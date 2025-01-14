@@ -8,7 +8,7 @@ utilizing your deck's special abilities, and achieving your win condition.
 
 ## Objective
 
-Be the first to achieve your deck's win condition, OR score 30 Victory Points (VP) to win.
+Be the first to achieve your deck's win condition, OR score 50 Victory Points (VP) to win.
 
 ## Setup
 
@@ -45,8 +45,8 @@ You can cook multiple recipes if you have enough ingredients prepared.
 
 1. [**ordered**] Score VP for recipes cooked + any special ability effects if eligible and any
 utensil cards that match a cooked recipe.
-2. [**ordered**] If you have a card(s) from a cooked recipe that is used to track your win
-condition, place it/them in your win condition tracking area.
+2. [**ordered**] If you have a card(s) from a cooked recipe that are used to track your win
+condition, place one of them (of your choosing) in your win condition tracking area.
 3. [**parallel**] Discard any cooked recipes along with the ingredient used for them in your
 discard pile.
 
@@ -73,16 +73,13 @@ Can be:
 
 Used to disrupt opponents. Each deck has the same 10 action cards as follows:
 
-- **Block An Opponent Action** (x3) - Prevent an opponent from playing an action card. This card
+- **Block An Opponent Action** (x2) - Prevent an opponent from playing an action card. This card
 can be used cumulatively (so your opponent can block your block, you theirs, etc.).
-- **Discard up to 2 Prepared Ingredients** - Choose which ingredients the opponent should
+- **Discard up to 2 Prepared Ingredients** (x2) - Choose which ingredients the opponent should
 discard.
-- **Discard 1 Cooked Recipe** - Choose 1 cooked recipe the opponent should discard.
-- **Discard 1 Win Condition Card** - Choose 1 win condition card the opponent should discard.
-- **Discard 1 Utensil Card** - Choose 1 utensil card the opponent should discard.
-- **Play Again** - Play your turn again from start without removing any cards already in play.
-- **Universal Ingredient** - Use any ingredient as substitute for any other when cooking a recipe.
-- **Cook With Less** - Cook a recipe with 1 less ingredient than required (min 1 still required).
+- **Discard 1 Cooked Recipe** (x2) - Choose 1 cooked recipe the opponent should discard.
+- **Discard 1 Win Condition Card** (x2) - Choose 1 win condition card the opponent should discard.
+- **Discard 1 Utensil Card** (x2) - Choose 1 utensil card the opponent should discard.
 
 ### Utensil Cards
 
@@ -125,10 +122,13 @@ you both gain **+1 VP**. If not, you both score **-1 VP**.
 The game ends immediately when:
 
 A player meets their win condition, OR
-A player scores 30 VP during their score phase.
+A player scores 50 VP during their score phase.
 
 ## Additional Notes
 
 - Once their deck is empty, a player shuffles their discard pile to form a new draw pile. This
 happens even during the Shop phase because at all times a player must be able to draw up to a
 hand of 8 cards!
+- Only 1 win condition card can be put per turn. So even if you have multiple win conditions
+(i.e. cooked both an entrée and main recip e for France or cooked 3 recipes with exact pasta
+ingredients for Italy) you can only put 1 win condition card per turn.

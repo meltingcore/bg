@@ -6,11 +6,12 @@
 
 #### Description
 
-- **Special Ability** - Each **normal** or **hard** recipe where the pasta ingredient is **exact**
-(meaning that it meets the requirements of the recipe) awards you **+2 VP**. 
-- **Win Condition** - Make 6 meals with the correct pasta ingredient.
-- **Tracking** - After scoring take the pasta ingredient from any recipe cooked with an **exact**
-ingredient and place it as a win condition card.
+- **Special Ability** - Each **normal** or **hard** recipe where the pasta ingredient exactly meets
+the requirements of the recipe awards you extra VP (**normal** = **+1 VP**; **hard** = **+2 VP**).
+- **Win Condition** - Make 6 meals with an **exact** pasta ingredient.
+- **Tracking** - Place the recipe card cooked with an **exact** pasta ingredient in front of you
+after scoring;
+
 
 #### Deck Composition
 
@@ -55,15 +56,12 @@ ingredient and place it as a win condition card.
 
 #### Description
 
-- **Special Ability** - Each meal prepared towards a full course (entrée -> main -> dessert) gives
-you extra points (main = **+2 VP**; dessert = **+3 VP**). You can build towards only 1 course at a
-time.
-- **Win Condition** - Cook a full course twice.
-- **Tracking** - Place 1 recipe card per course in your win condition tracking area thus tracking
-the full course (i.e. if you had an entrée recipe as win condition & now you cooked a main recipe,
-you discard the entrée recipe and place the main recipe in the win condition tracking area). One
-completed course means you have a dessert recipe in your win condition tracking area. When you have 
-2 dessert recipes in your win condition tracking area, you win.
+- **Special Ability** - Adjacent recipes from a 3 course meal (entrée → main → dessert) cooked in
+the same turn grant bonus VP as follows: **entrée** + **main** = **+2 VP**; **main** + **dessert** 
+= **+3 VP**.
+- **Win Condition** - Cook a complete 3-course meal twice.
+- **Tracking** - Place cooked recipes as win condition cards to track your course in order (first
+**entrée** then **main** and finally **dessert**). Only 1 course can be tracked at a time.
 
 #### Deck Composition
 
