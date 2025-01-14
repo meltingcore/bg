@@ -10,3 +10,10 @@ Players take turns to Draw Cards, Prepare Ingredients, Cook Recipes and Score Vi
 Achieve victory by either completing your deck's unique win condition or by scoring 30 VP.
 
 Collaborate, compete, and cook your way to culinary glory!
+
+
+## Table of Contents
+
+- [Rules](Rules.md)
+- [Decks](Decks.md)
+- [Changelog](CHANGELOG.md)
