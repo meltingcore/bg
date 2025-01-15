@@ -12,7 +12,7 @@ Achieve victory by either completing your deck's unique win condition or by scor
 Collaborate, compete, and cook your way to culinary glory!
 
 
-## Table of Contents
+For more details, check:
 
 - [Rules](Rules.md)
 - [Decks](Decks.md)

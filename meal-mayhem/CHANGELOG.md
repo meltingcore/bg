@@ -1,12 +1,65 @@
 # Changelog
 
+## [0.2.0]
+
+FEATURES:
+
+* Made the deck composition sections collapsable.
+* Added ToC for [Rules](Rules.md) and [Decks](Decks.md).
+
+CHANGES:
+
+Play testing `0.1.1` proved to drag a game too long with win conditions being too hard to achieve.
+In addition, 5 pairs of action cards that penalize opponents were too much as they hinder every
+attempt to do anything. Therefore, the overall goal in the changes below is to make the game more
+dynamic, fast and fun to play.
+
+- **Decks**:
+  - **Italy**:
+    - Win condition adjusted to **4 exact** pasta recipes and tracking was reverted back to pasta
+    ingredient cards as win condition cards. The change makes the win condition more achievable
+    and since it no longer penalizes players with lack of **primary** ingredients, the tracking was
+    reverted back from recipes to pasta ingredients.
+    - In a balance attempt the deck composition is adjusted as follows:
+      - The "Ravioli Burro e Salvia" recipe was changed from **normal** to **hard** thus resulting
+      in 4/6/4 easy/normal/hard recipes.
+      - The "Balsamic Vinegar" **optional** ingredient was removed to free up space for 1 more
+      **secondary** ingredient card to a total of 14/9/3 primary/secondary/optional ingredients.
+  - **France**:
+    - To meet the 4 cards to win condition concept you now build towards a 4-course meal 
+    (introducing **appetizer** as recipe type). Therefore, the special ability was changed as
+    follows: entrée + appetizer=+1 VP, appetizer + main=+2 VP and main + dessert=+3 VP;
+    - The win condition was also adjusted to now just complete a 4-course meal in order once.
+    - To facilitate the above changes the deck composition was adjusted as follows:
+      - Remove the "Herbs de Provence" **optional** ingredient to free up 1 slot resulting in
+      12/10/3 primary/secondary/optional ingredients.
+      - Remove the "Opera Cake" **hard** recipe to free up 1 slot.
+      - Add 4 **appetizer** recipes from the 2 free spots and from converting 2 **main** recipes
+      to have a 4th course resulting in 4/8/3 easy/normal/hard recipes as described below. Utensils
+      assignments were also adjusted accordingly across all recipes.
+        - Coq au Vin (Main) -> Quiche Lorraine (Appetizer) [cookware]
+        - Duck à l’Orange (Main) -> Escargots de Bourguignon (Appetizer) [tableware]
+        - Salade Niçoise (Appetizer) [kitchenware] -> NEW
+        - Soufflé au Fromage (Appetizer) [cookware] -> NEW
+- **Actions**:
+  - Reverting back to 7 opponent action cards and 3 self-benefitting action cards as follows:
+        - **Play Again** - Changed to **Draw 2 Cards** to allow 2 more cards in hand for 1 turn.
+        - **Universal Ingredient** - Changed to **Universal Ingredients** to act as covering all
+        ingredient requirements for a recipe.
+        - **Cook With Less** - Changed to **Cook Twice** to score double VP from a recipe.
+        - **Block An Opponent Action** - Back to 3 cards.
+        - The **Discard** action cards are back to 1 card each.
+  - Added clarifying notes for action cards in the rules.
+- **Rules**
+  - Win by VP adjusted from 50 to 40 as 50 was too slow to reach.
+
 ## [0.1.1]
 
 FEATURES:
 
 * Added [TODO](TODO.md) list
 
-BUGFIXES:
+CHANGES:
 
 - **Decks**:
   - **France**:

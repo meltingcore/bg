@@ -1,5 +1,26 @@
 # Rules of the Game
 
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Objective](#objective)
+- [Setup](#setup)
+- [Turn Structure](#turn-structure)
+  - [Shop Phase](#shop-phase)
+  - [Prepare Phase](#prepare-phase)
+  - [Cook Phase](#cook-phase)
+  - [Score Phase](#score-phase)
+- [Card Types](#card-types)
+  - [Ingredient Cards](#ingredient-cards)
+  - [Recipe Cards](#recipe-cards)
+  - [Action Cards](#action-cards)
+  - [Utensil Cards](#utensil-cards)
+  - [Country Card](#country-card)
+- [Roles](#roles)
+- [Winning the Game](#winning-the-game)
+- [Additional Notes](#additional-notes)
+
 ## Overview
 
 Welcome to the ultimate culinary competition! Each player selects a cuisine deck with unique
@@ -8,7 +29,7 @@ utilizing your deck's special abilities, and achieving your win condition.
 
 ## Objective
 
-Be the first to achieve your deck's win condition, OR score 50 Victory Points (VP) to win.
+Be the first to achieve your deck's win condition, OR score 40 Victory Points (VP) to win.
 
 ## Setup
 
@@ -73,13 +94,29 @@ Can be:
 
 Used to disrupt opponents. Each deck has the same 10 action cards as follows:
 
-- **Block An Opponent Action** (x2) - Prevent an opponent from playing an action card. This card
+- **Block An Opponent Action** (x3) - Prevent an opponent from playing an action card. This card
 can be used cumulatively (so your opponent can block your block, you theirs, etc.).
-- **Discard up to 2 Prepared Ingredients** (x2) - Choose which ingredients the opponent should
+- **Discard up to 2 Prepared Ingredients** - Choose which ingredients the opponent should
 discard.
-- **Discard 1 Cooked Recipe** (x2) - Choose 1 cooked recipe the opponent should discard.
-- **Discard 1 Win Condition Card** (x2) - Choose 1 win condition card the opponent should discard.
-- **Discard 1 Utensil Card** (x2) - Choose 1 utensil card the opponent should discard.
+- **Discard 1 Cooked Recipe** - Choose 1 cooked recipe the opponent should discard.
+- **Discard 1 Win Condition Card** - Choose 1 win condition card the opponent should discard.
+- **Discard 1 Utensil Card** - Choose 1 utensil card the opponent should discard.
+- **Draw 2 Cards** - You can draw 3 more cards from the deck, disregarding the 8 cards hand limit
+this turn (you still have to discard down to 8 cards at the end of the turn after scoring).
+- **Universal Ingredients** - Place during the **prepare** phase as ingredient card. During the
+**cook** phase you can cook any kind of recipe with only this card as all ingredient requirements
+for it.
+- **Cook Twice** - Place during the **cook** phase along with a recipe. During the **score** phase
+count that recipe as 2 recipes for scoring purposes.
+
+Action cards can only be blocked (so discarded) by the **Block An Opponent Action** card, with the
+following exceptions:
+
+- **Universal Ingredients** cannot be discarded by the **Discard up to 2 Prepared Ingredients**
+action card, but it gets discarded by the **Discard 1 Cooked Recipe** action card (since it 
+participates in the cooking of that recipe as any type of regular ingredient card).
+- **Cook Twice** can be discarded by the **Discard 1 Cooked Recipe** action card, to preserve
+the recipe it was played with.
 
 ### Utensil Cards
 
@@ -122,13 +159,15 @@ you both gain **+1 VP**. If not, you both score **-1 VP**.
 The game ends immediately when:
 
 A player meets their win condition, OR
-A player scores 50 VP during their score phase.
+A player scores 40 VP during their score phase.
 
 ## Additional Notes
 
 - Once their deck is empty, a player shuffles their discard pile to form a new draw pile. This
-happens even during the Shop phase because at all times a player must be able to draw up to a
+happens even during the **shop** phase because at all times a player must be able to draw up to a
 hand of 8 cards!
 - Only 1 win condition card can be put per turn. So even if you have multiple win conditions
-(i.e. cooked both an entrée and main recip e for France or cooked 3 recipes with exact pasta
+(i.e. cooked both an entrée and main recipe for France or cooked 3 recipes with **exact** pasta
 ingredients for Italy) you can only put 1 win condition card per turn.
+- Any recipes cooked with the help of the **Universal Ingredients** or the **Cook Twice** action
+cards do not participate in win condition tracking or special ability effects.
