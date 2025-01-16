@@ -110,8 +110,8 @@ cooked in the same turn grant bonus VP as follows: **entrée** + **appetizer** =
 ### China
 
 - **Special Ability** - If you cook more than 1 recipe in the same turn you get extra VPs equal to
-the number of recipes cooked (i.e. 2 recipes = +2 VP, 3 recipes = +3 VP, etc.);
-- **Win Condition** - Cook a noodles and a rice recipe in the same turn 5 times.
+the number of recipes cooked (i.e. 2 recipes = **+2 VP**, 3 recipes = **+3 VP**, etc.);
+- **Win Condition** - Cook a **noodles** and a **rice** recipe in the same turn 4 times.
 - **Tracking** - Every time you cook more than 1 recipe in a turn, after scoring, put 1 of the
 recipes in front of you as a win condition card.
 
@@ -154,8 +154,9 @@ recipes in front of you as a win condition card.
 
 - **Special Ability** - Recipes can include 1 more **secondary** ingredient as **extra**, adding 
 **+1 VP** to **easy** and **normal** recipes and **+2 VP** to **hard** recipes.
-- **Win Condition** - Use 5 different **secondary** ingredients across your cooked recipes.
-- **Tracking** - Place 1 **secondary** ingredient played as **extra** in front of you after scoring;
+- **Win Condition** - Use 4 **secondary** ingredients as **extra** across your cooked **normal**
+and **hard** recipes.
+- **Tracking** - Place 1 **extra** **secondary** ingredient in front of you after scoring;
 
 <details>
   <summary>Deck Composition</summary>
@@ -200,95 +201,101 @@ recipes in front of you as a win condition card.
 
 ### USA
 
-- **Special Ability** - You can pay double the required amount of ingredients to score extra points
-equal to that amount. Example: A recipe needing 2 ingredients normally scores 2 VP, but by
-paying 4 ingredients, you score 4 VP instead. Cannot do that more than once per turn;
-- **Win Condition** - Cook 5 different meals of the same type (e.g., 5 steaks or 5 burgers).
+- **Special Ability** - You can pay double the required number of ingredients to score bonus VPs
+equal to that number. Example: A recipe needing 2 ingredients normally scores 2 VP, but by paying
+4 ingredients, you score 4 VP instead. You can pay with any type of ingredients (you don't have to
+match the recipe requirements).
+- **Win Condition** - Cook 4 different recipes of the same type (e.g., 4 steaks or 4 burgers).
 - **Tracking** - Place each unique recipe card in front of you after scoring;
 
 <details>
   <summary>Deck Composition</summary>
 
 - Utensil Cards (3)
-- Ingredient Cards (26)
-  - Primary (13)
+- Ingredient Cards (24)
+  - Primary (12)
   - Secondary (9)
-  - Optional (4):
+  - Optional (3):
     - Ketchup
     - Mustard
     - Mayo
-    - BBQ Sauce
-- Recipe Cards (14):
+- Recipe Cards (16):
   - Easy Recipes (4)
-    - Classic Cheeseburger (Burger)
-    - Bacon Cheeseburger (Burger)
-    - Ribeye Steak (Steak)
-    - T-bone Steak (Steak)
+    - Lobster Roll [kitchenware]
+    - Cornbread [cookware]
+    - Clam Chowder [tableware]
+    - Johnny Cakes [kitchenware]
   - Normal Recipes (8):
-    - Juicy Lucy (Burger)
-    - Onion Burger (Burger)
-    - Bison Burger (Burger)
-    - Green Chile Cheeseburger (Burger)
-    - Philly Cheesesteak (Steak)
-    - Tomahawk Steak (Steak)
-    - Porterhouse Steak (Steak)
-    - Brisket Steak (Steak)
-  - Hard Recipes (2):
-    - Deep-fried Burger (Burger)
-    - New York Strip (Steak)
+    - Juicy Lucy (Burger) [cookware]
+    - Classic Cheeseburger (Burger) [tableware]
+    - Bacon Cheeseburger (Burger) [kitchenware]
+    - Green Chile Cheeseburger (Burger) [cookware]
+    - Philly Cheesesteak (Steak) [tableware]
+    - Tomahawk Steak (Steak) [kitchenware]
+    - Porterhouse Steak (Steak) [cookware]
+    - Ribeye Steak (Steak) [tableware]
+  - Hard Recipes (4):
+    - Luther Burger (Burger) [kitchenware]
+    - Deep-fried Burger (Burger) [cookware]
+    - T-bone Steak (Steak) [tableware]
+    - New York Strip (Steak) [kitchenware]
 - Action Cards (10)
 - Country Card (1)
 </details>
 
 ### Turkey
 
-- **Special Ability** - You can replace an opponent’s cooked recipe with a kebab and claim its
-points, as long as you use the same number of ingredients as the replaced recipe. The replacement
-happens before the score phase. After the score phase, return the recipe card to the opponent and
-get back your kebab card to track for win condition. Cannot do more than 1 replace per turn;
-- **Win Condition** - Replace 4 opponent normal or hard recipe with kebabs.
-- **Tracking** - Place the kebab recipe cards in front of you, after getting it back after scoring.
+- **Special Ability** - Before the **score** phase you can replace an opponent's **normal** or 
+**hard** recipe with your **kebab** recipe by discarding respectively 1 or 2 prepared and unused
+ingredients. You can discard any type of ingredients for this (you don't have to match the recipe
+requirements).
+- **Win Condition** - Replace 4 opponent recipes with **kebab** recipes.
+- **Tracking** - Place the **kebab** recipe cards in front of you, after getting them back (after
+scoring).
 
 <details>
   <summary>Deck Composition</summary>
 
 - Utensil Cards (3)
-- Ingredient Cards (26):
-  - Primary (15)
-  - Secondary (7)
+- Ingredient Cards (25):
+  - Primary (13)
+  - Secondary (8)
   - Optional (4):
     - Sumac
     - Paprika
     - Pomegranate Juice
     - Tahini
-- Recipe Cards (14):
-  - Easy Recipes (9):
-    - Shish Kebab
-    - Adana Kebab
-    - Iskender Kebab
-    - Patlican Kebab
-    - Ciğer Kebab
-    - Döner Kebab
-    - Beyti Kebab
-    - Çökertme Kebab
-    - Tepsi Kebab
-  - Normal Recipes (4):
-    - Lahmacun
-    - Pide
-    - Bulgar köftesi
-    - Muhammara
-  - Hard Recipes (1):
-    - Baklava
+- Recipe Cards (15):
+  - Easy Recipes (8):
+    - Shish Kebab [kitchenware]
+    - Adana Kebab [cookware]
+    - Iskender Kebab [tableware]
+    - Patlican Kebab [kitchenware]
+    - Ciğer Kebab [cookware]
+    - Döner Kebab [tableware]
+    - Beyti Kebab [kitchenware]
+    - Tepsi Kebab [cookware]
+  - Normal Recipes (5):
+    - Lahmacun [tableware]
+    - Pide [kitchenware]
+    - Köftesi [cookware]
+    - Muhammara [tableware]
+    - Imam Bayildi [kitchenware]
+  - Hard Recipes (2):
+    - Baklava [cookware]
+    - Tulumba [tableware]
 - Action Cards (10)
 - Country Card (1)
 </details>
 
 ### Japan
 
-- **Special Ability** - **Ramen** recipes which were cooked using **umami** ingredient or 
-**Sushi** recipes which were cooked using **wasabi** ingredient score **+2 VP**; 
-- **Win Condition** - Serve 5 meals with **umami** or **wasabi** ingredients
-- **Tracking** - Place the umami/wasabi card of the cooked recipe in front of you after scoring
+- **Special Ability** - Cooked recipes score VP based on their **secondary** ingredient as follows:
+**+2 VP** with **umami** ingredient; **+1 VP** with **wasabi** ingredient; **-1 VP** with
+**ginger** ingredient. 
+- **Win Condition** - Cook 2 recipes with **umami** and 2 recipes with **ginger** ingredients
+- **Tracking** - Place the **umami**/**ginger** cards of the cooked recipes in front of you
+after scoring.
 
 <details>
   <summary>Deck Composition</summary>
@@ -297,78 +304,76 @@ get back your kebab card to track for win condition. Cannot do more than 1 repla
 - Ingredient Cards (26):  
   - Primary (11)
   - Secondary (12):
-    - Umami (4)
+    - Umami (5)
     - Wasabi (4)
-    - Ginger (4)
+    - Ginger (3)
   - Optional (3):
     - Nori
     - Sesame Oil
     - Rice Vinegar
 - Recipe Cards (14): 
-  - Easy Recipes (4)
-    - Shoyu Ramen (Ramen)
-    - Tamago Sushi (Sushi)
-    - Onigiri (Other)
-    - Edamame Salad (Other)
-  - Normal Recipes (7):
-    - Miso Ramen (Ramen)
-    - Tonkotsu Ramen (Ramen)
-    - California Roll (Sushi)
-    - Spicy Tuna Roll (Sushi)
-    - Udon Noodles with Tempura (Other)
-    - Okonomiyaki (Other)
-    - Takoyaki (Other)
+  - Easy Recipes (3)
+    - Shoyu Ramen [kitchenware]
+    - Onigiri [cookware]
+    - Edamame Salad [tableware]
+  - Normal Recipes (8):
+    - Tamago Sushi [kitchenware]
+    - Miso Ramen [cookware]
+    - Tonkotsu Ramen [tableware]
+    - California Roll [kitchenware]
+    - Spicy Tuna Roll [cookware]
+    - Udon Noodles with Tempura [tableware]
+    - Okonomiyaki [kitchenware]
+    - Takoyaki [cookware]
   - Hard Recipes (3):
-    - Unagi Sushi Platter (Sushi)
-    - Ramen Tonkotsu Deluxe (Ramen)
-    - Gyoza (Other)
+    - Unagi Sushi Platter [tableware]
+    - Ramen Tonkotsu Deluxe [kitchenware]
+    - Gyoza [cookware]
 - Action Cards (10)
 - Country Card (1)
 </details>
 
 ### Mexico
 
-- **Special Ability** - You can add up to 2 hot secondary ingredients to any recipes for bonus VP,
-with the bonus increasing for each consecutive secondary ingredient (1st = +1, 2nd = +2). You must
-discard a card from your hand for each secondary ingredient card not part of the recipe (i.e. for
-easy recipes you should discard 2 cards for 2 secondary ingredients). You can spice up only 1 meal
-per turn;
-- **Win Condition** - Cook 4 “extra-hot” recipes  (where each recipe contains 2 hot secondary
-ingredients).
-- **Tracking** - Place a hot secondary ingredient card used in a cooked extra-hot recipe in front
-of you after scoring;
+- **Special Ability** - You can have up to 2 **hot** **secondary** ingredients to all recipes for
+bonus VP. Recipes with 1 **hot** ingredient are "Hot" and score bonus **+1 VP**. Recipes with 2
+**hot** ingredients are "Extra Hot" and score bonus **+2 VP**. To add second **hot** ingredient to
+an **easy** recipe you have to discard 1 card from your hand.
+- **Win Condition** - Cook 4 "Extra Hot" recipes.
+- **Tracking** - Place a **hot** **secondary** ingredient card used in a cooked "Extra Hot" recipe
+in front of you after scoring.
 
 <details>
   <summary>Deck Composition</summary>
 
 - Utensil Cards (3)
 - Ingredient Cards (27):
-  - Primary (12)
-  - Secondary (12):
+  - Primary (11)
+  - Secondary (13):
     - Habanero (Hot) (4)
-    - Jalapeno (Hot) (4)
-    - Avocado (4)
+    - Jalapeño (Hot) (4)
+    - Avocado (5)
   - Optional (3):
     - Lime
     - Cilantro
     - Sour Cream
 - Recipe Cards (13):
   - Easy Recipes (5):
-    - Quesadilla
-    - Taco de Frijoles
-    - Chilaquiles Verdes
-    - Carne Asada Tacos
-    - Enchiladas Rojas
+    - Quesadilla [kitchenware]
+    - Taco de Frijoles [cookware]
+    - Chilaquiles Verdes [tableware]
+    - Carne Asada Tacos [kitchenware]
+    - Enchiladas Rojas [cookware]
   - Normal Recipes (6):
-    - Mole Poblano with Rice
-    - Burrito de Frijoles
-    - Chicken Fajitas
-    - Tostadas de Pollo
-    - Pico de Gallo Nachos
-    - Taco al Pastor
+    - Mole Poblano with Rice [tableware]
+    - Burrito de Frijoles [kitchenware]
+    - Chicken Fajitas [cookware]
+    - Tostadas de Pollo [tableware]
+    - Pico de Gallo Nachos [kitchenware]
+    - Taco al Pastor [cookware]
   - Hard Recipes (2):
-    - Pozole Rojo
-    - Chiles Rellenos
+    - Pozole Rojo [tableware]
+    - Chiles Rellenos [kitchenware]
 - Action Cards (10)
 - Country Card (1)
 </details>

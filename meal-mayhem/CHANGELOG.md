@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.0]
+
+CHANGES:
+
+* Win condition for each deck aligned to 4 occurrences of a condition
+* Balance attempts at **extra** decks
+* Utensil types added for recipes in **extra** decks
+* **Japan** mechanics redesigned
+
 ## [0.2.1]
 
 FEATURES:
