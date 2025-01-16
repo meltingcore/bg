@@ -84,7 +84,7 @@ cooked in the same turn grant bonus VP as follows: **entrée** + **appetizer** =
     - Wine
     - Butter
     - Cream
-- Recipe Cards (16):
+- Recipe Cards (15):
   - Easy Recipes (4)
     - Soupe à l’Oignon (entrée) [kitchenware]
     - Bouillabaisse (entrée) [cookware]
@@ -109,9 +109,9 @@ cooked in the same turn grant bonus VP as follows: **entrée** + **appetizer** =
 
 ### China
 
-- **Special Ability** - If you cook both a **noodles** recipe and a **rice** recipe in the same
-turn, you score **+3 VP** during the scoring phase.
-- **Win Condition** - Cook more than 1 recipe 6 times.
+- **Special Ability** - If you cook more than 1 recipe in the same turn you get extra VPs equal to
+the number of recipes cooked (i.e. 2 recipes = +2 VP, 3 recipes = +3 VP, etc.);
+- **Win Condition** - Cook a noodles and a rice recipe in the same turn 5 times.
 - **Tracking** - Every time you cook more than 1 recipe in a turn, after scoring, put 1 of the
 recipes in front of you as a win condition card.
 
@@ -121,15 +121,13 @@ recipes in front of you as a win condition card.
 - Utensil Cards (3)
 - Ingredient Cards (24)  
   - Primary (12):
-    - Rice (6)
-    - Noodles (6)
   - Secondary (9)
   - Optional (3):
     - Shiitake Mushrooms
     - Soy Sauce
     - Mung Bean Sprouts
 - Recipe Cards (16):
-  - Easy Recipes (8)
+  - Easy Recipes (7)
     - Egg Fried Rice (Rice) [kitchenware]
     - Coconut Rice (Rice) [cookware]
     - Congee (Rice) [tableware]
@@ -137,8 +135,8 @@ recipes in front of you as a win condition card.
     - Cold Sesame Noodles (Noodles) [cookware]
     - Scallion Oil Noodles (Noodles) [tableware]
     - Zha Jiang Mian (Noodles) [kitchenware]
+  - Normal Recipes (7):
     - Soup Noodles with Chicken (Noodles) [cookware]
-  - Normal Recipes (6):
     - Hainanese Chicken Rice (Rice) [tableware]
     - Claypot Rice (Rice) [kitchenware]
     - Yangzhou Fried Rice (Rice) [cookware]
@@ -154,11 +152,10 @@ recipes in front of you as a win condition card.
 
 ### India
 
-- **Special Ability** - Recipes can include 1 more **secondary** ingredient, adding **+2 VP** to
-the recipe.
-- **Win Condition** - Use 6 different **secondary** ingredients across your cooked recipes.
-- **Tracking** - Place (only) 1 different **secondary** ingredient card in front of you after
-scoring;
+- **Special Ability** - Recipes can include 1 more **secondary** ingredient as **extra**, adding 
+**+1 VP** to **easy** and **normal** recipes and **+2 VP** to **hard** recipes.
+- **Win Condition** - Use 5 different **secondary** ingredients across your cooked recipes.
+- **Tracking** - Place 1 **secondary** ingredient played as **extra** in front of you after scoring;
 
 <details>
   <summary>Deck Composition</summary>
@@ -183,7 +180,7 @@ scoring;
     - Spiced Lentil Soup [cookware]
     - Tamarind Rice [tableware]
     - Lemon Rice [kitchenware]
-  - Normal Recipes (8):
+  - Normal Recipes (7):
     - Biryani [cookware]
     - Dal Tadka [tableware]
     - Masoor Dal [kitchenware]
@@ -191,8 +188,8 @@ scoring;
     - Aloo Gobi [tableware]
     - Paneer Butter Masala [kitchenware]
     - Vegetable Korma [cookware]
+  - Hard Recipes (3):
     - Coconut Curry [tableware]
-  - Hard Recipes (2):
     - Rogan Josh [kitchenware]
     - Malai Kofta [cookware]
 - Action Cards (10)
