@@ -94,29 +94,28 @@ Can be:
 
 Used to disrupt opponents. Each deck has the same 10 action cards as follows:
 
-- **Block An Opponent Action** (x3) - Prevent an opponent from playing an action card. This card
-can be used cumulatively (so your opponent can block your block, you theirs, etc.).
-- **Discard up to 2 Prepared Ingredients** - Choose which ingredients the opponent should
-discard.
-- **Discard 1 Cooked Recipe** - Choose 1 cooked recipe the opponent should discard.
-- **Discard 1 Win Condition Card** - Choose 1 win condition card the opponent should discard.
-- **Discard 1 Utensil Card** - Choose 1 utensil card the opponent should discard.
-- **Draw 2 Cards** - You can draw 3 more cards from the deck, disregarding the 8 cards hand limit
+- **Block An Opponent** (x3) - Prevent an opponent from playing an action card. This card can 
+be used cumulatively (so your opponent can block your block, you theirs, etc.).
+- **Discard Ingredients** - Choose up to 2 prepared ingredients that the opponent should discard.
+- **Discard Recipe** - Choose 1 cooked recipe that the opponent should discard.
+- **Discard Win Card** - Choose 1 Win Condition card that the opponent should discard.
+- **Discard Utensils** - Choose 1 utensil card that the opponent should discard.
+- **Draw Cards** - You can draw 3 more cards from the deck, disregarding the 8 cards hand limit
 this turn (you still have to discard down to 8 cards at the end of the turn after scoring).
 - **Universal Ingredients** - Place during the **prepare** phase as ingredient card. During the
 **cook** phase you can cook any kind of recipe with only this card as all ingredient requirements
 for it.
-- **Cook Twice** - Place during the **cook** phase along with a recipe. During the **score** phase
-count that recipe as 2 recipes for scoring purposes.
+- **Cook Recipe Twice** - Place during the **cook** phase along with a recipe. During the **score**
+phase count that recipe as 2 recipes for scoring purposes.
 
-Action cards can only be blocked (so discarded) by the **Block An Opponent Action** card, with the
+Action cards can only be blocked (so discarded) by the **Block An Opponent** card, with the
 following exceptions:
 
-- **Universal Ingredients** cannot be discarded by the **Discard up to 2 Prepared Ingredients**
-action card, but it gets discarded by the **Discard 1 Cooked Recipe** action card (since it 
-participates in the cooking of that recipe as any type of regular ingredient card).
-- **Cook Twice** can be discarded by the **Discard 1 Cooked Recipe** action card, to preserve
-the recipe it was played with.
+- **Universal Ingredients** cannot be discarded by the **Discard Ingredients** action card, but
+it gets discarded by the **Discard 1 Cooked Recipe** action card (since it participates in the
+cooking of that recipe as any type of regular ingredient card).
+- **Cook Recipe Twice** can be discarded by the **Discard 1 Cooked Recipe** action card, to
+preserve the recipe it was played with so instead of scoring it as 2 recipes you score it as 1.
 
 ### Utensil Cards
 
@@ -145,10 +144,10 @@ The role cards are:
 and the player both gain **+1 VP**.
 - **Waiter** - Choose a player to cook more than 1 recipe for this turn. If they manage you and the
 player both gain **+1 VP**.
-- **Dishwasher** - Shuffles a player’s discard pile back into play and have them gain **+1 VP** or
-gain **+1 VP** (if the player doesn't want this).
-- **Supplier** - Pick a player to either search for 1 card from their deck (then shuffle it) or to
-discard 2 cards from their hand; you should do the same action you chose for the player.
+- **Dishwasher** - Ask a player to fill up their hand and then discard it. If they do, they gain
+**+1 VP**. If they refuse, you gain **+1 VP**.
+- **Supplier** - Choose a player to either take any 2 cards from their discard pile or to draw 2
+cards less during the **shop** phase (so up to 6 card hand max) this turn. Then you do the same.
 - **Critic** - Grants **+1 VP** to an opponent and **+1 VP** to you or **-2 VP** to an opponent
 and **-1 VP** to you.
 - **Customer** - Demand a player to cook a **normal** or **hard** recipe this turn. If they manage
@@ -156,18 +155,22 @@ you both gain **+1 VP**. If not, you both score **-1 VP**.
 
 ## Winning the Game
 
-The game ends immediately when:
+The game ends after the turn in which a player meets its win condition or scores 40 VP in total.
+But winning is not immediate! Everybody has to finish their turn and score their VP before the
+game ends.
 
-A player meets their win condition, OR
-A player scores 40 VP during their score phase.
+Then to determine the winner, calculate the VP of all players (met win condition counts as 30 VP).
+If there is a tie, the one who most recently cooked in real life wins.
+
 
 ## Additional Notes
 
 - Once their deck is empty, a player shuffles their discard pile to form a new draw pile. This
 happens even during the **shop** phase because at all times a player must be able to draw up to a
 hand of 8 cards!
-- Only 1 win condition card can be put per turn. So even if you have multiple win conditions
-(i.e. cooked both an entrée and main recipe for France or cooked 3 recipes with **exact** pasta
-ingredients for Italy) you can only put 1 win condition card per turn.
+- Only 1 win condition card can be put per turn! So even if you have multiple win conditions
+(i.e. cooked both an **entrée** and **appetizer** recipe for France or cooked 3 recipes with 
+**exact** pasta ingredients for Italy) you can still only put the **entrée** card (France) or 1
+of the 3 **exact** pasta ingredient cards (Italy) as win condition card.
 - Any recipes cooked with the help of the **Universal Ingredients** or the **Cook Twice** action
 cards do not participate in win condition tracking or special ability effects.

@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.1]
+
+CHANGES:
+
+* Decks have their special abilities and win conditions texts shortened and aligned.
+* Action cards names aligned in the rules.
+* The abilities for the **Supplier** and **Dishwasher** role cards were modified.
+* The rules for winning the game were modified.
+* Implemented the TODO actions in the deck designs.
+
 ## [0.3.0]
 
 CHANGES:

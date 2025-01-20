@@ -18,11 +18,10 @@
 
 ### Italy
 
-- **Special Ability** - Each **normal** or **hard** recipe where the pasta ingredient exactly meets
-the requirements of the recipe awards you extra VP (**normal** = **+1 VP**; **hard** = **+2 VP**).
-- **Win Condition** - Make 4 meals with an **exact** pasta ingredient.
-- **Tracking** - Place the **exact** pasta ingredient used in a cooked recipe in front of you
-after scoring;
+- **Special Ability** - **Normal** and **hard** recipes cooked with **exact** pasta ingredients
+grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes grant **+2 VP**;
+- **Win Condition** - Make 4 meals with **exact** pasta ingredient.
+- **Tracking** - The **exact** ingredient cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -66,12 +65,11 @@ after scoring;
 
 ### France
 
-- **Special Ability** - Adjacent recipes from a 4-course meal (entrée/appetizer/main/dessert)
-cooked in the same turn grant bonus VP as follows: **entrée** + **appetizer** = **+1 VP**; 
- **appetizer** + **main** = **+2 VP**; **main** + **dessert** = **+3 VP**;
-- **Win Condition** - Cook a complete 4-course meal in order.
-- **Tracking** - Place cooked recipes as win condition cards to track your course in order (first
-**entrée** then **appetizer** then **main** and finally **dessert**).
+- **Special Ability** - Adjacent recipes from a 4-course meal cooked in the same turn grant bonus
+VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main** = **+2 VP**; 
+**main** + **dessert** = **+3 VP**;
+- **Win Condition** - Cook a complete 4-course meal in order (entrée, appetizer, main, dessert).
+- **Tracking** - The recipes cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -109,11 +107,11 @@ cooked in the same turn grant bonus VP as follows: **entrée** + **appetizer** =
 
 ### China
 
-- **Special Ability** - If you cook more than 1 recipe in the same turn you get extra VPs equal to
-the number of recipes cooked (i.e. 2 recipes = **+2 VP**, 3 recipes = **+3 VP**, etc.);
-- **Win Condition** - Cook a **noodles** and a **rice** recipe in the same turn 4 times.
-- **Tracking** - Every time you cook more than 1 recipe in a turn, after scoring, put 1 of the
-recipes in front of you as a win condition card.
+- **Special Ability** - If you cook multiple recipes in 1 turn, gain bonus VP equal to the number
+of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
+- **Win Condition** - Cook a **noodles** and a **rice** recipe in the same turn 4 times. At least
+1 of the recipes must be **normal** or **hard** one.
+- **Tracking** - The recipes cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -154,9 +152,9 @@ recipes in front of you as a win condition card.
 
 - **Special Ability** - Recipes can include 1 more **secondary** ingredient as **extra**, adding 
 **+1 VP** to **easy** and **normal** recipes and **+2 VP** to **hard** recipes.
-- **Win Condition** - Use 4 **secondary** ingredients as **extra** across your cooked **normal**
-and **hard** recipes.
-- **Tracking** - Place 1 **extra** **secondary** ingredient in front of you after scoring;
+- **Win Condition** - Use 4 different **secondary** ingredients as **extra** across your cooked
+**normal** and **hard** recipes.
+- **Tracking** - The **extra** ingredient cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -201,12 +199,10 @@ and **hard** recipes.
 
 ### USA
 
-- **Special Ability** - You can pay double the required number of ingredients to score bonus VPs
-equal to that number. Example: A recipe needing 2 ingredients normally scores 2 VP, but by paying
-4 ingredients, you score 4 VP instead. You can pay with any type of ingredients (you don't have to
-match the recipe requirements).
+- **Special Ability** - You can cook recipes with twice the amount of ingredients to score bonus
+VP equal to that amount. You don't have to match the recipe requirements for the extra ingredients.
 - **Win Condition** - Cook 4 different recipes of the same type (e.g., 4 steaks or 4 burgers).
-- **Tracking** - Place each unique recipe card in front of you after scoring;
+- **Tracking** - The recipe cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -245,13 +241,10 @@ match the recipe requirements).
 
 ### Turkey
 
-- **Special Ability** - Before the **score** phase you can replace an opponent's **normal** or 
-**hard** recipe with your **kebab** recipe by discarding respectively 1 or 2 prepared and unused
-ingredients. You can discard any type of ingredients for this (you don't have to match the recipe
-requirements).
+- **Special Ability** - Before scoring, you can replace opponent's **normal** or **hard** recipe
+with a **kebab** by discarding 1 or 2 prepared and unused ingredients of any type.
 - **Win Condition** - Replace 4 opponent recipes with **kebab** recipes.
-- **Tracking** - Place the **kebab** recipe cards in front of you, after getting them back (after
-scoring).
+- **Tracking** - The **kebab** recipe cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -294,8 +287,7 @@ scoring).
 **+2 VP** with **umami** ingredient; **+1 VP** with **wasabi** ingredient; **-1 VP** with
 **ginger** ingredient. 
 - **Win Condition** - Cook 2 recipes with **umami** and 2 recipes with **ginger** ingredients
-- **Tracking** - Place the **umami**/**ginger** cards of the cooked recipes in front of you
-after scoring.
+- **Tracking** - The **umami**/**ginger** ingredient cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -335,13 +327,11 @@ after scoring.
 
 ### Mexico
 
-- **Special Ability** - You can have up to 2 **hot** **secondary** ingredients to all recipes for
-bonus VP. Recipes with 1 **hot** ingredient are "Hot" and score bonus **+1 VP**. Recipes with 2
-**hot** ingredients are "Extra Hot" and score bonus **+2 VP**. To add second **hot** ingredient to
-an **easy** recipe you have to discard 1 card from your hand.
-- **Win Condition** - Cook 4 "Extra Hot" recipes.
-- **Tracking** - Place a **hot** **secondary** ingredient card used in a cooked "Extra Hot" recipe
-in front of you after scoring.
+- **Special Ability** - You can have up to 2 **hot** **secondary** ingredients in any recipe for
+up to that amount of bonus VP. To add a second **hot** ingredient to an **easy** recipe, discard
+1 card from your hand.
+- **Win Condition** - Cook 4 recipes with 2 **hot** ingredients.
+- **Tracking** - The **hot** **secondary** ingredient cards.
 
 <details>
   <summary>Deck Composition</summary>
