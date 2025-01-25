@@ -4,6 +4,7 @@
 
 - [Description](#description)
 - [Tabletop Simulator](#tabletop-simulator)
+- [Print And Play](#print-and-play)
 
 ## Description
 
@@ -27,4 +28,18 @@ For more details, check:
 
 I am still trying to grasp the basics of TTS and how to make it work with my game.
 So far I have only managed to compile the decks with TTS's deck builder. You can find the
-`tsdb` files [here](tts/tsdb) and the exported `png` deck templates [here](tts/exported).
+the exported `png` deck templates [here](files/tts).
+
+## Print And Play
+
+You can download the print-ready PDFs as folows:
+
+- [Decks](https://drive.google.com/drive/folders/1RjN7gm9uUmFUjK3Yv4_XwoySk4Y0jHjB?usp=sharing)
+- [Roles](https://drive.google.com/file/d/1vtato6tITbTrM0xFkkSaoeRSS999X8Ku/view?usp=sharing)
+- [Actions](https://drive.google.com/file/d/1S0TfjAVLHZW4D9PotTRZZduPXj8LMDFb/view?usp=sharing)
+- [Utensils](https://drive.google.com/file/d/1GEOwRXla9UpwlXIWsCkZbUjKwD3YBcrl/view?usp=sharing)
+
+Each pdf contains the full 54 cards. But if you need it you can also print the action cards or
+the utensils cards separately from the links above.
+
+Roles Cards

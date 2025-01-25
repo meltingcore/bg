@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1]
+
+CHANGES:
+
+* The tsdb files were deleted.
+* Links to pdf files added for Print & Play purposes.
+* Added Rules for print in the TODO list.
+
 ## [0.4.0]
 
 FEATURES:

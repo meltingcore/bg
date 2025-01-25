@@ -5,3 +5,4 @@
 - [X] Text should be bigger size.
 - [X] Unique picture for each recipe.
 - [ ] Add decks for Greek, Thai and Swedish cuisines.
+- [ ] Prepare the rules in format for print.
