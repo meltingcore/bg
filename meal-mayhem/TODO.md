@@ -4,3 +4,4 @@
 - [X] Less text more pictures/icons.
 - [X] Text should be bigger size.
 - [X] Unique picture for each recipe.
+- [ ] Add decks for Greek, Thai and Swedish cuisines.

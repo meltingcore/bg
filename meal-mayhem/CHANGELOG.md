@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.4.0]
+
+FEATURES:
+
+* Added Tabletop Simulator files for each deck (`tsdb` file and exported as `png`)
+
+CHANGES:
+
+* Mexico deck's special ability now asks you to discard a card from your hand for each
+**secondary** ingredient you use in a recipe that is not in the requirements.
+* The country name of Turkey changed to Türkiye to respect the new official spelling.
+* Added Thai, Greek and Swedish decks in the TODO list.
+
 ## [0.3.1]
 
 CHANGES:

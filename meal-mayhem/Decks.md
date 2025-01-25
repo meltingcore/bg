@@ -239,7 +239,7 @@ VP equal to that amount. You don't have to match the recipe requirements for the
 - Country Card (1)
 </details>
 
-### Turkey
+### Türkiye
 
 - **Special Ability** - Before scoring, you can replace opponent's **normal** or **hard** recipe
 with a **kebab** by discarding 1 or 2 prepared and unused ingredients of any type.
@@ -327,9 +327,9 @@ with a **kebab** by discarding 1 or 2 prepared and unused ingredients of any typ
 
 ### Mexico
 
-- **Special Ability** - You can have up to 2 **hot** **secondary** ingredients in any recipe for
-up to that amount of bonus VP. To add a second **hot** ingredient to an **easy** recipe, discard
-1 card from your hand.
+- **Special Ability** - You can have up to 2 **hot** **secondary** ingredients in any recipe for a
+bonus of up to +2 VP respectively. To add more **secondary** ingredients than the recipe requires,
+discard 1 card from your hand for each.
 - **Win Condition** - Cook 4 recipes with 2 **hot** ingredients.
 - **Tracking** - The **hot** **secondary** ingredient cards.
 

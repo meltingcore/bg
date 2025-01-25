@@ -1,5 +1,10 @@
 # Meal Mayhem
 
+## Table of Contents
+
+- [Description](#description)
+- [Tabletop Simulator](#tabletop-simulator)
+
 ## Description
 
 In this competitive cooking card game, players choose a cuisine deck and race to create delicious
@@ -11,10 +16,15 @@ Achieve victory by either completing your deck's unique win condition or by scor
 
 Collaborate, compete, and cook your way to culinary glory!
 
-
 For more details, check:
 
 - [Rules](Rules.md)
 - [Decks](Decks.md)
 - [Changelog](CHANGELOG.md)
 - [ToDo](TODO.md)
+
+## Tabletop Simulator
+
+I am still trying to grasp the basics of TTS and how to make it work with my game.
+So far I have only managed to compile the decks with TTS's deck builder. You can find the
+`tsdb` files [here](tts/tsdb) and the exported `png` deck templates [here](tts/exported).
