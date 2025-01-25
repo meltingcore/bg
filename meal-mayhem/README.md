@@ -42,4 +42,8 @@ You can download the print-ready PDFs as folows:
 Each pdf contains the full 54 cards. But if you need it you can also print the action cards or
 the utensils cards separately from the links above.
 
-Roles Cards
+The format of the cards should fit standard European bridge size (57x87 mm / 2.25x3.43 inch).
+I used the below for my play testing without issues:
+
+- [Cards](https://share.temu.com/NVlfODbBfXA)
+- [Sleeves](https://share.temu.com/LBnJzJBHwRA)
