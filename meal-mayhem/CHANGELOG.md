@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.2]
+
+CHANGES:
+
+* Added Buy Me Coffee sponsor link.
+* Added Print & Play card size information.
+* Added [file](Notes.md) for capturing ideas
+* Added ideas for the Thai, Greek and Swedish decks.
+
 ## [0.4.1]
 
 CHANGES:

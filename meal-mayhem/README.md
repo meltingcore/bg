@@ -23,6 +23,7 @@ For more details, check:
 - [Decks](Decks.md)
 - [Changelog](CHANGELOG.md)
 - [ToDo](TODO.md)
+- [Notes](Notes.md)
 
 ## Tabletop Simulator
 
