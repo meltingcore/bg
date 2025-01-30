@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.3]
+
+CHANGES:
+
+* The `tts` folder & the `Additional Notes` section renamed.
+* Added clarification for replacing recipes that use the "Cook Recipe Twice" action card.
+* Adjustments to the **Türkiye** deck.
+
 ## [0.4.2]
 
 CHANGES:

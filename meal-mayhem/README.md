@@ -3,7 +3,7 @@
 ## Table of Contents
 
 - [Description](#description)
-- [Tabletop Simulator](#tabletop-simulator)
+- [Online Simulation](#online-simulation)
 - [Print And Play](#print-and-play)
 
 ## Description
@@ -13,7 +13,7 @@ recipes while using unique abilities and strategies.
 Each deck features primary, secondary, and optional ingredients, recipes of varying difficulty,
 action cards to sabotage opponents, and utensils for bonus points.
 Players take turns to Draw Cards, Prepare Ingredients, Cook Recipes and Score Victory Points.
-Achieve victory by either completing your deck's unique win condition or by scoring 30 VP.
+Achieve victory by either completing your deck's unique win condition or by scoring VP.
 
 Collaborate, compete, and cook your way to culinary glory!
 
@@ -25,11 +25,10 @@ For more details, check:
 - [ToDo](TODO.md)
 - [Notes](Notes.md)
 
-## Tabletop Simulator
+## Online Simulation
 
-I am still trying to grasp the basics of TTS and how to make it work with my game.
-So far I have only managed to compile the decks with TTS's deck builder. You can find the
-the exported `png` deck templates [here](files/tts).
+You can find the exported `png` deck templates [here](files/templates).
+Play testing is available on [Screentop.gg](https://screentop.gg/@grumpper/meal-mayhem).
 
 ## Print And Play
 

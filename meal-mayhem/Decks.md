@@ -10,7 +10,7 @@
   - [India](#india)
 - [Extra](#extra-decks)
   - [USA](#usa)
-  - [Turkey](#turkey)
+  - [Türkiye](#türkiye)
   - [Japan](#japan)
   - [Mexico](#mexico)
 
@@ -242,7 +242,8 @@ VP equal to that amount. You don't have to match the recipe requirements for the
 ### Türkiye
 
 - **Special Ability** - Before scoring, you can replace opponent's **normal** or **hard** recipe
-with a **kebab** by discarding 1 or 2 prepared and unused ingredients of any type.
+with a **kebab** by discarding 1 or 2 prepared and unused ingredients of any type. You don't
+benefit from special ability effects of the replaced recipe.
 - **Win Condition** - Replace 4 opponent recipes with **kebab** recipes.
 - **Tracking** - The **kebab** recipe cards.
 
@@ -259,16 +260,16 @@ with a **kebab** by discarding 1 or 2 prepared and unused ingredients of any typ
     - Pomegranate Juice
     - Tahini
 - Recipe Cards (15):
-  - Easy Recipes (8):
+  - Easy Recipes (7):
     - Shish Kebab [kitchenware]
     - Adana Kebab [cookware]
     - Iskender Kebab [tableware]
-    - Patlican Kebab [kitchenware]
-    - Ciğer Kebab [cookware]
-    - Döner Kebab [tableware]
-    - Beyti Kebab [kitchenware]
-    - Tepsi Kebab [cookware]
-  - Normal Recipes (5):
+    - Ciğer Kebab [kitchenware]
+    - Döner Kebab [cookware]
+    - Beyti Kebab [tableware]
+    - Tepsi Kebab [kitchenware]
+  - Normal Recipes (6):
+    - Patlican Dolmasi [cookware]
     - Lahmacun [tableware]
     - Pide [kitchenware]
     - Köftesi [cookware]

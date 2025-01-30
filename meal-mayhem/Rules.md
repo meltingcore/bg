@@ -53,7 +53,7 @@ explicitly mentioned if it is done in **parallel** or in player **order**.
 
 ### Prepare Phase
 
-1. [**parallel**] Play any ingredient or utensil cards from your hand to your preparation area.
+1. [**parallel**] Play any ingredient and utensil cards from your hand to your preparation area.
 2. [**ordered**] Play any suitable action cards and then discard them.
 
 ### Cook Phase
@@ -105,11 +105,11 @@ this turn (you still have to discard down to 8 cards at the end of the turn afte
 - **Universal Ingredients** - Place during the **prepare** phase as ingredient card. During the
 **cook** phase you can cook any kind of recipe with only this card as all ingredient requirements
 for it.
-- **Cook Recipe Twice** - Place during the **cook** phase along with a recipe. During the **score**
-phase count that recipe as 2 recipes for scoring purposes.
+- **Cook Recipe Twice** - Place during the **cook** phase along with a recipe to count it as 2 for
+all purposes.
 
-Action cards can only be blocked (so discarded) by the **Block An Opponent** card, with the
-following exceptions:
+Action cards can only be blocked (so discarded) by the **Block An Opponent** card. The 2 cards
+below can also be discarded as follows:
 
 - **Universal Ingredients** cannot be discarded by the **Discard Ingredients** action card, but
 it gets discarded by the **Discard 1 Cooked Recipe** action card (since it participates in the
@@ -163,7 +163,7 @@ Then to determine the winner, calculate the VP of all players (met win condition
 If there is a tie, the one who most recently cooked in real life wins.
 
 
-## Additional Notes
+## Notes & Clarifications
 
 - Once their deck is empty, a player shuffles their discard pile to form a new draw pile. This
 happens even during the **shop** phase because at all times a player must be able to draw up to a
@@ -174,3 +174,6 @@ hand of 8 cards!
 of the 3 **exact** pasta ingredient cards (Italy) as win condition card.
 - Any recipes cooked with the help of the **Universal Ingredients** or the **Cook Twice** action
 cards do not participate in win condition tracking or special ability effects.
+- If a recipe that uses the **Cook Recipe Twice** action card is replaced by a Türkiye's **kebab** 
+recipe, both Türkiye and the player who cooks the recipe score its points, because only 1 of the 2
+recipes is replaced. Türkiye gets the action card during the replacement.
