@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.0]
+
+CHANGES:
+
+* All decks aligned accordingly to have 3 hard recipes.
+* Utensils now grant their bonus for each recipe.
+* Removed limit of 1 optional ingredient per recipe.
+* Introduced 2 new recipe mechanics and win condition limitation.
+* Action cards redesigned to have offensive and defensive functions.
+
 ## [0.4.4]
 
 CHANGES:

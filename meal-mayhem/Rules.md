@@ -79,8 +79,7 @@ Can be:
 
 - **Primary** - Used in all recipes.
 - **Secondary** - Used in **normal** and **hard** recipes.
-- **Optional** - Can be used in a recipe to grant **+1 VP**. Limit is 1 **optional** ingredient
-per recipe.
+- **Optional** - Can be used in a recipe to grant **+1 VP**.
 
 ### Recipe Cards
 
@@ -90,38 +89,62 @@ Can be:
 - **Normal** - Require 1 **primary** and 1 **secondary** ingredient and grant **+2 VP**.
 - **Hard** - Require 1 **primary** and 2 **secondary** ingredients and grant **+3 VP**.
 
+Recipes have the following specifics:
+
+- **Normal** and **Hard** recipes can be cooked for less but score less VP accordingly. For example,
+you can cook a **hard** recipe with only 1 secondary ingredient (as **normal** recipe) but you also
+score only **2 VP** (as **normal** recipes do). Or cook it only with the primary ingredient as 
+**easy** recipe to score only **1 VP**.
+- **Hard** recipes when cooked with their ingredient requirements fully covered make all other 
+recipes cooked in that turn to score extra **1 VP**. For example if you cook 1 **hard** recipe along
+with 2 **easy** recipes that turn, you score extra **2 VP** for the **easy** recipes totalling to
+3 + 1 + 1 + 2 = **7 VP**. This effect stacks so if you cook 2 **hard** recipes along with 1 
+**easy** recipe you score 3 + 3 + 1 + 2 + 2 = **11 VP**.
+- Only recipes that were cooked with their ingredient requirements fully covered participate in win
+condition tracking. For example with the Italy deck if you cook the **normal** recipe "Fettuccine
+Alfredo" with "Fettuccine" as **primary** ingredient only (so as an **easy** recipe) you cannot
+place the "Fettuccine" ingredient card in your win condition tracking area.
+
 ### Action Cards
 
-Used to disrupt opponents. Each deck has the same 10 action cards as follows:
+Can be played with either offensive or defensive effect. Offensive effects are used to disrupt
+opponents. Defensive effects benefit the players themselves. Each deck has the same 10 action cards
+as follows:
 
-- **Block An Opponent** (x3) - Prevent an opponent from playing an action card. This card can 
-be used cumulatively (so your opponent can block your block, you theirs, etc.).
-- **Discard Ingredients** - Choose up to 2 prepared ingredients that the opponent should discard.
-- **Discard Recipe** - Choose 1 cooked recipe that the opponent should discard.
-- **Discard Win Card** - Choose 1 Win Condition card that the opponent should discard.
-- **Discard Utensils** - Choose 1 utensil card that the opponent should discard.
-- **Draw Cards** - You can draw 3 more cards from the deck, disregarding the 8 cards hand limit
-this turn (you still have to discard down to 8 cards at the end of the turn after scoring).
-- **Universal Ingredients** - Place during the **prepare** phase as ingredient card. During the
-**cook** phase you can cook any kind of recipe with only this card as all ingredient requirements
-for it.
-- **Cook Recipe Twice** - Place during the **cook** phase along with a recipe to count it as 2 for
-all purposes.
+- **Block** (x3)
+  - **Offensive** - Prevent an opponent from playing an action card. 
+  - **Defensive** - Protect yourself from opponent's action card.
+- **Ingredients**
+  - **Offensive** - Choose 1 prepared ingredient that the opponent should discard.
+  - **Defensive** - Use this card as 1 prepared primary or secondary ingredient.
+- **Recipes** 
+  - **Offensive** - Choose 1 cooked recipe of an opponent. Shuffle the recipe card back into their
+  draw deck. The ingredients used for the recipe are saved for future use.
+  - **Defensive** - Take 1 recipe card back from your discard pile to your hand.
+- **Win Condition Cards**
+  - **Offensive** - Return 1 win condition card of an opponent back to their hand.
+  - **Defensive** - Take 1 card used for win condition tracking from your discard pile to your hand.
+- **Utensils**
+  - **Offensive** - Choose 1 utensil card of the opponent. They should flip it down so it's no
+  longer in effect.
+  - **Defensive** - Turn a flipped utensil card of yours back up so it's in effect again.
+- **Draw Cards**
+  - **Offensive** - Ask an opponent to discard 2 cards of their choosing from their hand.
+  - **Defensive** - Draw 2 cards from the draw deck, disregarding the 8 cards hand limit this turn 
+  (you still have to discard down to 8 cards at the end of the turn after scoring if necessary).
+- **Victory Points**
+  - **Offensive** - Make an opponent lose 2 VP (total cannot be less than 0).
+  - **Defensive** - Score 2 VP.
+- **Recipe Scores**
+  - **Offensive** - Make an opponent's cooked recipe to score 1 VP less.
+  - **Defensive** - Make a recipe you cooked to score 1 VP more.
 
-Action cards can only be blocked (so discarded) by the **Block An Opponent** card. The 2 cards
-below can also be discarded as follows:
-
-- **Universal Ingredients** cannot be discarded by the **Discard Ingredients** action card, but
-it gets discarded by the **Discard 1 Cooked Recipe** action card (since it participates in the
-cooking of that recipe as any type of regular ingredient card).
-- **Cook Recipe Twice** can be discarded by the **Discard 1 Cooked Recipe** action card, to
-preserve the recipe it was played with so instead of scoring it as 2 recipes you score it as 1.
+Action cards can only be blocked (so discarded) by the **Block An Action** card. The card can be 
+used cumulatively (so your opponent can block your block, you theirs, etc.). 
 
 ### Utensil Cards
 
-Grant **+1 VP** if you cook a recipe that matches the utensil. The bonus VP is once per turn per
-utensil card (not per cooked recipe)! So even if multiple recipes match a utensil card you still
-only score +1 VP for that utensil. 
+Grant **+1 VP** for each cooked recipe that has a symbol matching the utensil.
 
 Each deck has 3 utensil cards - **Kitchenware**, **Cookware** & **Tableware**.
 
@@ -172,8 +195,3 @@ hand of 8 cards!
 (i.e. cooked both an **entrée** and **appetizer** recipe for France or cooked 3 recipes with 
 **exact** pasta ingredients for Italy) you can still only put the **entrée** card (France) or 1
 of the 3 **exact** pasta ingredient cards (Italy) as win condition card.
-- Any recipes cooked with the help of the **Universal Ingredients** or the **Cook Twice** action
-cards do not participate in win condition tracking or special ability effects.
-- If a recipe that uses the **Cook Recipe Twice** action card is replaced by a Türkiye's **kebab** 
-recipe, both Türkiye and the player who cooks the recipe score its points, because only 1 of the 2
-recipes is replaced. Türkiye gets the action card during the replacement.

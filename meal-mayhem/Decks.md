@@ -47,15 +47,15 @@ grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes 
     - Penne al Pomodoro [cookware]
     - Cacio e Pepe [tableware]
     - Gnocchi alla Panna [kitchenware]
-  - Normal Recipes (6)
+  - Normal Recipes (7)
     - Spaghetti Carbonara (Spaghetti) [cookware]
     - Fettuccine Alfredo (Fettuccine) [tableware]
     - Lasagna Verde (Lasagna Sheets) [kitchenware]
     - Tagliatelle alla Bolognese (Tagliatelle) [cookware]
     - Gnocchi alla Sorrentina (Gnocchi) [tableware]
     - Penne all’Arrabbiata (Penne) [kitchenware]
-  - Hard Recipes (4)
     - Ravioli Burro e Salvia (Ravioli) [cookware]
+  - Hard Recipes (3)
     - Lasagna al Forno (Lasagna Sheets) [tableware]
     - Fettuccine ai Porcini e Tartufo (Fettuccine) [kitchenware]
     - Tagliatelle ai Funghi Porcini (Tagliatelle) [cookware]
@@ -133,15 +133,15 @@ of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
     - Cold Sesame Noodles (Noodles) [cookware]
     - Scallion Oil Noodles (Noodles) [tableware]
     - Zha Jiang Mian (Noodles) [kitchenware]
-  - Normal Recipes (7):
+  - Normal Recipes (6):
     - Soup Noodles with Chicken (Noodles) [cookware]
     - Hainanese Chicken Rice (Rice) [tableware]
     - Claypot Rice (Rice) [kitchenware]
     - Yangzhou Fried Rice (Rice) [cookware]
     - Cantonese Beef Chow Fun (Noodles) [tableware]
     - Sichuan Dan Dan Noodles (Noodles) [kitchenware]
+  - Hard Recipes (3)
     - Lo Mein (Noodles) [cookware]
-  - Hard Recipes (2)
     - Peking Duck Fried Rice (Rice) [tableware]
     - Dragon Beard Noodles (Noodles) [kitchenware]
 - Action Cards (10)
@@ -208,14 +208,14 @@ VP equal to that amount. You don't have to match the recipe requirements for the
   <summary>Deck Composition</summary>
 
 - Utensil Cards (3)
-- Ingredient Cards (24)
+- Ingredient Cards (25)
   - Primary (12)
-  - Secondary (9)
+  - Secondary (10)
   - Optional (3):
     - Ketchup
     - Mustard
     - Mayo
-- Recipe Cards (16):
+- Recipe Cards (15):
   - Easy Recipes (4)
     - Lobster Roll [kitchenware]
     - Cornbread [cookware]
@@ -230,11 +230,10 @@ VP equal to that amount. You don't have to match the recipe requirements for the
     - Tomahawk Steak (Steak) [kitchenware]
     - Porterhouse Steak (Steak) [cookware]
     - Ribeye Steak (Steak) [tableware]
-  - Hard Recipes (4):
-    - Luther Burger (Burger) [kitchenware]
-    - Deep-fried Burger (Burger) [cookware]
-    - T-bone Steak (Steak) [tableware]
-    - New York Strip (Steak) [kitchenware]
+  - Hard Recipes (3):
+    - Deep-fried Burger (Burger) [kitchenware]
+    - T-bone Steak (Steak) [cookware]
+    - Apple Pie [tableware]
 - Action Cards (10)
 - Country Card (1)
 </details>
@@ -251,15 +250,15 @@ benefit from special ability effects of the replaced recipe.
   <summary>Deck Composition</summary>
 
 - Utensil Cards (3)
-- Ingredient Cards (25):
-  - Primary (13)
+- Ingredient Cards (24):
+  - Primary (12)
   - Secondary (8)
   - Optional (4):
     - Sumac
     - Paprika
     - Pomegranate Juice
     - Tahini
-- Recipe Cards (15):
+- Recipe Cards (16):
   - Easy Recipes (7):
     - Shish Kebab [kitchenware]
     - Adana Kebab [cookware]
@@ -275,9 +274,10 @@ benefit from special ability effects of the replaced recipe.
     - Köftesi [cookware]
     - Muhammara [tableware]
     - Imam Bayildi [kitchenware]
-  - Hard Recipes (2):
+  - Hard Recipes (3):
     - Baklava [cookware]
     - Tulumba [tableware]
+    - Kadayif [kitchenware]
 - Action Cards (10)
 - Country Card (1)
 </details>
@@ -320,7 +320,7 @@ benefit from special ability effects of the replaced recipe.
     - Takoyaki [cookware]
   - Hard Recipes (3):
     - Unagi Sushi Platter [tableware]
-    - Ramen Tonkotsu Deluxe [kitchenware]
+    - Omurice [kitchenware]
     - Gyoza [cookware]
 - Action Cards (10)
 - Country Card (1)
@@ -338,17 +338,17 @@ discard 1 card from your hand for each.
   <summary>Deck Composition</summary>
 
 - Utensil Cards (3)
-- Ingredient Cards (27):
+- Ingredient Cards (26):
   - Primary (11)
-  - Secondary (13):
+  - Secondary (12):
     - Habanero (Hot) (4)
-    - Jalapeño (Hot) (4)
+    - Jalapeño (Hot) (3)
     - Avocado (5)
   - Optional (3):
     - Lime
     - Cilantro
     - Sour Cream
-- Recipe Cards (13):
+- Recipe Cards (14):
   - Easy Recipes (5):
     - Quesadilla [kitchenware]
     - Taco de Frijoles [cookware]
@@ -362,9 +362,10 @@ discard 1 card from your hand for each.
     - Tostadas de Pollo [tableware]
     - Pico de Gallo Nachos [kitchenware]
     - Taco al Pastor [cookware]
-  - Hard Recipes (2):
+  - Hard Recipes (3):
     - Pozole Rojo [tableware]
     - Chiles Rellenos [kitchenware]
+    - Tamales [cookware]
 - Action Cards (10)
 - Country Card (1)
 </details>
