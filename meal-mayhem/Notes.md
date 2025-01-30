@@ -2,6 +2,8 @@
 
 ## IDEAS:
 
+### DECKS:
+
 - In the Sweden deck you can have 6-7 recipes all for Surströmming (the rotten fish).
 A special ability could be that can cook such recipe but if you do you cannot cook any other recipe.
 However, it gives you as much VP as cards you decide to discard from your hand (up to 3). Win
@@ -13,3 +15,14 @@ could be to make 4 recipes with 4 different flavour types.
 - The Greek deck can have a special ability that when you cook a recipe with olive oil ingredient
 you can draw 1 card to be used on top of the maximum hand limit next turn. For normal and hard
 recipes you will also get 1 VP. Win condition could be to cook 4 seafood recipes.
+
+### MECHANICS:
+
+- Some cards can have a double function so that you can have a choice when playing them. This way
+you can have a bit more strategy in the game instead of just dumping what you draw. For example:
+  - unused but prepared ingredient cards can be lent to other players for a price (like 1 VP) or
+  discarded for (2 for 1 VP).
+  - utensils cards can be played as either giving you +1 VP every turn regardless of the recipe or
+  +2 for matching recipes.
+  - recipes can score based on the number of ingredients used in them (i.e. hard recipes can be
+  cooked with only 1 (primary) ingredient (like easy recipes) but you then score only 1 VP)

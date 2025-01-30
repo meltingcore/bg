@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.4]
+
+CHANGES:
+
+* Added "Mission Statement" and "Disclaimers" sections.
+* Added notes for ideas for multi-function cards.
+
 ## [0.4.3]
 
 CHANGES:
