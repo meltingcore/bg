@@ -6,7 +6,8 @@
 - [Mission Statement](#mission-statement)
 - [Online Simulation](#online-simulation)
 - [Print And Play](#print-and-play)
-- [Disclaimer](#disclaimer)
+- [Disclaimers](#disclaimers)
+- [Discussions](#discussions)
 
 ## Description
 
@@ -100,3 +101,12 @@ expense of some Italians potentially being mad at me for having a card game not 
 representing their cuisine which the said game never claims to aim to do.
 - If you have any feedback, please let me know as I am still developing this. :)
 - Have fun!
+
+## Discussions
+
+Discussions about this game can be found on the Break My Game Discord as well as in these links:
+
+- https://www.reddit.com/r/tabletopgamedesign/comments/1hskvmt/idea_for_a_card_game_about_cooking/
+- https://www.reddit.com/r/BoardgameDesign/comments/1htgp9y/cooking_card_game/
+- https://boardgamegeek.com/thread/3433379/idea-for-a-card-game-about-cooking
+- https://www.facebook.com/groups/608420639298774/permalink/3227212477419564/

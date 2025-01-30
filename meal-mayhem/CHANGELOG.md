@@ -4,7 +4,7 @@
 
 CHANGES:
 
-* Added "Mission Statement" and "Disclaimers" sections.
+* Added "Mission Statement", "Discussions" & "Disclaimers" sections.
 * Added notes for ideas for multi-function cards.
 
 ## [0.4.3]
