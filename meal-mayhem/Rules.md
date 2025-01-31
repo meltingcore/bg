@@ -116,7 +116,7 @@ as follows:
   - **Defensive** - Protect yourself from opponent's action card.
 - **Ingredients**
   - **Offensive** - Choose 1 prepared ingredient that the opponent should discard.
-  - **Defensive** - Use this card as 1 prepared primary or secondary ingredient.
+  - **Defensive** - Prepare 1 ingredient directly from your discard pile.
 - **Recipes** 
   - **Offensive** - Choose 1 cooked recipe of an opponent. Shuffle the recipe card back into their
   draw deck. The ingredients used for the recipe are saved for future use.
@@ -132,10 +132,7 @@ as follows:
   - **Offensive** - Ask an opponent to discard 2 cards of their choosing from their hand.
   - **Defensive** - Draw 2 cards from the draw deck, disregarding the 8 cards hand limit this turn 
   (you still have to discard down to 8 cards at the end of the turn after scoring if necessary).
-- **Victory Points**
-  - **Offensive** - Make an opponent lose 2 VP (total cannot be less than 0).
-  - **Defensive** - Score 2 VP.
-- **Recipe Scores**
+- **Recipe Scores** (x2)
   - **Offensive** - Make an opponent's cooked recipe to score 1 VP less.
   - **Defensive** - Make a recipe you cooked to score 1 VP more.
 
