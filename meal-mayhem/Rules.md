@@ -115,8 +115,9 @@ as follows:
   - **Offensive** - Prevent an opponent from playing an action card. 
   - **Defensive** - Protect yourself from opponent's action card.
 - **Ingredients**
-  - **Offensive** - Choose 1 prepared ingredient that the opponent should discard.
-  - **Defensive** - Prepare 1 ingredient directly from your discard pile.
+  - **Offensive** - Discard Ingredient - Choose 1 prepared ingredient that the opponent should
+  discard.
+  - **Defensive** - Reuse Ingredient - Prepare 1 ingredient directly from your discard pile.
 - **Recipes** 
   - **Offensive** - Choose 1 cooked recipe of an opponent. Shuffle the recipe card back into their
   draw deck. The ingredients used for the recipe are saved for future use.
@@ -132,9 +133,12 @@ as follows:
   - **Offensive** - Ask an opponent to discard 2 cards of their choosing from their hand.
   - **Defensive** - Draw 2 cards from the draw deck, disregarding the 8 cards hand limit this turn 
   (you still have to discard down to 8 cards at the end of the turn after scoring if necessary).
-- **Recipe Scores** (x2)
+- **Recipe Scores**
   - **Offensive** - Make an opponent's cooked recipe to score 1 VP less.
   - **Defensive** - Make a recipe you cooked to score 1 VP more.
+- **Hands**
+  - **Offensive** - Ask an opponent to replace their hand.
+  - **Defensive** - Replace your hand.
 
 Action cards can only be blocked (so discarded) by the **Block An Action** card. The card can be 
 used cumulatively (so your opponent can block your block, you theirs, etc.). 
