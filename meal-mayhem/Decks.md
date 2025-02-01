@@ -37,9 +37,9 @@ grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes 
     - Penne (2)
     - Gnocchi (2)
   - Secondary (9)
-  - Optional (3):
+  - Optioanal (3):
     - Basil
-    - Olive Oil
+    - Balsamic Vinegar
     - Parmigiano
 - Recipe Cards (14):
   - Easy Recipes (4)
@@ -84,23 +84,23 @@ VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main**
     - Cream
 - Recipe Cards (15):
   - Easy Recipes (4)
-    - Soupe à l’Oignon (entrée) [kitchenware]
-    - Bouillabaisse (entrée) [cookware]
-    - Garbure (entrée) [tableware]
-    - Tourin (entrée) [kitchenware]
+    - Soupe à l’Oignon (entrée) [cookware]
+    - Bouillabaisse (entrée) [tableware]
+    - Garbure (entrée) [kitchenware]
+    - Tourin (entrée) [cookware]
   - Normal Recipes (8):
-    - Quiche Lorraine (Appetizer) [cookware]
-    - Escargots de Bourguignon (Appetizer) [tableware]
-    - Salade Niçoise (Appetizer) [kitchenware]
-    - Soufflé au Fromage (Appetizer) [cookware]
-    - Ratatouille (Main) [tableware]
-    - Boeuf Bourguignon (Main) [kitchenware]
-    - Châteaubriand (Main) [cookware]
-    - Croque Monsieur (Main) [tableware]
+    - Quiche Lorraine (Appetizer) [tableware]
+    - Escargots de Bourguignon (Appetizer) [kitchenware]
+    - Salade Niçoise (Appetizer) [cookware]
+    - Soufflé au Fromage (Appetizer) [tableware]
+    - Ratatouille (Main) [kitchenware]
+    - Boeuf Bourguignon (Main) [cookware]
+    - Châteaubriand (Main) [tableware]
+    - Croque Monsieur (Main) [kitchenware]
   - Hard Recipes (3):	
-    - Pain Perdu (Dessert) [kitchenware]
-    - Crème Brûlée (Dessert) [cookware]
-    - Tarte Tatin (Dessert) [tableware]
+    - Pain Perdu (Dessert) [cookware]
+    - Crème Brûlée (Dessert) [tableware]
+    - Tarte Tatin (Dessert) [kitchenware]
 - Action Cards (10)
 - Country Card (1)
 </details>
@@ -126,24 +126,24 @@ of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
     - Mung Bean Sprouts
 - Recipe Cards (16):
   - Easy Recipes (7)
-    - Egg Fried Rice (Rice) [kitchenware]
-    - Coconut Rice (Rice) [cookware]
-    - Congee (Rice) [tableware]
-    - Sticky Rice with Mango (Rice) [kitchenware]
-    - Cold Sesame Noodles (Noodles) [cookware]
-    - Scallion Oil Noodles (Noodles) [tableware]
-    - Zha Jiang Mian (Noodles) [kitchenware]
+    - Egg Fried Rice (Rice) [tableware]
+    - Coconut Rice (Rice) [kitchenware]
+    - Congee (Rice) [cookware]
+    - Sticky Rice with Mango (Rice) [tableware]
+    - Cold Sesame Noodles (Noodles) [kitchenware]
+    - Scallion Oil Noodles (Noodles) [cookware]
+    - Zha Jiang Mian (Noodles) [tableware]
   - Normal Recipes (6):
-    - Soup Noodles with Chicken (Noodles) [cookware]
-    - Hainanese Chicken Rice (Rice) [tableware]
-    - Claypot Rice (Rice) [kitchenware]
-    - Yangzhou Fried Rice (Rice) [cookware]
-    - Cantonese Beef Chow Fun (Noodles) [tableware]
-    - Sichuan Dan Dan Noodles (Noodles) [kitchenware]
+    - Soup Noodles with Chicken (Noodles) [kitchenware]
+    - Hainanese Chicken Rice (Rice) [cookware]
+    - Claypot Rice (Rice) [tableware]
+    - Yangzhou Fried Rice (Rice) [kitchenware]
+    - Cantonese Beef Chow Fun (Noodles) [cookware]
+    - Sichuan Dan Dan Noodles (Noodles) [tableware]
   - Hard Recipes (3)
-    - Lo Mein (Noodles) [cookware]
-    - Peking Duck Fried Rice (Rice) [tableware]
-    - Dragon Beard Noodles (Noodles) [kitchenware]
+    - Lo Mein (Noodles) [kitchenware]
+    - Peking Duck Fried Rice (Rice) [cookware]
+    - Dragon Beard Noodles (Noodles) [tableware]
 - Action Cards (10)
 - Country Card (1)
 </details>
@@ -165,7 +165,7 @@ of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
   - Secondary (12):
     - Cumin (2)
     - Saffron (2)
-    - Turmeric (2)
+    - Tamarind (2)
     - Coriander (2)
     - Cinnamon (2)
     - Cardamom (2)

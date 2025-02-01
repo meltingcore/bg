@@ -109,36 +109,35 @@ place the "Fettuccine" ingredient card in your win condition tracking area.
 
 Can be played with either offensive or defensive effect. Offensive effects are used to disrupt
 opponents. Defensive effects benefit the players themselves. Each deck has the same 10 action cards
-as follows:
+as follows (Offensive [O] and Defensive [D]):
 
-- **Block** (x3)
-  - **Offensive** - Prevent an opponent from playing an action card. 
-  - **Defensive** - Protect yourself from opponent's action card.
+- **Blocking** (x3)
+  - [O] Block Action - Prevent an opponent from playing an action card. 
+  - [D] Block Action - Protect yourself from opponent's action card.
 - **Ingredients**
-  - **Offensive** - Discard Ingredient - Choose 1 prepared ingredient that the opponent should
-  discard.
-  - **Defensive** - Reuse Ingredient - Prepare 1 ingredient directly from your discard pile.
+  - [O] Discard Ingredient - Choose 1 prepared ingredient that the opponent should discard.
+  - [D] Reuse Ingredient - Prepare 1 ingredient directly from your discard pile.
 - **Recipes** 
-  - **Offensive** - Choose 1 cooked recipe of an opponent. Shuffle the recipe card back into their
-  draw deck. The ingredients used for the recipe are saved for future use.
-  - **Defensive** - Take 1 recipe card back from your discard pile to your hand.
+  - [O] Lose Recipe - Choose 1 cooked recipe of an opponent. Shuffle the recipe card back into
+  their draw deck. The ingredients used for the recipe are saved for future use.
+  - [D] Reuse Recipe - Take 1 recipe card back from your discard pile to your hand.
 - **Win Condition Cards**
-  - **Offensive** - Return 1 win condition card of an opponent back to their hand.
-  - **Defensive** - Take 1 card used for win condition tracking from your discard pile to your hand.
+  - [O] Disrupt Progress - Shuffle 1 win condition card of an opponent back in their draw pile.
+  - [D] Restore Progress - Take 1 card suitable for win condition tracking from your discard pile
+  to your hand.
 - **Utensils**
-  - **Offensive** - Choose 1 utensil card of the opponent. They should flip it down so it's no
-  longer in effect.
-  - **Defensive** - Turn a flipped utensil card of yours back up so it's in effect again.
-- **Draw Cards**
-  - **Offensive** - Ask an opponent to discard 2 cards of their choosing from their hand.
-  - **Defensive** - Draw 2 cards from the draw deck, disregarding the 8 cards hand limit this turn 
+  - [O] Break Utensil - Flip a utensil card of an opponent down to disable it.
+  - [D] Repair Utensil - Flip a disabled utensil card of yours back up to enable it.
+- **Drawing Cards**
+  - [O] Discard Cards - Ask an opponent to discard 2 cards of their choosing from their hand.
+  - [D] Draw Cards - Draw 2 cards from the draw deck, disregarding the 8 cards hand limit this turn 
   (you still have to discard down to 8 cards at the end of the turn after scoring if necessary).
 - **Recipe Scores**
-  - **Offensive** - Make an opponent's cooked recipe to score 1 VP less.
-  - **Defensive** - Make a recipe you cooked to score 1 VP more.
-- **Hands**
-  - **Offensive** - Ask an opponent to replace their hand.
-  - **Defensive** - Replace your hand.
+  - [O] Score Less - Make an opponent's cooked recipe to score 1 VP less.
+  - [D] Score More - Make a recipe you cooked to score 1 VP more.
+- **Playing Hands**
+  - [O] Replace Hand - Ask an opponent to replace their hand.
+  - [D] Replace Hand - Replace your hand.
 
 Action cards can only be blocked (so discarded) by the **Block An Action** card. The card can be 
 used cumulatively (so your opponent can block your block, you theirs, etc.). 

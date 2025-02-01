@@ -4,11 +4,17 @@
 
 CHANGES:
 
-* All decks aligned accordingly to have 3 hard recipes.
-* Utensils now grant their bonus for each recipe.
-* Removed limit of 1 optional ingredient per recipe.
+* Various decks adjustments:
+  * All decks aligned to have 3 hard recipes.
+  * Card "design" aligned so that ingredients & recipes are using "Fill color" art instead of
+  borders at random.
+* Utensil adjustments:
+  * Utensil order no longer starts with kitchenware for all decks.
+  * Utensils now grant their bonus for each recipe.
+* Removed max limit of 1 optional ingredient per recipe.
 * Introduced 2 new recipe mechanics and win condition limitation.
 * Action cards redesigned to have offensive and defensive functions.
+
 
 ## [0.4.4]
 
