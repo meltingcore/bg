@@ -19,17 +19,19 @@
   - [Country Card](#country-card)
 - [Roles](#roles)
 - [Winning the Game](#winning-the-game)
-- [Additional Notes](#additional-notes)
+- [Additional Notes](#notes-and-clarifications)
 
 ## Overview
 
-Welcome to the ultimate culinary competition! Each player selects a cuisine deck with unique
-ingredients, recipes, and abilities. The goal is to outscore your opponents by cooking recipes,
-utilizing your deck's special abilities, and achieving your win condition.
+Welcome to the ultimate culinary competition! 
+Each player plays as a restaurant that specializes in a specific cuisine. The cuisine is represented
+as a deck with unique ingredients, recipes, and abilities.  
+For 10 days your restaurant competes to outscore your opponents by cooking recipes, utilizing your
+deck's special abilities, and achieving your win condition.
 
 ## Objective
 
-Be the first to achieve your deck's win condition, OR score 40 Victory Points (VP) to win.
+Be the first to achieve your deck's win condition, OR score the most Victory Points (VP) to win.
 
 ## Setup
 
@@ -38,38 +40,29 @@ Be the first to achieve your deck's win condition, OR score 40 Victory Points (V
 3. On your right, you will place your discarded cards in a pile face down.
 4. On the left of the country card, you will place your win condition cards.
 5. On the right of the country card, you will place your utensils cards.
-6. Decide the first player randomly and start the game.
+6. Decide the first player randomly and start the game (play proceeds clockwise).
 
 ## Turn Structure
 
-Each turn consists of 4 phases. Each phase consists of multiple steps and for each step it is
-explicitly mentioned if it is done in **parallel** or in player **order**.
+The game consists of 10 turns representing 10 days of competition.
+During each turn, players can do any of the actions described below. No action is mandatory but 
+some are sane to do always (like drawing cards to have a full hand).
 
-### Shop Phase
+- Discard up to 3 cards from your hand
+- Draw cards until you have 8 cards in your hand.
+- Play your role card (if role cards are in play).
+- Play any ingredient and utensil cards from your hand to your preparation area.
+- Play any recipes from your hand.
+- Play any suitable action cards.
 
-1. [**parallel**] Discard up to 3 cards from your hand.
-2. [**parallel**] Draw cards from your deck until you have 8 cards in your hand.
-3. [**ordered**] Play your role card (if role cards are in play).
+After 10 turns, the game ends and the player with the most VP wins.
+Scoring is calculated as follows:
 
-### Prepare Phase
-
-1. [**parallel**] Play any ingredient and utensil cards from your hand to your preparation area.
-2. [**ordered**] Play any suitable action cards and then discard them.
-
-### Cook Phase
-
-1. [**ordered**] Play any recipes from your hand as long as you meet their ingredient requirements.
-You can cook multiple recipes if you have enough ingredients prepared.
-2. [**ordered**] Play any suitable action cards and then discard them.
-
-### Score Phase
-
-1. [**ordered**] Score VP for recipes cooked + any special ability effects if eligible and any
+- Score VP for recipes cooked + any special ability effects if eligible and any
 utensil cards that match a cooked recipe.
-2. [**ordered**] If you have a card(s) from a cooked recipe that are used to track your win
-condition, place one of them (of your choosing) in your win condition tracking area.
-3. [**parallel**] Discard any cooked recipes along with the ingredient used for them in your
-discard pile.
+- If you have a card(s) from a cooked recipe that are used to track your win
+condition, place them in your win condition tracking area. Each win condition card
+gives you 5 VP but complete win condition gives you 30 VP instead of 20 VP.
 
 ## Card Types
 
@@ -108,8 +101,12 @@ place the "Fettuccine" ingredient card in your win condition tracking area.
 ### Action Cards
 
 Can be played with either offensive or defensive effect. Offensive effects are used to disrupt
-opponents. Defensive effects benefit the players themselves. Each deck has the same 10 action cards
-as follows (Offensive [O] and Defensive [D]):
+opponents. Defensive effects benefit the players themselves.  
+When you decide to play an action card offensively you chose a player and put the card in front of 
+them faced down. It is only revealed when it's their turn to play. They can either block the action
+or let it happen.
+
+The action cards are as follows (Offensive [O] and Defensive [D]):
 
 - **Blocking** (x3)
   - [O] Block Action - Prevent an opponent from playing an action card. 
@@ -178,20 +175,12 @@ you both gain **+1 VP**. If not, you both score **-1 VP**.
 
 ## Winning the Game
 
-The game ends after the turn in which a player meets its win condition or scores 40 VP in total.
-But winning is not immediate! Everybody has to finish their turn and score their VP before the
-game ends.
-
-Then to determine the winner, calculate the VP of all players (met win condition counts as 30 VP).
+The game ends after 10 turns. Then to determine the winner, calculate the VP of all players 
 If there is a tie, the one who most recently cooked in real life wins.
 
 
-## Notes & Clarifications
+## Notes And Clarifications
 
 - Once their deck is empty, a player shuffles their discard pile to form a new draw pile. This
 happens even during the **shop** phase because at all times a player must be able to draw up to a
 hand of 8 cards!
-- Only 1 win condition card can be put per turn! So even if you have multiple win conditions
-(i.e. cooked both an **entrée** and **appetizer** recipe for France or cooked 3 recipes with 
-**exact** pasta ingredients for Italy) you can still only put the **entrée** card (France) or 1
-of the 3 **exact** pasta ingredient cards (Italy) as win condition card.
