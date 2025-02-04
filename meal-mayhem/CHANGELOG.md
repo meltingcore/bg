@@ -13,7 +13,7 @@ CHANGES:
   * Utensil order no longer starts with kitchenware for all decks.
   * Utensils now grant their bonus for each recipe.
 * Removed max limit of 1 optional ingredient per recipe.
-* Introduced bonus score mechanic to promote cooking hard recipes.
+* Introduced additional recipe mechanics.
 * Action cards redesigned to have offensive and defensive functions.
 
 
