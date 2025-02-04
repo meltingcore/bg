@@ -43,10 +43,10 @@ grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes 
     - Parmigiano
 - Recipe Cards (14):
   - Easy Recipes (4)
-    - Pasta Aglio e Olio [kitchenware]
-    - Penne al Pomodoro [cookware]
-    - Cacio e Pepe [tableware]
-    - Gnocchi alla Panna [kitchenware]
+    - Marinara [kitchenware]
+    - Quattro Formaggi [cookware]
+    - Napoletana [tableware]
+    - Capricciosa [kitchenware]
   - Normal Recipes (7)
     - Spaghetti Carbonara (Spaghetti) [cookware]
     - Fettuccine Alfredo (Fettuccine) [tableware]
@@ -217,23 +217,23 @@ VP equal to that amount. You don't have to match the recipe requirements for the
     - Mayo
 - Recipe Cards (15):
   - Easy Recipes (4)
-    - Lobster Roll [kitchenware]
-    - Cornbread [cookware]
-    - Clam Chowder [tableware]
-    - Johnny Cakes [kitchenware]
+    - Lobster Roll [cookware]
+    - Cornbread [tableware]
+    - Clam Chowder [kitchenware]
+    - Johnny Cakes [cookware]
   - Normal Recipes (8):
-    - Juicy Lucy (Burger) [cookware]
-    - Classic Cheeseburger (Burger) [tableware]
-    - Bacon Cheeseburger (Burger) [kitchenware]
-    - Green Chile Cheeseburger (Burger) [cookware]
-    - Philly Cheesesteak (Steak) [tableware]
-    - Tomahawk Steak (Steak) [kitchenware]
-    - Porterhouse Steak (Steak) [cookware]
-    - Ribeye Steak (Steak) [tableware]
+    - Juicy Lucy (Burger) [tableware]
+    - Classic Cheeseburger (Burger) [kitchenware]
+    - Bacon Cheeseburger (Burger) [cookware]
+    - Green Chile Cheeseburger (Burger) [tableware]
+    - Philly Cheesesteak (Steak) [kitchenware]
+    - Tomahawk Steak (Steak) [cookware]
+    - Porterhouse Steak (Steak) [tableware]
+    - Ribeye Steak (Steak) [kitchenware]
   - Hard Recipes (3):
-    - Deep-fried Burger (Burger) [kitchenware]
-    - T-bone Steak (Steak) [cookware]
-    - Apple Pie [tableware]
+    - Deep-fried Burger (Burger) [cookware]
+    - T-bone Steak (Steak) [tableware]
+    - Apple Pie [kitchenware]
 - Action Cards (10)
 - Country Card (1)
 </details>
@@ -252,32 +252,31 @@ benefit from special ability effects of the replaced recipe.
 - Utensil Cards (3)
 - Ingredient Cards (24):
   - Primary (12)
-  - Secondary (8)
-  - Optional (4):
+  - Secondary (9)
+  - Optional (3):
     - Sumac
     - Paprika
     - Pomegranate Juice
-    - Tahini
 - Recipe Cards (16):
   - Easy Recipes (7):
-    - Shish Kebab [kitchenware]
-    - Adana Kebab [cookware]
-    - Iskender Kebab [tableware]
-    - Ciğer Kebab [kitchenware]
-    - Döner Kebab [cookware]
-    - Beyti Kebab [tableware]
-    - Tepsi Kebab [kitchenware]
+    - Shish Kebab [tableware]
+    - Adana Kebab [kitchenware]
+    - Iskender Kebab [cookware]
+    - Ciğer Kebab [tableware]
+    - Döner Kebab [kitchenware]
+    - Beyti Kebab [cookware]
+    - Tepsi Kebab [tableware]
   - Normal Recipes (6):
-    - Patlican Dolmasi [cookware]
-    - Lahmacun [tableware]
-    - Pide [kitchenware]
-    - Köftesi [cookware]
-    - Muhammara [tableware]
-    - Imam Bayildi [kitchenware]
+    - Patlican Dolmasi [kitchenware]
+    - Lahmacun [cookware]
+    - Pide [tableware]
+    - Köftesi [kitchenware]
+    - Muhammara [cookware]
+    - Imam Bayildi [tableware]
   - Hard Recipes (3):
-    - Baklava [cookware]
-    - Tulumba [tableware]
-    - Kadayif [kitchenware]
+    - Baklava [kitchenware]
+    - Turkish Delight [cookware]
+    - Kadayif [tableware]
 - Action Cards (10)
 - Country Card (1)
 </details>
@@ -297,20 +296,20 @@ benefit from special ability effects of the replaced recipe.
 - Ingredient Cards (26):  
   - Primary (11)
   - Secondary (12):
-    - Umami (5)
+    - Umami (4)
     - Wasabi (4)
-    - Ginger (3)
+    - Ginger (4)
   - Optional (3):
     - Nori
     - Sesame Oil
-    - Rice Vinegar
+    - Yuzu
 - Recipe Cards (14): 
-  - Easy Recipes (3)
+  - Easy Recipes (4)
     - Shoyu Ramen [kitchenware]
     - Onigiri [cookware]
     - Edamame Salad [tableware]
-  - Normal Recipes (8):
     - Tamago Sushi [kitchenware]
+  - Normal Recipes (7):
     - Miso Ramen [cookware]
     - Tonkotsu Ramen [tableware]
     - California Roll [kitchenware]
@@ -341,31 +340,31 @@ discard 1 card from your hand for each.
 - Ingredient Cards (26):
   - Primary (11)
   - Secondary (12):
-    - Habanero (Hot) (4)
-    - Jalapeño (Hot) (3)
-    - Avocado (5)
+    - Cayenne Pepper (Hot) (4)
+    - Jalapeño (Hot) (4)
+    - Avocado (4)
   - Optional (3):
     - Lime
     - Cilantro
     - Sour Cream
 - Recipe Cards (14):
   - Easy Recipes (5):
-    - Quesadilla [kitchenware]
-    - Taco de Frijoles [cookware]
-    - Chilaquiles Verdes [tableware]
-    - Carne Asada Tacos [kitchenware]
-    - Enchiladas Rojas [cookware]
+    - Quesadilla [cookware]
+    - Taco de Frijoles [tableware]
+    - Chilaquiles Verdes [kitchenware]
+    - Carne Asada Tacos [cookware]
+    - Enchiladas Rojas [tableware]
   - Normal Recipes (6):
-    - Mole Poblano with Rice [tableware]
-    - Burrito de Frijoles [kitchenware]
-    - Chicken Fajitas [cookware]
-    - Tostadas de Pollo [tableware]
-    - Pico de Gallo Nachos [kitchenware]
-    - Taco al Pastor [cookware]
+    - Mole Poblano with Rice [kitchenware]
+    - Burrito de Frijoles [cookware]
+    - Chicken Fajitas [tableware]
+    - Tostadas de Pollo [kitchenware]
+    - Pico de Gallo Nachos [cookware]
+    - Taco al Pastor [tableware]
   - Hard Recipes (3):
-    - Pozole Rojo [tableware]
-    - Chiles Rellenos [kitchenware]
-    - Tamales [cookware]
+    - Pozole Rojo [kitchenware]
+    - Chiles Rellenos [cookware]
+    - Tamales [tableware]
 - Action Cards (10)
 - Country Card (1)
 </details>

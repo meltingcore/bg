@@ -89,21 +89,12 @@ Can be:
 - **Normal** - Require 1 **primary** and 1 **secondary** ingredient and grant **+2 VP**.
 - **Hard** - Require 1 **primary** and 2 **secondary** ingredients and grant **+3 VP**.
 
-Recipes have the following specifics:
+Hard recipes have the following specific:
 
-- **Normal** and **Hard** recipes can be cooked for less but score less VP accordingly. For example,
-you can cook a **hard** recipe with only 1 secondary ingredient (as **normal** recipe) but you also
-score only **2 VP** (as **normal** recipes do). Or cook it only with the primary ingredient as 
-**easy** recipe to score only **1 VP**.
-- **Hard** recipes when cooked with their ingredient requirements fully covered make all other 
-recipes cooked in that turn to score extra **1 VP**. For example if you cook 1 **hard** recipe along
-with 2 **easy** recipes that turn, you score extra **2 VP** for the **easy** recipes totalling to
-3 + 1 + 1 + 2 = **7 VP**. This effect stacks so if you cook 2 **hard** recipes along with 1 
-**easy** recipe you score 3 + 3 + 1 + 2 + 2 = **11 VP**.
-- Only recipes that were cooked with their ingredient requirements fully covered participate in win
-condition tracking. For example with the Italy deck if you cook the **normal** recipe "Fettuccine
-Alfredo" with "Fettuccine" as **primary** ingredient only (so as an **easy** recipe) you cannot
-place the "Fettuccine" ingredient card in your win condition tracking area.
+- **Hard** recipes when cooked score extra **1 VP** for any other recipe cooked in the same turn.
+For example if you cook 1 **hard** recipe along with 2 **easy** recipes that turn, you score extra
+**2 VP** for the **easy** recipes totalling to 3 + 1 + 1 + 2 = **7 VP**. This effect stacks so if
+you cook 2 **hard** recipes along with 1 **easy** recipe you score 3 + 3 + 1 + 2 + 2 = **11 VP**.
 
 ### Action Cards
 
