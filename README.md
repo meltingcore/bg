@@ -4,4 +4,4 @@ Store board game ideas, dev notes, changelog, etc.
 
 ## Table of Contents
 
-- [Meal Mayhem](meal-mayhem/README.md)
+- [Food Court](food-court/README.md)

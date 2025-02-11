@@ -283,5 +283,5 @@ If there is still a tie, the one who most recently cooked in real life wins.
 ## Notes And Clarifications
 
 - Once their deck is empty, a player shuffles their discard pile to form a new draw pile. This
-happens even during the **shop** phase because at all times a player must be able to draw up to a
-hand of 8 cards!
+happens even when drawing because at all times a player must be able to draw up to a hand of 8 
+cards!

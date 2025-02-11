@@ -1,4 +1,4 @@
-# Meal Mayhem
+# Food Court
 
 ## Table of Contents
 
@@ -58,7 +58,7 @@ to order for a takeout, you can play this game to decide. :)
 ## Online Simulation
 
 You can find the exported `png` deck templates [here](files/templates).
-Play testing is available on [Screentop.gg](https://screentop.gg/@grumpper/meal-mayhem).
+Play testing is available on [Screentop.gg](https://screentop.gg/@grumpper/food-court).
 
 ## Print And Play
 
@@ -82,23 +82,14 @@ I used the below for my play testing without issues:
 
 - The design is currently for play testing purposes only (so cards are not just text on white).
 It was made using [Photopeia](https://www.photopea.com/) using assets from
-[FlatIcon](https://www.flaticon.com/). I was way ahead with the card designs when I saw that I have
-to mention the artists when I am using their work. So whoever recognizes their work in the cards,
-please let me know so that I can give proper credit.
+[FlatIcon](https://www.flaticon.com/), [Rawpixel](https://www.rawpixel.com/),
+[Freepik](https://www.freepik.com/), [Dafont](https://www.dafont.com/) and 
+[1001fonts](https://www.1001fonts.com/). I was way ahead with the card designs when I saw that I
+have to mention the artists when I am using their work. So whoever recognizes their work in the
+cards, please let me know so that I can give proper credit.
 - The game is in its play testing phase so the "lore" of the game is not final. Once I stabilize
 the mechanics and the balance of the game, I will work on the theme and the art of the game.
-Recipes will be correctly classified, etc. 
-- About authenticity and accuracy of the meals: It's still just a bunch of recipes for a game.
-It's not going to be exhaustive, precise, authentic, encyclopedic representation of a cuisine... 
-That is not the objective... I don't think such thing is even possible since even in various 
-regions of the same country 1 recipe is done in different ways. Go ask 10 Italians how to do proper
-Bolognese and you will get 10 different answers. So yeah - thematically I will stick to what
-random 3 famous cooking sites compiled + the common knowledge from pop culture. Maybe there is
-super signature and important dessert from Italy but in the game the mechanic of the Italian deck
-revolves around pasta so with a limit of roughly 14 recipes per deck as of now I cannot properly 
-represent the intricacies of the Italian cuisine in full... So I will stick to pasta recipes at the
-expense of some Italians potentially being mad at me for having a card game not properly
-representing their cuisine which the said game never claims to aim to do.
+Recipes will be correctly classified, etc.
 - If you have any feedback, please let me know as I am still developing this. :)
 - Have fun!
 
