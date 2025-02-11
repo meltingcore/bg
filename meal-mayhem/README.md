@@ -1,5 +1,10 @@
 # Meal Mayhem
 
+**NOTE!**
+
+This is a LTS branch for version 0.5.x of the game.
+No longer in active development!
+
 ## Table of Contents
 
 - [Description](#description)
