@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.6.0]
+
+CHANGES:
+
+* Roles are now in pairs and their setup, play and mechanics are described in detail. 
+* Various parts of the rules are rewritten for clarity.
+* Main mechanics are described in separate sections.
+* The theme of the game is changed to restaurants in a food court.
+* The turn structure is simplified.
+* Action cards adjusted to fit the "resolving before scoring" mechanic.
+
 ## [0.5.0]
 
 CHANGES:
