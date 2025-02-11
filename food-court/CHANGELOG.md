@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1]
+
+BUG FIXES:
+
+* Updated the deck templates.
+* Removed the game throughout the documentation.
+
 ## [0.6.0]
 
 CHANGES:
