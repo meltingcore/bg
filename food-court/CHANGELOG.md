@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2]
+
+BUG FIXES:
+
+* Added streamline version of the rules for quick reference.
+* Added some images in the rules for guidance.
+
 ## [0.6.1]
 
 BUG FIXES:

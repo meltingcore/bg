@@ -22,6 +22,7 @@
 - [Roles](#roles)
 - [Winning the Game](#winning-the-game)
 - [Additional Notes](#notes-and-clarifications)
+- [Quick Reference](quick-reference.md)
 
 ## Overview
 
@@ -46,6 +47,8 @@ _(The way role cards are played is explained in more detail in the [Roles](#role
 
 Then each player sets up their station as they seem fit.
 The below is just a suggested guide:
+
+![image](images/guide_setup.png)
 
 1. Place your deck's ability card in front of you.
 2. Place your deck on your left face down, shuffle it and draw 8 cards for your starting hand.
@@ -107,6 +110,20 @@ Can be:
 - **Secondary** - Used in **normal** and **hard** recipes.
 - **Optional** - Can be used in a recipe to grant **+1 VP**.
 
+![image](images/guide_ingredient.png)
+
+Ingredient cards have the following structure:
+
+- Ingredient Icon - Represents the type of the ingredient so you can recognize it in
+recipe requirements. Darker border means it is a **primary** ingredient.
+- Ingredient Picture - A picture of the ingredient.
+- Ingredient Description - Tells you which recipes the ingredient can be used in.
+- Ingredient Type - The type of the ingredient (primary, secondary, optional).
+- Ingredient Name - The name of the ingredient.
+- Special Symbol - In some decks, the ingredient has a special symbol that can be used as visual
+aid for certain deck mechanics. In the above example it tells you that this is a Tagliatelle
+so you know if the recipe cooked with it scores extra points for using exact pasta ingredient.
+
 ### Recipe Cards
 
 Can be:
@@ -114,6 +131,20 @@ Can be:
 - **Easy** - Require 1 **primary** ingredient and grant **+1 VP**.
 - **Normal** - Require 1 **primary** and 1 **secondary** ingredient and grant **+2 VP**.
 - **Hard** - Require 1 **primary** and 2 **secondary** ingredients and grant **+3 VP**.
+
+![image](images/guide_recipe.png)
+
+Recipe cards have the following structure:
+
+- Utensil Symbol - Depicts the utensil type that can be used to score extra VP.
+- Recipe Picture - A picture of the dish.
+- Recipe Description - Short description of the dish.
+- Recipe Type - The difficulty of the recipe (easy, normal, hard).
+- Recipe Name - The name of the dish.
+- Ingredient Requirements - The ingredients needed to cook the recipe.
+- Special Symbol - In some decks, the recipe has a special symbol that is used for their special
+ability. In the above example it tells you that this recipe can use Tagliatelle as exact pasta
+ingredient to score extra points.
 
 Recipes have the following mechanics:
 
