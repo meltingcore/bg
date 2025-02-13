@@ -21,7 +21,7 @@
   - [Play Action Cards](#play-action-cards)
 - [Roles](#roles)
 - [Winning the Game](#winning-the-game)
-- [Additional Notes](#notes-and-clarifications)
+- [Additional Notes](#additional-notes)
 - [Quick Reference](quick-reference.md)
 
 ## Overview
@@ -307,11 +307,11 @@ your new pair of role cards.
 The game ends after the end of the round in which a player reaches 40 VP or meets its Win Condition.
 (end of the round means all player have taken their turns). 
 To determine the winner, calculate the VP of all players (each win condition card is worth 5 VP,
-but if all 4 are present the total bonus is 30 instead of 20 VP).
+but if all 4 are present the total bonus is 40 instead of 20 VP).
 If there is still a tie, the one who most recently cooked in real life wins.
 
 
-## Notes And Clarifications
+## Additional Notes
 
 - Once their deck is empty, a player shuffles their discard pile to form a new draw pile. This
 happens even when drawing because at all times a player must be able to draw up to a hand of 8 

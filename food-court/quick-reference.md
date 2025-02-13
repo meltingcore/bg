@@ -111,7 +111,7 @@ to both if they don't.
 The game ends at the **end of the round** where a player reaches **40 VP** or meets their 
 **Win Condition**.
 
-- Win Condition cards count as **5 VP each** (but max **30 VP** for 4 cards).
+- Win Condition cards count as **5 VP each** (but max **40 VP** for all 4 cards).
 - If tied, the most recent player to **cook in real life** wins.
 
 ## Additional Notes
