@@ -3,20 +3,17 @@
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
-- [Base](#base-decks)
-  - [Italy](#italy)
-  - [France](#france)
-  - [China](#china)
-  - [India](#india)
-- [Extra](#extra-decks)
-  - [USA](#usa)
-  - [Türkiye](#türkiye)
-  - [Japan](#japan)
-  - [Mexico](#mexico)
+- [🇮🇹 Piazza Romana](#-piazza-romana)
+- [🇫🇷 Le Petit Paris](#-le-petit-paris)
+- [🇨🇳 Jin Long](#-jin-long)
+- [🇮🇳 Raj Mahal](#-raj-mahal)
+- [🇺🇸 Liberty Grill](#-liberty-grill)
+- [🇹🇷 Sultan Saray](#-sultan-saray)
+- [🇯🇵 Sakura House](#-sakura-house)
+- [🇲🇽 El Nopalito](#-el-nopalito)
 
-## Base Decks
 
-### Italy
+## 🇮🇹 Piazza Romana
 
 - **Special Ability** - **Normal** and **hard** recipes cooked with **exact** pasta ingredients
 grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes grant **+2 VP**;
@@ -37,7 +34,7 @@ grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes 
     - Penne (2)
     - Gnocchi (2)
   - Secondary (9)
-  - Optioanal (3):
+  - Optional (3):
     - Basil
     - Balsamic Vinegar
     - Parmigiano
@@ -63,7 +60,7 @@ grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes 
 - Country Card (1)
 </details>
 
-### France
+## 🇫🇷 Le Petit Paris
 
 - **Special Ability** - Adjacent recipes from a 4-course meal cooked in the same turn grant bonus
 VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main** = **+2 VP**; 
@@ -105,7 +102,7 @@ VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main**
 - Country Card (1)
 </details>
 
-### China
+## 🇨🇳 Jin Long
 
 - **Special Ability** - If you cook multiple recipes in 1 turn, gain bonus VP equal to the number
 of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
@@ -148,7 +145,7 @@ of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
 - Country Card (1)
 </details>
 
-### India
+## 🇮🇳 Raj Mahal
 
 - **Special Ability** - Recipes can include 1 more **secondary** ingredient as **extra**, adding 
 **+1 VP** to **easy** and **normal** recipes and **+2 VP** to **hard** recipes.
@@ -195,9 +192,7 @@ of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
 - Country Card (1)
 </details>
 
-## Extra Decks
-
-### USA
+## 🇺🇸 Liberty Grill
 
 - **Special Ability** - You can cook recipes with twice the amount of ingredients to score bonus
 VP equal to that amount. You don't have to match the recipe requirements for the extra ingredients.
@@ -238,7 +233,7 @@ VP equal to that amount. You don't have to match the recipe requirements for the
 - Country Card (1)
 </details>
 
-### Türkiye
+## 🇹🇷 Sultan Saray
 
 - **Special Ability** - Before scoring, you can replace opponent's **normal** or **hard** recipe
 with a **kebab** by discarding 1 or 2 prepared and unused ingredients of any type. You don't
@@ -281,7 +276,7 @@ benefit from special ability effects of the replaced recipe.
 - Country Card (1)
 </details>
 
-### Japan
+## 🇯🇵 Sakura House
 
 - **Special Ability** - Cooked recipes score VP based on their **secondary** ingredient as follows:
 **+2 VP** with **umami** ingredient; **+1 VP** with **wasabi** ingredient; **-1 VP** with
@@ -325,7 +320,7 @@ benefit from special ability effects of the replaced recipe.
 - Country Card (1)
 </details>
 
-### Mexico
+## 🇲🇽 El Nopalito
 
 - **Special Ability** - You can have up to 2 **hot** **secondary** ingredients in any recipe for a
 bonus of up to +2 VP respectively. To add more **secondary** ingredients than the recipe requires,

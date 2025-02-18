@@ -12,6 +12,7 @@
   - [Ingredient Cards](#ingredient-cards)
   - [Recipe Cards](#recipe-cards)
   - [Action Cards](#action-cards)
+  - [Block Cards](#block-cards)
   - [Utensil Cards](#utensil-cards)
   - [Ability Card](#ability-card)
 - [Main Mechanics](#main-mechanics)
@@ -74,13 +75,14 @@ During their turn, players always start by:
 Then they can:
 
 - Prepare ingredients
+- Play defensive action cards
 - Cook recipes
 - Put utensils in play
-- Put action cards face down (in front of self or opponents)
+- Place offensive action cards face down in front of opponents.
 
 Finally, if they decide to score VP they should:
 
-- Flip up and resolve the action cards in front of self.
+- Flip up and resolve the action cards in front of themselves.
 - Score VP 
 
 
@@ -166,14 +168,13 @@ place the "Fettuccine" ingredient card in your win condition tracking area.
 
 Can be played with either offensive or defensive effect. Offensive effects are used to disrupt
 opponents. Defensive effects benefit the players themselves.  
-Action cards are put face down in front of the player who they affect (you for defensive cards or
-opponents for offensive cards) and are resolved (flipped back up) before scoring.
+
+Offensive Action Cards are played face down in front of an opponent and are flipped up and resolved
+right before they score.
+Defensive Action Cards are played immediately from the hand like any other cards.
 
 The action cards are as follows (Offensive [O] and Defensive [D]):
 
-- **Blocking** (x3)
-  - [O] Block Action - Prevent an opponent from playing an action card. 
-  - [D] Block Action - Protect yourself from opponent's action card.
 - **Ingredients**
   - [O] Discard Ingredient - Choose 1 prepared (used or unused) ingredient that the opponent should 
   discard.
@@ -193,23 +194,28 @@ The action cards are as follows (Offensive [O] and Defensive [D]):
 - **Drawing Cards**
   - [O] Discard Cards - Ask an opponent to discard 2 cards of their choice from their hand. If
   they don't have 2 cards in their hand, they instead discard 2 cards from the draw pile.
-  - [D] Draw Cards - Draw 2 cards from the draw deck for your hand, disregarding the 8 cards hand 
-  limit.
+  - [D] Draw Cards - Draw 2 cards from the draw deck for your hand.
 - **Recipe Scores**
-  - [O] Score Less - Make an opponent's cooked recipe to score 1 VP less.
-  - [D] Score More - Make a recipe you cooked to score 1 VP more.
+  - [O] Score Less - Make an opponent's cooked recipe score 1 VP less.
+  - [D] Score More - Make a recipe you cooked score 1 VP more.
 - **Redistribute Cards**
   - [O] Extract Cards - Ask an opponent to draw 3 random cards directly from their draw pile and
   discard them.
   - [D] Restore Cards - Draw 3 random cards from your discard pile to the top of your draw pile. 
 
-- Action cards can only be blocked (so discarded) by the **Block An Action** card. The card can be 
-used cumulatively (so your opponent can block your block, you theirs, etc.).
-- Any cards you get via action cards (i.e. via the "Draw Cards" card) can be played before scoring.
+- Offensive action cards can only be blocked (so discarded) by a **Block Action** card. Defensive
+action cards cannot be blocked.
+- Any cards you get to add to your hand via action card effect are not subject to the 8 cards limit.
 - Players always choose the targets of their action cards when possible! For example, you choose the
 utensil card the opponent should disable, the recipe they should lose, etc. But you cannot choose
 which cards they should discard from their hand or draw/discard cards from their piles instead of
 them.
+
+### Block Cards
+
+Special type of action cards. Can be used to block an offensive action cards that were flipped up
+prior to scoring and other block cards (so your opponent can block your block, you theirs, etc.).
+Played immediately from the hand like any other cards.
 
 ### Utensil Cards
 
@@ -248,14 +254,13 @@ the "Break/Repair Utensil" action cards.
 
 ### Play Action Cards
 
-You can put action cards face down in front of you or your opponents. They stay face down until
-you decide to score. Each action card can be played with the green text up as defensive action to
-benefit you or with the red text up as offensive action to disrupt your opponents. So they should 
-be put in 2 different stacks.
-Before scoring you flip all action cards up and resolve their effects. "Block An Action" cards can 
-be used to negate effects of other action cards. The owner of such card chooses which card it 
-blocks. So your opponents decide which of your defensive action cards is blocked, and you decide
-which of their offensive action cards is blocked.
+Defensive action cards are played immediately from the hand typically at the start of a turn as 
+most of them supply the player with extra cards.
+Offensive action cards are placed face down in front of a player. They stay face down until that
+player decides to score. Before scoring all flipped down action cards are flipped back up and their
+effects are resolved.
+"Block Action" cards can be used to negate effects of offensive action cards. The owner of such
+card chooses which card it blocks.
 
 ## Roles
 

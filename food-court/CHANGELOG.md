@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.4]
+
+BUG FIXES:
+
+* Action Cards rules are updated to unsure more fluidity.
+* Various documentation QoL changes
+
+## [0.6.3]
+
+BUG FIXES:
+
+* Adjust the complete Win Condition total bonus to 40 VP to feel more like a snitch ;)
+
 ## [0.6.2]
 
 BUG FIXES:

@@ -20,12 +20,13 @@ Each round consists of all players taking turns.
 2. **On your turn:**
    - Discard up to **3 cards** and redraw to **8 cards**.
    - Perform any of the following:
+     - **Play Defensive Action Cards**
      - **Prepare Ingredients**
      - **Cook Recipes**
      - **Play Utensils**
-     - **Place Action Cards** face down
+     - **Place Offensive Action Cards** face down
    - And if you decide to score:
-     - Reveal and resolve **all action cards** in front of you.
+     - Reveal and resolve or block **offensive action cards** in front of you.
      - Score VP.
 
 ## Scoring
@@ -57,10 +58,16 @@ Only fully cooked recipes contribute to win conditions and special abilities.
 
 ### Action Cards
 
-- Played **face down** and revealed before scoring.
-- **Offensive** (Red) - Disrupt opponents.
-- **Defensive** (Green) - Benefit yourself.
-- Can be **blocked** using "Block An Action" cards.
+- Offensive (Red):
+  - Placed **face down** and resolved before scoring.
+  - Disrupt opponents.
+  - Can be **blocked** using "Block Action" cards.
+- **Defensive** (Green):
+  - Played immediately
+  - Benefit yourself
+- Block Action cards:
+  - Played immediately
+  - Block offensive action cards and other block cards.
 
 ### Utensil Cards
 
@@ -88,8 +95,9 @@ Place utensil cards in their dedicated stack.
 
 ### Play Action Cards
 
-- Place **face down** in front of yourself (defensive) or opponents (offensive).
-- Reveal and resolve them before scoring.
+- Play **defensive** action cards immediately.
+- Place **offensive** action cards face down in front of you and resolve before scoring.
+- **Block Action** cards can be played to block offensive action cards adn other block cards.
 
 ## Roles (Optional, for 3+ players)
 
