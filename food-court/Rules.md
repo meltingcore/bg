@@ -71,12 +71,14 @@ Then each player takes their turn.
 During their turn, players always start by:
 
 - Discarding up to 3 cards from their hand & drawing cards until they have 8 cards in their hand
+  (reshuffle the discard pile back into the draw deck if needed).
+- Rotate upward any upside-down recipe cards to finish their cooking and make them ready to score.
 
 Then they can:
 
 - Prepare ingredients
 - Play defensive action cards
-- Cook recipes
+- Put recipes for cooking
 - Put utensils in play
 - Place offensive action cards face down in front of opponents.
 
@@ -84,7 +86,6 @@ Finally, if they decide to score VP they should:
 
 - Flip up and resolve the action cards in front of themselves.
 - Score VP 
-
 
 As you can see you can choose to do whatever you want during your turn. The only requirement is to
 fill your hand so you have something to play and to flip up and resolve all action cards in front
@@ -95,7 +96,7 @@ of you before scoring (if you decide to score this turn).
 Scoring happens as follows:
 
 - Score VP for:
-  - recipes cooked
+  - cooked recipes
   - any special ability effects if eligible
   - any utensil cards that match a cooked recipe
   - any met role card condition (if in play).
@@ -130,9 +131,12 @@ so you know if the recipe cooked with it scores extra points for using exact pas
 
 Can be:
 
-- **Easy** - Require 1 **primary** ingredient and grant **+1 VP**.
-- **Normal** - Require 1 **primary** and 1 **secondary** ingredient and grant **+2 VP**.
-- **Hard** - Require 1 **primary** and 2 **secondary** ingredients and grant **+3 VP**.
+- **Easy** - Require 1 **primary** ingredient.
+- **Normal** - Require 1 **primary** and 1 **secondary** ingredient.
+- **Hard** - Require 1 **primary** and 2 **secondary** ingredients.
+
+They grant **1 VP** for each ingredient used so **1 VP** for **easy**, **2 VP** for
+**normal** and **3 VP** for **hard** recipes.
 
 ![image](images/guide_recipe.png)
 
@@ -150,19 +154,12 @@ ingredient to score extra points.
 
 Recipes have the following mechanics:
 
-- **Normal** and **Hard** recipes can be cooked for less but score less VP accordingly. For example,
-you can cook a **hard** recipe with only 1 secondary ingredient (as **normal** recipe) but you also
-score only **2 VP** (as **normal** recipes do). Or cook it only with the primary ingredient as 
-**easy** recipe to score only **1 VP**.
-- **Hard** recipes when cooked with their ingredient requirements fully covered make all other 
-recipes cooked in that turn to score extra **1 VP**. For example if you cook 1 **hard** recipe along
-with 2 **easy** recipes that turn, you score extra **2 VP** for the **easy** recipes totalling to
-3 + 1 + 1 + 2 = **7 VP**. This effect stacks so if you cook 2 **hard** recipes along with 1 
-**easy** recipe you score 3 + 3 + 1 + 2 + 2 = **11 VP**.
-- Only recipes that were cooked with their ingredient requirements fully covered participate in win
-condition tracking. For example with the Italy deck if you cook the **normal** recipe "Fettuccine
-Alfredo" with "Fettuccine" as **primary** ingredient only (so as an **easy** recipe) you cannot
-place the "Fettuccine" ingredient card in your win condition tracking area.
+- They first need to be cooked for 1 turn before they can be scored (for more details check the
+[Cook Recipes](#cook-recipes) in the [Main Mechanics](#main-mechanics) section).
+- **Hard** recipes when cooked make all other cooked recipes score extra **1 VP**. For example if 
+you cook 1 **hard** recipe along with 2 **easy** recipes that turn, you score extra **2 VP** for
+the **easy** recipes totalling to 3 + 1 + 1 + 2 = **7 VP**. This effect stacks so if you cook 2 
+**hard** recipes along with 1 **easy** recipe you score 3 + 3 + 1 + 2 + 2 = **11 VP**.
 
 ### Action Cards
 
@@ -176,11 +173,11 @@ Defensive Action Cards are played immediately from the hand like any other cards
 The action cards are as follows (Offensive [O] and Defensive [D]):
 
 - **Ingredients**
-  - [O] Discard Ingredient - Choose 1 prepared (used or unused) ingredient that the opponent should 
+  - [O] Discard Ingredient - Choose 1 prepared unused ingredient that the opponent should 
   discard.
   - [D] Reuse Ingredient - Prepare 1 ingredient card of your choice directly from your discard pile.
 - **Recipes** 
-  - [O] Lose Recipe - Choose 1 cooked recipe of an opponent. Shuffle the recipe card and 1 of its
+  - [O] Lose Recipe - Choose 1 recipe of an opponent. Shuffle the recipe card and 1 of its
   ingredients back into their draw deck. The rest of the recipe ingredients (if any) stay in play.
   - [D] Reuse Recipe - Take 1 recipe card and 1 ingredient card of your choice back from your
   discard pile to your hand.
@@ -196,16 +193,15 @@ The action cards are as follows (Offensive [O] and Defensive [D]):
   they don't have 2 cards in their hand, they instead discard 2 cards from the draw pile.
   - [D] Draw Cards - Draw 2 cards from the draw deck for your hand.
 - **Recipe Scores**
-  - [O] Score Less - Make an opponent's cooked recipe score 1 VP less.
-  - [D] Score More - Make a recipe you cooked score 1 VP more.
-- **Redistribute Cards**
-  - [O] Extract Cards - Ask an opponent to draw 3 random cards directly from their draw pile and
-  discard them.
-  - [D] Restore Cards - Draw 3 random cards from your discard pile to the top of your draw pile. 
+  - [O] Score Less - Make an opponent's recipe score 1 VP less.
+  - [D] Score More - Make a recipe of yours score 1 VP more.
+- **Affect Cooking**
+  - [O] Slow down Cooking - Rotate 1 opponent recipe upside-down (to cook for another turn).
+  - [D] Speed up Cooking - Play 1 recipe card placed upwards (immediately ready for scoring).
 
 - Offensive action cards can only be blocked (so discarded) by a **Block Action** card. Defensive
 action cards cannot be blocked.
-- Any cards you get to add to your hand via action card effect are not subject to the 8 cards limit.
+- Any cards you add to your hand via action card effects are not subject to the 8 cards limit.
 - Players always choose the targets of their action cards when possible! For example, you choose the
 utensil card the opponent should disable, the recipe they should lose, etc. But you cannot choose
 which cards they should discard from their hand or draw/discard cards from their piles instead of
@@ -240,11 +236,11 @@ For each recipe you want to cook you need to:
 
 - choose from the prepared unused ingredient cards.
 - place them in a column with an overlap.
-- put the recipe at the bottom of the column.
+- put the recipe upside-down at the bottom of the column.
 
-The recipe is now counted as cooked, and you can score from it.
-Keep in mind that you are not required to cook normal and hard recipes with their full ingredient
-requirements. Read more about that in the [Recipe Cards](#recipe-cards) section.
+The recipe is now being cooked (you are not able to score from it yet).
+On your next turn you put the recipe card upwards meaning it's ready.
+You can score from it now.
 
 ### Put Utensils
 
@@ -272,18 +268,18 @@ players take their turns. Role cards' abilities cannot be blocked!
 
 The role cards are:
 
-- **Chef** - Choose a player to cook 1 **normal** or **hard** recipe this turn. If they manage you
-and the player both gain **+2 VP**.
-- **Waiter** - Choose a player to cook more than 1 recipe for this turn. If they manage you and the
-player both gain **+2 VP**.
+- **Chef** - Choose a player to start cooking 1 **normal** or **hard** recipe this turn. If they
+manage you and the player both gain **+2 VP**.
+- **Waiter** - Choose a player to start cooking more than 1 recipe for this turn. If they manage
+you and the player both gain **+2 VP**.
 - **Dishwasher** - Ask a player to discard their new hand and fill it a second time. If they do,
 they gain **+2 VP**. If they refuse, you gain **+2 VP**.
 - **Supplier** - Choose a player to either take any 2 cards from their discard pile or to draw 2
 cards less during their turn (so up to 6 card hand max). Then you do the same.
 - **Critic** - Grants **+1 VP** to an opponent and **+1 VP** to you or **-2 VP** to an opponent
 and **-1 VP** to you.
-- **Customer** - Demand a player to cook a **normal** or **hard** recipe this turn. If they manage
-you both gain **+2 VP**. If not, you both score **-2 VP**.
+- **Customer** - Demand a player to start cooking a **normal** or **hard** recipe this turn. If
+they manage you both gain **+2 VP**. If not, you both score **-2 VP**.
 
 The mechanics of playing the role cards are as follows:
 
@@ -312,12 +308,8 @@ your new pair of role cards.
 The game ends after the end of the round in which a player reaches 40 VP or meets its Win Condition.
 (end of the round means all player have taken their turns). 
 To determine the winner, calculate the VP of all players (each win condition card is worth 5 VP,
-but if all 4 are present the total bonus is 40 instead of 20 VP).
+but if all 4 are present the total bonus is 30 instead of 20 VP).
 If there is still a tie, the one who most recently cooked in real life wins.
 
 
 ## Additional Notes
-
-- Once their deck is empty, a player shuffles their discard pile to form a new draw pile. This
-happens even when drawing because at all times a player must be able to draw up to a hand of 8 
-cards!

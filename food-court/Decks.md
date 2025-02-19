@@ -25,33 +25,31 @@ grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes 
 
 - Utensil Cards (3)
 - Ingredient Cards (26)
-  - Primary (14):
+  - Primary (13):
     - Spaghetti (2)
-    - Fettuccine (2)
-    - Tagliatelle (2)
-    - Lasagna Sheets (2)
-    - Ravioli (2)
+    - Fettuccine (3)
+    - Tagliatelle (3)
+    - Lasagna Sheets (3)
     - Penne (2)
-    - Gnocchi (2)
-  - Secondary (9)
+  - Secondary (10)
   - Optional (3):
     - Basil
     - Balsamic Vinegar
     - Parmigiano
 - Recipe Cards (14):
   - Easy Recipes (4)
-    - Marinara [kitchenware]
-    - Quattro Formaggi [cookware]
-    - Napoletana [tableware]
-    - Capricciosa [kitchenware]
+    - Farfalle al Salmone [kitchenware]
+    - Fusilli Caprese [cookware]
+    - Rigatoni alla Gricia [tableware]
+    - Cannelloni Ricotta e Spinaci [kitchenware]
   - Normal Recipes (7)
     - Spaghetti Carbonara (Spaghetti) [cookware]
     - Fettuccine Alfredo (Fettuccine) [tableware]
     - Lasagna Verde (Lasagna Sheets) [kitchenware]
     - Tagliatelle alla Bolognese (Tagliatelle) [cookware]
-    - Gnocchi alla Sorrentina (Gnocchi) [tableware]
+    - Cacio e Pepe (Spaghetti) [tableware]
     - Penne all’Arrabbiata (Penne) [kitchenware]
-    - Ravioli Burro e Salvia (Ravioli) [cookware]
+    - Penne al Pesto (Penne) [cookware]
   - Hard Recipes (3)
     - Lasagna al Forno (Lasagna Sheets) [tableware]
     - Fettuccine ai Porcini e Tartufo (Fettuccine) [kitchenware]
@@ -64,7 +62,7 @@ grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes 
 
 - **Special Ability** - Adjacent recipes from a 4-course meal cooked in the same turn grant bonus
 VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main** = **+2 VP**; 
-**main** + **dessert** = **+3 VP**;
+**main** + **dessert** = **+2 VP**;
 - **Win Condition** - Cook a complete 4-course meal in order (entrée, appetizer, main, dessert).
 - **Tracking** - The recipes cards.
 

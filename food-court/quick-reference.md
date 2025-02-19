@@ -18,11 +18,13 @@ Win by either:
 Each round consists of all players taking turns.
 1. **If using Role Cards**, play them first.
 2. **On your turn:**
-   - Discard up to **3 cards** and redraw to **8 cards**.
+   - Discard up to **3 cards** and redraw to **8 cards** (reshuffle discard pile back in draw pile
+   if needed).
+   - Finish any recipe cooking.
    - Perform any of the following:
      - **Play Defensive Action Cards**
      - **Prepare Ingredients**
-     - **Cook Recipes**
+     - **Place Recipes for Cooking**
      - **Play Utensils**
      - **Place Offensive Action Cards** face down
    - And if you decide to score:
@@ -37,7 +39,7 @@ VP are gained for:
 - **Matching Utensils**
 - **Met Role Card Conditions** (if in play)
 
-During scoring you can place 1 win condition card if eligible!
+During scoring, you can place (only) 1 win condition card if eligible!
 
 ## Card Types
 
@@ -52,9 +54,9 @@ During scoring you can place 1 win condition card if eligible!
 - **Easy** (1 Primary) - **+1 VP**
 - **Normal** (1 Primary + 1 Secondary) - **+2 VP**
 - **Hard** (1 Primary + 2 Secondary) - **+3 VP**
-
-**Hard Recipes** fully cooked grant **+1 VP** to all other recipes cooked that turn.  
-Only fully cooked recipes contribute to win conditions and special abilities.
+ 
+**Hard Recipes** grant **+1 VP** to all other recipes cooked that turn.  
+Recipes are initially placed face down to cook and are straightened next turn making them ready.
 
 ### Action Cards
 
@@ -87,7 +89,7 @@ Place ingredient cards in front of you as **prepared but unused**.
 
 1. Choose **prepared ingredients**.
 2. Stack them in a **column**, overlapping.
-3. Place the **recipe card** at the bottom.
+3. Place the **recipe card** at the bottom upside-down to cook.
 
 ### Play Utensils
 
@@ -106,26 +108,22 @@ Place utensil cards in their dedicated stack.
 
 ### Role Abilities
 
-- **Chef** - Grants **+2 VP** to both if chosen player cooks a Normal/Hard recipe.
-- **Waiter** - Grants **+2 VP** to both if chosen player cooks **multiple** recipes.
+- **Chef** - Grants **+2 VP** to both if chosen player starts cooking a Normal/Hard recipe.
+- **Waiter** - Grants **+2 VP** to both if chosen player starts cooking **multiple** recipes.
 - **Dishwasher** - Forces player to redraw hand for **+2 VP**. Gain them yourself if they decline.
 - **Supplier** - Grants both **card retrieval** or **hand size of 6** 
 - **Critic** - Grants both +1/+1 VP or -2/-1 VP.
-- **Customer** - Grants **+2 VP** to both if chosen player cooks a Normal/Hard recipe or **-2 VP**
-to both if they don't.
+- **Customer** - Grants **+2 VP** to both if chosen player starts cooking a Normal/Hard recipe or 
+**-2 VP** to both if they don't.
 
 ## Winning the Game
 
 The game ends at the **end of the round** where a player reaches **40 VP** or meets their 
 **Win Condition**.
 
-- Win Condition cards count as **5 VP each** (but max **40 VP** for all 4 cards).
+- Win Condition cards count as **5 VP each** (but max **30 VP** for all 4 cards).
 - If tied, the most recent player to **cook in real life** wins.
 
 ## Additional Notes
 
-- If your deck runs out, **shuffle your discard pile** to create a new draw pile (players must
-always be able to **refill their hand to 8 cards** when drawing).
-
 Enjoy the competition and may the best restaurant win!
-

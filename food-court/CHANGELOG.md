@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.7.0]
+
+CHANGES:
+
+* Recipes are now being cooked for one turn (before being ready for scoring).
+  * Action cards are modified to reflect the recipe change.  
+  * Role card descriptions are modified to reflect the recipe change.
+* [Notes](Notes.md) now includes play test data.
+
+BUG FIXES:
+
+* Recipes can no longer be cooked with fewer ingredients than needed.
+* The bonus for a complete Win Condition is again 30 VP.
+* Piazza Romana's deck re-adjusted for 5 primary ingredient types and pizzas were removed.
+* Le Petit Paris' special ability bonus VP adjusted.
+* Jin Long's win condition tracking clarified.
+
 ## [0.6.4]
 
 BUG FIXES:
