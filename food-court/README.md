@@ -27,6 +27,7 @@ For more details, check:
 - [Changelog](CHANGELOG.md)
 - [ToDo](TODO.md)
 - [Notes](Notes.md)
+- [Playtesting](Playtesting.md)
 
 ## Mission Statement
 

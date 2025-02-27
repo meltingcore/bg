@@ -47,7 +47,7 @@ During scoring, you can place (only) 1 win condition card if eligible!
 
 - **Primary** - Used in all recipes.
 - **Secondary** - Used in **Normal** and **Hard** recipes.
-- **Optional** - Grants **+1 VP** when used.
+- **Optional** - Grants **+2 VP** when used.
 
 ### Recipe Cards
 
@@ -56,7 +56,8 @@ During scoring, you can place (only) 1 win condition card if eligible!
 - **Hard** (1 Primary + 2 Secondary) - **+3 VP**
  
 **Hard Recipes** grant **+1 VP** to all other recipes cooked that turn.  
-Recipes are initially placed face down to cook and are straightened next turn making them ready.
+Recipes are initially in cooking mode (monochrome picture up) and are rotated next turn
+(color picture up) making them ready for scoring.
 
 ### Action Cards
 

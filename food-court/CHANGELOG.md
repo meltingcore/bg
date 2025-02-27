@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.1]
+
+CHANGES:
+
+* Various visual updates
+* Added playtest data and feedback from BMG
+* Optional ingredient cards now grant +2 VP when used.
+
 ## [0.7.0]
 
 CHANGES:

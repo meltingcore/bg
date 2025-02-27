@@ -26,16 +26,3 @@ you can have a bit more strategy in the game instead of just dumping what you dr
   +2 for matching recipes.
   - recipes can score based on the number of ingredients used in them (i.e. hard recipes can be
   cooked with only 1 (primary) ingredient (like easy recipes) but you then score only 1 VP)
-
-### DATA:
-
-#### v0.6.4
-
-**2 Players**
-
-| Decks           | Duration | Win Condition Cards | Score    | Rounds |
-|-----------------|----------|---------------------|----------|--------|
-| Italy vs France | 28m 33s  | 3 vs 4              | 44 vs 72 | 8      |
-| Italy vs France | 14m 13s  | 2 vs 4              | 27 vs 48 | 5      |
-| China vs India  | 17m 25s  | 4 vs 1              | 73 vs 20 | 6      |
-| China vs India  | 23m 44s  | 2 vs 4              | 40 vs 78 | 9      |

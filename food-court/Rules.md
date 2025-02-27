@@ -72,7 +72,7 @@ During their turn, players always start by:
 
 - Discarding up to 3 cards from their hand & drawing cards until they have 8 cards in their hand
   (reshuffle the discard pile back into the draw deck if needed).
-- Rotate upward any upside-down recipe cards to finish their cooking and make them ready to score.
+- Rotate any recipe cards in play with their score number up to make them ready to score.
 
 Then they can:
 
@@ -101,7 +101,7 @@ Scoring happens as follows:
   - any utensil cards that match a cooked recipe
   - any met role card condition (if in play).
 - If you have a card from a cooked recipe that is used to track your win condition, place it in
-your win condition tracking area. You can only put one such card per turn.
+your win condition tracking area. You can only put 1 win condition card per turn!
 
 ## Card Types
 
@@ -111,7 +111,7 @@ Can be:
 
 - **Primary** - Used in all recipes.
 - **Secondary** - Used in **normal** and **hard** recipes.
-- **Optional** - Can be used in a recipe to grant **+1 VP**.
+- **Optional** - Can be used in a recipe to grant **+2 VP**.
 
 ![image](images/guide_ingredient.png)
 
@@ -143,8 +143,8 @@ They grant **1 VP** for each ingredient used so **1 VP** for **easy**, **2 VP** 
 Recipe cards have the following structure:
 
 - Utensil Symbol - Depicts the utensil type that can be used to score extra VP.
-- Recipe Picture - A picture of the dish.
-- Recipe Description - Short description of the dish.
+- Recipe Pictures - Pictures of the dish in monochrome (cooking) and color (ready to score).
+- Recipe Score - Base score value of the recipe.
 - Recipe Type - The difficulty of the recipe (easy, normal, hard).
 - Recipe Name - The name of the dish.
 - Ingredient Requirements - The ingredients needed to cook the recipe.
@@ -236,11 +236,13 @@ For each recipe you want to cook you need to:
 
 - choose from the prepared unused ingredient cards.
 - place them in a column with an overlap.
-- put the recipe upside-down at the bottom of the column.
+- put the recipe card at the bottom of the column with the monochrome picture up.
 
-The recipe is now being cooked (you are not able to score from it yet).
-On your next turn you put the recipe card upwards meaning it's ready.
-You can score from it now.
+The recipe is now being cooked (you are not able to score from it yet, and it does not participate
+in any special ability effects, etc.).
+On your next turn you flip the recipe card with its score number and color picture up meaning 
+it's ready.  
+You can score from it now, and it participates in any special ability effects, etc.
 
 ### Put Utensils
 
