@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.1]
+
+BUG FIXES:
+
+* Fixed the print-ready PDF files link
+
 ## [0.8.0]
 
 CHANGES:

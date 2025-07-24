@@ -66,8 +66,8 @@ Play testing is available on [Screentop.gg](https://screentop.gg/@grumpper/food-
 
 ## Print And Play
 
-You can download the print-ready PDFs from 
-[here](https://drive.google.com/drive/folders/1fS_dyMKiEreeLW__3wqeTJlAEkKief2B?usp=sharing).
+You can download the print-ready PDFs and the sell-sheet from 
+[here](https://drive.google.com/drive/folders/1M1Kjf4p6zJS5gKm_s8_iyvQW_NOxZtsd?usp=sharing).
 
 The format of the cards should fit standard European bridge size (57x87 mm / 2.25x3.43 inch).
 I used the below for my play testing without issues:
