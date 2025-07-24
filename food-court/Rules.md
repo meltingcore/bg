@@ -1,36 +1,35 @@
 # Rules of the Game
 
-## Table of Contents
-
-- [Table of Contents](#table-of-contents)
-- [Overview](#overview)
-- [Objective](#objective)
-- [Setup](#setup)
-- [Turn Structure](#turn-structure)
-- [Scoring](#scoring)
-- [Card Types](#card-types)
-  - [Ingredient Cards](#ingredient-cards)
-  - [Recipe Cards](#recipe-cards)
-  - [Action Cards](#action-cards)
-  - [Block Cards](#block-cards)
-  - [Utensil Cards](#utensil-cards)
-  - [Ability Card](#ability-card)
-- [Main Mechanics](#main-mechanics)
-  - [Prepare Ingredients](#prepare-ingredients)
-  - [Cook Recipes](#cook-recipes)
-  - [Play Utensils](#put-utensils)
-  - [Play Action Cards](#play-action-cards)
-- [Roles](#roles)
-- [Winning the Game](#winning-the-game)
-- [Additional Notes](#additional-notes)
-- [Quick Reference](quick-reference.md)
+<!-- TOC -->
+* [Rules of the Game](#rules-of-the-game)
+  * [Overview](#overview)
+  * [Objective](#objective)
+  * [Setup](#setup)
+  * [Turn Structure](#turn-structure)
+  * [Card Types](#card-types)
+    * [Ingredient Cards](#ingredient-cards)
+    * [Recipe Cards](#recipe-cards)
+    * [Event Cards](#event-cards)
+    * [Customer Cards](#customer-cards)
+    * [Ability Card](#ability-card)
+  * [Player Actions](#player-actions)
+    * [Main Actions](#main-actions)
+      * [Prepare](#prepare)
+      * [Cook](#cook)
+      * [Serve](#serve)
+    * [Additional Actions](#additional-actions)
+    * [Attract Customers](#attract-customers)
+    * [Complaint & Promotion](#complaint--promotion)
+  * [Winning the Game](#winning-the-game)
+  * [Examples](#examples)
+<!-- TOC -->
 
 ## Overview
 
 You are at the mall, you did your shopping, and now you are starving so you go to the food court.
 But what do you want to eat? Which restaurant will you choose? They all look so good!...
 
-Welcome to the ultimate culinary competition! 
+Welcome to the ultimate culinary competition!
 Each player plays as a restaurant in the mall's food court that specializes in a specific cuisine.
 The restaurant is represented as a deck with unique ingredients, recipes, and abilities.  
 The restaurants compete by cooking recipes, utilizing their special abilities, and striving to
@@ -38,70 +37,59 @@ achieve their win conditions.
 
 ## Objective
 
-Be the first to achieve your deck's win condition, OR score 40 Victory Points (VP) to win.
+Get the most Victory Points (VP) by the end of the game.
 
 ## Setup
 
-1. Each player chooses a deck to play with.
-2. If role cards are in play, shuffle and deal them to the players.
-_(The way role cards are played is explained in more detail in the [Roles](#roles) section.)_
+Each player chooses a deck to play with.
 
-Then each player sets up their station as they seem fit.
-The below is just a suggested guide:
+Then all players take out all their customer cards from their decks to be mixed into a common
+customer deck. When the customer deck is shuffled, draw customer cards equal to the number of
+players + 1 (but no less than 4) and place them face up in the center of the table to form the
+central customer queue. The deck is then placed face down next to the central queue as a draw pile
+with a face down discard pile on the other side of the queue.
+
+Then each player sets up their station as follows:
 
 ![image](images/guide_setup.png)
 
 1. Place your deck's ability card in front of you.
-2. Place your deck on your left face down, shuffle it and draw 8 cards for your starting hand.
-3. On your right, you will place your discarded cards in a pile face down.
-4. On the left of the ability card, you will place your win condition cards.
-5. On the right of the ability card, you will place your utensils cards.
-6. Above the ability card you will place your ingredients, recipes & action cards.
-7. Decide the first player randomly and start the game (play proceeds clockwise).
+2. Place your deck on your left face down, shuffle it and draw 7 cards for your starting hand.
+3. On you right, you will place your discarded cards in a pile face down.
+4. On the right of the ability card, you will place your win condition cards.
+5. Above the ability card you will place your ingredients & recipes.
+6. Above the ingredients & recipes you will place the customer cards that form your queue.
+
+Decide the first player randomly and start the game (play proceeds clockwise).
 
 ## Turn Structure
 
-The game is played in rounds. One round consists of all players' turns.
+Players take turns in order.
 
-If role cards are in play at the beginning of the round, players play them.
-_(For more details check the [Roles](#roles) section.)_
+During their turn, players always start by discarding up to 2 cards from their hand & drawing cards
+until they have 7 cards in hand (unless stated otherwise).
+When the draw pile depletes reshuffle the discard pile back into it.
 
-Then each player takes their turn.
+Then they can choose to do 1 of 3 actions: **Prepare**, **Cook** or **Serve**.
 
-During their turn, players always start by:
+When **preparing** players put ingredient cards in front of them as **prepared** but **unused**.  
+When **cooking** players combine **prepared** & **unused** ingredients and recipe cards on top of
+them to cook them.  
+When **serving** players score from:
+  - their **cooked** recipes by serving them to the customers in their queue (so no more than the
+  sum of the order numbers of all customer cards in their queue).
+  - any special ability effects if eligible.
+  - customer effects
+  - customer nationality bonuses (if the customer is from the player's cuisine)
 
-- Discarding up to 3 cards from their hand & drawing cards until they have 8 cards in their hand
-  (reshuffle the discard pile back into the draw deck if needed).
-- Rotate any recipe cards in play with their score number up to make them ready to score.
+Once per turn the players can take one of the customer cards from the center if they
+meet its requirements and place it in their customer cards area until they have 3 (unless stated
+otherwise). For more information on the customer cards mechanic refer to the 
+[Customer Cards](#customer-cards) section.
 
-Then they can:
-
-- Prepare ingredients
-- Play defensive action cards
-- Put recipes for cooking
-- Put utensils in play
-- Place offensive action cards face down in front of opponents.
-
-Finally, if they decide to score VP they should:
-
-- Flip up and resolve the action cards in front of themselves.
-- Score VP 
-
-As you can see you can choose to do whatever you want during your turn. The only requirement is to
-fill your hand so you have something to play and to flip up and resolve all action cards in front
-of you before scoring (if you decide to score this turn).
-
-## Scoring
-
-Scoring happens as follows:
-
-- Score VP for:
-  - cooked recipes
-  - any special ability effects if eligible
-  - any utensil cards that match a cooked recipe
-  - any met role card condition (if in play).
-- If you have a card from a cooked recipe that is used to track your win condition, place it in
-your win condition tracking area. You can only put 1 win condition card per turn!
+At any point during their turn, player can also play event cards to manipulate the customer queues.
+More information on the event cards mechanic can be found in the [Event Cards](#event-cards)
+section.
 
 ## Card Types
 
@@ -117,15 +105,17 @@ Can be:
 
 Ingredient cards have the following structure:
 
-- Ingredient Icon - Represents the type of the ingredient so you can recognize it in
-recipe requirements. Darker border means it is a **primary** ingredient.
-- Ingredient Picture - A picture of the ingredient.
-- Ingredient Description - Tells you which recipes the ingredient can be used in.
-- Ingredient Type - The type of the ingredient (primary, secondary, optional).
-- Ingredient Name - The name of the ingredient.
-- Special Symbol - In some decks, the ingredient has a special symbol that can be used as visual
-aid for certain deck mechanics. In the above example it tells you that this is a Tagliatelle
-so you know if the recipe cooked with it scores extra points for using exact pasta ingredient.
+- **Ingredient Icon** - Represents the type of the ingredient so you can recognize it in
+  recipe requirements. Darker border means it is a **primary** ingredient.
+- **Ingredient Picture** - A picture of the ingredient.
+- **Ingredient Description** - Tells you which recipes the ingredient can be used in.
+- **Ingredient Type** - The type of the ingredient (primary, secondary, optional).
+- **Ingredient Name** - The name of the ingredient.
+- **Special Symbol** - In some decks, the ingredient has a special symbol that can be used as visual
+  aid for certain deck mechanics. In the above example it tells you that this is a Tagliatelle
+  so you know if the recipe cooked with it scores extra points for using exact pasta ingredient.
+- **Win Condition Symbol** - If present it indicates this card can be used to track the win
+  condition for the deck
 
 ### Recipe Cards
 
@@ -142,176 +132,176 @@ They grant **1 VP** for each ingredient used so **1 VP** for **easy**, **2 VP** 
 
 Recipe cards have the following structure:
 
-- Utensil Symbol - Depicts the utensil type that can be used to score extra VP.
-- Recipe Pictures - Pictures of the dish in monochrome (cooking) and color (ready to score).
-- Recipe Score - Base score value of the recipe.
-- Recipe Type - The difficulty of the recipe (easy, normal, hard).
-- Recipe Name - The name of the dish.
-- Ingredient Requirements - The ingredients needed to cook the recipe.
-- Special Symbol - In some decks, the recipe has a special symbol that is used for their special
-ability. In the above example it tells you that this recipe can use Tagliatelle as exact pasta
-ingredient to score extra points.
+- **Utensil Symbol** - Depicts the utensil type that can be used to score extra VP.
+- **Recipe Pictures** - Pictures of the dish in monochrome (cooking) and color (ready to score).
+- **Recipe Score** - Base score value of the recipe.
+- **Recipe Type** - The difficulty of the recipe (easy, normal, hard).
+- **Recipe Name** - The name of the dish.
+- **Ingredient Requirements** - The ingredients needed to cook the recipe.
+- **Special Symbol** - In some decks, the recipe has a special symbol that is used for their special
+  ability. In the above example it tells you that this recipe is a Main course recipe.
+- **Scoring Symbols** - Used to calculate the total score of the recipe when serving.
+- **Win Condition Symbol** - If present it indicates this card can be used to track the win
+  condition.
 
-Recipes have the following mechanics:
+**Hard** recipes when cooked make all **easy** & **normal** cooked recipes to score extra **1 VP**.
+For example if you cook 1 **hard** recipe along with 2 **easy** recipes that turn, you score extra
+**2 VP** for the **easy** recipes totalling to 3 + 1 + 1 + 2 = **7 VP**. This effect stacks so if
+you cook 2 **hard** recipes and 2 **easy** recipe you score 3 + 3 + 1 + 1 + 2 + 2 = **12 VP**.
 
-- They first need to be cooked for 1 turn before they can be scored (for more details check the
-[Cook Recipes](#cook-recipes) in the [Main Mechanics](#main-mechanics) section).
-- **Hard** recipes when cooked make all other cooked recipes score extra **1 VP**. For example if 
-you cook 1 **hard** recipe along with 2 **easy** recipes that turn, you score extra **2 VP** for
-the **easy** recipes totalling to 3 + 1 + 1 + 2 = **7 VP**. This effect stacks so if you cook 2 
-**hard** recipes along with 1 **easy** recipe you score 3 + 3 + 1 + 2 + 2 = **11 VP**.
+### Event Cards
 
-### Action Cards
+Each deck includes 2 **Complaint** cards & 3 **Promotion** cards.
 
-Can be played with either offensive or defensive effect. Offensive effects are used to disrupt
-opponents. Defensive effects benefit the players themselves.  
+- **Complaint** - Use it to discard a customer card from the queue of any player or from the
+  central customer queue.
+- **Promotion** - Use it to swap a customer card from your queue with a customer card from the
+  queue of any player or from the central customer queue.
 
-Offensive Action Cards are played face down in front of an opponent and are flipped up and resolved
-right before they score.
-Defensive Action Cards are played immediately from the hand like any other cards.
+### Customer Cards
 
-The action cards are as follows (Offensive [O] and Defensive [D]):
+Customers stand in the middle of the food court forming a central queue. The central queue is
+made of a number of customer cards equal to the number of players + 1 (but no less than 4).
 
-- **Ingredients**
-  - [O] Discard Ingredient - Choose 1 prepared unused ingredient that the opponent should 
-  discard.
-  - [D] Reuse Ingredient - Prepare 1 ingredient card of your choice directly from your discard pile.
-- **Recipes** 
-  - [O] Lose Recipe - Choose 1 recipe of an opponent. Shuffle the recipe card and 1 of its
-  ingredients back into their draw deck. The rest of the recipe ingredients (if any) stay in play.
-  - [D] Reuse Recipe - Take 1 recipe card and 1 ingredient card of your choice back from your
-  discard pile to your hand.
-- **Win Condition Cards**
-  - [O] Disrupt Progress - Shuffle 1 win condition card of an opponent back in their draw pile.
-  - [D] Restore Progress - Take 1 card suitable for win condition tracking from your discard pile
-  to your hand.
-- **Utensils**
-  - [O] Break Utensil - Flip a utensil card of an opponent down to disable it.
-  - [D] Repair Utensil - Flip a disabled utensil card of yours back up to enable it.
-- **Drawing Cards**
-  - [O] Discard Cards - Ask an opponent to discard 2 cards of their choice from their hand. If
-  they don't have 2 cards in their hand, they instead discard 2 cards from the draw pile.
-  - [D] Draw Cards - Draw 2 cards from the draw deck for your hand.
-- **Recipe Scores**
-  - [O] Score Less - Make an opponent's recipe score 1 VP less.
-  - [D] Score More - Make a recipe of yours score 1 VP more.
-- **Affect Cooking**
-  - [O] Slow down Cooking - Rotate 1 opponent recipe upside-down (to cook for another turn).
-  - [D] Speed up Cooking - Play 1 recipe card placed upwards (immediately ready for scoring).
+Each player competes to attract customers to their restaurant in order to serve them and thus score
+victory points (VP). To do so they must check if they cover the requirements of the customer card
+and if they do, they can take the customer card and place it in their own customer queue.
 
-- Offensive action cards can only be blocked (so discarded) by a **Block Action** card. Defensive
-action cards cannot be blocked.
-- Any cards you add to your hand via action card effects are not subject to the 8 cards limit.
-- Players always choose the targets of their action cards when possible! For example, you choose the
-utensil card the opponent should disable, the recipe they should lose, etc. But you cannot choose
-which cards they should discard from their hand or draw/discard cards from their piles instead of
-them.
+A player cannot have more than 3 customer cards in their queue (unless stated otherwise).
 
-### Block Cards
+When at least one customer is attracted (one customer card is placed in the player's queue) a player
+can choose to perform the **Serve** action to score from their cooked recipes.
+Each customer card has an order number that depicts how many recipes can be served to them.
+More customer cards results in raising that limit (i.e. if you have 3 customers in your queue with
+1, 2 and 2 recipe orders respectively, the total amount of recipes you can serve (score from) is 5).
 
-Special type of action cards. Can be used to block an offensive action cards that were flipped up
-prior to scoring and other block cards (so your opponent can block your block, you theirs, etc.).
-Played immediately from the hand like any other cards.
+After serving is complete all customer cards in the player's queue are discarded to the common 
+customer deck's discard pile.
 
-### Utensil Cards
+![image](images/guide_customer.png)
 
-Grant **+1 VP** for each cooked recipe that has a symbol matching the utensil.
+- **Ingredient Card Requirements** - The **prepared** and **unused** ingredient cards needed to 
+attract the customer to the player's queue.
+- **Recipe Card Requirements** - The **cooked** recipe cards needed to attract the customer to the
+player's queue.
+- **Order Number** - The number of recipes that can be served to the customer. The sum of this
+number across all customer cards in the player's queue is the total number of recipes that can be
+served (scored from) during the **Serve** action.
+- **Nationality** - Players gain extra **+1 VP** if the customer is from their cuisine's nationality
+& are served at least one recipe.
+- **Effect Icon & Description** - The effect granted by the customer card. The effect can be either
+a buff to the player or a debuff to an opponent. Effects that are granted by the customer cards 
+"when serving" are granted if the player serves at least one recipe to them. Other effects are 
+always granted as long as the customer card is in the player's queue.
 
-Each deck has 3 utensil cards - **Kitchenware**, **Cookware** & **Tableware**.
+Each player deck has the following Customer Cards:
+
+| Buff / Debuff                | Requirements                        | Order Number         |
+|------------------------------|-------------------------------------|----------------------|
+| Kitchenware (Utensil)        | 2 Ingredients                       | 1                    |
+| Cookware    (Utensil)        | 2 Recipes / 1 Ingredient & 1 Recipe | 1 / 2                |
+| Tableware   (Utensil)        | 2 Recipes / 1 Ingredient & 1 Recipe | 1 / 2                |
+| Player Gains 2 VP            | 2 Ingredients & 1 Recipe            | 1                    |
+| Opponent Loses 2 VP          | 2 Ingredients & 2 Recipes           | 1                    |
+| Hand Limit Increased by 1    | 2 Ingredients & 1 Recipe            | 2                    |
+| Customer Queue Limit is 4    | 2 Ingredients & 2 Recipes           | 2                    |
+| Discard 1 Win Condition Card | 3 Recipes                           | 1                    |
+
+The customer card effects are either:
+
+- One time only during serving (i.e. Gain 2 VP)
+- Ongoing (valid) each turn until the card is discarded (i.e. Increased Hand or Queue Limit)
+- Utensils - **Kitchenware** (Cutting board and a knife), **Cookware** (Cooking pot) or
+**Tableware** (Plate and cutlery) that grant **+1 VP** for each cooked and served recipe that has a
+symbol matching the utensil. Keep in mind this effect does not stack so you cannot score 3 VP from
+a single recipe if you have 3 customer cards with the same utensil symbol in your queue. You can 
+however score 3 VP from 3 recipes with different utensil symbols if you have the 3 customer cards 
+with the different utensils in your queue.
 
 ### Ability Card
 
 Explains your deck's special ability and win condition.
 
-## Main Mechanics
+## Player Actions
 
-### Prepare Ingredients
+### Main Actions
+
+Players can choose to do one of the 3 main actions during their turn as follows:
+
+#### Prepare
 
 You put as much ingredient cards as you want from your hand in front of you. They are now counted
-as prepared but unused ingredients. You can use them later to cook recipes.
+as **prepared** but **unused** ingredients. You can use them later to cook recipes.
 
-### Cook Recipes
+#### Cook
 
-For each recipe you want to cook you need to:
+You put in play (cook) as much recipe cards as you want as follows:
 
-- choose from the prepared unused ingredient cards.
-- place them in a column with an overlap.
-- put the recipe card at the bottom of the column with the monochrome picture up.
+- choose from the **prepared & unused** ingredient cards to meet the recipe requirements and put 
+them in a column with an overlap so you can see their symbols on the top.
+- put the recipe card on top of the ingredients' column.
 
-The recipe is now being cooked (you are not able to score from it yet, and it does not participate
-in any special ability effects, etc.).
-On your next turn you flip the recipe card with its score number and color picture up meaning 
-it's ready.  
-You can score from it now, and it participates in any special ability effects, etc.
+![image](images/guide_cooking.png)
 
-### Put Utensils
+#### Serve
 
-You should put utensil cards in dedicated stack. They grant **+1 VP** during scoring for each cooked
-recipe that has a symbol matching the utensil. They cannot be discarded only disabled/enabled by 
-the "Break/Repair Utensil" action cards.
+You score from as much cooked recipes as is the sum of your customer queue's order limits.
 
-### Play Action Cards
+Scoring happens as follows:
 
-Defensive action cards are played immediately from the hand typically at the start of a turn as 
-most of them supply the player with extra cards.
-Offensive action cards are placed face down in front of a player. They stay face down until that
-player decides to score. Before scoring all flipped down action cards are flipped back up and their
-effects are resolved.
-"Block Action" cards can be used to negate effects of offensive action cards. The owner of such
-card chooses which card it blocks.
+- Score VP for:
+    - cooked recipes
+    - any special ability effects if eligible
+    - customer effects and nationality bonuses
+- If you have a card from a cooked recipe that is used to track your win condition, place it in
+  your win condition tracking area.
 
-## Roles
+You can only put 1 win condition card per turn!
 
-The game also comes with 6 roles represented by 12 role cards (each role is a pair of cards). They
-can be put in play when 3 or more players are playing.
-Each role card has a unique ability that can be used once per round. The role cards are dealt
-randomly to players during the initial setup. They are played at the start of each round before
-players take their turns. Role cards' abilities cannot be blocked! 
+At any point during the above actions you can also do the following:
 
-The role cards are:
+### Additional Actions
 
-- **Chef** - Choose a player to start cooking 1 **normal** or **hard** recipe this turn. If they
-manage you and the player both gain **+2 VP**.
-- **Waiter** - Choose a player to start cooking more than 1 recipe for this turn. If they manage
-you and the player both gain **+2 VP**.
-- **Dishwasher** - Ask a player to discard their new hand and fill it a second time. If they do,
-they gain **+2 VP**. If they refuse, you gain **+2 VP**.
-- **Supplier** - Choose a player to either take any 2 cards from their discard pile or to draw 2
-cards less during their turn (so up to 6 card hand max). Then you do the same.
-- **Critic** - Grants **+1 VP** to an opponent and **+1 VP** to you or **-2 VP** to an opponent
-and **-1 VP** to you.
-- **Customer** - Demand a player to start cooking a **normal** or **hard** recipe this turn. If
-they manage you both gain **+2 VP**. If not, you both score **-2 VP**.
+Player can choose to do any of the following during their turn:
 
-The mechanics of playing the role cards are as follows:
+### Attract Customers
 
-Setup:
+Choose a customer card from the central queue and check if you meet its requirements.
+If you do, take the customer card and place it in your customer queue.
+Use the customer card's limit during the **Serve** action and its effect accordingly.
 
-Separate the pairs so that you have 2 piles of 6 cards. One pile is face up and the other is face
-down. Shuffle the face down pile and deal 1 card to each player until all cards are dealt or until
-each player has a role card. Then all players reveal their role cards and take the other card from
-the pair from the face up pile.
+### Complaint & Promotion
 
-Playing:
+Play **Complaint** & **Promotion** cards to respectively discard or swap customers with opponents.
 
-1. You receive a pair of role cards at the beginning of a round. 
-2. You put one of them in front of you so you can remember what role you are playing and what is
-its ability.
-3. You choose your counterpart and give them the other card from the pair so they also know what
-they should do during they turn.
-4. If you receive a role card from another player (you were picked as someone's counterpart) you
-put it in front of you to the right of your role card. 
-5. At the end of the round you give your left role card to your counterpart and respectively receive
-the other role card from the person who gave you your right role card. Next round you play with 
-your new pair of role cards.
+For detailed information on the effects of the event cards refer to the
+[Event Cards](#event-cards) section.
 
 ## Winning the Game
 
 The game ends after the end of the round in which a player reaches 40 VP or meets its Win Condition.
-(end of the round means all player have taken their turns). 
+(end of the round means all player have taken their turns).
 To determine the winner, calculate the VP of all players (each win condition card is worth 5 VP,
 but if all 4 are present the total bonus is 30 instead of 20 VP).
 If there is still a tie, the one who most recently cooked in real life wins.
 
+## Examples
 
-## Additional Notes
+![image](images/guide_table.png)
+
+- 4 Player game but visible is only 1 player station and the central customer queue.
+- From the player station is visible that:
+  - the player is playing with the **Piazza Romana** deck.
+  - the player has 2 win condition cards in their tracking area (2 more to go).
+  - the player has 3 prepared and unused ingredients - 1 primary, 1 secondary and 1 optional.
+  - the player has 2 cooked recipes - 1 easy and 1 normal.
+  - the player has 2 customer cards in their queue with a total order limit of 2 recipes
+  - both customer cards grant benefits upon serving and 1 is the same nationality as the player.
+
+Technically the player can take 1 more customer card from the central queue to fill theirs, but 
+they will have to cook another recipe to benefit from the effects of all 3.
+If the player decides to serve this turn they will get total of 6 VP:
+  - 3 VP from the normal recipe (base 2 + 1 from the Italian customer card effect)
+  - 1 VP from the easy recipe
+  - 2 VP from the French customer card effect
+

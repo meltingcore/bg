@@ -1,20 +1,21 @@
 # Food Court
 
-## Table of Contents
-
-- [Description](#description)
-- [Mission Statement](#mission-statement)
-- [Online Simulation](#online-simulation)
-- [Print And Play](#print-and-play)
-- [Disclaimers](#disclaimers)
-- [Discussions](#discussions)
+<!-- TOC -->
+* [Food Court](#food-court)
+  * [Description](#description)
+  * [Mission Statement](#mission-statement)
+  * [Online Simulation](#online-simulation)
+  * [Print And Play](#print-and-play)
+  * [Disclaimers](#disclaimers)
+  * [Discussions](#discussions)
+<!-- TOC -->
 
 ## Description
 
 In this competitive cooking card game, players choose a cuisine deck and race to create delicious
 recipes while using unique abilities and strategies.
 Each deck features primary, secondary, and optional ingredients, recipes of varying difficulty,
-action cards to sabotage opponents, and utensils for bonus points.
+and action cards to work with effects.
 Players take turns to Draw Cards, Prepare Ingredients, Cook Recipes and Score Victory Points.
 Achieve victory by either completing your deck's unique win condition or by scoring VP.
 
@@ -23,6 +24,8 @@ Collaborate, compete, and cook your way to culinary glory!
 For more details, check:
 
 - [Rules](Rules.md)
+- [Quick Reference](quick-reference.md)
+- [Effects](Effects.md)
 - [Decks](Decks.md)
 - [Changelog](CHANGELOG.md)
 - [ToDo](TODO.md)
@@ -63,15 +66,8 @@ Play testing is available on [Screentop.gg](https://screentop.gg/@grumpper/food-
 
 ## Print And Play
 
-You can download the print-ready PDFs as folows:
-
-- [Decks](https://drive.google.com/drive/folders/1RjN7gm9uUmFUjK3Yv4_XwoySk4Y0jHjB?usp=sharing)
-- [Roles](https://drive.google.com/file/d/1vtato6tITbTrM0xFkkSaoeRSS999X8Ku/view?usp=sharing)
-- [Actions](https://drive.google.com/file/d/1S0TfjAVLHZW4D9PotTRZZduPXj8LMDFb/view?usp=sharing)
-- [Utensils](https://drive.google.com/file/d/1GEOwRXla9UpwlXIWsCkZbUjKwD3YBcrl/view?usp=sharing)
-
-Each pdf contains the full 54 cards. But if you need it you can also print the action cards or
-the utensils cards separately from the links above.
+You can download the print-ready PDFs from 
+[here](https://drive.google.com/drive/folders/1fS_dyMKiEreeLW__3wqeTJlAEkKief2B?usp=sharing).
 
 The format of the cards should fit standard European bridge size (57x87 mm / 2.25x3.43 inch).
 I used the below for my play testing without issues:

@@ -1,17 +1,17 @@
 # Cuisine Decks
 
-## Table of Contents
 
-- [Table of Contents](#table-of-contents)
-- [🇮🇹 Piazza Romana](#-piazza-romana)
-- [🇫🇷 Le Petit Paris](#-le-petit-paris)
-- [🇨🇳 Jin Long](#-jin-long)
-- [🇮🇳 Raj Mahal](#-raj-mahal)
-- [🇺🇸 Liberty Grill](#-liberty-grill)
-- [🇹🇷 Sultan Saray](#-sultan-saray)
-- [🇯🇵 Sakura House](#-sakura-house)
-- [🇲🇽 El Nopalito](#-el-nopalito)
-
+<!-- TOC -->
+* [Cuisine Decks](#cuisine-decks)
+  * [🇮🇹 Piazza Romana](#-piazza-romana)
+  * [🇫🇷 Le Petit Paris](#-le-petit-paris)
+  * [🇨🇳 Jin Long](#-jin-long)
+  * [🇮🇳 Raj Mahal](#-raj-mahal)
+  * [🇺🇸 Liberty Grill](#-liberty-grill)
+  * [🇹🇷 Sultan Saray](#-sultan-saray)
+  * [🇯🇵 Sakura House](#-sakura-house)
+  * [🇲🇽 El Nopalito](#-el-nopalito)
+<!-- TOC -->
 
 ## 🇮🇹 Piazza Romana
 
@@ -23,14 +23,16 @@ grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes 
 <details>
   <summary>Deck Composition</summary>
 
-- Utensil Cards (3)
 - Ingredient Cards (26)
   - Primary (13):
     - Spaghetti (2)
-    - Fettuccine (3)
-    - Tagliatelle (3)
-    - Lasagna Sheets (3)
+    - Fettuccine (2)
+    - Tagliatelle (2)
+    - Lasagna Sheets (2)
     - Penne (2)
+    - Campanelle (1)
+    - Gnocchi (1)
+    - Ravioli (1)
   - Secondary (10)
   - Optional (3):
     - Basil
@@ -54,8 +56,9 @@ grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes 
     - Lasagna al Forno (Lasagna Sheets) [tableware]
     - Fettuccine ai Porcini e Tartufo (Fettuccine) [kitchenware]
     - Tagliatelle ai Funghi Porcini (Tagliatelle) [cookware]
-- Action Cards (10)
-- Country Card (1)
+- Action Cards (5)
+- Customer Cards (8)
+- Ability Card (1)
 </details>
 
 ## 🇫🇷 Le Petit Paris
@@ -69,7 +72,6 @@ VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main**
 <details>
   <summary>Deck Composition</summary>
 
-- Utensil Cards (3)
 - Ingredient Cards (25)
   - Primary (12)
   - Secondary (10)
@@ -96,14 +98,15 @@ VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main**
     - Pain Perdu (Dessert) [cookware]
     - Crème Brûlée (Dessert) [tableware]
     - Tarte Tatin (Dessert) [kitchenware]
-- Action Cards (10)
-- Country Card (1)
+- Action Cards (5)
+- Customer Cards (8)
+- Ability Card (1)
 </details>
 
 ## 🇨🇳 Jin Long
 
-- **Special Ability** - If you cook multiple recipes in 1 turn, gain bonus VP equal to the number
-of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
+- **Special Ability** - Each pair of recipes of the same type grants +1 VP (i.e. 2 rice recipes, 
+2 noodle recipes, etc.). 1 recipe can be part of multiple pairs.
 - **Win Condition** - Cook a **noodles** and a **rice** recipe in the same turn 4 times. At least
 1 of the recipes must be **normal** or **hard** one.
 - **Tracking** - The recipes cards.
@@ -111,7 +114,6 @@ of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
 <details>
   <summary>Deck Composition</summary>
 
-- Utensil Cards (3)
 - Ingredient Cards (24)  
   - Primary (12):
   - Secondary (9)
@@ -139,8 +141,9 @@ of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
     - Lo Mein (Noodles) [kitchenware]
     - Peking Duck Fried Rice (Rice) [cookware]
     - Dragon Beard Noodles (Noodles) [tableware]
-- Action Cards (10)
-- Country Card (1)
+- Action Cards (5)
+- Customer Cards (8)
+- Ability Card (1)
 </details>
 
 ## 🇮🇳 Raj Mahal
@@ -154,7 +157,6 @@ of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
 <details>
   <summary>Deck Composition</summary>
 
-- Utensil Cards (3)
 - Ingredient Cards (26):
   - Primary (11)
   - Secondary (12):
@@ -186,8 +188,9 @@ of recipes minus 1 (i.e. 2 recipes = **+1 VP**, 3 recipes = **+2 VP**, etc.).
     - Coconut Curry [tableware]
     - Rogan Josh [kitchenware]
     - Malai Kofta [cookware]
-- Action Cards (10)
-- Country Card (1)
+- Action Cards (5)
+- Customer Cards (8)
+- Ability Card (1)
 </details>
 
 ## 🇺🇸 Liberty Grill
@@ -200,7 +203,6 @@ VP equal to that amount. You don't have to match the recipe requirements for the
 <details>
   <summary>Deck Composition</summary>
 
-- Utensil Cards (3)
 - Ingredient Cards (25)
   - Primary (12)
   - Secondary (10)
@@ -227,22 +229,22 @@ VP equal to that amount. You don't have to match the recipe requirements for the
     - Deep-fried Burger (Burger) [cookware]
     - T-bone Steak (Steak) [tableware]
     - Apple Pie [kitchenware]
-- Action Cards (10)
-- Country Card (1)
+- Action Cards (5)
+- Customer Cards (8)
+- Ability Card (1)
 </details>
 
 ## 🇹🇷 Sultan Saray
 
-- **Special Ability** - Before scoring, you can replace opponent's **normal** or **hard** recipe
-with a **kebab** by discarding 1 or 2 prepared and unused ingredients of any type. You don't
-benefit from special ability effects of the replaced recipe.
-- **Win Condition** - Replace 4 opponent recipes with **kebab** recipes.
+- **Special Ability** - During serving, you may take 1 **normal** or **hard** recipe from each 
+opponent by discarding a cooked **kebab** recipe and its ingredients. Special ability effects of 
+the taken recipes do not apply.
+- **Win Condition** - Take 4 opponent recipes with **kebab** recipes.
 - **Tracking** - The **kebab** recipe cards.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Utensil Cards (3)
 - Ingredient Cards (24):
   - Primary (12)
   - Secondary (9)
@@ -270,22 +272,21 @@ benefit from special ability effects of the replaced recipe.
     - Baklava [kitchenware]
     - Turkish Delight [cookware]
     - Kadayif [tableware]
-- Action Cards (10)
-- Country Card (1)
+- Action Cards (5)
+- Customer Cards (8)
+- Ability Card (1)
 </details>
 
 ## 🇯🇵 Sakura House
 
 - **Special Ability** - Cooked recipes score VP based on their **secondary** ingredient as follows:
-**+2 VP** with **umami** ingredient; **+1 VP** with **wasabi** ingredient; **-1 VP** with
-**ginger** ingredient. 
-- **Win Condition** - Cook 2 recipes with **umami** and 2 recipes with **ginger** ingredients
-- **Tracking** - The **umami**/**ginger** ingredient cards.
+**+2 VP** with **wasabi** ingredient; **-1 VP** with **ginger** ingredient. 
+- **Win Condition** - Cook 2 recipes with **wasabi** and 2 recipes with **ginger** ingredients
+- **Tracking** - The **wasabi**/**ginger** ingredient cards.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Utensil Cards (3)
 - Ingredient Cards (26):  
   - Primary (11)
   - Secondary (12):
@@ -314,8 +315,9 @@ benefit from special ability effects of the replaced recipe.
     - Unagi Sushi Platter [tableware]
     - Omurice [kitchenware]
     - Gyoza [cookware]
-- Action Cards (10)
-- Country Card (1)
+- Action Cards (5)
+- Customer Cards (8)
+- Ability Card (1)
 </details>
 
 ## 🇲🇽 El Nopalito
@@ -329,7 +331,6 @@ discard 1 card from your hand for each.
 <details>
   <summary>Deck Composition</summary>
 
-- Utensil Cards (3)
 - Ingredient Cards (26):
   - Primary (11)
   - Secondary (12):
@@ -358,6 +359,7 @@ discard 1 card from your hand for each.
     - Pozole Rojo [kitchenware]
     - Chiles Rellenos [cookware]
     - Tamales [tableware]
-- Action Cards (10)
-- Country Card (1)
+- Action Cards (5)
+- Customer Cards (8)
+- Ability Card (1)
 </details>

@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.8.0]
+
+CHANGES:
+
+* Redesign turn structure to choosing from 1 of 3 actions (prepare, cook & serve).
+* Hand limit is now 7 cards by default (down from 8) and each turn players can discard up to 
+2 (down from 3) cards before filling back their hand.
+* Redesign player interaction and scoring to be based on customer queues. 
+* Redesign all player decks to remove utensils & change the Block & Swap action cards to become 
+Complaint and Promotion event cards instead.
+* Roles functionality removed.
+* No more card rotations and upside-down text.
+* Removed cooking for one turn mechanic.
+* Jin Long's special ability modified.
+* Sakura House's special ability modified.
+* Sultan Saray's special ability modified.
+* Piazza Romana's primary ingredients adjusted.
+* Cards used for win condition tracking now have medal icon in the upper right corner.
+* Scoring calculations are now easier due to dedicated symbols on the recipe cards.
+* Scoring (serving) is now only possible if a player has a customer queue.
+
 ## [0.7.1]
 
 CHANGES:
