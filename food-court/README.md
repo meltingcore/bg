@@ -25,7 +25,6 @@ For more details, check:
 
 - [Rules](Rules.md)
 - [Quick Reference](quick-reference.md)
-- [Effects](Effects.md)
 - [Decks](Decks.md)
 - [Changelog](CHANGELOG.md)
 - [ToDo](TODO.md)
