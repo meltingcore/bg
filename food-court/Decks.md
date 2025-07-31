@@ -58,6 +58,14 @@ grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes 
     - Tagliatelle ai Funghi Porcini (Tagliatelle) [cookware]
 - Action Cards (5)
 - Customer Cards (8)
+  - Gain 2 VP
+  - Opponent Discards 1 Win Condition Card used for tracking
+  - Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Have a hand limit increased by 1 each turn until discarded
+  - Kitchenware utensil
+  - Cookware utensil
+  - Gain +1VP for each customer not from your nationality
+  - Special: Put back in play up to 2 primary ingredients from the discard pile
 - Ability Card (1)
 </details>
 
@@ -100,6 +108,14 @@ VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main**
     - Tarte Tatin (Dessert) [kitchenware]
 - Action Cards (5)
 - Customer Cards (8)
+  - Opponent Loses 2 VP
+  - Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Opponent Discards up to 2 prepared and unused ingredients
+  - Have a hand limit increased by 1 each turn until discarded
+  - Cookware utensil
+  - Tableware utensil
+  - Gain +1VP for each customer from your nationality
+  - Special: Put in play 1 recipe card with one less ingredient
 - Ability Card (1)
 </details>
 
@@ -143,6 +159,14 @@ VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main**
     - Dragon Beard Noodles (Noodles) [tableware]
 - Action Cards (5)
 - Customer Cards (8)
+  - Gain 2 VP
+  - Opponent Discards up to 2 prepared and unused ingredients
+  - Opponent Discards 1 Win Condition Card used for tracking
+  - Have a hand limit increased by 1 each turn until discarded
+  - Tableware utensil
+  - Kitchenware utensil
+  - Gain +1VP for each customer not from your nationality
+  - Special: Put in play an easy recipe from the discard pile for free
 - Ability Card (1)
 </details>
 
@@ -190,6 +214,14 @@ VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main**
     - Malai Kofta [cookware]
 - Action Cards (5)
 - Customer Cards (8)
+  - Opponent Loses 2 VP
+  - Opponent Discards 1 Win Condition Card used for tracking
+  - Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Have a hand limit increased by 1 each turn until discarded
+  - Kitchenware utensil
+  - Cookware utensil
+  - Gain +1VP for each customer from your nationality
+  - Special: Put back in play 2 secondary ingredients from the discard pile
 - Ability Card (1)
 </details>
 
@@ -231,6 +263,14 @@ VP equal to that amount. You don't have to match the recipe requirements for the
     - Apple Pie [kitchenware]
 - Action Cards (5)
 - Customer Cards (8)
+  - Gain 2 VP
+  - Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Opponent Discards up to 2 prepared and unused ingredients 
+  - Have a hand limit increased by 1 each turn until discarded
+  - Cookware utensil
+  - Tableware utensil
+  - Gain +1VP for each customer not from your nationality
+  - Special: Gain +1VP if you serve more than 3 recipes
 - Ability Card (1)
 </details>
 
@@ -274,6 +314,14 @@ the taken recipes do not apply.
     - Kadayif [tableware]
 - Action Cards (5)
 - Customer Cards (8)
+  - Opponent Loses 2 VP
+  - Opponent Discards up to 2 prepared and unused ingredients 
+  - Opponent Discards 1 Win Condition Card used for tracking
+  - Have a hand limit increased by 1 each turn until discarded
+  - Tableware utensil
+  - Kitchenware utensil
+  - Gain +1VP for each customer from your nationality
+  - Special: Gain +1VP from an opponent (the opponent loses 1VP)
 - Ability Card (1)
 </details>
 
@@ -317,6 +365,14 @@ the taken recipes do not apply.
     - Gyoza [cookware]
 - Action Cards (5)
 - Customer Cards (8)
+  - Gain 2 VP
+  - Opponent Discards 1 Win Condition Card used for tracking
+  - Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Have a hand limit increased by 1 each turn until discarded
+  - Kitchenware utensil
+  - Cookware utensil
+  - Gain +1VP for each customer from your nationality
+  - Special: Score up to extra 2VP (1 for each easy recipe served)
 - Ability Card (1)
 </details>
 
@@ -361,5 +417,13 @@ discard 1 card from your hand for each.
     - Tamales [tableware]
 - Action Cards (5)
 - Customer Cards (8)
+  - Opponent Loses 2 VP
+  - Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Opponent Discards up to 2 prepared and unused ingredients 
+  - Have a hand limit increased by 1 each turn until discarded
+  - Cookware utensil
+  - Tableware utensil
+  - Gain +1VP for each customer not from your nationality
+  - Special: Discard your hand to gain +2VP
 - Ability Card (1)
 </details>

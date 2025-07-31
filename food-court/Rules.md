@@ -66,8 +66,8 @@ Decide the first player randomly and start the game (play proceeds clockwise).
 
 Players take turns in order.
 
-During their turn, players always start by discarding up to 2 cards from their hand & drawing cards
-until they have 7 cards in hand (unless stated otherwise).
+During their turn, players always start by discarding up to 3 cards from their hand & drawing cards
+until they have 7 cards in hand (unless the hand limit is modified by a customer card).
 When the draw pile depletes reshuffle the discard pile back into it.
 
 Then they can choose to do 1 of 3 actions: **Prepare**, **Cook** or **Serve**.
@@ -80,11 +80,10 @@ When **serving** players score from:
   sum of the order numbers of all customer cards in their queue).
   - any special ability effects if eligible.
   - customer effects
-  - customer nationality bonuses (if the customer is from the player's cuisine)
 
 Once per turn the players can take one of the customer cards from the center if they
-meet its requirements and place it in their customer cards area until they have 3 (unless stated
-otherwise). For more information on the customer cards mechanic refer to the 
+meet its requirements and place it in their customer cards area until they have 3. 
+For more information on the customer cards mechanic refer to the 
 [Customer Cards](#customer-cards) section.
 
 At any point during their turn, player can also play event cards to manipulate the customer queues.
@@ -144,10 +143,9 @@ Recipe cards have the following structure:
 - **Win Condition Symbol** - If present it indicates this card can be used to track the win
   condition.
 
-**Hard** recipes when cooked make all **easy** & **normal** cooked recipes to score extra **1 VP**.
-For example if you cook 1 **hard** recipe along with 2 **easy** recipes that turn, you score extra
-**2 VP** for the **easy** recipes totalling to 3 + 1 + 1 + 2 = **7 VP**. This effect stacks so if
-you cook 2 **hard** recipes and 2 **easy** recipe you score 3 + 3 + 1 + 1 + 2 + 2 = **12 VP**.
+**easy** & **normal** cooked recipes score extra **1 VP** if at least 1 hard recipe is also cooked
+and served with them (meaning that this bonus does not stack and even if you cook 2 hard recipes 
+you will still get only 1 bonus VP from a single easy or normal recipe).
 
 ### Event Cards
 
@@ -167,10 +165,10 @@ Each player competes to attract customers to their restaurant in order to serve 
 victory points (VP). To do so they must check if they cover the requirements of the customer card
 and if they do, they can take the customer card and place it in their own customer queue.
 
-A player cannot have more than 3 customer cards in their queue (unless stated otherwise).
+A player cannot have more than 3 customer cards in their queue.
 
 When at least one customer is attracted (one customer card is placed in the player's queue) a player
-can choose to perform the **Serve** action to score from their cooked recipes.
+can choose to perform the **Serve** action to score from their **cooked** recipes.
 Each customer card has an order number that depicts how many recipes can be served to them.
 More customer cards results in raising that limit (i.e. if you have 3 customers in your queue with
 1, 2 and 2 recipe orders respectively, the total amount of recipes you can serve (score from) is 5).
@@ -187,36 +185,42 @@ player's queue.
 - **Order Number** - The number of recipes that can be served to the customer. The sum of this
 number across all customer cards in the player's queue is the total number of recipes that can be
 served (scored from) during the **Serve** action.
-- **Nationality** - Players gain extra **+1 VP** if the customer is from their cuisine's nationality
-& are served at least one recipe.
+- **Nationality** - Players gain extra **+1 VP** for any customer that is either of their own 
+nationality or vice versa (if they served the customer card with the corresponding effect).
 - **Effect Icon & Description** - The effect granted by the customer card. The effect can be either
-a buff to the player or a debuff to an opponent. Effects that are granted by the customer cards 
-"when serving" are granted if the player serves at least one recipe to them. Other effects are 
-always granted as long as the customer card is in the player's queue.
+a buff to the player or a debuff to an opponent. Effects are granted if the player serves at least
+one recipe to the customer (except the hand limit increase effect which is always granted as long 
+as the customer card is in the player's queue).
 
-Each player deck has the following Customer Cards:
+Each player deck has a slight variation of a customers following the below logic:
 
-| Buff / Debuff                | Requirements                        | Order Number         |
-|------------------------------|-------------------------------------|----------------------|
-| Kitchenware (Utensil)        | 2 Ingredients                       | 1                    |
-| Cookware    (Utensil)        | 2 Recipes / 1 Ingredient & 1 Recipe | 1 / 2                |
-| Tableware   (Utensil)        | 2 Recipes / 1 Ingredient & 1 Recipe | 1 / 2                |
-| Player Gains 2 VP            | 2 Ingredients & 1 Recipe            | 1                    |
-| Opponent Loses 2 VP          | 2 Ingredients & 2 Recipes           | 1                    |
-| Hand Limit Increased by 1    | 2 Ingredients & 1 Recipe            | 2                    |
-| Customer Queue Limit is 4    | 2 Ingredients & 2 Recipes           | 2                    |
-| Discard 1 Win Condition Card | 3 Recipes                           | 1                    |
+- Victory Points Customer Cards (1 of the below):
+    - Player Gains 2 VP
+    - Opponent Loses 2VP
+- Discard Customer Cards (2 of the below):
+    - Discard 1 Win Condition Card used for tracking
+    - Discard 1 Cooked Recipe along with its ingredients
+    - Discard Up to 2 Prepared Unused Ingredients
+- Hand Limit +1 (ongoing effect)
+- Utensil Customer Cards (2 of the below)
+    - Kitchenware - Gain +1VP for each recipe with a kitchenware utensil symbol
+    - Cookware - Gain +1VP for each recipe with a cookware utensil symbol
+    - Tableware - Gain +1VP for each recipe with a tableware utensil symbol
+- Nationality Bonus (1 of the below):
+    - Gain +1VP for each customer from your nationality
+    - Gain +1VP for each customer not from your nationality  
+- Deck Special (depending on the deck's nationality):
+    - Italy: Put back in play up to 2 primary ingredients from the discard pile
+    - France: Put in play 1 recipe card with one less ingredient
+    - China: Put in play an easy recipe from the discard pile for free
+    - India: Put back in play 2 secondary ingredients from the discard pile
+    - USA: Gain +1VP if you serve more than 3 recipes
+    - Türkiye: Gain +1VP from an opponent (the opponent loses 1VP)
+    - Japan: Score +1VP for each easy recipe served (up to 2VP max)
+    - Mexico: Discard your hand to gain +2VP
 
-The customer card effects are either:
-
-- One time only during serving (i.e. Gain 2 VP)
-- Ongoing (valid) each turn until the card is discarded (i.e. Increased Hand or Queue Limit)
-- Utensils - **Kitchenware** (Cutting board and a knife), **Cookware** (Cooking pot) or
-**Tableware** (Plate and cutlery) that grant **+1 VP** for each cooked and served recipe that has a
-symbol matching the utensil. Keep in mind this effect does not stack so you cannot score 3 VP from
-a single recipe if you have 3 customer cards with the same utensil symbol in your queue. You can 
-however score 3 VP from 3 recipes with different utensil symbols if you have the 3 customer cards 
-with the different utensils in your queue.
+The customer card effects do not stack!
+For exact customer card configuration per deck check the [Decks](Decks.md) page.
 
 ### Ability Card
 
@@ -252,7 +256,7 @@ Scoring happens as follows:
 - Score VP for:
     - cooked recipes
     - any special ability effects if eligible
-    - customer effects and nationality bonuses
+    - customer effects
 - If you have a card from a cooked recipe that is used to track your win condition, place it in
   your win condition tracking area.
 
@@ -296,12 +300,13 @@ If there is still a tie, the one who most recently cooked in real life wins.
   - the player has 3 prepared and unused ingredients - 1 primary, 1 secondary and 1 optional.
   - the player has 2 cooked recipes - 1 easy and 1 normal.
   - the player has 2 customer cards in their queue with a total order limit of 2 recipes
-  - both customer cards grant benefits upon serving and 1 is the same nationality as the player.
+  - both customer cards grant benefits upon serving.
 
 Technically the player can take 1 more customer card from the central queue to fill theirs, but 
 they will have to cook another recipe to benefit from the effects of all 3.
 If the player decides to serve this turn they will get total of 6 VP:
-  - 3 VP from the normal recipe (base 2 + 1 from the Italian customer card effect)
+  - 3 VP from the normal recipe (base 2 + 1 from the Italian customer card effect being the
+  Cookware utensil symbol)
   - 1 VP from the easy recipe
   - 2 VP from the French customer card effect
 

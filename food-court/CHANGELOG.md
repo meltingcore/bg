@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.8.2]
+
+CHANGES:
+
+* Customer cards are now slightly randomized for each deck to add variety.
+* Effects in general do not stack anymore meaning that:
+  * You cannot benefit from the same customer effect multiple times (i.e. you can only score 2 VP
+  instead of 4VP if you have 2 "Gain 2VP" customers in your queue).
+  * You cannot get the **hard** recipe bonus on **easy** and **normal** recipes multiple times.
+  * Utensil bonuses **of the same type** do not stack anymore (different types still do).
+
 ## [0.8.1]
 
 BUG FIXES:
