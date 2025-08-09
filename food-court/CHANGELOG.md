@@ -1,15 +1,35 @@
 # Changelog
 
-## [0.8.2]
+## [0.9.0]
 
 CHANGES:
 
-* Customer cards are now slightly randomized for each deck to add variety.
+* New **Discount** event card added to attract a customer from the central queue without having
+  to meet its requirements and adhere to the 1 customer per turn limit.
+* New **Drink** card type added.
+  * Each deck will have 3 drink cards that can score 3VP if their deck specific requirements are
+  met.
+  * Drink cards can be scored regardless of the action the player takes (i.e. you can score them
+  while preparing)
+  * There still has to be at least 1 customer in the player queue to serve the drink to score it,
+  but you do not discard the customer after scoring the drink.
+* Customer cards are now slightly randomized for each deck to add variety and new effect is added
+the gives you an opportunity to prepare 1 ingredient while cooking as ongoing (until discarded).
+* Customers are now attracted by covering their requirements at the end of the turn after 
+performing the main action so the only way to attract them at the start of the turn is by using 
+**Discount** event cards.
+* Attempt to ease on the scoring snowballing and math:
+  * Hard recipes now just grant 4VP instead of 3VP + bonus to other recipes.
+  * Optional ingredients now grant 1VP instead of 2VP.
+  * Most special abilities are now simplified to just grant +1VP instead of different bonuses based
+  on complex conditions.
 * Effects in general do not stack anymore meaning that:
   * You cannot benefit from the same customer effect multiple times (i.e. you can only score 2 VP
   instead of 4VP if you have 2 "Gain 2VP" customers in your queue).
-  * You cannot get the **hard** recipe bonus on **easy** and **normal** recipes multiple times.
-  * Utensil bonuses **of the same type** do not stack anymore (different types still do).
+  * Utensil bonuses **of the same type** do not stack anymore (different types still do so you 
+  cannot score +2VP from 2 Kitchenware cards on the same recipe but can from a Kitchenware and 
+  Cookware cards for 2 recipes).
+* Rules are now more streamlined to avoid the "wall of text" feel
 
 ## [0.8.1]
 

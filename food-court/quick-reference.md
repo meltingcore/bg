@@ -8,119 +8,119 @@
   * [Card Types](#card-types)
     * [Ingredient Cards](#ingredient-cards)
     * [Recipe Cards](#recipe-cards)
+    * [Drink Cards](#drink-cards)
     * [Event Cards](#event-cards)
     * [Customer Cards](#customer-cards)
     * [Ability Card](#ability-card)
-  * [Player Actions](#player-actions)
-    * [Prepare](#prepare)
-    * [Cook](#cook)
-    * [Serve](#serve)
-    * [Attract Customers](#attract-customers)
-    * [Complaint & Promotion](#complaint--promotion)
   * [Winning the Game](#winning-the-game)
-<!-- TOC -->-->
+<!-- TOC -->
 
 ## Objective
 
-Win by scoring the most Victory Points (VP) at the end of the game.
+Players aim to score the most Victory Points (VP) by cooking and serving recipes, playing drink
+and event cards, triggering customer and special ability effects, and achieving win condition
+milestones.
 
 ## Setup
 
-1. Each player chooses a restaurant deck.
-2. Remove all customer cards from player decks and combine them into a central customer deck.
-   Shuffle and draw customer cards equal to the number of players + 1 (minimum 4) and place them
-   face up in the center as the central customer queue. Place the rest as a face down draw pile and
-   keep discard pile on the other side of the queue.
-3. Each player sets up their station:
-    - Place your Ability Card in front of you.
-    - Place your deck (draw pile) face down to your left and draw 7 cards for your starting hand.
-    - Place your discard pile to your right.
-    - Place your win condition cards to the right of your Ability Card.
-    - Place ingredients & recipes above the Ability Card.
-    - Place your personal customer queue above your ingredients & recipes.
-4. Decide the first player randomly. Play proceeds clockwise.
+1. **Deck Selection:** Each player selects a restaurant deck.
+2. **Central Customer Queue Creation:**
+    - All players remove the customer cards from their decks and combine these into a shared
+      customer deck.
+    - Shuffle the deck and draw customer cards equal to the number of players plus 1 to form the
+      **central customer queue**.
+    - Place the remaining customer deck face down as draw pile, with space for a face-down discard
+      pile on the opposite side of the queue.
+3. **Player Station Setup:**
+    - Place the **Ability Card** in front of the player.
+    - Place the player deck face down on the left side as draw pile and draw 7 cards for a starting
+      hand.
+    - Reserve space to the right of the Ability Card for the **discard pile** and **Win Condition
+      Cards**.
+    - Above the Ability Card, players will place their **prepared ingredients and cooked recipes**.
+    - Above that, players will maintain their **personal customer queue**.
+4. Choose **First Player:** randomly and start the game.
 
 ## Turn Structure
 
-1. Discard up to 2 cards from your hand, then draw back up to 7 cards (reshuffle discard pile if
-   needed).
-2. Choose **one** main action: **Prepare**, **Cook**, or **Serve**. To be able to **Serve**, you 
-must have at least one customer card in your queue.
-   - **Prepare:** - Place ingredients from your hand as **prepared** and **unused**.
-   - **Cook:** - Combine **prepared** and **unused** ingredients with recipe cards to cook them.
-   - **Serve:** - Score **cooked** recipes for VP based on your combined customer queue order limit.
-3. Once per turn you may take a customer card from the central queue if you meet its
-   requirements (max 3 customers can be in your queue unless stated otherwise).
-4. At any point during your turn, you may play **Event** cards (**Complaint** or **Promotion**) to
-   manipulate the customer queues.
+Game is played in rounds where 1 round consists of all players taking their turns clockwise.  
+Each player turn consists of the following:
+
+1. **Fill Hand:** Discard up to 3 cards and draw up to the hand limit.
+2. **Main Action:** Choose 1 of the following actions:
+    1. **Prepare:** Move ingredient cards from hand to play as prepared but unused.
+    2. **Cook:** Use prepared unused ingredients to fulfill recipe requirements and place the recipe
+       card on top of the ingredients.
+    3. **Serve:** Serve cooked recipes to customers in the player queue and resolve any customer and
+       special ability effects to score points. Set aside 1 win condition card for tracking if
+       applicable.
+3. **Attract Customers:** If requirements are met, attract 1 customer from the central queue to the
+   player queue.
+4. **Additional Actions:** Players may perform any of the following actions at any time:
+    - Play event cards.
+    - Play drink cards.
 
 ## Card Types
 
 ### Ingredient Cards
 
-- **Primary:** Used in all recipes.
-- **Secondary:** Used in **normal** and **hard** recipes.
-- **Optional:** Can be used in a recipe for **+2 VP**.
+Ingredient cards represent the various components needed to cook recipes. They come in three
+categories:
+
+- **Primary Ingredients** – Required in every recipe.
+- **Secondary Ingredients** – Required in normal and hard recipes.
+- **Optional Ingredients** – Can be added to any recipe to grant +1 VP when served.
 
 ### Recipe Cards
 
-- **Easy:** 1 Primary ingredient (**1 VP**)
-- **Normal:** 1 Primary + 1 Secondary (**2 VP**)
-- **Hard:** 1 Primary + 2 Secondary (**3 VP**)
+Recipe cards represent dishes that players can cook and serve for points. They vary in complexity
+and scoring potential:
 
-When **hard** recipes are cooked, all **easy** & **normal** recipes cooked that turn score **+1 VP
-** (this effect stacks).
+- **Easy:** Requires 1 Primary Ingredient — worth 1 VP.
+- **Normal:** Requires 1 Primary + 1 Secondary Ingredient — worth 2 VP.
+- **Hard:** Requires 1 Primary + 2 Secondary Ingredients — worth 4 VP.
+
+### Drink Cards
+
+Drink cards gives VP but unlike recipes, drinks require no ingredients and can be played at any 
+time as long as their condition is met and there is at least once customer in the player's queue.
 
 ### Event Cards
 
-- **Complaint:** Discard a customer card from any queue.
-- **Promotion:** Swap a customer card between your queue and another.
+Event cards provide one-time strategic effects that can impact any player's queue and can be played
+at any time after players fill in they hand. They are:
+
+- **Complaint:** Discards a customer from any queue.
+- **Promotion:** Swaps 2 customers from any two queues.
+- **Discount:** Allows a player to attract a customer from the central queue, ignoring its
+  requirements and the limit of attracting only 1 customer per turn.
 
 ### Customer Cards
 
-- Attract customers from the central queue by meeting their requirements (max 3 in your queue
-unless stated otherwise).
-- Each customer card has an order number (number of recipes it can be served).
-- When served, may grant a buff (bonus) or inflict a penalty on an opponent.
-- If nationality matches your deck, gain **+1 VP** when served.
-- Some have a **utensil symbol** that grants **+1 VP** for each served recipe with a matching 
-utensil (does not stack).
+Customer cards represent diners that players try to attract and serve. They are drawn from a shared
+central queue and added to individual player queues when requirements are met. Each customer
+increases the player’s serving capacity and grant various effects.
+
+- Players may attract 1 customer per turn (unless using a Discount event card).
+- Players may have a maximum of 3 customers in their personal queue.
+- Customer effects that are not ongoing only activate if at least one recipe is served to them.
+- Customer effects that are ongoing apply immediately when the card is put in play and are active
+  while the customer remains in the queue.
+- Effects do not stack if duplicated.
 
 ### Ability Card
 
-Shows your deck's special ability and win condition.
-
-## Player Actions
-
-### Prepare
-
-Place any number of ingredient cards from your hand in front of you as **prepared** & **unused**
-ingredients.
-
-### Cook
-
-Combine **prepared** & **unused** ingredients with recipe cards to cook them (place the recipe card
-on top of its used ingredients).
-
-### Serve
-
-Score **cooked** recipes for VP, up to the total recipe limit of your customer queue. Apply customer
-card effects and discard all served customer cards. You may place 1 win condition card per turn in
-your win condition area.
-
-### Attract Customers
-
-Once per turn if you meet a customer card's requirements in the central queue, take it into your 
-queue (max 3 unless stated otherwise).
-
-### Complaint & Promotion
-
-At any time in your turn play **Complaint** or **Promotion** event cards to discard or swap 
-customer cards.
+Each deck includes an ability card that outlines the deck’s unique ability, its win condition and 
+how to track it.
 
 ## Winning the Game
 
-- The game ends at the end of the round in which a player reaches **40 VP** or meets their **Win
-  Condition**.
-- Each win condition card is worth **5 VP** (but all 4 = 30 VP).
-- If there is a tie the most recent player to have cooked in real life wins.
+The game ends after the round in which a player reaches **40 VP** or completes their
+**win condition** ends. All players must finish their turns so a round could end.
+
+**Final Scoring:**
+
+- Each win condition card is worth 5 VP.
+- If all four are achieved, the total is 30 VP instead of 20.
+
+**Tiebreaker:** The player who most recently cooked a real-life meal wins.

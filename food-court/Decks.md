@@ -15,8 +15,7 @@
 
 ## 🇮🇹 Piazza Romana
 
-- **Special Ability** - **Normal** and **hard** recipes cooked with **exact** pasta ingredients
-grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes grant **+2 VP**;
+- **Special Ability** - Recipes cooked with **exact** pasta ingredients grant **+1 VP**.
 - **Win Condition** - Make 4 meals with **exact** pasta ingredient.
 - **Tracking** - The **exact** ingredient cards.
 
@@ -56,24 +55,31 @@ grant bonus VP as follows: **normal** recipes grant **+1 VP**; **hard** recipes 
     - Lasagna al Forno (Lasagna Sheets) [tableware]
     - Fettuccine ai Porcini e Tartufo (Fettuccine) [kitchenware]
     - Tagliatelle ai Funghi Porcini (Tagliatelle) [cookware]
-- Action Cards (5)
-- Customer Cards (8)
-  - Gain 2 VP
-  - Opponent Discards 1 Win Condition Card used for tracking
-  - Opponent Discards 1 Cooked Recipe along with its ingredients
-  - Have a hand limit increased by 1 each turn until discarded
-  - Kitchenware utensil
-  - Cookware utensil
-  - Gain +1VP for each customer not from your nationality
-  - Special: Put back in play up to 2 primary ingredients from the discard pile
+- Drink Cards (3)
+  - Espresso - Have 5 different prepared and unused pasta ingredients
+  - Limoncello - Have 3 different pasta ingredients in your cooked recipes
+  - Aperol Spritz - Have 2 recipes cooked with exact pasta ingredients
+- Action Cards (6)
+  - Complaint (1)
+  - Discount (2) 
+  - Promotion (3)
+- Customer Cards (9)
+  - Req [2/1] Ord [1] Gain 2 VP  
+  - Req [-/3] Ord [1] Opponent Discards 1 Win Condition Card used for tracking
+  - Req [3/-] Ord [2] Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
+  - Req [2/-] Ord [1] Kitchenware utensil
+  - Req [-/2] Ord [2] Cookware utensil
+  - Req [2/2] Ord [1] Gain +1VP for each customer not from your nationality
+  - Req [1/1] Ord [2] Special: Put back in play up to 2 primary ingredients from the discard pile
+  - Req [1/-] Ord [1] You can prepare 1 ingredient while cooking until discarded
 - Ability Card (1)
 </details>
 
 ## 🇫🇷 Le Petit Paris
 
-- **Special Ability** - Adjacent recipes from a 4-course meal cooked in the same turn grant bonus
-VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main** = **+2 VP**; 
-**main** + **dessert** = **+2 VP**;
+- **Special Ability** - Adjacent cooked recipes from a 4-course meal grant **+1 VP**. Recipes cannot
+participate in multiple pairs of the same type.
 - **Win Condition** - Cook a complete 4-course meal in order (entrée, appetizer, main, dessert).
 - **Tracking** - The recipes cards.
 
@@ -84,7 +90,7 @@ VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main**
   - Primary (12)
   - Secondary (10)
   - Optional (3):
-    - Wine
+    - Herbs de Provence
     - Butter
     - Cream
 - Recipe Cards (15):
@@ -106,23 +112,31 @@ VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main**
     - Pain Perdu (Dessert) [cookware]
     - Crème Brûlée (Dessert) [tableware]
     - Tarte Tatin (Dessert) [kitchenware]
-- Action Cards (5)
+- Drink Cards (3)
+  - Champagne - Have 4 prepared and unused secondary ingredients
+  - Cognac - Have 3 different courses as cooked recipes
+  - Pernod - Have 2 recipes with optional ingredients
+- Action Cards (6)
+  - Complaint (1) 
+  - Discount (2)  
+  - Promotion (3) 
 - Customer Cards (8)
-  - Opponent Loses 2 VP
-  - Opponent Discards 1 Cooked Recipe along with its ingredients
-  - Opponent Discards up to 2 prepared and unused ingredients
-  - Have a hand limit increased by 1 each turn until discarded
-  - Cookware utensil
-  - Tableware utensil
-  - Gain +1VP for each customer from your nationality
-  - Special: Put in play 1 recipe card with one less ingredient
+  - Req [2/1] Ord [1] Opponent Loses 2 VP
+  - Req [-/3] Ord [1] Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients
+  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
+  - Req [2/-] Ord [1] Cookware utensil
+  - Req [-/2] Ord [2] Tableware utensil
+  - Req [2/2] Ord [1] Gain +1VP for each customer from your nationality
+  - Req [1/1] Ord [2] Special: Put in play 1 optional ingredient from the discard pile
+  - Req [1/-] Ord [1] You can prepare 1 ingredient while cooking until discarded
 - Ability Card (1)
 </details>
 
 ## 🇨🇳 Jin Long
 
-- **Special Ability** - Each pair of recipes of the same type grants +1 VP (i.e. 2 rice recipes, 
-2 noodle recipes, etc.). 1 recipe can be part of multiple pairs.
+- **Special Ability** - Recipes of the same type grants VP equal to their total amount -1 (i.e. 
+3 **rice** recipes = 2VP).
 - **Win Condition** - Cook a **noodles** and a **rice** recipe in the same turn 4 times. At least
 1 of the recipes must be **normal** or **hard** one.
 - **Tracking** - The recipes cards.
@@ -157,23 +171,31 @@ VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main**
     - Lo Mein (Noodles) [kitchenware]
     - Peking Duck Fried Rice (Rice) [cookware]
     - Dragon Beard Noodles (Noodles) [tableware]
-- Action Cards (5)
+- Drink Cards (3)
+  - Baijiu - Have 3 primary & 3 secondary prepared unused ingredients
+  - Huangjiu - Have 4 easy cooked recipes
+  - Green Tea - Have an easy, normal & hard recipe of the same type
+- Action Cards (6)
+  - Complaint (1) 
+  - Discount (2)  
+  - Promotion (3) 
 - Customer Cards (8)
-  - Gain 2 VP
-  - Opponent Discards up to 2 prepared and unused ingredients
-  - Opponent Discards 1 Win Condition Card used for tracking
-  - Have a hand limit increased by 1 each turn until discarded
-  - Tableware utensil
-  - Kitchenware utensil
-  - Gain +1VP for each customer not from your nationality
-  - Special: Put in play an easy recipe from the discard pile for free
+  - Req [2/1] Ord [1] Gain 2 VP
+  - Req [-/3] Ord [1] Opponent Discards up to 2 prepared and unused ingredients
+  - Req [3/-] Ord [2] Opponent Discards 1 Win Condition Card used for tracking
+  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
+  - Req [2/-] Ord [1] Tableware utensil
+  - Req [-/2] Ord [2] Kitchenware utensil
+  - Req [2/2] Ord [1] Gain +1VP for each customer not from your nationality
+  - Req [1/1] Ord [2] Special: Put in play an easy recipe for free from the discard pile
+  - Req [1/-] Ord [1] You can prepare 1 ingredient while cooking until discarded
 - Ability Card (1)
 </details>
 
 ## 🇮🇳 Raj Mahal
 
-- **Special Ability** - Recipes can include 1 more **secondary** ingredient as **extra**, adding 
-**+1 VP** to **easy** and **normal** recipes and **+2 VP** to **hard** recipes.
+- **Special Ability** - Recipes can include 1 more **secondary** ingredient as **extra** that
+grant **+1 VP**.
 - **Win Condition** - Use 4 different **secondary** ingredients as **extra** across your cooked
 **normal** and **hard** recipes.
 - **Tracking** - The **extra** ingredient cards.
@@ -212,16 +234,24 @@ VP as follows: **entrée** + **appetizer** = **+1 VP**; **appetizer** + **main**
     - Coconut Curry [tableware]
     - Rogan Josh [kitchenware]
     - Malai Kofta [cookware]
-- Action Cards (5)
+- Drink Cards (3)
+  - Feni - Have 4 different prepared and unused secondary ingredients
+  - Lassi - Have 3 recipes cooked with different secondary ingredients
+  - Masala Chai - Have 2 recipes with extra secondary ingredients
+- Action Cards (6)
+  - Complaint (1) 
+  - Discount (2)  
+  - Promotion (3) 
 - Customer Cards (8)
-  - Opponent Loses 2 VP
-  - Opponent Discards 1 Win Condition Card used for tracking
-  - Opponent Discards 1 Cooked Recipe along with its ingredients
-  - Have a hand limit increased by 1 each turn until discarded
-  - Kitchenware utensil
-  - Cookware utensil
-  - Gain +1VP for each customer from your nationality
-  - Special: Put back in play 2 secondary ingredients from the discard pile
+  - Req [2/1] Ord [1] Opponent Loses 2 VP
+  - Req [-/3] Ord [1] Opponent Discards 1 Win Condition Card used for tracking
+  - Req [3/-] Ord [2] Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
+  - Req [2/-] Ord [1] Kitchenware utensil
+  - Req [-/2] Ord [2] Cookware utensil
+  - Req [2/2] Ord [1] Gain +1VP for each customer from your nationality
+  - Req [1/1] Ord [2] Special: Put back in play 2 secondary ingredients from the discard pile
+  - Req [1/-] Ord [1] You can prepare 1 ingredient while cooking until discarded
 - Ability Card (1)
 </details>
 
@@ -261,25 +291,32 @@ VP equal to that amount. You don't have to match the recipe requirements for the
     - Deep-fried Burger (Burger) [cookware]
     - T-bone Steak (Steak) [tableware]
     - Apple Pie [kitchenware]
-- Action Cards (5)
+- Drink Cards (3)
+  - Coke - Have 8 prepared and unused ingredients
+  - Bourbon - Have 3 cooked recipes of the same type
+  - Root Beer - Have 2 cooked recipes with doubled ingredients
+- Action Cards (6)
+  - Complaint (1) 
+  - Discount (2)  
+  - Promotion (3) 
 - Customer Cards (8)
-  - Gain 2 VP
-  - Opponent Discards 1 Cooked Recipe along with its ingredients
-  - Opponent Discards up to 2 prepared and unused ingredients 
-  - Have a hand limit increased by 1 each turn until discarded
-  - Cookware utensil
-  - Tableware utensil
-  - Gain +1VP for each customer not from your nationality
-  - Special: Gain +1VP if you serve more than 3 recipes
+  - Req [2/1] Ord [1] Gain 2 VP
+  - Req [-/3] Ord [1] Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients 
+  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
+  - Req [2/-] Ord [1] Cookware utensil
+  - Req [-/2] Ord [2] Tableware utensil
+  - Req [2/2] Ord [1] Gain +1VP for each customer not from your nationality
+  - Req [1/1] Ord [2] Special: Gain +1VP if you serve more than 2 recipes
+  - Req [1/-] Ord [1] You can prepare 1 ingredient while cooking until discarded
 - Ability Card (1)
 </details>
 
 ## 🇹🇷 Sultan Saray
 
-- **Special Ability** - During serving, you may take 1 **normal** or **hard** recipe from each 
-opponent by discarding a cooked **kebab** recipe and its ingredients. Special ability effects of 
-the taken recipes do not apply.
-- **Win Condition** - Take 4 opponent recipes with **kebab** recipes.
+- **Special Ability** - During serving, you may swap 1 cooked recipe per opponent with a cooked 
+**kebab** recipe and score from it.
+- **Win Condition** - Swap 4 normal or hard recipes from opponents with **kebab** recipes.
 - **Tracking** - The **kebab** recipe cards.
 
 <details>
@@ -312,16 +349,24 @@ the taken recipes do not apply.
     - Baklava [kitchenware]
     - Turkish Delight [cookware]
     - Kadayif [tableware]
-- Action Cards (5)
+- Drink Cards (3)
+  - Raki - Have 2 prepared & unused optional ingredients
+  - Salep - Have 3 cooked kebab recipes only
+  - Ayran - Have 3 cooked non-kebab recipes only
+- Action Cards (6)
+  - Complaint (1) 
+  - Discount (2)  
+  - Promotion (3) 
 - Customer Cards (8)
-  - Opponent Loses 2 VP
-  - Opponent Discards up to 2 prepared and unused ingredients 
-  - Opponent Discards 1 Win Condition Card used for tracking
-  - Have a hand limit increased by 1 each turn until discarded
-  - Tableware utensil
-  - Kitchenware utensil
-  - Gain +1VP for each customer from your nationality
-  - Special: Gain +1VP from an opponent (the opponent loses 1VP)
+  - Req [2/1] Ord [1] Opponent Loses 2 VP
+  - Req [-/3] Ord [1] Opponent Discards up to 2 prepared and unused ingredients 
+  - Req [3/-] Ord [2] Opponent Discards 1 Win Condition Card used for tracking
+  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
+  - Req [2/-] Ord [1] Tableware utensil
+  - Req [-/2] Ord [2] Kitchenware utensil
+  - Req [2/2] Ord [1] Gain +1VP for each customer from your nationality
+  - Req [1/1] Ord [2] Special: Gain +1VP from an opponent (the opponent loses 1VP)
+  - Req [1/-] Ord [1] You can prepare 1 ingredient while cooking until discarded
 - Ability Card (1)
 </details>
 
@@ -338,8 +383,8 @@ the taken recipes do not apply.
 - Ingredient Cards (26):  
   - Primary (11)
   - Secondary (12):
-    - Umami (4)
-    - Wasabi (4)
+    - Umami (5)
+    - Wasabi (3)
     - Ginger (4)
   - Optional (3):
     - Nori
@@ -363,24 +408,32 @@ the taken recipes do not apply.
     - Unagi Sushi Platter [tableware]
     - Omurice [kitchenware]
     - Gyoza [cookware]
-- Action Cards (5)
+- Drink Cards (3)
+  - Sake - Have 3 prepared and unused secondary ingredients of the same type.
+  - Matcha Tea - Have 1 recipe cooked with a Ginger secondary and an optional ingredient
+  - Umeshu - Have 2 recipes cooked with Umami ingredients
+- Action Cards (6)
+  - Complaint (1) 
+  - Discount (2)  
+  - Promotion (3) 
 - Customer Cards (8)
-  - Gain 2 VP
-  - Opponent Discards 1 Win Condition Card used for tracking
-  - Opponent Discards 1 Cooked Recipe along with its ingredients
-  - Have a hand limit increased by 1 each turn until discarded
-  - Kitchenware utensil
-  - Cookware utensil
-  - Gain +1VP for each customer from your nationality
-  - Special: Score up to extra 2VP (1 for each easy recipe served)
+  - Req [2/1] Ord [1] Gain 2 VP
+  - Req [-/3] Ord [1] Opponent Discards 1 Win Condition Card used for tracking
+  - Req [3/-] Ord [2] Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
+  - Req [2/-] Ord [1] Kitchenware utensil
+  - Req [-/2] Ord [2] Cookware utensil
+  - Req [2/2] Ord [1] Gain +1VP for each customer from your nationality
+  - Req [1/1] Ord [2] Special: Gain +1VP if you serve more than 1 easy recipe
+  - Req [1/-] Ord [1] You can prepare 1 ingredient while cooking until discarded
 - Ability Card (1)
 </details>
 
 ## 🇲🇽 El Nopalito
 
-- **Special Ability** - You can have up to 2 **hot** **secondary** ingredients in any recipe for a
-bonus of up to +2 VP respectively. To add more **secondary** ingredients than the recipe requires,
-discard 1 card from your hand for each.
+- **Special Ability** - You can add up to 2 **hot** ingredients on **any** recipe. If the total 
+**hot** ingredients in cooked recipes is more than the total order limit of the customer queue,
+score the difference as bonus VP.
 - **Win Condition** - Cook 4 recipes with 2 **hot** ingredients.
 - **Tracking** - The **hot** **secondary** ingredient cards.
 
@@ -415,15 +468,23 @@ discard 1 card from your hand for each.
     - Pozole Rojo [kitchenware]
     - Chiles Rellenos [cookware]
     - Tamales [tableware]
-- Action Cards (5)
+- Drink Cards (3)
+  - Mezcal - Have 4 prepared and unused hot secondary ingredients
+  - Tequila - Have 4 recipes cooked with at least 1 hot secondary ingredient
+  - Tepache - Have 1 easy recipe cooked with 2 hot ingredients
+- Action Cards (6)
+  - Complaint (1) 
+  - Discount (2)  
+  - Promotion (3) 
 - Customer Cards (8)
-  - Opponent Loses 2 VP
-  - Opponent Discards 1 Cooked Recipe along with its ingredients
-  - Opponent Discards up to 2 prepared and unused ingredients 
-  - Have a hand limit increased by 1 each turn until discarded
-  - Cookware utensil
-  - Tableware utensil
-  - Gain +1VP for each customer not from your nationality
-  - Special: Discard your hand to gain +2VP
+  - Req [2/1] Ord [1] Opponent Loses 2 VP
+  - Req [-/3] Ord [1] Opponent Discards 1 Cooked Recipe along with its ingredients
+  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients 
+  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
+  - Req [2/-] Ord [1] Cookware utensil
+  - Req [-/2] Ord [2] Tableware utensil
+  - Req [2/2] Ord [1] Gain +1VP for each customer not from your nationality
+  - Req [1/1] Ord [2] Special: You may discard your hand to gain +2VP
+  - Req [1/-] Ord [1] You can prepare 1 ingredient while cooking until discarded
 - Ability Card (1)
 </details>
