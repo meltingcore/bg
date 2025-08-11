@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.10.0]
+
+CHANGES:
+
+* The main actions are now only 2 - cook and serve. The prepare and cook actions were united into
+one and to reduce downtime limits were set to prepare up to 3 ingredients and cook either 2 easy or
+1 normal or hard recipe.
+* Discarding unnecessary cards and refilling a hand up to its limit is now an off turn activity. 
+* The "Win Condition" is now called "End Condition" and the new end of the game is the end of the 
+round in which a player achieves it (puts 4 End Condition Cards into tracking).
+* Winning the game is now determined by whoever has the most VP (and End Condition cards now each
+count as 2VP).
+* Customers can only be attracted at the end of the turn when cooking (when not using event card).
+* Each deck's customer effects slightly modified to reflect the new changes - there is no discard
+recipe or win condition card effects anymore & the prepare while cook effect now removes the 
+ingredient limit.
+* Drink cards visuals were updated to show that players need to have at least 1 customer in their
+queue to be able to score from drink cards.
+* More visual guides added in the rules.
+
 ## [0.9.0]
 
 CHANGES:

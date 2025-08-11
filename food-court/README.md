@@ -17,7 +17,7 @@ recipes while using unique abilities and strategies.
 Each deck features primary, secondary, and optional ingredients, recipes of varying difficulty,
 and action cards to work with effects.
 Players take turns to Draw Cards, Prepare Ingredients, Cook Recipes and Score Victory Points.
-Achieve victory by either completing your deck's unique win condition or by scoring VP.
+Achieve victory by either completing your deck's unique end condition and score the most VP.
 
 Collaborate, compete, and cook your way to culinary glory!
 

@@ -18,8 +18,7 @@
 ## Objective
 
 Players aim to score the most Victory Points (VP) by cooking and serving recipes, playing drink
-and event cards, triggering customer and special ability effects, and achieving win condition
-milestones.
+and event cards, triggering customer and special ability effects.
 
 ## Setup
 
@@ -35,7 +34,7 @@ milestones.
     - Place the **Ability Card** in front of the player.
     - Place the player deck face down on the left side as draw pile and draw 7 cards for a starting
       hand.
-    - Reserve space to the right of the Ability Card for the **discard pile** and **Win Condition
+    - Reserve space to the right of the Ability Card for the **discard pile** and **End Condition
       Cards**.
     - Above the Ability Card, players will place their **prepared ingredients and cooked recipes**.
     - Above that, players will maintain their **personal customer queue**.
@@ -46,19 +45,21 @@ milestones.
 Game is played in rounds where 1 round consists of all players taking their turns clockwise.  
 Each player turn consists of the following:
 
-1. **Fill Hand:** Discard up to 3 cards and draw up to the hand limit.
-2. **Main Action:** Choose 1 of the following actions:
-    1. **Prepare:** Move ingredient cards from hand to play as prepared but unused.
-    2. **Cook:** Use prepared unused ingredients to fulfill recipe requirements and place the recipe
-       card on top of the ingredients.
-    3. **Serve:** Serve cooked recipes to customers in the player queue and resolve any customer and
-       special ability effects to score points. Set aside 1 win condition card for tracking if
+1. **Main Action:** Choose 1 of the following actions:
+    * **Cook:** 
+       1. Put up to 3 ingredient cards as prepared and unused.
+       2. Cook up to 2 easy or 1 non-easy (normal or hard) recipe using their cards and the prepared
+       ingredients to cover their requirements.
+    * **Serve:** Serve cooked recipes to customers in the player queue and resolve any customer and
+       special ability effects to score points. Set aside 1 end condition card for tracking if
        applicable.
-3. **Attract Customers:** If requirements are met, attract 1 customer from the central queue to the
-   player queue.
-4. **Additional Actions:** Players may perform any of the following actions at any time:
+2. **Attract Customers:** At the end of a turn if requirements are met, attract 1 customer from the
+   central queue to the player queue.
+3. **Additional Actions:** Players may perform any of the following actions at any time:
     - Play event cards.
     - Play drink cards.
+
+Outside their turn players discard up to 3 cards and draw up to the hand limit.
 
 ## Card Types
 
@@ -88,7 +89,7 @@ time as long as their condition is met and there is at least once customer in th
 ### Event Cards
 
 Event cards provide one-time strategic effects that can impact any player's queue and can be played
-at any time after players fill in they hand. They are:
+at any time. They are:
 
 - **Complaint:** Discards a customer from any queue.
 - **Promotion:** Swaps 2 customers from any two queues.
@@ -97,30 +98,28 @@ at any time after players fill in they hand. They are:
 
 ### Customer Cards
 
-Customer cards represent diners that players try to attract and serve. They are drawn from a shared
-central queue and added to individual player queues when requirements are met. Each customer
-increases the player’s serving capacity and grant various effects.
+Customer must be attracted so that players can serve them and score points. They are drawn from a 
+shared central queue and added to individual player queues when their requirements are met. Each 
+customer increases the player’s serving capacity and grant various effects.
 
 - Players may attract 1 customer per turn (unless using a Discount event card).
 - Players may have a maximum of 3 customers in their personal queue.
 - Customer effects that are not ongoing only activate if at least one recipe is served to them.
 - Customer effects that are ongoing apply immediately when the card is put in play and are active
-  while the customer remains in the queue.
-- Effects do not stack if duplicated.
+  immediately and while the customer remains in the queue.
+- Customer effects do not stack if duplicated.
 
 ### Ability Card
 
-Each deck includes an ability card that outlines the deck’s unique ability, its win condition and 
+Each deck includes an ability card that outlines the deck’s unique ability, its end condition and 
 how to track it.
 
 ## Winning the Game
 
-The game ends after the round in which a player reaches **40 VP** or completes their
-**win condition** ends. All players must finish their turns so a round could end.
+The game ends after the round in which a player completes their **end condition**. 
+All players must finish their turns so a round could end.
 
-**Final Scoring:**
-
-- Each win condition card is worth 5 VP.
-- If all four are achieved, the total is 30 VP instead of 20.
+The winner is determined by the player with the most Victory Points (VP) at the end of the game.
+Each end condition card in tracking counts as 2VP towards the final score of player.
 
 **Tiebreaker:** The player who most recently cooked a real-life meal wins.
