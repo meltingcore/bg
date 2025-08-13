@@ -59,7 +59,8 @@ Each player turn consists of the following:
     - Play event cards.
     - Play drink cards.
 
-Outside their turn players discard up to 3 cards and draw up to the hand limit.
+Outside their turn players discard up to 3 cards and draw up to the hand limit (7 or 8 depending
+whether the hand increase customer effect is active).
 
 ## Card Types
 

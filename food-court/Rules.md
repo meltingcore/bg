@@ -256,8 +256,9 @@ Players can use this to guide their strategy and scoring plan.
 
 ### Fill Hand
 
-Outside their turn, players discard up to 3 cards and then draw up to their hand limit. If the draw 
-pile is empty or does not have enough cards, the discard pile is reshuffled into it.
+Outside their turn, players discard up to 3 cards and then draw up to their hand limit. 
+Normally this limit is 7 but can be 8 if they have active the hand limit increase customer effect.
+If the draw pile is empty or does not have enough cards, the discard pile is reshuffled into it.
 
 ### Cook
 

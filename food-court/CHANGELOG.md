@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.1]
+
+BUG FIXES:
+
+* The default hand limit being 7 is now clearly stated in the rules.
+
 ## [0.10.0]
 
 CHANGES:
