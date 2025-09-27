@@ -25,42 +25,54 @@
 Redesign the mechanics for ease of play, streamlining the turn structure and dramatically ease the
 calculations to just the end of the game:
 
-- Both Recipes and Customer cards have 1, 2 or 3 on them and this indicates what is needed to be
-  covered to attract a customer (i.e. 1 customer with value 2 can be attracted by 2 easy recipes
+- Customer cards have 1, 2, 3 & 4 as base value on them and this indicates what is needed to be
+  served to attract a customer (i.e. 1 customer with value 2 can be attracted by 2 easy recipes
   with values 1 or 1 normal recipe with value 2). This customer card stays with the player until the
-  end of the game for scoring. Therefore, recipe cards should now have just base value + extra 1 for
-  special ability + utensil symbol for summoning utensil cards (see below)
-- Customer card will be solely used for scoring with the score of a card being its base value (1,2
-  or 3) + value from its effect (if any). At the end of the game each player calculates the total
-  amount of points to determine the winner.
-- Customer cards should be dealt from a deck so that there is one in front of each player.
-- Customers effects which give extra points are various types:
-    - +1 if the customer card is from the same nationality as the player's deck.
-    - +1 if the customer card has utensil symbol that the player has in play and is enabled.
-    - +X points as flat bonus where X is 1,2 or 3.
-    - +X points if the player has at least X end condition cards in play.
-    - +X points if the player has at least X drink cards played.
-    - Some don't have effects and are just base value.
+  end of the game for scoring. Therefore, recipe cards should now have just base value + extra 1
+  bonus from special ability as value points. Utensil symbol remains but does not give points and
+  instead is used for summoning utensil cards (see below).
+- Customer cards will be solely used for scoring with the total score of a card being its base value
+  (1,2, 3 or 4) + its extra value (if the customer requirement is achieved). At the end of the game 
+  each player calculates the total amount of points from its attracted customers to determine the 
+  winner.
+- During game setup customer cards are dealt from a shuffled customer deck so that there is one in
+  front of each player and 2 are placed face up in the center as central queue. During their turn a 
+  player takes one from the central queue (which is then filled) and puts it on the right of its 
+  current one (if present) forming a queue from left to right. If they can serve them recipes 
+  (covering their base value) they attract the customers in a pile next to them and if left with 
+  zero customers (no queue) they immediately draw 1 more (there must be at least 1 customer in front
+  of them). At the end of the turn if still at the customer limit they move the one at the start of
+  the queue to the end of the queue of the player on the left. If the customer deck is depleted the
+  round must be finished (everyone that still haven't should complete their turn) and then the game
+  ends.
+- Customers requirements which give extra points are various types depicted by icons as follows:
+    - globe - the player must be from the same nationality as the customer.
+    - utensil - the player must have the depicted utensil card in play.
+    - gold medal - the player must have X end condition cards in tracking (where X is the number of 
+    medals depicted).
+    - drink - the player must have X drink cards in play (where X is the number of bottles 
+    depicted).
+- Customer requirements can be single one or a combination of the above which could be strict (AND)
+  or flexible (OR).
+- Each deck should have the following customer distribution:
+    - 1 customer with base value 4 (hard to attract but gives 4 points)
+    - 3 customers with base value 3 (medium hard to attract but gives 3 points)
+    - 3 customers with base value 2 (medium easy to attract but gives 2 points)
+    - 2 customers with base value 1 (easy to attract but gives 1 point)
 - End condition remains but the game will also end if the combined customer deck is emptied.
-- End condition cards should award 1, 2, 3 & 4 at the end of the game based on how many you have in
-  play (so complete end condition is extra 10 points).
-- Drinks are like recipes but with prerequisites instead of ingredient requirements. They are worth
-  2 points when attracting customers.
-- Utensils cards are back to the decks. Each utensil card can be put permanently if 2 or 3 recipes with
-  its symbol are served at the same round. Then all customers with that utensil symbol give +1 when
-  scoring. The utensils cards should have also the following effects:
-    - Kitchenware: Hand limit is increased by 1.
-    - Cookware: Can play 1 more card per turn.
-    - Tableware: Can attract 1 extra customer per turn.
-- Event cards are reduced to 1/1/1 and add 4th "malfunction" one is added to disable a utensil card 
-  (that can be enabled if its condition is done again)
-- What are the different strategies to win?
-    - Go for end condition cards fast to end the game early and hope to have the most points.
-    - Go for utensil cards and gather customers with utensil symbols
-    - Go for drink cards and gather customers with drink symbols
-    - Go for customers from 
-    there any agency or you just play what you draw and hope for the best?! Maybe the customer scoring
-    depends on which end condition you chose to persue and the rest do not amount? i.e. customers give
-    extra points for one of drinks, for utensils and for end condition completion (i.e. +1 if at least
-    2 end condition cards are in play). Or maybe you just have different end conditions (drinks,
-    utensils, end condition cards) and all give you bonus?
+- Drinks are like recipes but with prerequisites instead of ingredient requirements. When they are
+  put in play they attract all customers directly from the player's queue (and continue to do so 
+  each time their requirement is met as they stay in play for scoring purposes).
+- Each deck has 3 utensil cards listed below. Each utensil card can be put in play if 2 recipes with
+  its symbol are served at the same round. Utensils cards like drink card stay in play until the end
+  for scoring purposes. The utensils cards also have the following ongoing effects while in play:
+    - Kitchenware: Hand limit is increased by 1 (default is 6 so 7).
+    - Cookware: Play card limit per turn is increased by 1 (default is 3 so 4).
+    - Tableware: Customer queue limit is increased by 1 (default is 2 so 3).
+- Event cards are reduced to 1/1/1 (1 Complaint, 1 Promotion, 1 Discount) and their effects are
+  adjusted as follows:
+    - Complaint: Discards a customer from any player's queue or the central .
+    - Promotion: Swaps 2 customers from any two players' queues.
+    - Discount: Allows a player to attract a customer from its queue without serving.
+
+

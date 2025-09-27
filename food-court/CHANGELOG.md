@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.11.0]
+
+CHANGES:
+ 
+* New customer flow with scoring redesign: players gain customer queue which they must serve to 
+  attract them for points at the end of the game. If no customer is served during a turn the player
+  lose the upmost left customer to the next player on the left.
+* Customer effects are now requirements for extra points during scoring as follows: Globe (same 
+  nationality), Utensil (have utensil in play), Medal X (X End Condition cards in tracking), Bottle
+  X (X drinks in play). Requirements vary in complexity and cant be strict or flexible.
+* Utensils are back as deck cards; put in play by serving 2 recipes with the same utensil symbol in 
+  one serve. In addition to helping score extra points at the end they now have ongoing effects: 
+  Kitchenware +1 hand (6→7), Cookware +1 play‑card limit (3→4), Tableware +1 queue limit (2→3).
+* Drinks now when put in play attract all customers from the player's queue directly and each time
+  their requirement is met as they stay in play (for scoring purposes).
+* Event cards count reduced to 1/1/1 and updated: Complaint (discard from any queue or center), 
+  Promotion (swap between any two queues or center), Discount (attract 1 from your own queue without
+  serving).
+* End condition remains but game also ends when the customer deck is emptied.
+* The restaurant decks now have their special abilities streamlined, their customers adjusted to fit
+  the new mechanics and their recipes slightly modified to fit the new utensil and scoring system.
+
 ## [0.10.1]
 
 BUG FIXES:
