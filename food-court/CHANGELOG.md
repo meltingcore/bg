@@ -4,23 +4,34 @@
 
 CHANGES:
  
-* New customer flow with scoring redesign: players gain customer queue which they must serve to 
-  attract them for points at the end of the game. If no customer is served during a turn the player
-  lose the upmost left customer to the next player on the left.
+* New customer flow with scoring redesign: players attract customers to a queue which they must 
+  serve to be able to score them for points at the end of the game. If no customer is served during
+  a turn the player lose the upmost left customer on their queue to the next player on the left.
 * Customer effects are now requirements for extra points during scoring as follows: Globe (same 
-  nationality), Utensil (have utensil in play), Medal X (X End Condition cards in tracking), Bottle
+  nationality), Utensil (have utensil in play), Medal X (X End Condition cards in tracking), Drink
   X (X drinks in play). Requirements vary in complexity and cant be strict or flexible.
 * Utensils are back as deck cards; put in play by serving 2 recipes with the same utensil symbol in 
-  one serve. In addition to helping score extra points at the end they now have ongoing effects: 
+  one turn. In addition to helping score extra points at the end they now have ongoing effects: 
   Kitchenware +1 hand (6→7), Cookware +1 play‑card limit (3→4), Tableware +1 queue limit (2→3).
-* Drinks now when put in play attract all customers from the player's queue directly and each time
-  their requirement is met as they stay in play (for scoring purposes).
-* Event cards count reduced to 1/1/1 and updated: Complaint (discard from any queue or center), 
-  Promotion (swap between any two queues or center), Discount (attract 1 from your own queue without
-  serving).
+* Drinks now when put in play serve all customers from the player's queue directly and each time
+  their requirement is met as they stay in play (for scoring purposes). Their requirements however
+  now require the cards that fulfil them to be discarded.
+* Event cards count reduced to 1/1/1 and updated: Complaint (discard from any queue), Promotion 
+  (swap between any two queues), Discount (move 1 customer from yours or the central queue directly
+  to the scoring pile).
+* It is explicitly stated that special abilities are evaluated only from served recipes and a card
+  cannot participate in more than one special ability occurrence.
 * End condition remains but game also ends when the customer deck is emptied.
-* The restaurant decks now have their special abilities streamlined, their customers adjusted to fit
-  the new mechanics and their recipes slightly modified to fit the new utensil and scoring system.
+* The restaurant decks now have their special abilities and end conditions streamlined, their 
+  customers adjusted to fit the new mechanics and their recipes slightly modified to fit the new 
+  utensil and scoring system.
+
+BUG FIXES:
+
+* Multiple fixes and clarifications in the rules and quick reference including:
+  * Unified pronoun style to second person (“you/your”).
+  * Standardized terminology: Event Cards, Drink Cards, Utensil Cards, End Condition.
+  * Fixed rule discrepancies.
 
 ## [0.10.1]
 

@@ -12,12 +12,15 @@
 
 ## Description
 
-In this competitive cooking card game, players choose a cuisine deck and race to create delicious
-recipes while using unique abilities and strategies.
-Each deck features primary, secondary, and optional ingredients, recipes of varying difficulty,
-and action cards to work with effects.
-Players take turns to Draw Cards, Prepare Ingredients, Cook Recipes and Score Victory Points.
-Achieve victory by either completing your deck's unique end condition and score the most VP.
+In this competitive cooking card game, you choose a restaurant deck representing a national cuisine
+and race to create delicious recipes while using your deck’s unique ability and strategy.
+Each deck features primary, secondary, and optional ingredients; recipes of varying difficulty;
+and Event, Drink, and Utensil Cards.
+On your turn, attract a customer from the central queue and play up to 3 cards to prepare
+ingredients, cook recipes, play drinks/events/utensils, and then serve to move customers to your
+scoring pile. Scoring only happens at end of game from served customers (base value plus any bonus
+value from bonus requirements). Achieve victory by having the most Victory Points (VP) at the end of
+the game.
 
 Collaborate, compete, and cook your way to culinary glory!
 
