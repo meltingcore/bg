@@ -55,28 +55,29 @@
     - Lasagna al Forno (Lasagna Sheets) [tableware]
     - Fettuccine ai Porcini e Tartufo (Fettuccine) [kitchenware]
     - Tagliatelle ai Funghi Porcini (Tagliatelle) [cookware]
-- Drink Cards (3)
+- Drink Cards (3) 🍷
   - Espresso - Have 5 different prepared and unused pasta ingredients
   - Limoncello - Have 3 different pasta ingredients in your cooked recipes
   - Aperol Spritz - Have 2 recipes cooked with exact pasta ingredients
 - Utensil Cards (3)
-  - Kitchenware
-  - Cookware
-  - Tableware
+  - Kitchenware 🔪
+  - Cookware 🫕
+  - Tableware 🍽️
 - Event Cards (3)
   - Complaint (1)
   - Discount (1) 
   - Promotion (1)
 - Customer Cards (10)
-  - Req [2/1] Ord [1] End‑game: +2 to your score  
-  - Req [-/3] Ord [1] End‑game: opponent −1 score
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Kitchenware utensil
-  - Req [-/2] Ord [2] Cookware utensil
-  - Req [2/2] Ord [1] End‑game: +1 for each customer not from your nationality
-  - Req [1/1] Ord [2] Special: Put back in play up to 2 primary ingredients from the discard pile
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+  - 1/1 🍽
+  - 1/2 🌎|🏅+🏅
+  - 1/3 🏅+🏅+🍷
+  - 2/1 🍽
+  - 2/2 🌎|🍷+🍷
+  - 2/3 🍷+🍷+️🏅
+  - 3/1 🍽️
+  - 3/2 🌎|🍷+🍽
+  - 3/3 🏅+🍷+🍽
+  - 4/2 🌎|🍽️+🍽️
 - Ability Card (1)
 </details>
 
@@ -115,29 +116,29 @@
     - Pain Perdu (Dessert) [cookware]
     - Crème Brûlée (Dessert) [tableware]
     - Tarte Tatin (Dessert) [kitchenware]
-- Drink Cards (3)
+- Drink Cards (3) 🍷
   - Champagne - Have 4 prepared and unused secondary ingredients
   - Cognac - Have 3 different courses as cooked recipes
   - Pernod - Have 2 recipes with optional ingredients
 - Utensil Cards (3)
-  - Kitchenware
-  - Cookware
-  - Tableware
+  - Kitchenware 🔪
+  - Cookware 🫕
+  - Tableware 🍽️
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
-  - Req [2/1] Ord [1] End‑game: opponent −2 score
-  - Req [-/3] Ord [1] End‑game: +1 to your score
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Cookware utensil
-  - Req [-/2] Ord [2] Tableware utensil
-  - Req [2/2] Ord [1] End‑game: +1 for each customer from your nationality
-  - Additional customer per standard deck composition
-  - Req [1/1] Ord [2] Special: Put in play 1 optional ingredient from the discard pile
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+  - 1/1 🍷
+  - 1/2 🌎|🍽+🍽
+  - 1/3 🍽+🍽+🏅
+  - 2/1 🍷
+  - 2/2 🌎|🏅+🏅
+  - 2/3 🏅+🏅+🍽
+  - 3/1 🍷
+  - 3/2 🌎|🏅+🍷
+  - 3/3 🍽+🏅+🍷
+  - 4/2 🌎|🍷+🍷
 - Ability Card (1)
 </details>
 
@@ -177,28 +178,29 @@
     - Lo Mein (Noodles) [kitchenware]
     - Peking Duck Fried Rice (Rice) [cookware]
     - Dragon Beard Noodles (Noodles) [tableware]
-- Drink Cards (3)
+- Drink Cards (3) 🍷
   - Baijiu - Have 3 primary & 3 secondary prepared unused ingredients
   - Huangjiu - Have 4 easy cooked recipes
   - Green Tea - Have an easy, normal & hard recipe of the same type
 - Utensil Cards (3)
-  - Kitchenware
-  - Cookware
-  - Tableware
+  - Kitchenware 🔪
+  - Cookware 🫕
+  - Tableware 🍽️
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
-  - Req [2/1] Ord [1] End‑game: +2 to your score
-  - Req [-/3] Ord [1] Opponent Discards up to 2 prepared and unused ingredients
-  - Req [3/-] Ord [2] End‑game: opponent −1 score
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Tableware utensil
-  - Req [-/2] Ord [2] Kitchenware utensil
-  - Req [2/2] Ord [1] End‑game: +1 for each customer not from your nationality
-  - Req [1/1] Ord [2] Special: Put in play an easy recipe for free from the discard pile
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+  - 1/1 🏅
+  - 1/2 🌎|🍷+🍷
+  - 1/3 🍷+🍷+🍽
+  - 2/1 🏅
+  - 2/2 🌎|🍽+🍽
+  - 2/3 🍽+🍽+🍷
+  - 3/1 🏅
+  - 3/2 🌎|🍽+🏅
+  - 3/3 🍷+🍽+🏅
+  - 4/2 🌎|🏅+🏅
 - Ability Card (1)
 </details>
 
@@ -243,28 +245,29 @@ grants +1 serve value.
     - Coconut Curry [tableware]
     - Rogan Josh [kitchenware]
     - Malai Kofta [cookware]
-- Drink Cards (3)
+- Drink Cards (3) 🍷
   - Feni - Have 4 different prepared and unused secondary ingredients
   - Lassi - Have 3 recipes cooked with different secondary ingredients
   - Masala Chai - Have 2 recipes with extra secondary ingredients
 - Utensil Cards (3)
-  - Kitchenware
-  - Cookware
-  - Tableware
+  - Kitchenware 🔪
+  - Cookware 🫕
+  - Tableware 🍽️
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
-  - Req [2/1] Ord [1] End‑game: opponent −2 score
-  - Req [-/3] Ord [1] End‑game: +1 to your score
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Kitchenware utensil
-  - Req [-/2] Ord [2] Cookware utensil
-  - Req [2/2] Ord [1] End‑game: +1 for each customer from your nationality
-  - Req [1/1] Ord [2] Special: Put back in play 2 secondary ingredients from the discard pile
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+  - 1/1 🍽
+  - 1/2 🌎|🏅+🏅
+  - 1/3 🏅+🏅+🍷
+  - 2/1 🍽
+  - 2/2 🌎|🍷+🍷
+  - 2/3 🍷+🍷+️🏅
+  - 3/1 🍽️
+  - 3/2 🌎|🍷+🍽
+  - 3/3 🏅+🍷+🍽
+  - 4/2 🌎|🍽️+🍽️
 - Ability Card (1)
 </details>
 
@@ -304,29 +307,29 @@ grants +1 serve value.
     - Deep-fried Burger (Burger) [cookware]
     - T-bone Steak (Steak) [tableware]
     - Apple Pie [kitchenware]
-- Drink Cards (3)
+- Drink Cards (3) 🍷
   - Coke - Have 8 prepared and unused ingredients
   - Bourbon - Have 3 cooked recipes of the same type
   - Root Beer - Have 2 cooked recipes with doubled ingredients
 - Utensil Cards (3)
-  - Kitchenware
-  - Cookware
-  - Tableware
+  - Kitchenware 🔪
+  - Cookware 🫕
+  - Tableware 🍽️
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
-  - Req [2/1] Ord [1] End‑game: +2 to your score
-  - Req [-/3] Ord [1] End‑game: opponent −1 score
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients 
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Cookware utensil
-  - Req [-/2] Ord [2] Tableware utensil
-  - Req [2/2] Ord [1] End‑game: +1 for each customer not from your nationality
-  - Req [1/1] Ord [2] Special: End‑game: +1 if you served more than 2 recipes
-  - Additional customer per standard deck composition
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+  - 1/1 🍷
+  - 1/2 🌎|🍽+🍽
+  - 1/3 🍽+🍽+🏅
+  - 2/1 🍷
+  - 2/2 🌎|🏅+🏅
+  - 2/3 🏅+🏅+🍽
+  - 3/1 🍷
+  - 3/2 🌎|🏅+🍷
+  - 3/3 🍽+🏅+🍷
+  - 4/2 🌎|🍷+🍷
 - Ability Card (1)
 </details>
 
@@ -367,29 +370,29 @@ regardless of what queue they are in.
     - Baklava [kitchenware]
     - Turkish Delight [cookware]
     - Kadayif [tableware]
-- Drink Cards (3)
+- Drink Cards (3) 🍷
   - Raki - Have 2 prepared & unused optional ingredients
   - Salep - Have 3 cooked kebab recipes only
   - Ayran - Have 3 cooked non-kebab recipes only
 - Utensil Cards (3)
-  - Kitchenware
-  - Cookware
-  - Tableware
+  - Kitchenware 🔪
+  - Cookware 🫕
+  - Tableware 🍽️
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
-  - Req [2/1] Ord [1] End‑game: opponent −2 score
-  - Req [-/3] Ord [1] Opponent Discards up to 2 prepared and unused ingredients 
-  - Req [3/-] Ord [2] End‑game: +1 to your score
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Tableware utensil
-  - Req [-/2] Ord [2] Kitchenware utensil
-  - Req [2/2] Ord [1] End‑game: +1 for each customer from your nationality
-  - Req [1/1] Ord [2] Special: End‑game: steal +1 from an opponent (opponent −1)
-  - Additional customer per standard deck composition
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+  - 1/1 🏅
+  - 1/2 🌎|🍷+🍷
+  - 1/3 🍷+🍷+🍽
+  - 2/1 🏅
+  - 2/2 🌎|🍽+🍽
+  - 2/3 🍽+🍽+🍷
+  - 3/1 🏅
+  - 3/2 🌎|🍽+🏅
+  - 3/3 🍷+🍽+🏅
+  - 4/2 🌎|🏅+🏅
 - Ability Card (1)
 </details>
 
@@ -431,29 +434,29 @@ regardless of what queue they are in.
     - Unagi Sushi Platter [tableware]
     - Omurice [kitchenware]
     - Gyoza [cookware]
-- Drink Cards (3)
+- Drink Cards (3) 🍷
   - Sake - Have 3 prepared and unused secondary ingredients of the same type.
   - Matcha Tea - Have 1 recipe cooked with a Ginger secondary and an optional ingredient
   - Umeshu - Have 2 recipes cooked with Umami ingredients
 - Utensil Cards (3)
-  - Kitchenware
-  - Cookware
-  - Tableware
+  - Kitchenware 🔪
+  - Cookware 🫕
+  - Tableware 🍽️
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
-  - Req [2/1] Ord [1] End‑game: +2 to your score
-  - Req [-/3] Ord [1] End‑game: opponent −1 score
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Kitchenware utensil
-  - Req [-/2] Ord [2] Cookware utensil
-  - Req [2/2] Ord [1] End‑game: +1 for each customer from your nationality
-  - Req [1/1] Ord [2] Special: End‑game: +1 if you served more than 1 easy recipe
-  - Additional customer per standard deck composition
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+  - 1/1 🍽
+  - 1/2 🌎|🏅+🏅
+  - 1/3 🏅+🏅+🍷
+  - 2/1 🍽
+  - 2/2 🌎|🍷+🍷
+  - 2/3 🍷+🍷+️🏅
+  - 3/1 🍽️
+  - 3/2 🌎|🍷+🍽
+  - 3/3 🏅+🍷+🍽
+  - 4/2 🌎|🍽️+🍽️
 - Ability Card (1)
 </details>
 
@@ -495,28 +498,28 @@ regardless of what queue they are in.
     - Pozole Rojo [kitchenware]
     - Chiles Rellenos [cookware]
     - Tamales [tableware]
-- Drink Cards (3)
+- Drink Cards (3) 🍷
   - Mezcal - Have 4 prepared and unused hot secondary ingredients
   - Tequila - Have 4 recipes cooked with at least 1 hot secondary ingredient
   - Tepache - Have 1 easy recipe cooked with 2 hot ingredients
 - Utensil Cards (3)
-  - Kitchenware
-  - Cookware
-  - Tableware
+  - Kitchenware 🔪
+  - Cookware 🫕
+  - Tableware 🍽️
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
-  - Req [2/1] Ord [1] End‑game: opponent −2 score
-  - Req [-/3] Ord [1] End‑game: +1 to your score
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients 
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Cookware utensil
-  - Req [-/2] Ord [2] Tableware utensil
-  - Req [2/2] Ord [1] End‑game: +1 for each customer not from your nationality
-  - Req [1/1] Ord [2] Special: You may discard your hand to add +2 to your end‑game score
-  - Additional customer per standard deck composition
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+  - 1/1 🍷
+  - 1/2 🌎|🍽+🍽
+  - 1/3 🍽+🍽+🏅
+  - 2/1 🍷
+  - 2/2 🌎|🏅+🏅
+  - 2/3 🏅+🏅+🍽
+  - 3/1 🍷
+  - 3/2 🌎|🏅+🍷
+  - 3/3 🍽+🏅+🍷
+  - 4/2 🌎|🍷+🍷
 - Ability Card (1)
 </details>

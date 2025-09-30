@@ -6,7 +6,7 @@
   * [Objective](#objective)
   * [Setup](#setup)
   * [Turn Structure](#turn-structure)
-    * [Actions](#actions)
+  * [Limits](#limits)
   * [Card Types](#card-types)
     * [Ingredient Cards](#ingredient-cards)
     * [Recipe Cards](#recipe-cards)
@@ -64,14 +64,15 @@ Check the [Examples](#examples) section for a visual representation of the setup
 
 ## Turn Structure
 
-The game is played in rounds in which all players take a turn. When not taking your turn, you may
-discard up to 3 cards, then draw to your hand limit (6 by default).
+The game is played in rounds in which all players take a turn. Outside your turn, see
+[Fill Hand](#fill-hand).
 
 On your turn:
 
 1. Attract 1 customer from the central queue and add it to the right of your personal queue. Then
    refill the central queue from the customer deck if possible.
-2. Play up to 3 cards from your hand to do any of the following:
+2. Play cards from your hand up to the play limit to do any of the following (see
+   [Player Actions](#player-actions) and [Limits](#limits) for details):
    - Prepare Ingredients
    - Cook Recipes
    - Play Event Cards
@@ -80,32 +81,21 @@ On your turn:
 3. Serve:
    - Use cooked recipes' total serve value to move attracted customers to your scoring pile by 
    covering their base values in full.
-   - Move all customers from your queue to your scoring pile if a drink card was put into play or 
-   its requirement is met.
+   - If a Drink triggers, move all customers from your queue to your scoring pile. See
+     [Drink Cards](#drink-cards).
 4. End of turn:
    - If your customer queue is empty, attract 1 customer from the central queue.
    - If your customer queue is at its limit, move the leftmost customer in your queue to the end of
      the queue of the player on your left.
 
-### Actions
+## Limits
 
-You spend most of your turn playing different types of cards:
+The game uses a few simple limits. Utensils can increase these limits while in play; see
+[Utensil Cards](#utensil-cards).
 
-- Prepare Ingredients — put Ingredient Cards into play as prepared but unused.
-- Cook Recipes — put Recipe Cards into play by covering their ingredient requirements with
-  prepared and unused ingredients. For example, to cook a normal recipe you need 1 primary and
-  1 secondary ingredient.
-- Serve Recipes — allocate cooked serve value to customers in your queue. For example, to serve a
-  customer with base value 2 you can serve 2 easy recipes (1+1), 1 normal recipe (2), or any
-  combination that sums to 2 or more. When serving, discard the cooked recipes used (along with
-  their ingredients) and move those customers to your scoring pile as served customers.
-- Serve Drinks — play Drink Cards when their requirements are met to move all customers from your 
-  queue to your scoring pile. Drinks stay in play until end of game for scoring and re‑trigger each 
-  time their requirement is met.
-- Play Event Cards — play Event Cards to manipulate customer queues.
-- Play Utensil Cards — if you serve 2 recipes with the same utensil symbol in a single turn, you may
-  put the matching Utensil Card into play. Utensils stay in play until end of game for scoring and
-  have ongoing effects while in play.
+- Hand Limit: 6 cards (7 with Kitchenware).
+- Play Limit (cards per turn): 3 cards (4 with Cookware).
+- Customer Queue Limit: 2 customers (3 with Tableware).
 
 ## Card Types
 
@@ -117,7 +107,7 @@ categories:
 - **Primary Ingredients** – Required in every recipe.
 - **Secondary Ingredients** – Required in **normal** and **hard** recipes.
 - **Optional Ingredients** – Can be added to any recipe to raise its serve value by 1. Only one
-  optional ingredient can be used per recipe.
+optional ingredient may be used per recipe.
 
 ![image](images/guide_ingredient.png)
 
@@ -159,7 +149,7 @@ Recipe cards have the following structure:
 
 ### Drink Cards
 
-Drink cards are played by meeting their prerequisites (no ingredients). When put in play, a drink
+Drink cards are played by meeting their requirement (no ingredients). When put in play, a Drink
 immediately moves all customers directly from your queue to your scoring pile (they become served
 customers). Drinks remain in play until the end of the game for scoring purposes and re‑trigger
 each time their requirement is met to move all customers from your queue to your scoring pile again.
@@ -208,32 +198,26 @@ Customer cards have the following structure:
   requirements.
 - Bonus Requirements - If met at end of game, add the bonus value to this customer:
   - Globe: your deck nationality matches the customer.
-  - Utensil: you have the depicted utensil in play.
+  - Utensil: (X): you have at least X Utensil cards in play.
   - Gold medal (X): you have at least X End Condition cards in tracking.
   - Drink (X): you have at least X drink cards in play.
-  Requirements can be simple (1 icon) or complex (multiple icons with strict (AND) or flexible (OR)
+  Requirements can be simple (1 icon) or complex (multiple icons with strict (+) or flexible (?)
   conditions).
 - **Nationality** - The customer’s nationality.
 
-**Notable Rules:**
-
-- Customer queue limit is 2 by default (3 if the Tableware utensil is in play).
-- On your turn, attract 1 from the central queue, then attempt to move customers to your scoring
-  pile by serving recipes or drinks.
-- At end of your turn, if your queue is empty, draw 1 customer from the central queue.
-- At end of your turn, if at queue limit, pass your leftmost queued customer to the player on your
-  left.
+- For customer limits, see [Limits](#limits).
+- For turn flow (attract and end-of-turn), see [Turn Structure](#turn-structure).
 
 See [Decks](Decks.md) for specific configurations.
 
 ### Utensil Cards
 
 Each deck has 3 Utensil Cards: Kitchenware, Cookware, and Tableware.
-Putting in play: during your turn, if you serve 2 recipes with the same utensil symbol, you may 
-put the matching Utensil Card into play. Utensils stay in play until end of game for their ongoing
-effects while in play:
+Putting into play: during your turn, if you serve 2 recipes with the same utensil symbol, you may
+put the matching Utensil Card into play. Utensils stay in play until end of game and have the
+following ongoing effects:
 - Kitchenware: Hand limit +1 (default 6 → 7).
-- Cookware: Play‑card limit per turn +1 (default 3 → 4).
+- Cookware: Play limit (cards per turn) +1 (default 3 → 4).
 - Tableware: Customer queue limit +1 (default 2 → 3).
 
 ### Ability Card
@@ -245,7 +229,7 @@ Each deck includes an Ability Card that outlines:
 
 Use this to guide your strategy and scoring plan.
 
-Note: Special abilities are evaluated only from recipes you serve, not recipes you cook and a card 
+Note: Special abilities are evaluated only from recipes you serve, not recipes you cook, and a card 
 cannot participate in more than one special ability occurrence.
 
 Example: If you play with the French deck (where the special ability is entrée + appetizer = +1 and
@@ -253,13 +237,12 @@ appetizer + main = +1), and you have 4 cooked recipes: 2 entrée, 1 appetizer an
 decide to serve the 2 entrée and the appetizer recipes, you score +1 serve value only once because 
 the appetizer can only be used in one special ability occurrence and the main course was not served.
 
-
 ## Player Actions
 
 ### Fill Hand
 
-Outside your turn, you may discard up to 3 cards and then draw up to your hand limit (default 6;
-Kitchenware raises it to 7). If the draw pile is empty, reshuffle the discard pile as draw again.
+Outside your turn, you may discard up to 3 cards and then draw up to your hand limit. If the draw 
+pile is empty, reshuffle the discard pile as draw pile and continue.
 
 ### Cook
 
@@ -271,16 +254,16 @@ Then use prepared, unused ingredients to fulfill a recipe’s requirements:
 - Ingredients are arranged in a column.
 - The matching recipe card is placed on top of the stack.
 
-You may cook as many recipes as your prepared ingredients allow.
-Keep in minde that the total number of cards you play from your hand in a turn (including recipes, 
-drinks, events, ingredients) is limited to 3 by default (4 with Cookware).
+You may cook as many recipes as your prepared ingredients allow but keep in mind that the total 
+number of cards you play from your hand in a turn (including recipes, drinks, events, ingredients
+and utensils) is limited (see [Limits](#limits) for details).
 
 ![image](images/guide_cooking.png)
 
 The above picture demonstrates that the player can do one of the following:
 
 - Prepare 1 primary and 1 secondary ingredient and cook 1 normal recipe.
-- Prepare 2 primary ingredients and cook 1 easy recipes.
+- Prepare 2 primary ingredients and cook 1 easy recipe.
 
 ### Serve
 
@@ -305,22 +288,22 @@ See [Drink Cards](#drink-cards).
 
 #### Play Utensil Cards
 
-You may play Utensil Cards (Kitchneware, Cookware, Tableware) when serving 2 recipes with their 
-symbol. For more details, see [Utensil Cards](#utensil-cards).
+You may play Utensil Cards (Kitchenware, Cookware, Tableware) when serving 2 recipes with their 
+symbol in the same turn. For more details, see [Utensil Cards](#utensil-cards).
 
 ### Play Event Cards
 
-You may play Event Cards (Complaint, Promotion, Discount) to manipulate customer queues at any time
-during your turn. For more details, see [Event Cards](#event-cards).
+You may play Event Cards (Complaint, Promotion, Discount) to manipulate customer queues.
+For more details, see [Event Cards](#event-cards).
 
 ## Winning the Game
 
 The game ends after the round in which either a player puts 4 End Condition cards into tracking or
 the customer deck is emptied. Players must finish the current round.
 
-After the game ends, sum Victory Points (VP) from your served customers: each customer scores
-its base value plus its bonus value if its bonus requirements are met. The player with the highest
-total VP wins.
+After the game ends, sum Victory Points (VP) from your served customers: each customer scores its 
+base value plus its bonus value if its requirements are met. The player with the highest total VP 
+wins.
 
 Tiebreaker: the player who most recently cooked a real-life meal wins.
 
