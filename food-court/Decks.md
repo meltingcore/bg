@@ -56,28 +56,28 @@
     - Fettuccine ai Porcini e Tartufo (Fettuccine) [kitchenware]
     - Tagliatelle ai Funghi Porcini (Tagliatelle) [cookware]
 - Drink Cards (3) 🍷
-  - Espresso - Have 5 different prepared and unused pasta ingredients
-  - Limoncello - Have 3 different pasta ingredients in your cooked recipes
-  - Aperol Spritz - Have 2 recipes cooked with exact pasta ingredients
-- Utensil Cards (3)
-  - Kitchenware 🔪
-  - Cookware 🫕
-  - Tableware 🍽️
+  - Espresso - Discard 5 different prepared and unused pasta ingredients
+  - Limoncello - Discard 3 recipes each cooked with different pasta ingredient
+  - Aperol Spritz - Discard 2 recipes cooked with exact pasta ingredients
+- Utensil Cards (3) 🍽️
+  - Kitchenware
+  - Cookware
+  - Tableware
 - Event Cards (3)
   - Complaint (1)
   - Discount (1) 
   - Promotion (1)
 - Customer Cards (10)
   - 1/1 🍽
-  - 1/2 🌎|🏅+🏅
-  - 1/3 🏅+🏅+🍷
+  - 1/2 🌎🏅
+  - 1/3 🏅🏅🍷
   - 2/1 🍽
-  - 2/2 🌎|🍷+🍷
-  - 2/3 🍷+🍷+️🏅
+  - 2/2 🌎🍷
+  - 2/3 🍷🍷️🏅
   - 3/1 🍽️
-  - 3/2 🌎|🍷+🍽
-  - 3/3 🏅+🍷+🍽
-  - 4/2 🌎|🍽️+🍽️
+  - 3/2 🌎🍽
+  - 3/3 🏅🍷🍽
+  - 4/3 🍷🍷🍷
 - Ability Card (1)
 </details>
 
@@ -117,28 +117,28 @@
     - Crème Brûlée (Dessert) [tableware]
     - Tarte Tatin (Dessert) [kitchenware]
 - Drink Cards (3) 🍷
-  - Champagne - Have 4 prepared and unused secondary ingredients
-  - Cognac - Have 3 different courses as cooked recipes
-  - Pernod - Have 2 recipes with optional ingredients
-- Utensil Cards (3)
-  - Kitchenware 🔪
-  - Cookware 🫕
-  - Tableware 🍽️
+  - Champagne - Discard 4 prepared and unused secondary ingredients
+  - Cognac - Discard 3 different courses as cooked recipes
+  - Pernod - Discard 2 recipes with optional ingredients
+- Utensil Cards (3) 🍽️
+  - Kitchenware
+  - Cookware
+  - Tableware
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🍷
-  - 1/2 🌎|🍽+🍽
-  - 1/3 🍽+🍽+🏅
+  - 1/2 🌎🍽
+  - 1/3 🍽🍽🏅
   - 2/1 🍷
-  - 2/2 🌎|🏅+🏅
-  - 2/3 🏅+🏅+🍽
+  - 2/2 🌎🏅
+  - 2/3 🏅🏅🍽
   - 3/1 🍷
-  - 3/2 🌎|🏅+🍷
-  - 3/3 🍽+🏅+🍷
-  - 4/2 🌎|🍷+🍷
+  - 3/2 🌎🍷
+  - 3/3 🍽🏅🍷
+  - 4/3 🏅🏅🏅
 - Ability Card (1)
 </details>
 
@@ -179,28 +179,28 @@
     - Peking Duck Fried Rice (Rice) [cookware]
     - Dragon Beard Noodles (Noodles) [tableware]
 - Drink Cards (3) 🍷
-  - Baijiu - Have 3 primary & 3 secondary prepared unused ingredients
-  - Huangjiu - Have 4 easy cooked recipes
-  - Green Tea - Have an easy, normal & hard recipe of the same type
-- Utensil Cards (3)
-  - Kitchenware 🔪
-  - Cookware 🫕
-  - Tableware 🍽️
+  - Baijiu - Discard 3 primary & 2 secondary prepared unused ingredients
+  - Huangjiu - Discard 4 easy cooked recipes
+  - Green Tea - Discard 3 cooked recipes of the same type
+- Utensil Cards (3) 🍽️
+  - Kitchenware
+  - Cookware
+  - Tableware
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🏅
-  - 1/2 🌎|🍷+🍷
-  - 1/3 🍷+🍷+🍽
+  - 1/2 🌎🍷
+  - 1/3 🍷🍷🍽
   - 2/1 🏅
-  - 2/2 🌎|🍽+🍽
-  - 2/3 🍽+🍽+🍷
+  - 2/2 🌎🍽
+  - 2/3 🍽🍽🍷
   - 3/1 🏅
-  - 3/2 🌎|🍽+🏅
-  - 3/3 🍷+🍽+🏅
-  - 4/2 🌎|🏅+🏅
+  - 3/2 🌎🏅
+  - 3/3 🍷🍽🏅
+  - 4/3 🍽🍽🍽
 - Ability Card (1)
 </details>
 
@@ -246,28 +246,28 @@ grants +1 serve value.
     - Rogan Josh [kitchenware]
     - Malai Kofta [cookware]
 - Drink Cards (3) 🍷
-  - Feni - Have 4 different prepared and unused secondary ingredients
-  - Lassi - Have 3 recipes cooked with different secondary ingredients
-  - Masala Chai - Have 2 recipes with extra secondary ingredients
-- Utensil Cards (3)
-  - Kitchenware 🔪
-  - Cookware 🫕
-  - Tableware 🍽️
+  - Feni - Discard 4 different prepared and unused secondary ingredients
+  - Lassi - Discard 3 recipes cooked with different secondary ingredients
+  - Masala Chai - Discard 2 recipes with extra secondary ingredients
+- Utensil Cards (3) 🍽️
+  - Kitchenware
+  - Cookware
+  - Tableware
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🍽
-  - 1/2 🌎|🏅+🏅
-  - 1/3 🏅+🏅+🍷
+  - 1/2 🌎🏅
+  - 1/3 🏅🏅🍷
   - 2/1 🍽
-  - 2/2 🌎|🍷+🍷
-  - 2/3 🍷+🍷+️🏅
+  - 2/2 🌎🍷
+  - 2/3 🍷🍷️🏅
   - 3/1 🍽️
-  - 3/2 🌎|🍷+🍽
-  - 3/3 🏅+🍷+🍽
-  - 4/2 🌎|🍽️+🍽️
+  - 3/2 🌎🍽
+  - 3/3 🏅🍷🍽
+  - 4/3 🍷🍷🍷
 - Ability Card (1)
 </details>
 
@@ -308,28 +308,28 @@ grants +1 serve value.
     - T-bone Steak (Steak) [tableware]
     - Apple Pie [kitchenware]
 - Drink Cards (3) 🍷
-  - Coke - Have 8 prepared and unused ingredients
-  - Bourbon - Have 3 cooked recipes of the same type
-  - Root Beer - Have 2 cooked recipes with doubled ingredients
-- Utensil Cards (3)
-  - Kitchenware 🔪
-  - Cookware 🫕
-  - Tableware 🍽️
+  - Coke - Discard 6 prepared and unused ingredients
+  - Bourbon - Discard 3 cooked recipes of the same type
+  - Root Beer - Discard 2 cooked recipes with extra ingredient
+- Utensil Cards (3) 🍽️
+  - Kitchenware
+  - Cookware
+  - Tableware
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🍷
-  - 1/2 🌎|🍽+🍽
-  - 1/3 🍽+🍽+🏅
+  - 1/2 🌎🍽
+  - 1/3 🍽🍽🏅
   - 2/1 🍷
-  - 2/2 🌎|🏅+🏅
-  - 2/3 🏅+🏅+🍽
+  - 2/2 🌎🏅
+  - 2/3 🏅🏅🍽
   - 3/1 🍷
-  - 3/2 🌎|🏅+🍷
-  - 3/3 🍽+🏅+🍷
-  - 4/2 🌎|🍷+🍷
+  - 3/2 🌎🍷
+  - 3/3 🍽🏅🍷
+  - 4/3 🏅🏅🏅
 - Ability Card (1)
 </details>
 
@@ -371,28 +371,28 @@ regardless of what queue they are in.
     - Turkish Delight [cookware]
     - Kadayif [tableware]
 - Drink Cards (3) 🍷
-  - Raki - Have 2 prepared & unused optional ingredients
-  - Salep - Have 3 cooked kebab recipes only
-  - Ayran - Have 3 cooked non-kebab recipes only
-- Utensil Cards (3)
-  - Kitchenware 🔪
-  - Cookware 🫕
-  - Tableware 🍽️
+  - Raki - Discard 2 prepared & unused optional ingredients
+  - Salep - Discard 3 cooked kebab recipes
+  - Ayran - Discard 3 cooked non-kebab recipes
+- Utensil Cards (3) 🍽️
+  - Kitchenware
+  - Cookware
+  - Tableware
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🏅
-  - 1/2 🌎|🍷+🍷
-  - 1/3 🍷+🍷+🍽
+  - 1/2 🌎🍷
+  - 1/3 🍷🍷🍽
   - 2/1 🏅
-  - 2/2 🌎|🍽+🍽
-  - 2/3 🍽+🍽+🍷
+  - 2/2 🌎🍽
+  - 2/3 🍽🍽🍷
   - 3/1 🏅
-  - 3/2 🌎|🍽+🏅
-  - 3/3 🍷+🍽+🏅
-  - 4/2 🌎|🏅+🏅
+  - 3/2 🌎🏅
+  - 3/3 🍷🍽🏅
+  - 4/3 🍽🍽🍽
 - Ability Card (1)
 </details>
 
@@ -435,28 +435,28 @@ regardless of what queue they are in.
     - Omurice [kitchenware]
     - Gyoza [cookware]
 - Drink Cards (3) 🍷
-  - Sake - Have 3 prepared and unused secondary ingredients of the same type.
-  - Matcha Tea - Have 1 recipe cooked with a Ginger secondary and an optional ingredient
-  - Umeshu - Have 2 recipes cooked with Umami ingredients
-- Utensil Cards (3)
-  - Kitchenware 🔪
-  - Cookware 🫕
-  - Tableware 🍽️
+  - Sake - Discard 3 prepared and unused secondary ingredients of the same type.
+  - Matcha Tea - Discard 1 recipe cooked with a Ginger secondary and an optional ingredient
+  - Umeshu - Discard 2 recipes cooked with Umami ingredients
+- Utensil Cards (3) 🍽️
+  - Kitchenware
+  - Cookware
+  - Tableware
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🍽
-  - 1/2 🌎|🏅+🏅
-  - 1/3 🏅+🏅+🍷
+  - 1/2 🌎🏅
+  - 1/3 🏅🏅🍷
   - 2/1 🍽
-  - 2/2 🌎|🍷+🍷
-  - 2/3 🍷+🍷+️🏅
+  - 2/2 🌎🍷
+  - 2/3 🍷🍷️🏅
   - 3/1 🍽️
-  - 3/2 🌎|🍷+🍽
-  - 3/3 🏅+🍷+🍽
-  - 4/2 🌎|🍽️+🍽️
+  - 3/2 🌎🍽
+  - 3/3 🏅🍷🍽
+  - 4/3 🍷🍷🍷
 - Ability Card (1)
 </details>
 
@@ -499,27 +499,27 @@ regardless of what queue they are in.
     - Chiles Rellenos [cookware]
     - Tamales [tableware]
 - Drink Cards (3) 🍷
-  - Mezcal - Have 4 prepared and unused hot secondary ingredients
-  - Tequila - Have 4 recipes cooked with at least 1 hot secondary ingredient
-  - Tepache - Have 1 easy recipe cooked with 2 hot ingredients
-- Utensil Cards (3)
-  - Kitchenware 🔪
-  - Cookware 🫕
-  - Tableware 🍽️
+  - Mezcal - Discard 4 prepared and unused hot secondary ingredients
+  - Tequila - Discard 4 recipes cooked with at least 1 hot secondary ingredient
+  - Tepache - Discard 2 recipes cooked with 2 hot ingredients
+- Utensil Cards (3) 🍽️
+  - Kitchenware
+  - Cookware
+  - Tableware
 - Event Cards (3)
   - Complaint (1) 
   - Discount (1)  
   - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🍷
-  - 1/2 🌎|🍽+🍽
-  - 1/3 🍽+🍽+🏅
+  - 1/2 🌎🍽
+  - 1/3 🍽🍽🏅
   - 2/1 🍷
-  - 2/2 🌎|🏅+🏅
-  - 2/3 🏅+🏅+🍽
+  - 2/2 🌎🏅
+  - 2/3 🏅🏅🍽
   - 3/1 🍷
-  - 3/2 🌎|🏅+🍷
-  - 3/3 🍽+🏅+🍷
-  - 4/2 🌎|🍷+🍷
+  - 3/2 🌎🍷
+  - 3/3 🍽🏅🍷
+  - 4/3 🏅🏅🏅
 - Ability Card (1)
 </details>
