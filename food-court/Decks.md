@@ -15,7 +15,7 @@
 
 ## 🇮🇹 Piazza Romana
 
-- **Special Ability** - Recipes cooked with **exact** pasta ingredients have **+1** serve value.
+- **Special Ability** - Recipes cooked with **exact** pasta ingredients grant **+1** serve value.
 - **End Condition** - Serve 4 meals with different **exact** pasta ingredients.
 - **Tracking** - The **exact** ingredient cards.
 
@@ -83,7 +83,7 @@
 
 ## 🇫🇷 Le Petit Paris
 
-- **Special Ability** - Adjacent cooked recipes from a 4-course meal have **+1** serve value.
+- **Special Ability** - Adjacent recipes in a 4-course meal grant **+1** serve value.
 - **End Condition** - Serve a complete 4-course meal in order (entrée, appetizer, main, dessert).
 - **Tracking** - The recipes cards.
 
@@ -144,9 +144,9 @@
 
 ## 🇨🇳 Jin Long
 
-- **Special Ability** - A pair of recipes of the same type give +1 serve value.
+- **Special Ability** - A pair of recipes of the same type grants +1 serve value.
 - **End Condition** - Serve a **noodles** and a **rice** recipe in the same turn 4 times.
-- **Tracking** - The recipes cards.
+- **Tracking** - The normal/hard recipes cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -206,7 +206,7 @@
 
 ## 🇮🇳 Raj Mahal
 
-- **Special Ability** - Each pair of different **secondary** ingredients used across served recipes
+- **Special Ability** - Each pair of different **secondary** ingredients across all served recipes
 grants +1 serve value.
 - **End Condition** - Collect 2 pairs of **secondary** ingredients of the same type.
 - **Tracking** - The **secondary** ingredient cards.
@@ -273,9 +273,9 @@ grants +1 serve value.
 
 ## 🇺🇸 Liberty Grill
 
-- **Special Ability** - You can cook recipes with extra primary or secondary ingredient to gain
-+1 serve value.
-- **End Condition** - Cook 4 different recipes of the same type (e.g., 4 steaks or 4 burgers).
+- **Special Ability** - Recipes cooked with extra primary or secondary ingredient grant +1 serve 
+value.
+- **End Condition** - Serve 4 different recipes of the same type (e.g., 4 steaks or 4 burgers).
 - **Tracking** - The recipe cards.
 
 <details>
@@ -337,7 +337,7 @@ grants +1 serve value.
 
 - **Special Ability** - Kebab recipes have +1 serve value to Turkish customers and can serve them
 regardless of what queue they are in.
-- **End Condition** - Serve 4 Turkish customers not from your queues.
+- **End Condition** - Serve 4 Turkish customers not from your queue.
 - **Tracking** - The **kebab** recipe cards.
 
 <details>
@@ -462,8 +462,8 @@ regardless of what queue they are in.
 
 ## 🇲🇽 El Nopalito
 
-- **Special Ability** - You can add up to 2 hot ingredients on any recipe and each pair grants 
-+1 serve value.
+- **Special Ability** - You can add up to 2 hot ingredients on any recipe and each pair in a recipe
+grants +1 serve value.
 - **End Condition** - Cook 4 recipes with 2 **hot** ingredients.
 - **Tracking** - The **hot** **secondary** ingredient cards.
 
