@@ -63,10 +63,6 @@
   - Kitchenware
   - Cookware
   - Tableware
-- Event Cards (3)
-  - Complaint (1)
-  - Discount (1) 
-  - Promotion (1)
 - Customer Cards (10)
   - 1/1 🍽
   - 1/2 🌎🏅
@@ -124,10 +120,6 @@
   - Kitchenware
   - Cookware
   - Tableware
-- Event Cards (3)
-  - Complaint (1) 
-  - Discount (1)  
-  - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🍷
   - 1/2 🌎🍽
@@ -186,10 +178,6 @@
   - Kitchenware
   - Cookware
   - Tableware
-- Event Cards (3)
-  - Complaint (1) 
-  - Discount (1)  
-  - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🏅
   - 1/2 🌎🍷
@@ -253,10 +241,6 @@ grants +1 serve value.
   - Kitchenware
   - Cookware
   - Tableware
-- Event Cards (3)
-  - Complaint (1) 
-  - Discount (1)  
-  - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🍽
   - 1/2 🌎🏅
@@ -315,10 +299,6 @@ value.
   - Kitchenware
   - Cookware
   - Tableware
-- Event Cards (3)
-  - Complaint (1) 
-  - Discount (1)  
-  - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🍷
   - 1/2 🌎🍽
@@ -336,8 +316,8 @@ value.
 ## 🇹🇷 Sultan Saray
 
 - **Special Ability** - Kebab recipes have +1 serve value to Turkish customers and can serve them
-regardless of what queue they are in.
-- **End Condition** - Serve 4 Turkish customers not from your queue.
+regardless of their position in the central queue.
+- **End Condition** - Serve 4 Turkish customers from the central queue.
 - **Tracking** - The **kebab** recipe cards.
 
 <details>
@@ -378,10 +358,6 @@ regardless of what queue they are in.
   - Kitchenware
   - Cookware
   - Tableware
-- Event Cards (3)
-  - Complaint (1) 
-  - Discount (1)  
-  - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🏅
   - 1/2 🌎🍷
@@ -442,10 +418,6 @@ regardless of what queue they are in.
   - Kitchenware
   - Cookware
   - Tableware
-- Event Cards (3)
-  - Complaint (1) 
-  - Discount (1)  
-  - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🍽
   - 1/2 🌎🏅
@@ -506,10 +478,6 @@ grants +1 serve value.
   - Kitchenware
   - Cookware
   - Tableware
-- Event Cards (3)
-  - Complaint (1) 
-  - Discount (1)  
-  - Promotion (1) 
 - Customer Cards (10)
   - 1/1 🍷
   - 1/2 🌎🍽

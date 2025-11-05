@@ -75,4 +75,16 @@ calculations to just the end of the game:
     - Promotion: Swaps 2 customers from any two players' queues.
     - Discount: Allows a player to attract a customer from its queue without serving.
 
+### New Ideas:
 
+- Drinks conditions easier
+- Customers should have more base value
+- event cards before or after customer attraction?
+- any 3 cards  or 3 cards but cook or serve rounds?
+- Event cards are gone
+- Customers can be swapped if you cover their drink requirements and bonus points are from end condition cards only
+- Utensils determine how many ingredients, recipes or customer cards can be utilized
+- Drinks have easier requirements
+- Out of turn fill up hand and prepare ingredients
+- On turn cook recipes and serve customers
+- Customers are chained based on mood and personality

@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.12.0]
+
+CHANGES:
+
+* Customers mechanics refactored to a single shared central queue and mood/personality traits are
+added for chaining for bonus points at game end.
+* Turn Structure updated: now players serve customers directly from the central queue;
+* Limits logic updated: now determine how many ingredients/recipes/customers can be 
+prepared/cooked/served.
+* Drinks updated: now can serve 1 customer from the central queue without covering its base value.
+* Optional ingredients are no longer limited to 1 per recipe.
+* Events cards removed.
+
 ## [0.11.0]
 
 CHANGES:
