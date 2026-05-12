@@ -1,5 +1,9 @@
 # Notes
 
+These notes are a historical idea backlog. The current playable rules are in [Rules.md](Rules.md),
+and older mechanics here may mention removed concepts such as personal customer queues, Event Cards,
+or standalone Utensil Cards.
+
 ## IDEAS:
 
 ### DECKS:
@@ -82,7 +86,8 @@ calculations to just the end of the game:
 - event cards before or after customer attraction?
 - any 3 cards  or 3 cards but cook or serve rounds?
 - Event cards are gone
-- Customers can be swapped if you cover their drink requirements and bonus points are from end condition cards only
+- Customers can be swapped if you cover their drink requirements and bonus points are from end
+  condition cards only
 - Utensils determine how many ingredients, recipes or customer cards can be utilized
 - Drinks have easier requirements
 - Out of turn fill up hand and prepare ingredients
