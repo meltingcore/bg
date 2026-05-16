@@ -71,3 +71,9 @@ Temporary Items
 .idea
 
 ### Codex
+
+### Node / Astro
+node_modules/
+.pnpm-store/
+.astro/
+dist/
