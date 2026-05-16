@@ -239,6 +239,31 @@ label {
   gap: 16px;
 }
 
+.active-customer-grid {
+  display: grid;
+  grid-template-columns: 176px minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.round-controls {
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  min-height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(4, 20, 17, 0.22);
+  padding: 16px;
+}
+
+.round-controls p {
+  max-width: 720px;
+  margin: 0;
+  color: #cfe1d9;
+  font-weight: 700;
+}
+
 .queue-card {
   min-width: 0;
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -436,7 +461,7 @@ summary span {
   --card-bg: #fffaf1;
   position: relative;
   width: 176px;
-  height: 342px;
+  min-height: 342px;
   border: 1px solid color-mix(in srgb, var(--card-accent) 38%, #a88f74);
   border-radius: 8px;
   background: var(--card-bg);
@@ -670,6 +695,11 @@ summary span {
   align-self: end;
 }
 
+.card-actions .muted {
+  align-self: center;
+  font-size: 0.76rem;
+}
+
 .card-value-strip {
   position: relative;
   z-index: 1;
@@ -747,6 +777,64 @@ summary span {
   background: #fffdf8;
   padding: 10px;
   box-shadow: 0 5px 14px rgba(46, 36, 24, 0.08);
+}
+
+.meal-dish {
+  border: 1px solid #d7c9b6;
+  border-radius: 8px;
+  background: #fffdf8;
+  padding: 10px;
+  box-shadow: 0 5px 14px rgba(46, 36, 24, 0.08);
+}
+
+.meal-dish header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.meal-dish small {
+  display: block;
+  margin-top: 4px;
+  color: #65716d;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ingredient-chips,
+.breakdown-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.chip-button,
+.breakdown-row span {
+  min-height: 28px;
+  border: 1px solid #d7c9b6;
+  border-radius: 999px;
+  background: #fffaf1;
+  padding: 0.24rem 0.58rem;
+  color: #25302d;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.breakdown-row span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.breakdown-row .tie-pill {
+  border-color: #c78d2e;
+  background: #fff3dc;
+}
+
+.muted {
+  color: #65716d;
+  font-weight: 750;
 }
 
 .dish:hover {
@@ -867,6 +955,10 @@ summary span {
   }
 
   .competition-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .active-customer-grid {
     grid-template-columns: 1fr;
   }
 

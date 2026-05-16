@@ -10,7 +10,6 @@ export type CuisineId =
 
 export type IngredientType = 'primary' | 'secondary' | 'optional';
 export type RecipeDifficulty = 'easy' | 'normal' | 'hard';
-export type CustomerSymbol = 'cutting board' | 'cooking pot' | 'swap' | 'playing cards';
 
 export interface IngredientDefinition {
   name: string;
@@ -35,9 +34,8 @@ export interface DrinkDefinition {
 }
 
 export interface CustomerDefinition {
-  base: number;
+  order: number;
   tips: number;
-  symbol: CustomerSymbol;
 }
 
 export interface DeckDefinition {
@@ -56,14 +54,12 @@ export interface DeckDefinition {
 }
 
 const customerPattern: CustomerDefinition[] = [
-  { base: 1, tips: 1, symbol: 'cutting board' },
-  { base: 1, tips: 2, symbol: 'cooking pot' },
-  { base: 2, tips: 1, symbol: 'swap' },
-  { base: 2, tips: 2, symbol: 'playing cards' },
-  { base: 2, tips: 3, symbol: 'cutting board' },
-  { base: 3, tips: 1, symbol: 'cooking pot' },
-  { base: 3, tips: 2, symbol: 'swap' },
-  { base: 4, tips: 3, symbol: 'playing cards' },
+  { order: 1, tips: 2 },
+  { order: 1, tips: 3 },
+  { order: 2, tips: 2 },
+  { order: 2, tips: 2 },
+  { order: 3, tips: 1 },
+  { order: 3, tips: 2 },
 ];
 
 const repeat = (
@@ -99,15 +95,15 @@ export const DECKS: DeckDefinition[] = [
     endCondition: 'Serve 4 meals with different exact pasta ingredients.',
     tracking: 'Exact pasta ingredient cards.',
     ingredients: [
-      { name: 'Spaghetti', count: 2, type: 'primary', emoji: '🍝', tags: ['pasta', 'exact'] },
-      { name: 'Fettuccine', count: 2, type: 'primary', emoji: '🍝', tags: ['pasta', 'exact'] },
-      { name: 'Tagliatelle', count: 2, type: 'primary', emoji: '🍝', tags: ['pasta', 'exact'] },
-      { name: 'Lasagna Sheets', count: 2, type: 'primary', emoji: '🍝', tags: ['pasta', 'exact'] },
-      { name: 'Penne', count: 2, type: 'primary', emoji: '🍝', tags: ['pasta', 'exact'] },
+      { name: 'Spaghetti', count: 1, type: 'primary', emoji: '🍝', tags: ['pasta', 'exact'] },
+      { name: 'Fettuccine', count: 1, type: 'primary', emoji: '🍝', tags: ['pasta', 'exact'] },
+      { name: 'Tagliatelle', count: 1, type: 'primary', emoji: '🍝', tags: ['pasta', 'exact'] },
+      { name: 'Lasagna Sheets', count: 1, type: 'primary', emoji: '🍝', tags: ['pasta', 'exact'] },
+      { name: 'Penne', count: 1, type: 'primary', emoji: '🍝', tags: ['pasta', 'exact'] },
       { name: 'Campanelle', count: 1, type: 'primary', emoji: '🍝', tags: ['pasta', 'exact'] },
       { name: 'Gnocchi', count: 1, type: 'primary', emoji: '🥔', tags: ['pasta', 'exact'] },
       { name: 'Ravioli', count: 1, type: 'primary', emoji: '🥟', tags: ['pasta', 'exact'] },
-      ...repeat([], 10, 'secondary', '🍅'),
+      ...repeat([], 5, 'secondary', '🍅'),
       { name: 'Basil', count: 1, type: 'optional', emoji: '🌿' },
       { name: 'Balsamic Vinegar', count: 1, type: 'optional', emoji: '🍶' },
       { name: 'Parmigiano', count: 1, type: 'optional', emoji: '🧀' },
@@ -129,8 +125,9 @@ export const DECKS: DeckDefinition[] = [
       { name: 'Tagliatelle ai Funghi Porcini', difficulty: 'hard', emoji: '🍝🍄', exactIngredient: 'Tagliatelle' },
     ],
     drinks: [
-      { name: 'Espresso', emoji: '☕', requirement: 'Discard 5 different prepared and unused pasta ingredients.' },
-      { name: 'Limoncello', emoji: '🍋', requirement: 'Discard 3 recipes each cooked with different pasta ingredient.' },
+      { name: 'Cappuccino', emoji: '☕', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Aperol Spritz', emoji: '🍹', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Limoncello', emoji: '🍋', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
     ],
     customers: customerPattern,
   },
@@ -140,12 +137,12 @@ export const DECKS: DeckDefinition[] = [
     shortName: 'France',
     flag: '🥖',
     color: '#3567b7',
-    ability: 'Adjacent recipes in a 4-course meal grant +1 serve value.',
+    ability: 'Each adjacent course pair served in the same meal grants +1 serve value.',
     endCondition: 'Serve a complete 4-course meal in order.',
     tracking: 'Recipe cards.',
     ingredients: [
-      ...repeat([], 12, 'primary', '🥖'),
-      ...repeat([], 10, 'secondary', '🧀'),
+      ...repeat([], 7, 'primary', '🥖'),
+      ...repeat([], 5, 'secondary', '🧀'),
       { name: 'Herbs de Provence', count: 1, type: 'optional', emoji: '🌿' },
       { name: 'Butter', count: 1, type: 'optional', emoji: '🧈' },
       { name: 'Cream', count: 1, type: 'optional', emoji: '🥛' },
@@ -168,8 +165,9 @@ export const DECKS: DeckDefinition[] = [
       { name: 'Tarte Tatin', difficulty: 'hard', emoji: '🥧', tags: ['dessert'] },
     ],
     drinks: [
-      { name: 'Champagne', emoji: '🍾', requirement: 'Discard 4 prepared and unused secondary ingredients.' },
-      { name: 'Cognac', emoji: '🥃', requirement: 'Discard 3 different courses as cooked recipes.' },
+      { name: 'Champagne', emoji: '🍾', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Cognac', emoji: '🥃', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Pernod', emoji: '🍸', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
     ],
     customers: customerPattern,
   },
@@ -183,15 +181,14 @@ export const DECKS: DeckDefinition[] = [
     endCondition: 'Serve a noodles and a rice recipe in the same turn 4 times.',
     tracking: 'Normal and hard recipe cards.',
     ingredients: [
-      ...repeat([], 12, 'primary', '🍚'),
-      ...repeat([], 9, 'secondary', '🍜'),
+      ...repeat([], 7, 'primary', '🍚'),
+      ...repeat([], 5, 'secondary', '🍜'),
       { name: 'Shiitake Mushrooms', count: 1, type: 'optional', emoji: '🍄' },
       { name: 'Soy Sauce', count: 1, type: 'optional', emoji: '🍶' },
       { name: 'Mung Bean Sprouts', count: 1, type: 'optional', emoji: '🌱' },
     ],
     recipes: [
       { name: 'Mapo Tofu', difficulty: 'easy', emoji: '🌶️🍥', tags: [] },
-      { name: 'Coconut Rice', difficulty: 'easy', emoji: '🍚🥥', tags: ['rice'] },
       { name: 'Congee', difficulty: 'easy', emoji: '🥣' },
       { name: 'Sticky Rice with Mango', difficulty: 'easy', emoji: '🥭', tags: ['rice'] },
       { name: 'Dry-Fried Green Beans', difficulty: 'easy', emoji: '🫘🌶️' },
@@ -208,8 +205,9 @@ export const DECKS: DeckDefinition[] = [
       { name: 'Dragon Beard Noodles', difficulty: 'hard', emoji: '🍜', tags: ['noodles'] },
     ],
     drinks: [
-      { name: 'Baijiu', emoji: '🍶', requirement: 'Discard 3 primary and 2 secondary prepared unused ingredients.' },
-      { name: 'Huangjiu', emoji: '🍶', requirement: 'Discard 4 easy cooked recipes.' },
+      { name: 'Baijiu', emoji: '🍶', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Huangjiu', emoji: '🍶', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Green Tea', emoji: '🍵', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
     ],
     customers: customerPattern,
   },
@@ -219,17 +217,16 @@ export const DECKS: DeckDefinition[] = [
     shortName: 'India',
     flag: '🍛',
     color: '#d77825',
-    ability: 'Each pair of different secondary ingredients across served recipes grants +1 serve value.',
+    ability: 'Each pair of Secondary Ingredients used in served dishes grants +1 serve value.',
     endCondition: 'Collect 2 pairs of secondary ingredients of the same type.',
     tracking: 'Secondary ingredient cards.',
     ingredients: [
-      ...repeat([], 11, 'primary', '🍚'),
+      ...repeat([], 6, 'primary', '🍚'),
       { name: 'Cumin', count: 2, type: 'secondary', emoji: '🌰' },
       { name: 'Saffron', count: 2, type: 'secondary', emoji: '🍯' },
-      { name: 'Tamarind', count: 2, type: 'secondary', emoji: '🌰' },
-      { name: 'Coriander', count: 2, type: 'secondary', emoji: '🌿' },
-      { name: 'Cinnamon', count: 2, type: 'secondary', emoji: '🌰' },
-      { name: 'Cardamom', count: 2, type: 'secondary', emoji: '🌿' },
+      { name: 'Coriander', count: 1, type: 'secondary', emoji: '🌿' },
+      { name: 'Cinnamon', count: 1, type: 'secondary', emoji: '🌰' },
+      { name: 'Cardamom', count: 1, type: 'secondary', emoji: '🌿' },
       { name: 'Ghee', count: 1, type: 'optional', emoji: '🧈' },
       { name: 'Coconut Milk', count: 1, type: 'optional', emoji: '🥥' },
       { name: 'Cashew', count: 1, type: 'optional', emoji: '🥜' },
@@ -251,8 +248,9 @@ export const DECKS: DeckDefinition[] = [
       { name: 'Malai Kofta', difficulty: 'hard', emoji: '🧆🍛' },
     ],
     drinks: [
-      { name: 'Feni', emoji: '🥃', requirement: 'Discard 4 different prepared and unused secondary ingredients.' },
-      { name: 'Lassi', emoji: '🥛', requirement: 'Discard 3 recipes cooked with different secondary ingredients.' },
+      { name: 'Feni', emoji: '🥃', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Lassi', emoji: '🥛', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Masala Chai', emoji: '☕', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
     ],
     customers: customerPattern,
   },
@@ -262,12 +260,12 @@ export const DECKS: DeckDefinition[] = [
     shortName: 'USA',
     flag: '🍔',
     color: '#274b8f',
-    ability: 'Recipes cooked with extra primary or secondary ingredient grant +1 serve value.',
+    ability: '1 extra Primary or Secondary Ingredient can be added to a dish above its requirements.',
     endCondition: 'Serve 4 different recipes of the same type.',
     tracking: 'Recipe cards.',
     ingredients: [
-      ...repeat([], 12, 'primary', '🍔'),
-      ...repeat([], 10, 'secondary', '🥩'),
+      ...repeat([], 6, 'primary', '🍔'),
+      ...repeat([], 6, 'secondary', '🥩'),
       { name: 'Ketchup', count: 1, type: 'optional', emoji: '🍅' },
       { name: 'Mustard', count: 1, type: 'optional', emoji: '🌭' },
       { name: 'Mayo', count: 1, type: 'optional', emoji: '🥚' },
@@ -290,8 +288,9 @@ export const DECKS: DeckDefinition[] = [
       { name: 'Apple Pie', difficulty: 'hard', emoji: '🥧🍎' },
     ],
     drinks: [
-      { name: 'Coke', emoji: '🥤', requirement: 'Discard 6 prepared and unused ingredients.' },
-      { name: 'Bourbon', emoji: '🥃', requirement: 'Discard 3 cooked recipes of the same type.' },
+      { name: 'Coke', emoji: '🥤', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Bourbon', emoji: '🥃', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Root Beer', emoji: '🍺', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
     ],
     customers: customerPattern,
   },
@@ -301,12 +300,12 @@ export const DECKS: DeckDefinition[] = [
     shortName: 'Turkiye',
     flag: '🥙',
     color: '#9f2530',
-    ability: 'Kebab recipes have +1 serve value to Turkish customers.',
+    ability: 'Kebab dishes gain +1 serve value for each non-kebab dish also served with them.',
     endCondition: 'Serve 4 Turkish customers from the central queue.',
     tracking: 'Kebab recipe cards.',
     ingredients: [
-      ...repeat([], 12, 'primary', '🥙'),
-      ...repeat([], 9, 'secondary', '🍅'),
+      ...repeat([], 6, 'primary', '🥙'),
+      ...repeat([], 6, 'secondary', '🍅'),
       { name: 'Sumac', count: 1, type: 'optional', emoji: '🍋' },
       { name: 'Paprika', count: 1, type: 'optional', emoji: '🌶️' },
       { name: 'Pomegranate Juice', count: 1, type: 'optional', emoji: '🍷' },
@@ -318,7 +317,6 @@ export const DECKS: DeckDefinition[] = [
       { name: 'Ciger Kebab', difficulty: 'easy', emoji: '🍢🍖', tags: ['kebab'] },
       { name: 'Doner Kebab', difficulty: 'easy', emoji: '🥙', tags: ['kebab'] },
       { name: 'Beyti Kebab', difficulty: 'easy', emoji: '🍢', tags: ['kebab'] },
-      { name: 'Tepsi Kebab', difficulty: 'easy', emoji: '🍢🍅', tags: ['kebab'] },
       { name: 'Patlican Dolmasi', difficulty: 'normal', emoji: '🍆🍚' },
       { name: 'Lahmacun', difficulty: 'normal', emoji: '🫓🍖' },
       { name: 'Pide', difficulty: 'normal', emoji: '🫓🧀' },
@@ -330,8 +328,9 @@ export const DECKS: DeckDefinition[] = [
       { name: 'Kadayif', difficulty: 'hard', emoji: '🍰' },
     ],
     drinks: [
-      { name: 'Raki', emoji: '🥛', requirement: 'Discard 2 prepared and unused optional ingredients.' },
-      { name: 'Salep', emoji: '☕', requirement: 'Discard 3 cooked kebab recipes.' },
+      { name: 'Raki', emoji: '🥛', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Salep', emoji: '☕', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Ayran', emoji: '🥛', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
     ],
     customers: customerPattern,
   },
@@ -341,14 +340,14 @@ export const DECKS: DeckDefinition[] = [
     shortName: 'Japan',
     flag: '🍣',
     color: '#cc5f7a',
-    ability: 'Secondary ingredients grant serve value: +2 with wasabi, -1 with ginger.',
+    ability: 'Each pair of different Secondary Ingredients used in a meal grants +1 serve value.',
     endCondition: 'Cook 2 recipes with wasabi and 2 recipes with ginger.',
     tracking: 'Wasabi and ginger ingredient cards.',
     ingredients: [
-      ...repeat([], 11, 'primary', '🍣'),
-      { name: 'Umami', count: 5, type: 'secondary', emoji: '🍄' },
+      ...repeat([], 6, 'primary', '🍣'),
+      { name: 'Umami', count: 2, type: 'secondary', emoji: '🍄' },
       { name: 'Wasabi', count: 3, type: 'secondary', emoji: '🌿', tags: ['wasabi'] },
-      { name: 'Ginger', count: 4, type: 'secondary', emoji: '🫚', tags: ['ginger'] },
+      { name: 'Ginger', count: 2, type: 'secondary', emoji: '🫚', tags: ['ginger'] },
       { name: 'Nori', count: 1, type: 'optional', emoji: '🍙' },
       { name: 'Sesame Oil', count: 1, type: 'optional', emoji: '🍶' },
       { name: 'Yuzu', count: 1, type: 'optional', emoji: '🍋' },
@@ -370,8 +369,9 @@ export const DECKS: DeckDefinition[] = [
       { name: 'Gyoza', difficulty: 'hard', emoji: '🥟' },
     ],
     drinks: [
-      { name: 'Sake', emoji: '🍶', requirement: 'Discard 3 prepared and unused secondary ingredients of the same type.' },
-      { name: 'Matcha Tea', emoji: '🍵', requirement: 'Discard 1 recipe cooked with ginger secondary and optional ingredient.' },
+      { name: 'Sake', emoji: '🍶', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Matcha Tea', emoji: '🍵', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Umeshu', emoji: '🍑', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
     ],
     customers: customerPattern,
   },
@@ -381,14 +381,14 @@ export const DECKS: DeckDefinition[] = [
     shortName: 'Mexico',
     flag: '🌮',
     color: '#157f7a',
-    ability: 'Add up to 2 hot ingredients on any recipe; each pair grants +1 serve value.',
+    ability: 'Hot secondary ingredients gain +1 serve value and up to 2 can be added to dishes in a meal.',
     endCondition: 'Cook 4 recipes with 2 hot ingredients.',
     tracking: 'Hot secondary ingredient cards.',
     ingredients: [
-      ...repeat([], 11, 'primary', '🌮'),
-      { name: 'Cayenne Pepper', count: 4, type: 'secondary', emoji: '🌶️', tags: ['hot'] },
-      { name: 'Jalapeno', count: 4, type: 'secondary', emoji: '🌶️', tags: ['hot'] },
-      { name: 'Avocado', count: 4, type: 'secondary', emoji: '🥑' },
+      ...repeat([], 5, 'primary', '🌮'),
+      { name: 'Cayenne Pepper', count: 3, type: 'secondary', emoji: '🌶️', tags: ['hot'] },
+      { name: 'Jalapeno', count: 3, type: 'secondary', emoji: '🌶️', tags: ['hot'] },
+      { name: 'Avocado', count: 2, type: 'secondary', emoji: '🥑' },
       { name: 'Lime', count: 1, type: 'optional', emoji: '🍋' },
       { name: 'Cilantro', count: 1, type: 'optional', emoji: '🌿' },
       { name: 'Sour Cream', count: 1, type: 'optional', emoji: '🥛' },
@@ -410,8 +410,9 @@ export const DECKS: DeckDefinition[] = [
       { name: 'Tamales', difficulty: 'hard', emoji: '🫔🌽' },
     ],
     drinks: [
-      { name: 'Mezcal', emoji: '🥃', requirement: 'Discard 4 prepared and unused hot secondary ingredients.' },
-      { name: 'Tequila', emoji: '🍸', requirement: 'Discard 4 recipes cooked with at least 1 hot secondary ingredient.' },
+      { name: 'Mezcal', emoji: '🥃', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Tequila', emoji: '🍸', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
+      { name: 'Tepache', emoji: '🍍', requirement: 'Tie-breaker: +1 serve value when tied after reveal.' },
     ],
     customers: customerPattern,
   },
