@@ -1,5 +1,14 @@
 # Cuisine Decks
 
+Customer Cards are listed as `base value/tips value [symbol]`.
+Nationality matches the deck section where the customer is listed.
+
+Customer symbols provide the following limit bonuses:
+
+- `cutting board` - Ingredient Limit
+- `cooking pot` - Cooking Limit
+- `swap` - Swap Limit
+- `playing cards` - Hand Limit
 
 <!-- TOC -->
 * [Cuisine Decks](#cuisine-decks)
@@ -15,8 +24,8 @@
 
 ## 🇮🇹 Piazza Romana
 
-- **Special Ability** - Recipes cooked with **exact** pasta ingredients grant **+1 VP**.
-- **End Condition** - Make 4 meals with **exact** pasta ingredient.
+- **Special Ability** - Recipes cooked with **exact** pasta ingredients grant **+1** serve value.
+- **End Condition** - Serve 4 meals with different **exact** pasta ingredients.
 - **Tracking** - The **exact** ingredient cards.
 
 <details>
@@ -39,48 +48,41 @@
     - Parmigiano
 - Recipe Cards (14):
   - Easy Recipes (4)
-    - Farfalle al Salmone [kitchenware]
-    - Fusilli Caprese [cookware]
-    - Rigatoni alla Gricia [tableware]
-    - Cannelloni Ricotta e Spinaci [kitchenware]
+    - Farfalle al Salmone
+    - Fusilli Caprese
+    - Rigatoni alla Gricia
+    - Cannelloni Ricotta e Spinaci
   - Normal Recipes (7)
-    - Spaghetti Carbonara (Spaghetti) [cookware]
-    - Fettuccine Alfredo (Fettuccine) [tableware]
-    - Lasagna Verde (Lasagna Sheets) [kitchenware]
-    - Tagliatelle alla Bolognese (Tagliatelle) [cookware]
-    - Cacio e Pepe (Spaghetti) [tableware]
-    - Penne all’Arrabbiata (Penne) [kitchenware]
-    - Penne al Pesto (Penne) [cookware]
+    - Spaghetti Carbonara (Spaghetti)
+    - Fettuccine Alfredo (Fettuccine)
+    - Lasagna Verde (Lasagna Sheets)
+    - Tagliatelle alla Bolognese (Tagliatelle)
+    - Cacio e Pepe (Spaghetti)
+    - Penne all’Arrabbiata (Penne)
+    - Penne al Pesto (Penne)
   - Hard Recipes (3)
-    - Lasagna al Forno (Lasagna Sheets) [tableware]
-    - Fettuccine ai Porcini e Tartufo (Fettuccine) [kitchenware]
-    - Tagliatelle ai Funghi Porcini (Tagliatelle) [cookware]
-- Drink Cards (3)
-  - Espresso - Have 5 different prepared and unused pasta ingredients
-  - Limoncello - Have 3 different pasta ingredients in your cooked recipes
-  - Aperol Spritz - Have 2 recipes cooked with exact pasta ingredients
-- Action Cards (5)
-  - Complaint (1)
-  - Discount (2) 
-  - Promotion (2)
-- Customer Cards (9)
-  - Req [2/1] Ord [1] Gain 2 VP  
-  - Req [-/3] Ord [1] Opponent Loses 1VP
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Kitchenware utensil
-  - Req [-/2] Ord [2] Cookware utensil
-  - Req [2/2] Ord [1] Gain +1VP for each customer not from your nationality
-  - Req [1/1] Ord [2] Special: Put back in play up to 2 primary ingredients from the discard pile
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+    - Lasagna al Forno (Lasagna Sheets)
+    - Fettuccine ai Porcini e Tartufo (Fettuccine)
+    - Tagliatelle ai Funghi Porcini (Tagliatelle)
+- Drink Cards (2) 🍷
+  - Espresso - Discard 5 different prepared and unused pasta ingredients
+  - Limoncello - Discard 3 recipes each cooked with different pasta ingredient
+- Customer Cards (8)
+  - 1/1 [cutting board]
+  - 1/2 [cooking pot]
+  - 2/1 [swap]
+  - 2/2 [playing cards]
+  - 2/3 [cutting board]
+  - 3/1 [cooking pot]
+  - 3/2 [swap]
+  - 4/3 [playing cards]
 - Ability Card (1)
 </details>
 
 ## 🇫🇷 Le Petit Paris
 
-- **Special Ability** - Adjacent cooked recipes from a 4-course meal grant **+1 VP**. Recipes cannot
-participate in multiple pairs of the same type.
-- **End Condition** - Cook a complete 4-course meal in order (entrée, appetizer, main, dessert).
+- **Special Ability** - Adjacent recipes in a 4-course meal grant **+1** serve value.
+- **End Condition** - Serve a complete 4-course meal in order (entrée, appetizer, main, dessert).
 - **Tracking** - The recipes cards.
 
 <details>
@@ -95,51 +97,43 @@ participate in multiple pairs of the same type.
     - Cream
 - Recipe Cards (15):
   - Easy Recipes (4)
-    - Soupe à l’Oignon (entrée) [cookware]
-    - Bouillabaisse (entrée) [tableware]
-    - Garbure (entrée) [kitchenware]
-    - Tourin (entrée) [cookware]
+    - Soupe à l’Oignon (entrée)
+    - Bouillabaisse (entrée)
+    - Garbure (entrée)
+    - Tourin (entrée)
   - Normal Recipes (8):
-    - Quiche Lorraine (Appetizer) [tableware]
-    - Escargots de Bourguignon (Appetizer) [kitchenware]
-    - Salade Niçoise (Appetizer) [cookware]
-    - Soufflé au Fromage (Appetizer) [tableware]
-    - Ratatouille (Main) [kitchenware]
-    - Boeuf Bourguignon (Main) [cookware]
-    - Châteaubriand (Main) [tableware]
-    - Croque Monsieur (Main) [kitchenware]
+    - Quiche Lorraine (Appetizer)
+    - Escargots de Bourguignon (Appetizer)
+    - Salade Niçoise (Appetizer)
+    - Soufflé au Fromage (Appetizer)
+    - Ratatouille (Main)
+    - Boeuf Bourguignon (Main)
+    - Châteaubriand (Main)
+    - Croque Monsieur (Main)
   - Hard Recipes (3):	
-    - Pain Perdu (Dessert) [cookware]
-    - Crème Brûlée (Dessert) [tableware]
-    - Tarte Tatin (Dessert) [kitchenware]
-- Drink Cards (3)
-  - Champagne - Have 4 prepared and unused secondary ingredients
-  - Cognac - Have 3 different courses as cooked recipes
-  - Pernod - Have 2 recipes with optional ingredients
-- Action Cards (5)
-  - Complaint (1) 
-  - Discount (2)  
-  - Promotion (2) 
-- Customer Cards (9)
-  - Req [2/1] Ord [1] Opponent Loses 2 VP
-  - Req [-/3] Ord [1] Gain 1 VP
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Cookware utensil
-  - Req [-/2] Ord [2] Tableware utensil
-  - Req [2/2] Ord [1] Gain +1VP for each customer from your nationality
-  - Req [1/1] Ord [2] Special: Put in play 1 optional ingredient from the discard pile
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+    - Pain Perdu (Dessert)
+    - Crème Brûlée (Dessert)
+    - Tarte Tatin (Dessert)
+- Drink Cards (2) 🍷
+  - Champagne - Discard 4 prepared and unused secondary ingredients
+  - Cognac - Discard 3 different courses as cooked recipes
+- Customer Cards (8)
+  - 1/1 [cutting board]
+  - 1/2 [cooking pot]
+  - 2/1 [swap]
+  - 2/2 [playing cards]
+  - 2/3 [cutting board]
+  - 3/1 [cooking pot]
+  - 3/2 [swap]
+  - 4/3 [playing cards]
 - Ability Card (1)
 </details>
 
 ## 🇨🇳 Jin Long
 
-- **Special Ability** - Recipes of the same type grants VP equal to their total amount -1 (i.e. 
-3 **rice** recipes = 2VP).
-- **End Condition** - Cook a **noodles** and a **rice** recipe in the same turn 4 times. At least
-1 of the recipes must be **normal** or **hard** one.
-- **Tracking** - The recipes cards.
+- **Special Ability** - A pair of recipes of the same type grants +1 serve value.
+- **End Condition** - Serve a **noodles** and a **rice** recipe in the same turn 4 times.
+- **Tracking** - The normal/hard recipes cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -153,52 +147,45 @@ participate in multiple pairs of the same type.
     - Mung Bean Sprouts
 - Recipe Cards (16):
   - Easy Recipes (7)
-    - Egg Fried Rice (Rice) [tableware]
-    - Coconut Rice (Rice) [kitchenware]
-    - Congee (Rice) [cookware]
-    - Sticky Rice with Mango (Rice) [tableware]
-    - Cold Sesame Noodles (Noodles) [kitchenware]
-    - Scallion Oil Noodles (Noodles) [cookware]
-    - Zha Jiang Mian (Noodles) [tableware]
+    - Mapo Tofu
+    - Coconut Rice (Rice)
+    - Congee
+    - Sticky Rice with Mango (Rice)
+    - Dry-Fried Green Beans
+    - Kung Pao Chicken
+    - Zha Jiang Mian (Noodles)
   - Normal Recipes (6):
-    - Soup Noodles with Chicken (Noodles) [kitchenware]
-    - Hainanese Chicken Rice (Rice) [cookware]
-    - Claypot Rice (Rice) [tableware]
-    - Yangzhou Fried Rice (Rice) [kitchenware]
-    - Cantonese Beef Chow Fun (Noodles) [cookware]
-    - Sichuan Dan Dan Noodles (Noodles) [tableware]
+    - Soup Noodles with Chicken (Noodles)
+    - Hainanese Chicken Rice (Rice)
+    - Claypot Rice (Rice)
+    - Yangzhou Fried Rice (Rice)
+    - Cantonese Beef Chow Fun (Noodles)
+    - Sichuan Dan Dan Noodles (Noodles)
   - Hard Recipes (3)
-    - Lo Mein (Noodles) [kitchenware]
-    - Peking Duck Fried Rice (Rice) [cookware]
-    - Dragon Beard Noodles (Noodles) [tableware]
-- Drink Cards (3)
-  - Baijiu - Have 3 primary & 3 secondary prepared unused ingredients
-  - Huangjiu - Have 4 easy cooked recipes
-  - Green Tea - Have an easy, normal & hard recipe of the same type
-- Action Cards (5)
-  - Complaint (1) 
-  - Discount (2)  
-  - Promotion (2) 
-- Customer Cards (9)
-  - Req [2/1] Ord [1] Gain 2 VP
-  - Req [-/3] Ord [1] Opponent Discards up to 2 prepared and unused ingredients
-  - Req [3/-] Ord [2] Opponent Loses 1VP
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Tableware utensil
-  - Req [-/2] Ord [2] Kitchenware utensil
-  - Req [2/2] Ord [1] Gain +1VP for each customer not from your nationality
-  - Req [1/1] Ord [2] Special: Put in play an easy recipe for free from the discard pile
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+    - Lo Mein (Noodles)
+    - Peking Duck Fried Rice (Rice)
+    - Dragon Beard Noodles (Noodles)
+- Drink Cards (2) 🍷
+  - Baijiu - Discard 3 primary & 2 secondary prepared unused ingredients
+  - Huangjiu - Discard 4 easy cooked recipes
+- Customer Cards (8)
+  - 1/1 [cutting board]
+  - 1/2 [cooking pot]
+  - 2/1 [swap]
+  - 2/2 [playing cards]
+  - 2/3 [cutting board]
+  - 3/1 [cooking pot]
+  - 3/2 [swap]
+  - 4/3 [playing cards]
 - Ability Card (1)
 </details>
 
 ## 🇮🇳 Raj Mahal
 
-- **Special Ability** - Recipes can include 1 more **secondary** ingredient as **extra** that
-grant **+1 VP**.
-- **End Condition** - Use 4 different **secondary** ingredients as **extra** across your cooked
-**normal** and **hard** recipes.
-- **Tracking** - The **extra** ingredient cards.
+- **Special Ability** - Each pair of different **secondary** ingredients across all served recipes
+grants +1 serve value.
+- **End Condition** - Collect 2 pairs of **secondary** ingredients of the same type.
+- **Tracking** - The **secondary** ingredient cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -218,48 +205,42 @@ grant **+1 VP**.
     - Cashew
 - Recipe Cards (14):
   - Easy Recipes (4):
-    - Jeera Rice [kitchenware]
-    - Spiced Lentil Soup [cookware]
-    - Tamarind Rice [tableware]
-    - Lemon Rice [kitchenware]
+    - Jeera Rice
+    - Spiced Lentil Soup
+    - Tamarind Rice
+    - Lemon Rice
   - Normal Recipes (7):
-    - Biryani [cookware]
-    - Dal Tadka [tableware]
-    - Masoor Dal [kitchenware]
-    - Chana Masala [cookware]
-    - Aloo Gobi [tableware]
-    - Paneer Butter Masala [kitchenware]
-    - Vegetable Korma [cookware]
+    - Biryani
+    - Dal Tadka
+    - Masoor Dal
+    - Chana Masala
+    - Aloo Gobi
+    - Paneer Butter Masala
+    - Vegetable Korma
   - Hard Recipes (3):
-    - Coconut Curry [tableware]
-    - Rogan Josh [kitchenware]
-    - Malai Kofta [cookware]
-- Drink Cards (3)
-  - Feni - Have 4 different prepared and unused secondary ingredients
-  - Lassi - Have 3 recipes cooked with different secondary ingredients
-  - Masala Chai - Have 2 recipes with extra secondary ingredients
-- Action Cards (5)
-  - Complaint (1) 
-  - Discount (2)  
-  - Promotion (2) 
-- Customer Cards (9)
-  - Req [2/1] Ord [1] Opponent Loses 2 VP
-  - Req [-/3] Ord [1] Gain 1 VP
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Kitchenware utensil
-  - Req [-/2] Ord [2] Cookware utensil
-  - Req [2/2] Ord [1] Gain +1VP for each customer from your nationality
-  - Req [1/1] Ord [2] Special: Put back in play 2 secondary ingredients from the discard pile
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+    - Coconut Curry
+    - Rogan Josh
+    - Malai Kofta
+- Drink Cards (2) 🍷
+  - Feni - Discard 4 different prepared and unused secondary ingredients
+  - Lassi - Discard 3 recipes cooked with different secondary ingredients
+- Customer Cards (8)
+  - 1/1 [cutting board]
+  - 1/2 [cooking pot]
+  - 2/1 [swap]
+  - 2/2 [playing cards]
+  - 2/3 [cutting board]
+  - 3/1 [cooking pot]
+  - 3/2 [swap]
+  - 4/3 [playing cards]
 - Ability Card (1)
 </details>
 
 ## 🇺🇸 Liberty Grill
 
-- **Special Ability** - You can cook recipes with twice the amount of ingredients to score bonus
-VP equal to that amount. You don't have to match the recipe requirements for the extra ingredients.
-- **End Condition** - Cook 4 different recipes of the same type (e.g., 4 steaks or 4 burgers).
+- **Special Ability** - Recipes cooked with extra primary or secondary ingredient grant +1 serve 
+value.
+- **End Condition** - Serve 4 different recipes of the same type (e.g., 4 steaks or 4 burgers).
 - **Tracking** - The recipe cards.
 
 <details>
@@ -274,49 +255,43 @@ VP equal to that amount. You don't have to match the recipe requirements for the
     - Mayo
 - Recipe Cards (15):
   - Easy Recipes (4)
-    - Lobster Roll [cookware]
-    - Cornbread [tableware]
-    - Clam Chowder [kitchenware]
-    - Johnny Cakes [cookware]
+    - Lobster Roll
+    - Cornbread
+    - Clam Chowder
+    - Johnny Cakes
   - Normal Recipes (8):
-    - Juicy Lucy (Burger) [tableware]
-    - Classic Cheeseburger (Burger) [kitchenware]
-    - Bacon Cheeseburger (Burger) [cookware]
-    - Green Chile Cheeseburger (Burger) [tableware]
-    - Philly Cheesesteak (Steak) [kitchenware]
-    - Tomahawk Steak (Steak) [cookware]
-    - Porterhouse Steak (Steak) [tableware]
-    - Ribeye Steak (Steak) [kitchenware]
+    - Juicy Lucy (Burger)
+    - Classic Cheeseburger (Burger)
+    - Bacon Cheeseburger (Burger)
+    - Green Chile Cheeseburger (Burger)
+    - Philly Cheesesteak (Steak)
+    - Tomahawk Steak (Steak)
+    - Porterhouse Steak (Steak)
+    - Ribeye Steak (Steak)
   - Hard Recipes (3):
-    - Deep-fried Burger (Burger) [cookware]
-    - T-bone Steak (Steak) [tableware]
-    - Apple Pie [kitchenware]
-- Drink Cards (3)
-  - Coke - Have 8 prepared and unused ingredients
-  - Bourbon - Have 3 cooked recipes of the same type
-  - Root Beer - Have 2 cooked recipes with doubled ingredients
-- Action Cards (5)
-  - Complaint (1) 
-  - Discount (2)  
-  - Promotion (2) 
-- Customer Cards (9)
-  - Req [2/1] Ord [1] Gain 2 VP
-  - Req [-/3] Ord [1] Opponent Loses 1 VP
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients 
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Cookware utensil
-  - Req [-/2] Ord [2] Tableware utensil
-  - Req [2/2] Ord [1] Gain +1VP for each customer not from your nationality
-  - Req [1/1] Ord [2] Special: Gain +1VP if you serve more than 2 recipes
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+    - Deep-fried Burger (Burger)
+    - T-bone Steak (Steak)
+    - Apple Pie
+- Drink Cards (2) 🍷
+  - Coke - Discard 6 prepared and unused ingredients
+  - Bourbon - Discard 3 cooked recipes of the same type
+- Customer Cards (8)
+  - 1/1 [cutting board]
+  - 1/2 [cooking pot]
+  - 2/1 [swap]
+  - 2/2 [playing cards]
+  - 2/3 [cutting board]
+  - 3/1 [cooking pot]
+  - 3/2 [swap]
+  - 4/3 [playing cards]
 - Ability Card (1)
 </details>
 
 ## 🇹🇷 Sultan Saray
 
-- **Special Ability** - During serving, you may swap 1 cooked recipe per opponent with a cooked 
-**kebab** recipe and score from it.
-- **End Condition** - Swap 4 normal or hard recipes from opponents with **kebab** recipes.
+- **Special Ability** - Kebab recipes have +1 serve value to Turkish customers and can serve them
+regardless of their position in the central queue.
+- **End Condition** - Serve 4 Turkish customers from the central queue.
 - **Tracking** - The **kebab** recipe cards.
 
 <details>
@@ -331,49 +306,43 @@ VP equal to that amount. You don't have to match the recipe requirements for the
     - Pomegranate Juice
 - Recipe Cards (16):
   - Easy Recipes (7):
-    - Shish Kebab [tableware]
-    - Adana Kebab [kitchenware]
-    - Iskender Kebab [cookware]
-    - Ciğer Kebab [tableware]
-    - Döner Kebab [kitchenware]
-    - Beyti Kebab [cookware]
-    - Tepsi Kebab [tableware]
+    - Shish Kebab
+    - Adana Kebab
+    - Iskender Kebab
+    - Ciğer Kebab
+    - Döner Kebab
+    - Beyti Kebab
+    - Tepsi Kebab
   - Normal Recipes (6):
-    - Patlican Dolmasi [kitchenware]
-    - Lahmacun [cookware]
-    - Pide [tableware]
-    - Köftesi [kitchenware]
-    - Muhammara [cookware]
-    - Imam Bayildi [tableware]
+    - Patlican Dolmasi
+    - Lahmacun
+    - Pide
+    - Köftesi
+    - Muhammara
+    - Imam Bayildi
   - Hard Recipes (3):
-    - Baklava [kitchenware]
-    - Turkish Delight [cookware]
-    - Kadayif [tableware]
-- Drink Cards (3)
-  - Raki - Have 2 prepared & unused optional ingredients
-  - Salep - Have 3 cooked kebab recipes only
-  - Ayran - Have 3 cooked non-kebab recipes only
-- Action Cards (5)
-  - Complaint (1) 
-  - Discount (2)  
-  - Promotion (2) 
-- Customer Cards (9)
-  - Req [2/1] Ord [1] Opponent Loses 2 VP
-  - Req [-/3] Ord [1] Opponent Discards up to 2 prepared and unused ingredients 
-  - Req [3/-] Ord [2] Gain 1 VP
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Tableware utensil
-  - Req [-/2] Ord [2] Kitchenware utensil
-  - Req [2/2] Ord [1] Gain +1VP for each customer from your nationality
-  - Req [1/1] Ord [2] Special: Gain +1VP from an opponent (the opponent loses 1VP)
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+    - Baklava
+    - Turkish Delight
+    - Kadayif
+- Drink Cards (2) 🍷
+  - Raki - Discard 2 prepared & unused optional ingredients
+  - Salep - Discard 3 cooked kebab recipes
+- Customer Cards (8)
+  - 1/1 [cutting board]
+  - 1/2 [cooking pot]
+  - 2/1 [swap]
+  - 2/2 [playing cards]
+  - 2/3 [cutting board]
+  - 3/1 [cooking pot]
+  - 3/2 [swap]
+  - 4/3 [playing cards]
 - Ability Card (1)
 </details>
 
 ## 🇯🇵 Sakura House
 
-- **Special Ability** - Cooked recipes score VP based on their **secondary** ingredient as follows:
-**+2 VP** with **wasabi** ingredient; **-1 VP** with **ginger** ingredient. 
+- **Special Ability** - Secondary ingredients grant serve value as follows: +2 with wasabi; 
+−1 with ginger.
 - **End Condition** - Cook 2 recipes with **wasabi** and 2 recipes with **ginger** ingredients
 - **Tracking** - The **wasabi**/**ginger** ingredient cards.
 
@@ -392,48 +361,41 @@ VP equal to that amount. You don't have to match the recipe requirements for the
     - Yuzu
 - Recipe Cards (14): 
   - Easy Recipes (4)
-    - Shoyu Ramen [kitchenware]
-    - Onigiri [cookware]
-    - Edamame Salad [tableware]
-    - Tamago Sushi [kitchenware]
+    - Shoyu Ramen
+    - Onigiri
+    - Edamame Salad
+    - Tamago Sushi
   - Normal Recipes (7):
-    - Miso Ramen [cookware]
-    - Tonkotsu Ramen [tableware]
-    - California Roll [kitchenware]
-    - Spicy Tuna Roll [cookware]
-    - Udon Noodles with Tempura [tableware]
-    - Okonomiyaki [kitchenware]
-    - Takoyaki [cookware]
+    - Miso Ramen
+    - Tonkotsu Ramen
+    - California Roll
+    - Spicy Tuna Roll
+    - Udon Noodles with Tempura
+    - Okonomiyaki
+    - Takoyaki
   - Hard Recipes (3):
-    - Unagi Sushi Platter [tableware]
-    - Omurice [kitchenware]
-    - Gyoza [cookware]
-- Drink Cards (3)
-  - Sake - Have 3 prepared and unused secondary ingredients of the same type.
-  - Matcha Tea - Have 1 recipe cooked with a Ginger secondary and an optional ingredient
-  - Umeshu - Have 2 recipes cooked with Umami ingredients
-- Action Cards (5)
-  - Complaint (1) 
-  - Discount (2)  
-  - Promotion (2) 
-- Customer Cards (9)
-  - Req [2/1] Ord [1] Gain 2 VP
-  - Req [-/3] Ord [1] Opponent Loses 1VP
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Kitchenware utensil
-  - Req [-/2] Ord [2] Cookware utensil
-  - Req [2/2] Ord [1] Gain +1VP for each customer from your nationality
-  - Req [1/1] Ord [2] Special: Gain +1VP if you serve more than 1 easy recipe
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+    - Unagi Sushi Platter
+    - Omurice
+    - Gyoza
+- Drink Cards (2) 🍷
+  - Sake - Discard 3 prepared and unused secondary ingredients of the same type.
+  - Matcha Tea - Discard 1 recipe cooked with a Ginger secondary and an optional ingredient
+- Customer Cards (8)
+  - 1/1 [cutting board]
+  - 1/2 [cooking pot]
+  - 2/1 [swap]
+  - 2/2 [playing cards]
+  - 2/3 [cutting board]
+  - 3/1 [cooking pot]
+  - 3/2 [swap]
+  - 4/3 [playing cards]
 - Ability Card (1)
 </details>
 
 ## 🇲🇽 El Nopalito
 
-- **Special Ability** - You can add up to 2 **hot** ingredients on **any** recipe. If the total 
-**hot** ingredients in cooked recipes is more than the total order limit of the customer queue,
-score the difference as bonus VP.
+- **Special Ability** - A player may add up to 2 hot ingredients on any recipe and each pair in a
+recipe grants +1 serve value.
 - **End Condition** - Cook 4 recipes with 2 **hot** ingredients.
 - **Tracking** - The **hot** **secondary** ingredient cards.
 
@@ -452,39 +414,33 @@ score the difference as bonus VP.
     - Sour Cream
 - Recipe Cards (14):
   - Easy Recipes (5):
-    - Quesadilla [cookware]
-    - Taco de Frijoles [tableware]
-    - Chilaquiles Verdes [kitchenware]
-    - Carne Asada Tacos [cookware]
-    - Enchiladas Rojas [tableware]
+    - Quesadilla
+    - Taco de Frijoles
+    - Chilaquiles Verdes
+    - Carne Asada Tacos
+    - Enchiladas Rojas
   - Normal Recipes (6):
-    - Mole Poblano with Rice [kitchenware]
-    - Burrito de Frijoles [cookware]
-    - Chicken Fajitas [tableware]
-    - Tostadas de Pollo [kitchenware]
-    - Pico de Gallo Nachos [cookware]
-    - Taco al Pastor [tableware]
+    - Mole Poblano with Rice
+    - Burrito de Frijoles
+    - Chicken Fajitas
+    - Tostadas de Pollo
+    - Pico de Gallo Nachos
+    - Taco al Pastor
   - Hard Recipes (3):
-    - Pozole Rojo [kitchenware]
-    - Chiles Rellenos [cookware]
-    - Tamales [tableware]
-- Drink Cards (3)
-  - Mezcal - Have 4 prepared and unused hot secondary ingredients
-  - Tequila - Have 4 recipes cooked with at least 1 hot secondary ingredient
-  - Tepache - Have 1 easy recipe cooked with 2 hot ingredients
-- Action Cards (5)
-  - Complaint (1) 
-  - Discount (2)  
-  - Promotion (2) 
-- Customer Cards (9)
-  - Req [2/1] Ord [1] Opponent Loses 2 VP
-  - Req [-/3] Ord [1] Gain 1 VP
-  - Req [3/-] Ord [2] Opponent Discards up to 2 prepared and unused ingredients 
-  - Req [2/1] Ord [2] Have a hand limit increased by 1 each turn until discarded
-  - Req [2/-] Ord [1] Cookware utensil
-  - Req [-/2] Ord [2] Tableware utensil
-  - Req [2/2] Ord [1] Gain +1VP for each customer not from your nationality
-  - Req [1/1] Ord [2] Special: You may discard your hand to gain +2VP
-  - Req [1/-] Ord [1] You can prepare any number of ingredients while cooking until discarded
+    - Pozole Rojo
+    - Chiles Rellenos
+    - Tamales
+- Drink Cards (2) 🍷
+  - Mezcal - Discard 4 prepared and unused hot secondary ingredients
+  - Tequila - Discard 4 recipes cooked with at least 1 hot secondary ingredient
+- Customer Cards (8)
+  - 1/1 [cutting board]
+  - 1/2 [cooking pot]
+  - 2/1 [swap]
+  - 2/2 [playing cards]
+  - 2/3 [cutting board]
+  - 3/1 [cooking pot]
+  - 3/2 [swap]
+  - 4/3 [playing cards]
 - Ability Card (1)
 </details>

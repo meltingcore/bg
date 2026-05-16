@@ -1,5 +1,8 @@
 # Play testing and game data
 
+This file preserves historical playtest results and feedback. Older entries may use previous
+terminology such as Win Condition, roles, events, or personal customer queues.
+
 <!-- TOC -->
 * [Play testing and game data](#play-testing-and-game-data)
   * [Game data:](#game-data)

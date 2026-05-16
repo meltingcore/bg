@@ -12,14 +12,15 @@
 
 ## Description
 
-In this competitive cooking card game, players choose a cuisine deck and race to create delicious
-recipes while using unique abilities and strategies.
-Each deck features primary, secondary, and optional ingredients, recipes of varying difficulty,
-and action cards to work with effects.
-Players take turns to Draw Cards, Prepare Ingredients, Cook Recipes and Score Victory Points.
-Achieve victory by either completing your deck's unique end condition and score the most VP.
+In this competitive cooking card game, each player chooses a restaurant deck representing a national
+cuisine and races to create delicious recipes while using that deck's unique ability and strategy.
+Each deck features primary, secondary, and optional ingredients; recipes of varying difficulty;
+Drink Cards; Customer Cards; and an Ability Card.
+Players prepare ingredients, cook dishes, use drinks, and compete for customers from the shared
+central queue by serving recipes. A player wins by having the most Victory Points (VP) at the end
+of the game.
 
-Collaborate, compete, and cook your way to culinary glory!
+Players compete, cook, and serve their way to culinary glory.
 
 For more details, check:
 
@@ -35,37 +36,37 @@ For more details, check:
 
 The idea behind and the main goal of this project is to create a card game that:
 
-1. Has easy-to-understand rules and mechanics - It should be like 7 Wonders or Small World. You have
-to be able to explain the game in 5-10 minutes. If you have to watch YouTube tutorials to grasp
-the game or the rule book is comparable to a novel, then it should have been a video game where the
-engine can offload you of some of the mechanics. :)
-2. Should be easy to set up - You don't have to have a dedicated room in your house so that
-when you set up the game for 2 hours you can just lock the room for the next session because you 
-don't want to pack the game back in the box for 1 hour and then rinse and repeat next time. 1 game
-session should also not be more than an hour... People do not have that much spare time. :)
-3. Has a good balance between luck and strategy - It should be fun to play even if you are not
+1. Has easy-to-understand rules and mechanics - It should be like 7 Wonders or Small World. The
+game should be teachable in 5-10 minutes. If players have to watch YouTube tutorials to grasp the
+game or the rule book is comparable to a novel, then it should have been a video game where the
+engine can offload some of the mechanics. :)
+2. Should be easy to set up - Players should not need a dedicated room just to preserve a long setup
+between sessions. 1 game session should also not be more than an hour... People do not have that
+much spare time. :)
+3. Has a good balance between luck and strategy - It should be fun to play even if a player is not
 winning. Luck is unavoidable in any kind of game that involves drawing cards or throwing dice, but
-it should not be the only factor that determines the winner. You should be able to make at least
-some choices when playing the game instead of just dumping what you draw.
-4. Should be easy to catch up - Everyone should play until the end and if you are behind, you should
-have a chance to catch up. Nobody likes to play a game where you get killed but the game won't end
-for another 40 min. Nobody wants to play a game where you are 30 points behind from the 3rd round
-on, and it's clear who is going to win, but you have to play for another 40 min to see it happen.
+it should not be the only factor that determines the winner. Players should be able to make at least
+some choices instead of just dumping whatever they draw.
+4. Should be easy to catch up - Everyone should play until the end and players who fall behind
+should have a chance to catch up. Nobody likes a game where elimination happens early but the game
+keeps going for another 40 min. Nobody wants a game where one player is 30 points behind from the
+3rd round on, and it is clear who is going to win, but everyone has to play for another 40 min to
+see it happen.
 5. Should have some kind of asymmetry - It should be fun to play with different decks. There is no
 point of each player doing the same thing. However, we are aiming at relatively light asymmetry. It
 should be like Blood Rage or Scythe, not like Vast (check the YouTube part above :)).
 6. Should be fun to play - After all this should be simple card game that is fun to play. We are not
-going to reinvent the wheel here or disrupt the board game industry. But next time you wander what
-to order for a takeout, you can play this game to decide. :)
+going to reinvent the wheel here or disrupt the board game industry. But the next time a group
+wonders what to order for takeout, this game can decide. :)
 
 ## Online Simulation
 
-You can find the exported `png` deck templates [here](files/templates).
+The exported `png` deck templates are [here](files/templates).
 Play testing is available on [Screentop.gg](https://screentop.gg/@grumpper/food-court).
 
 ## Print And Play
 
-You can download the print-ready PDFs and the sell-sheet from 
+The print-ready PDFs and the sell-sheet are available from
 [here](https://drive.google.com/drive/folders/1M1Kjf4p6zJS5gKm_s8_iyvQW_NOxZtsd?usp=sharing).
 
 The format of the cards should fit standard European bridge size (57x87 mm / 2.25x3.43 inch).
@@ -86,7 +87,7 @@ cards, please let me know so that I can give proper credit.
 - The game is in its play testing phase so the "lore" of the game is not final. Once I stabilize
 the mechanics and the balance of the game, I will work on the theme and the art of the game.
 Recipes will be correctly classified, etc.
-- If you have any feedback, please let me know as I am still developing this. :)
+- Feedback is welcome while the game is still in development. :)
 - Have fun!
 
 ## Discussions

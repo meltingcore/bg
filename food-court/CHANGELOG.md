@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.11.0]
+
+CHANGES:
+
+* Customer flow updated to a competitive shared-queue model: up to two players can compete for each
+  customer, and each competitor must serve recipes equal to the customer's base value.
+* Recipe serve value now determines which player wins a customer competition; attracted customers
+  remain the only end-game scoring source.
+* Cooked recipes are now served to the left or right of a customer card, with one competing player
+  on each side.
+* End Condition Cards renamed to Tips Cards and customer Bonus Value renamed to Tips Value.
+* Customer tips scoring clarified: tips VP is all-or-nothing and requires Tips Cards in tracking
+  equal to or greater than the customer's printed Tips Value.
+* Standalone Utensil Cards removed from the active rules; customer symbols now provide stacking
+  Ingredient Limit, Cooking Limit, Swap Limit, and Hand Limit bonuses.
+* Deck composition updated to 8 Customer Cards and 2 Drink Cards per cuisine deck.
+* Customer symbols updated to Cutting Board, Cooking Pot, Swap, and Playing Cards to match the
+  Ingredient Limit, Cooking Limit, Swap Limit, and Hand Limit bonuses.
+* Recipe deck lists no longer include obsolete Kitchenware, Cookware, or Tableware symbols.
+* Quick reference aligned with the current rules and old mood/personality, event, personal queue,
+  and utensil-card references removed.
+* Drinks updated: now can attract the top card from the customer deck without serving recipes.
+* Optional ingredients are no longer limited to 1 per recipe.
+* Event Cards removed.
+
+BUG FIXES:
+
+* Multiple fixes and clarifications in the rules and quick reference including:
+  * Unified pronoun style to second person (“you/your”).
+  * Standardized terminology: Tips Cards, Tips Value, Drink Cards, and End Condition.
+  * Fixed rule discrepancies.
+
 ## [0.10.1]
 
 BUG FIXES:
