@@ -1,14 +1,16 @@
 # Cuisine Decks
 
-Customer Cards are listed as `base value/tips value [symbol]`.
+Customer Cards have the following `order value/tips value`:
+  - 1/2
+  - 1/3
+  - 2/2
+  - 2/2
+  - 3/1
+  - 3/2
 Nationality matches the deck section where the customer is listed.
 
-Customer symbols provide the following limit bonuses:
-
-- `cutting board` - Ingredient Limit
-- `cooking pot` - Cooking Limit
-- `swap` - Swap Limit
-- `playing cards` - Hand Limit
+Each nationality has a customer effect that applies to all players competing for that customer.
+Deck special abilities apply only to the player using that cuisine deck.
 
 <!-- TOC -->
 * [Cuisine Decks](#cuisine-decks)
@@ -24,24 +26,25 @@ Customer symbols provide the following limit bonuses:
 
 ## 🇮🇹 Piazza Romana
 
-- **Special Ability** - Recipes cooked with **exact** pasta ingredients grant **+1** serve value.
-- **End Condition** - Serve 4 meals with different **exact** pasta ingredients.
-- **Tracking** - The **exact** ingredient cards.
+- **Customer Effect** - If you serve at least 1 dish with an ingredient, gain +1 serve value.
+- **Special Ability** - Dishes served with their exact pasta ingredient gain +1 serve value.
+- **Tips Tracking** - Attract a customer using a dish with an exact pasta ingredient added and use 
+  the pasta ingredient card as a Tips Card.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (26)
-  - Primary (13):
-    - Spaghetti (2)
-    - Fettuccine (2)
-    - Tagliatelle (2)
-    - Lasagna Sheets (2)
-    - Penne (2)
-    - Campanelle (1)
-    - Gnocchi (1)
-    - Ravioli (1)
-  - Secondary (10)
+- Ingredient Cards (16)
+  - Primary / Exact Pasta (8):
+    - Spaghetti
+    - Fettuccine
+    - Tagliatelle
+    - Lasagna Sheets
+    - Penne
+    - Campanelle
+    - Gnocchi
+    - Ravioli
+  - Secondary (5)
   - Optional (3):
     - Basil
     - Balsamic Vinegar
@@ -58,147 +61,130 @@ Customer symbols provide the following limit bonuses:
     - Lasagna Verde (Lasagna Sheets)
     - Tagliatelle alla Bolognese (Tagliatelle)
     - Cacio e Pepe (Spaghetti)
-    - Penne all’Arrabbiata (Penne)
+    - Penne all'Arrabbiata (Penne)
     - Penne al Pesto (Penne)
   - Hard Recipes (3)
     - Lasagna al Forno (Lasagna Sheets)
     - Fettuccine ai Porcini e Tartufo (Fettuccine)
     - Tagliatelle ai Funghi Porcini (Tagliatelle)
-- Drink Cards (2) 🍷
-  - Espresso - Discard 5 different prepared and unused pasta ingredients
-  - Limoncello - Discard 3 recipes each cooked with different pasta ingredient
-- Customer Cards (8)
-  - 1/1 [cutting board]
-  - 1/2 [cooking pot]
-  - 2/1 [swap]
-  - 2/2 [playing cards]
-  - 2/3 [cutting board]
-  - 3/1 [cooking pot]
-  - 3/2 [swap]
-  - 4/3 [playing cards]
+- Drink Cards (3)
+  - Cappuccino
+  - Aperol Spritz
+  - Limoncello
+- Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇫🇷 Le Petit Paris
 
-- **Special Ability** - Adjacent recipes in a 4-course meal grant **+1** serve value.
-- **End Condition** - Serve a complete 4-course meal in order (entrée, appetizer, main, dessert).
-- **Tracking** - The recipes cards.
+- **Customer Effect** - If you serve at least 1 dish with all of its ingredients added, gain +1 
+  serve value.
+- **Special Ability** - Each adjacent course pair served in the same meal gains +1 serve value:
+  entrée + appetizer, appetizer + main, or main + dessert.
+- **Tips Tracking** - Attract a customer using dish in order: entrée, appetizer, main & dessert and
+  use the recipe card as a Tips Card. Tips cards must be different pasta types.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (25)
-  - Primary (12)
-  - Secondary (10)
+- Ingredient Cards (15)
+  - Primary (7)
+  - Secondary (5)
   - Optional (3):
     - Herbs de Provence
     - Butter
     - Cream
 - Recipe Cards (15):
   - Easy Recipes (4)
-    - Soupe à l’Oignon (entrée)
+    - Soupe à l'Oignon (entrée)
     - Bouillabaisse (entrée)
     - Garbure (entrée)
     - Tourin (entrée)
   - Normal Recipes (8):
-    - Quiche Lorraine (Appetizer)
-    - Escargots de Bourguignon (Appetizer)
-    - Salade Niçoise (Appetizer)
-    - Soufflé au Fromage (Appetizer)
-    - Ratatouille (Main)
-    - Boeuf Bourguignon (Main)
-    - Châteaubriand (Main)
-    - Croque Monsieur (Main)
-  - Hard Recipes (3):	
-    - Pain Perdu (Dessert)
-    - Crème Brûlée (Dessert)
-    - Tarte Tatin (Dessert)
-- Drink Cards (2) 🍷
-  - Champagne - Discard 4 prepared and unused secondary ingredients
-  - Cognac - Discard 3 different courses as cooked recipes
-- Customer Cards (8)
-  - 1/1 [cutting board]
-  - 1/2 [cooking pot]
-  - 2/1 [swap]
-  - 2/2 [playing cards]
-  - 2/3 [cutting board]
-  - 3/1 [cooking pot]
-  - 3/2 [swap]
-  - 4/3 [playing cards]
+    - Quiche Lorraine (appetizer)
+    - Escargots de Bourguignon (appetizer)
+    - Salade Niçoise (appetizer)
+    - Soufflé au Fromage (appetizer)
+    - Ratatouille (main)
+    - Boeuf Bourguignon (main)
+    - Châteaubriand (main)
+    - Croque Monsieur (main)
+  - Hard Recipes (3):
+    - Pain Perdu (dessert)
+    - Crème Brûlée (dessert)
+    - Tarte Tatin (dessert)
+- Drink Cards (3)
+  - Champagne
+  - Cognac
+  - Pernod
+- Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇨🇳 Jin Long
 
-- **Special Ability** - A pair of recipes of the same type grants +1 serve value.
-- **End Condition** - Serve a **noodles** and a **rice** recipe in the same turn 4 times.
-- **Tracking** - The normal/hard recipes cards.
+- **Customer Effect** - Easy recipes gain +1 serve value.
+- **Special Ability** - Each pair of dishes of the same type served in the same meal gains +1
+  serve value.
+- **Tips Tracking** - Attract a customer serving a pair of rice and noodles dishes in the same meal
+  and use one of the recipe cards as a Tips Card.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (24)  
-  - Primary (12):
-  - Secondary (9)
+- Ingredient Cards (15)
+  - Primary (7)
+  - Secondary (5)
   - Optional (3):
     - Shiitake Mushrooms
     - Soy Sauce
     - Mung Bean Sprouts
-- Recipe Cards (16):
-  - Easy Recipes (7)
+- Recipe Cards (15):
+  - Easy Recipes (6)
     - Mapo Tofu
-    - Coconut Rice (Rice)
     - Congee
-    - Sticky Rice with Mango (Rice)
+    - Sticky Rice with Mango (rice)
     - Dry-Fried Green Beans
     - Kung Pao Chicken
-    - Zha Jiang Mian (Noodles)
+    - Zha Jiang Mian (noodles)
   - Normal Recipes (6):
-    - Soup Noodles with Chicken (Noodles)
-    - Hainanese Chicken Rice (Rice)
-    - Claypot Rice (Rice)
-    - Yangzhou Fried Rice (Rice)
-    - Cantonese Beef Chow Fun (Noodles)
-    - Sichuan Dan Dan Noodles (Noodles)
+    - Soup Noodles with Chicken (noodles)
+    - Hainanese Chicken Rice (rice)
+    - Claypot Rice (rice)
+    - Yangzhou Fried Rice (rice)
+    - Cantonese Beef Chow Fun (noodles)
+    - Sichuan Dan Dan Noodles (noodles)
   - Hard Recipes (3)
-    - Lo Mein (Noodles)
-    - Peking Duck Fried Rice (Rice)
-    - Dragon Beard Noodles (Noodles)
-- Drink Cards (2) 🍷
-  - Baijiu - Discard 3 primary & 2 secondary prepared unused ingredients
-  - Huangjiu - Discard 4 easy cooked recipes
-- Customer Cards (8)
-  - 1/1 [cutting board]
-  - 1/2 [cooking pot]
-  - 2/1 [swap]
-  - 2/2 [playing cards]
-  - 2/3 [cutting board]
-  - 3/1 [cooking pot]
-  - 3/2 [swap]
-  - 4/3 [playing cards]
+    - Lo Mein
+    - Peking Duck Fried Rice (rice)
+    - Dragon Beard Noodles (noodles)
+- Drink Cards (3)
+  - Baijiu
+  - Huangjiu
+  - Green Tea
+- Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇮🇳 Raj Mahal
 
-- **Special Ability** - Each pair of different **secondary** ingredients across all served recipes
-grants +1 serve value.
-- **End Condition** - Collect 2 pairs of **secondary** ingredients of the same type.
-- **Tracking** - The **secondary** ingredient cards.
+- **Customer Effect** - Secondary Ingredients add +1 additional serve value.
+- **Special Ability** - Each pair of Secondary Ingredients used in served dishes gains +1 serve
+  value.
+- **Tips Tracking** - Attract a customer using a dish with a secondary ingredient added and use the
+  secondary ingredient card as a Tips Card. Tips cards must be different spices.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (26):
-  - Primary (11)
-  - Secondary (12):
+- Ingredient Cards (16):
+  - Primary (6)
+  - Secondary (7):
     - Cumin (2)
     - Saffron (2)
-    - Tamarind (2)
-    - Coriander (2)
-    - Cinnamon (2)
-    - Cardamom (2)
+    - Coriander
+    - Cinnamon
+    - Cardamom
   - Optional (3):
     - Ghee
     - Coconut Milk
@@ -221,34 +207,29 @@ grants +1 serve value.
     - Coconut Curry
     - Rogan Josh
     - Malai Kofta
-- Drink Cards (2) 🍷
-  - Feni - Discard 4 different prepared and unused secondary ingredients
-  - Lassi - Discard 3 recipes cooked with different secondary ingredients
-- Customer Cards (8)
-  - 1/1 [cutting board]
-  - 1/2 [cooking pot]
-  - 2/1 [swap]
-  - 2/2 [playing cards]
-  - 2/3 [cutting board]
-  - 3/1 [cooking pot]
-  - 3/2 [swap]
-  - 4/3 [playing cards]
+- Drink Cards (3)
+  - Feni
+  - Lassi
+  - Masala Chai
+- Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇺🇸 Liberty Grill
 
-- **Special Ability** - Recipes cooked with extra primary or secondary ingredient grant +1 serve 
-value.
-- **End Condition** - Serve 4 different recipes of the same type (e.g., 4 steaks or 4 burgers).
-- **Tracking** - The recipe cards.
+- **Customer Effect** - Easy recipes gain +1 serve value for each non-easy recipe served with them
+  instead of just once.
+- **Special Ability** - 1 extra Primary or Secondary Ingredient can be added to a dish above its 
+  requirements to gain +1 serve value.
+- **Tips Tracking** - Attract a customer using a burger or steak dish and use the recipe card as 
+  a Tips Card. Tips cards must be of the same type (burger or steak).
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (25)
-  - Primary (12)
-  - Secondary (10)
+- Ingredient Cards (15)
+  - Primary (6)
+  - Secondary (6)
   - Optional (3):
     - Ketchup
     - Mustard
@@ -260,59 +241,52 @@ value.
     - Clam Chowder
     - Johnny Cakes
   - Normal Recipes (8):
-    - Juicy Lucy (Burger)
-    - Classic Cheeseburger (Burger)
-    - Bacon Cheeseburger (Burger)
-    - Green Chile Cheeseburger (Burger)
-    - Philly Cheesesteak (Steak)
-    - Tomahawk Steak (Steak)
-    - Porterhouse Steak (Steak)
-    - Ribeye Steak (Steak)
+    - Juicy Lucy (burger)
+    - Classic Cheeseburger (burger)
+    - Bacon Cheeseburger (burger)
+    - Green Chile Cheeseburger (burger)
+    - Philly Cheesesteak (steak)
+    - Tomahawk Steak (steak)
+    - Porterhouse Steak (steak)
+    - Ribeye Steak (steak)
   - Hard Recipes (3):
-    - Deep-fried Burger (Burger)
-    - T-bone Steak (Steak)
+    - Deep-fried Burger (burger)
+    - T-bone Steak (steak)
     - Apple Pie
-- Drink Cards (2) 🍷
-  - Coke - Discard 6 prepared and unused ingredients
-  - Bourbon - Discard 3 cooked recipes of the same type
-- Customer Cards (8)
-  - 1/1 [cutting board]
-  - 1/2 [cooking pot]
-  - 2/1 [swap]
-  - 2/2 [playing cards]
-  - 2/3 [cutting board]
-  - 3/1 [cooking pot]
-  - 3/2 [swap]
-  - 4/3 [playing cards]
+- Drink Cards (3)
+  - Coke
+  - Bourbon
+  - Root Beer
+- Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇹🇷 Sultan Saray
 
-- **Special Ability** - Kebab recipes have +1 serve value to Turkish customers and can serve them
-regardless of their position in the central queue.
-- **End Condition** - Serve 4 Turkish customers from the central queue.
-- **Tracking** - The **kebab** recipe cards.
+- **Customer Effect** - Gain +1 serve value if you have fewer Tips Cards in tracking than at least
+  one opponent.
+- **Special Ability** - Kebab dishes gain +1 serve value for each non-kebab dish also served with
+  them.
+- **Tips Tracking** - Attract a customer using a kebab dish and use the recipe card as a Tips Card.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (24):
-  - Primary (12)
-  - Secondary (9)
+- Ingredient Cards (15):
+  - Primary (6)
+  - Secondary (6)
   - Optional (3):
     - Sumac
     - Paprika
     - Pomegranate Juice
-- Recipe Cards (16):
-  - Easy Recipes (7):
-    - Shish Kebab
-    - Adana Kebab
-    - Iskender Kebab
-    - Ciğer Kebab
-    - Döner Kebab
-    - Beyti Kebab
-    - Tepsi Kebab
+- Recipe Cards (15):
+  - Easy Recipes (6):
+    - Shish Kebab (kebab)
+    - Adana Kebab (kebab)
+    - Iskender Kebab (kebab)
+    - Ciğer Kebab (kebab)
+    - Döner Kebab (kebab)
+    - Beyti Kebab (kebab)
   - Normal Recipes (6):
     - Patlican Dolmasi
     - Lahmacun
@@ -324,42 +298,35 @@ regardless of their position in the central queue.
     - Baklava
     - Turkish Delight
     - Kadayif
-- Drink Cards (2) 🍷
-  - Raki - Discard 2 prepared & unused optional ingredients
-  - Salep - Discard 3 cooked kebab recipes
-- Customer Cards (8)
-  - 1/1 [cutting board]
-  - 1/2 [cooking pot]
-  - 2/1 [swap]
-  - 2/2 [playing cards]
-  - 2/3 [cutting board]
-  - 3/1 [cooking pot]
-  - 3/2 [swap]
-  - 4/3 [playing cards]
+- Drink Cards (3)
+  - Raki
+  - Salep
+  - Ayran
+- Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇯🇵 Sakura House
 
-- **Special Ability** - Secondary ingredients grant serve value as follows: +2 with wasabi; 
-−1 with ginger.
-- **End Condition** - Cook 2 recipes with **wasabi** and 2 recipes with **ginger** ingredients
-- **Tracking** - The **wasabi**/**ginger** ingredient cards.
+- **Customer Effect** - Hard recipes gain +1 serve value.
+- **Special Ability** - Pair of different secondary ingredients used in a meal gains +1 serve value.
+- **Tips Tracking** - Attract a customer using a dish with a secondary ingredient added and use the
+  ingredient card as Tips Cards. Tips cards can be 2 of the same type maximum.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (26):  
-  - Primary (11)
-  - Secondary (12):
-    - Umami (5)
+- Ingredient Cards (16):
+  - Primary (6)
+  - Secondary (7):
+    - Umami (2)
     - Wasabi (3)
-    - Ginger (4)
+    - Ginger (3)
   - Optional (3):
     - Nori
     - Sesame Oil
     - Yuzu
-- Recipe Cards (14): 
+- Recipe Cards (14):
   - Easy Recipes (4)
     - Shoyu Ramen
     - Onigiri
@@ -377,37 +344,31 @@ regardless of their position in the central queue.
     - Unagi Sushi Platter
     - Omurice
     - Gyoza
-- Drink Cards (2) 🍷
-  - Sake - Discard 3 prepared and unused secondary ingredients of the same type.
-  - Matcha Tea - Discard 1 recipe cooked with a Ginger secondary and an optional ingredient
-- Customer Cards (8)
-  - 1/1 [cutting board]
-  - 1/2 [cooking pot]
-  - 2/1 [swap]
-  - 2/2 [playing cards]
-  - 2/3 [cutting board]
-  - 3/1 [cooking pot]
-  - 3/2 [swap]
-  - 4/3 [playing cards]
+- Drink Cards (3)
+  - Sake
+  - Matcha Tea
+  - Umeshu
+- Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇲🇽 El Nopalito
 
-- **Special Ability** - A player may add up to 2 hot ingredients on any recipe and each pair in a
-recipe grants +1 serve value.
-- **End Condition** - Cook 4 recipes with 2 **hot** ingredients.
-- **Tracking** - The **hot** **secondary** ingredient cards.
+- **Customer Effect** - Normal recipes gain +1 serve value.
+- **Special Ability** - Hot secondary ingredients gain +1 serve value and up to 2 can be added to 
+  dishes in a meal.
+- **Tips Tracking** - Attract a customer using a dish with a hot secondary ingredient added and use 
+  the ingredient card as a Tips Card.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (26):
-  - Primary (11)
-  - Secondary (12):
-    - Cayenne Pepper (Hot) (4)
-    - Jalapeño (Hot) (4)
-    - Avocado (4)
+- Ingredient Cards (16):
+  - Primary (5)
+  - Secondary (8):
+    - Cayenne Pepper (hot) (3)
+    - Jalapeño (hot) (3)
+    - Avocado (2)
   - Optional (3):
     - Lime
     - Cilantro
@@ -430,17 +391,10 @@ recipe grants +1 serve value.
     - Pozole Rojo
     - Chiles Rellenos
     - Tamales
-- Drink Cards (2) 🍷
-  - Mezcal - Discard 4 prepared and unused hot secondary ingredients
-  - Tequila - Discard 4 recipes cooked with at least 1 hot secondary ingredient
-- Customer Cards (8)
-  - 1/1 [cutting board]
-  - 1/2 [cooking pot]
-  - 2/1 [swap]
-  - 2/2 [playing cards]
-  - 2/3 [cutting board]
-  - 3/1 [cooking pot]
-  - 3/2 [swap]
-  - 4/3 [playing cards]
+- Drink Cards (3)
+  - Mezcal
+  - Tequila
+  - Tepache
+- Customer Cards (6)
 - Ability Card (1)
 </details>

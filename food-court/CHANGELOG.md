@@ -1,5 +1,43 @@
 # Changelog
 
+## [0.12.0]
+
+CHANGES:
+
+* Customer flow redesigned into a simultaneous meal contest: each round has 1 active customer, and
+  all players may serve meals to that customer at the same time.
+* Customer Order Value now defines both how many recipes each player may serve to that customer and
+  how much base VP the customer gives at end game.
+* The previous prepare/cook/serve pipeline was removed. Ingredients are now optional recipe
+  additions used as serve value boosts.
+* Ingredient Limit, Cooking Limit, Swap Limit, Customer Limit, customer sides, and unresolved
+  multi-turn customer competitions were removed.
+* Recipe values are standardized: easy recipes are worth 1, normal recipes are worth 2, and hard
+  recipes are worth 3. Easy recipes gain +1 if served with at least 1 non-easy recipe.
+* Ingredient values are standardized: Primary and Secondary Ingredients add +1, and Optional
+  Ingredients add +2.
+* Recipe requirements are modifed as follows: easy recipes cannot have ingredients added, normal 
+  recipes can have 1 ingredient added and hard recipes can have 2. Any recipe may also take 1 
+  Optional Ingredient.
+* Ties now use highest-unique-value resolution. If the highest value is tied, those tied players
+  are ignored and the next highest value wins. If all competing values are tied, the customer is
+  discarded.
+* Drink Cards are now generic reactive tie-breakers that add +1 after reveal when the player is
+  tied with another player.
+* Customer symbols were replaced with deck-agnostic nationality effects printed on Customer Cards.
+* Matching nationality no longer gives a separate +1 bonus.
+* Deck abilities were updated around meal composition and optional ingredient additions.
+* Deck ingredient counts were reduced to roughly 15 per cuisine deck while keeping recipe 
+  distributions close to the existing deck identities.
+* Quick reference and README were aligned with the simultaneous contest rules.
+
+BUG FIXES:
+
+* Multiple fixes and clarifications in the rules and quick reference including:
+  * Standardized terminology: Tips Cards, Tips Value, Drink Cards, and End Condition.
+  * Removed obsolete references to prepared ingredients, cooked dishes, and customer limit bonuses.
+  * Fixed rule discrepancies caused by the shift from customer queues to active-customer contests.
+
 ## [0.11.0]
 
 CHANGES:
@@ -28,7 +66,7 @@ CHANGES:
 BUG FIXES:
 
 * Multiple fixes and clarifications in the rules and quick reference including:
-  * Unified pronoun style to second person (“you/your”).
+  * Unified pronoun style to second person ("you/your").
   * Standardized terminology: Tips Cards, Tips Value, Drink Cards, and End Condition.
   * Fixed rule discrepancies.
 
