@@ -53,9 +53,10 @@ Tips Cards can increase customer scoring and can end the game early.
 
 Each round is a simultaneous contest for the active customer.
 
-1. **Refresh Hands** - Each player may discard up to 3 cards, then draw up to their hand limit.
-   The default hand limit is 6 unless a card effect changes it. If the draw pile is empty, the
-   player reshuffles their discard pile as a new draw pile and continues drawing.
+1. **Refresh Hands** - Each player may discard up to 1 card, then draw up to 3 cards without
+   exceeding their hand limit. The default hand limit is 6 unless a card effect changes it. If the
+   draw pile is empty, the player reshuffles their discard pile as a new draw pile and continues
+   drawing.
 2. **Serve Dishes** - Each player may secretly serve a meal of a number of Recipe Cards from their 
    hand as cooked dishes up to the active customer's Order Value.
 3. **Add Ingredients** - Players may add Ingredient Cards to a recipe for bonus points based
@@ -77,10 +78,8 @@ A player's serve value is the total value of their served meal.
 Recipe values:
 
 - Easy recipe: 1 serve value.
-- Normal recipe: 2 serve value.
-- Hard recipe: 3 serve value.
-
-Easy recipes gain +1 serve value if at least 1 non-easy recipe is served with them.
+- Normal recipe: 1 serve value.
+- Hard recipe: 1 serve value.
 
 Added ingredients:
 
@@ -130,9 +129,8 @@ China wins with 5.
 ### Recipe Cards
 
 Recipe cards represent dishes players serve to compete for customers. Each recipe has a difficulty:
-easy, normal, or hard and ingredient requirements. Difficulty determines the recipe's base serve 
-value. Ingredient requirements determine how many and what type of ingredients can be added to that 
-recipe.
+easy, normal, or hard. All recipes have the same base serve value of 1. Difficulty determines how
+many normal ingredients can be added to that recipe.
 
 Some recipes also have deck-specific symbols, such as pasta type, meal course, food type (rice, 
 noodles, kebab, etc.). These tags are used by deck abilities or for Tips tracking.
@@ -181,12 +179,12 @@ customer.
 Customer effects are printed on customer cards and apply to all players.
 
 - **Italian Customer** - If you serve at least 1 dish with an ingredient, gain +1 serve value.
-- **French Customer** - If you serve at least 1 dish with all of its ingredients filled, gain +1 
-  serve value.
+- **French Customer** - If you serve at least 1 dish with all of its normal ingredient slots
+  filled, gain +1 serve value.
 - **Chinese Customer** - Easy recipes gain +1 serve value.
 - **Indian Customer** - Secondary Ingredients add +1 serve value.
 - **American Customer** - Easy recipes gain +1 serve value for each non-easy recipe served with
-  them instead of just once.
+  them.
 - **Turkish Customer** - Gain +1 serve value if you have fewer Tips Cards in tracking than at
   least one opponent.
 - **Japanese Customer** - Hard recipes gain +1 serve value.

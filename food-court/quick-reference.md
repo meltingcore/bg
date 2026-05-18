@@ -24,7 +24,7 @@ Score the most victory points (VP) from attracted customers.
 
 ## Round Flow
 
-1. Each player may discard up to 3 cards, then draw up to hand limit. Default hand limit is 6.
+1. Each player may discard up to 1 card, then draw up to 3 cards, up to hand limit 6.
 2. Each player may serve 0 or more recipes face down, up to the active customer's Order Value.
 3. Players may add ingredients face down to served recipes.
 4. Reveal all served cards at the same time.
@@ -43,9 +43,8 @@ Score the most victory points (VP) from attracted customers.
 Recipes:
 
 - Easy: 1 value.
-- Normal: 2 value.
-- Hard: 3 value.
-- Easy recipes gain +1 if non-easy recipes are served with them.
+- Normal: 1 value.
+- Hard: 1 value.
 
 Ingredient slots:
 
@@ -68,7 +67,7 @@ Then apply customer effects, deck abilities, and played drinks.
 - French: If you serve a dish with its complete ingredients, gain +1.
 - Chinese: Easy recipes gain +1.
 - Indian: Secondary Ingredients add +1 additional value.
-- American: Easy recipes gain +1 for each non-easy recipe served with them instead of just once.
+- American: Easy recipes gain +1 for each non-easy recipe served with them.
 - Turkish: Gain +1 if you have fewer Tips Cards in tracking than at least one opponent.
 - Japanese: Hard recipes gain +1.
 - Mexican: Normal recipes gain +1.

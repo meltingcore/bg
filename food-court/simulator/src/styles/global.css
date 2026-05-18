@@ -167,6 +167,8 @@ h3 {
 
 .setup-panel,
 .board-panel,
+.player-switch-panel,
+.public-summary-panel,
 .player-panel,
 .log-panel,
 .rule-panel,
@@ -338,11 +340,83 @@ label {
   font-weight: 900;
 }
 
+.player-switch-panel,
+.public-summary-panel {
+  margin-bottom: 18px;
+  padding: 14px;
+}
+
+.player-switch-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.player-switch-panel h2,
+.player-switch-panel p {
+  margin: 0;
+}
+
+.player-switch-panel p {
+  margin-top: 4px;
+  color: #59645f;
+  font-weight: 700;
+}
+
+.player-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.player-switch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.public-player-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.public-player {
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, #d8cab7);
+  border-left: 6px solid var(--accent);
+  border-radius: 8px;
+  background: #fffdf8;
+  padding: 12px;
+}
+
+.public-player.active {
+  outline: 3px solid color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+.public-player strong,
+.public-player span {
+  display: block;
+}
+
+.public-player > span {
+  margin-top: 4px;
+  color: #59645f;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
 .players-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(560px, 1fr));
   gap: 16px;
   align-items: start;
+}
+
+.single-player-grid {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .player-panel {
@@ -938,7 +1012,8 @@ summary span {
 
   .app-header,
   .player-header,
-  .section-header {
+  .section-header,
+  .player-switch-panel {
     align-items: stretch;
     flex-direction: column;
   }

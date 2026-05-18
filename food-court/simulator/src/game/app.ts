@@ -47,7 +47,7 @@ const cardSubtype = (card: CardInstance) => {
 
 const cardType = (card: CardInstance) => card.kind[0].toUpperCase() + card.kind.slice(1);
 
-const recipeValue = (difficulty?: string) => (difficulty === 'easy' ? 1 : difficulty === 'normal' ? 2 : difficulty === 'hard' ? 3 : 0);
+const recipeValue = (difficulty?: string) => (difficulty === 'easy' || difficulty === 'normal' || difficulty === 'hard' ? 1 : 0);
 
 const cardRail = (card: CardInstance) => {
   if (card.kind === 'customer') {
@@ -133,7 +133,7 @@ const cardBody = (card: CardInstance) => {
 const customerEffect = (deckId: CuisineId) => {
   const effects: Record<CuisineId, string> = {
     italy: 'If you serve at least 1 dish with an ingredient, gain +1.',
-    france: 'If you serve at least 1 dish with all of its ingredients filled, gain +1.',
+    france: 'If you serve at least 1 dish with all normal ingredient slots filled, gain +1.',
     china: 'Easy recipes gain +1.',
     india: 'Secondary Ingredients add +1 additional serve value.',
     usa: 'Easy recipes gain +1 for each non-easy recipe served with them.',
@@ -151,7 +151,7 @@ const renderBreakdown = (breakdown: PlayerBreakdown) => {
   return `
     <span><b>${breakdown.total}</b> total</span>
     <span>${breakdown.recipe} recipe</span>
-    <span>${breakdown.easyCombo} easy combo</span>
+    <span>${breakdown.easyCombo} easy bonus</span>
     <span>${breakdown.ingredients} ingredients</span>
     <span>${breakdown.customer} customer</span>
     <span>${breakdown.ability} ability</span>
@@ -224,7 +224,7 @@ const renderHandCard = (state: GameState, player: PlayerState, card: CardInstanc
       ${renderHandActions(state, player, card)}
       ${
         state.phase === 'serve'
-          ? `<button class="ghost" data-action="discard" data-player="${player.id}" data-card="${card.id}" ${player.refreshDiscards >= 3 ? 'disabled' : ''}>Discard</button>`
+          ? `<button class="ghost" data-action="discard" data-player="${player.id}" data-card="${card.id}" ${player.refreshDiscards >= 1 || player.refreshDraws > 0 ? 'disabled' : ''}>Discard</button>`
           : ''
       }
     </div>
@@ -275,7 +275,69 @@ const renderCustomerPanel = (state: GameState) => {
   `;
 };
 
-const renderPlayer = (state: GameState, player: PlayerState) => {
+const renderPlayerSwitcher = (state: GameState, activePlayerId: string, historyDepth: number) => `
+  <section class="player-switch-panel">
+    <div>
+      <h2>Current Player</h2>
+      <p>Only the selected player's hand and station are shown.</p>
+    </div>
+    <div class="player-switch-actions">
+      <div class="player-switcher">
+        ${state.players
+          .map(
+            (player) => `
+              <button
+                class="${player.id === activePlayerId ? 'primary' : ''}"
+                data-action="select-player"
+                data-player="${player.id}"
+              >
+                ${player.flag} ${escapeHtml(player.name)}
+              </button>
+            `,
+          )
+          .join('')}
+      </div>
+      <button class="undo-button" data-action="undo" ${historyDepth > 0 ? '' : 'disabled'}>Undo Action</button>
+    </div>
+  </section>
+`;
+
+const renderPublicPlayerSummary = (state: GameState, activePlayerId: string) => `
+  <section class="public-summary-panel">
+    <header class="section-header">
+      <div>
+        <h2>Public Table</h2>
+        <p>Opponent hands and card names stay hidden.</p>
+      </div>
+    </header>
+    <div class="public-player-grid">
+      ${state.players
+        .map((player) => {
+          const breakdown = roundBreakdowns(state).find((item) => item.playerId === player.id);
+          const revealed = state.phase !== 'serve';
+          return `
+            <article class="public-player ${player.id === activePlayerId ? 'active' : ''}" style="--accent:${player.color}">
+              <strong>${player.flag} ${escapeHtml(player.name)}</strong>
+              <span>${escapeHtml(player.deckName)}</span>
+              <div class="pill-row">
+                <span>${scoreFor(player)} VP</span>
+                <span>${player.tips.length}/4 Tips</span>
+                <span>${player.hand.length} Hand</span>
+                <span>${player.meal.length}/${state.activeCustomer?.order ?? 0} Recipes</span>
+                <span>${revealed && breakdown?.competing ? `${breakdown.total} Value` : revealed ? 'No Meal' : 'Value Hidden'}</span>
+                ${revealed && breakdown?.competing ? `<span>${breakdown.customer} Customer</span>` : ''}
+                ${revealed && breakdown?.competing ? `<span>${breakdown.ability} Ability</span>` : ''}
+                ${revealed && breakdown?.tied ? '<span>Tied</span>' : ''}
+              </div>
+            </article>
+          `;
+        })
+        .join('')}
+    </div>
+  </section>
+`;
+
+const renderPlayer = (state: GameState, player: PlayerState, historyDepth: number) => {
   const breakdown = roundBreakdowns(state).find((item) => item.playerId === player.id);
   return `
     <section class="player-panel" style="--accent:${player.color}">
@@ -292,14 +354,16 @@ const renderPlayer = (state: GameState, player: PlayerState) => {
 
       <div class="limit-row">
         <span><b>${player.hand.length}/6</b> Hand</span>
-        <span><b>${player.refreshDiscards}/3</b> Refresh discards</span>
+        <span><b>${player.refreshDiscards}/1</b> Refresh discards</span>
+        <span><b>${player.refreshDraws}/3</b> Refresh draws</span>
         <span><b>${player.meal.length}/${state.activeCustomer?.order ?? 0}</b> Recipes</span>
         <span><b>${player.drawPile.length}</b> Draw</span>
         <span><b>${player.discard.length}</b> Discard</span>
       </div>
 
       <div class="player-actions">
-        <button data-action="refresh" data-player="${player.id}" ${state.phase === 'serve' ? '' : 'disabled'}>Draw To 6</button>
+        <button data-action="refresh" data-player="${player.id}" ${state.phase === 'serve' && player.refreshDraws < 3 && player.hand.length < 6 ? '' : 'disabled'}>Draw Up To 3</button>
+        <button class="undo-button" data-action="undo" ${historyDepth > 0 ? '' : 'disabled'}>Undo Action</button>
       </div>
 
       <details open>
@@ -383,14 +447,29 @@ const renderDeckReference = () => `
   </section>
 `;
 
-const renderLog = (state: GameState) => `
+const redactPrivateLog = (entry: string, state: GameState, activePlayerId: string) => {
+  const hiddenPlayer = state.players.find((player) => player.id !== activePlayerId && entry.startsWith(`${player.name} `));
+  if (!hiddenPlayer) return entry;
+
+  if (entry.includes(' discarded ')) return `${hiddenPlayer.name} discarded a card during refresh.`;
+  if (entry.includes(' staged ')) return `${hiddenPlayer.name} staged a recipe.`;
+  if (entry.includes(' added ')) return `${hiddenPlayer.name} added an ingredient to a recipe.`;
+  if (entry.includes(' returned ')) return `${hiddenPlayer.name} returned a card to hand.`;
+  if (entry.includes(' played ')) return `${hiddenPlayer.name} played a Drink Card for +1 serve value.`;
+  if (entry.includes(' tracked ')) return `${hiddenPlayer.name} tracked a Tips Card.`;
+  return entry;
+};
+
+const renderLog = (state: GameState, activePlayerId: string) => `
   <section class="log-panel">
     <h2>Playtest Log</h2>
-    <ol>${state.log.slice(0, 18).map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ol>
+    <ol>${state.log.slice(0, 18).map((item) => `<li>${escapeHtml(redactPrivateLog(item, state, activePlayerId))}</li>`).join('')}</ol>
   </section>
 `;
 
-const render = (root: HTMLElement, state: GameState | null, historyDepth = 0) => {
+const render = (root: HTMLElement, state: GameState | null, activePlayerId: string | null, historyDepth = 0) => {
+  const activePlayer = state?.players.find((player) => player.id === activePlayerId) ?? state?.players[0] ?? null;
+
   root.innerHTML = `
     <main>
       <header class="app-header">
@@ -409,7 +488,9 @@ const render = (root: HTMLElement, state: GameState | null, historyDepth = 0) =>
 
       ${renderSetup(state)}
       ${state ? renderCustomerPanel(state) : ''}
-      ${state ? `<section class="players-grid">${state.players.map((player) => renderPlayer(state, player)).join('')}</section>${renderLog(state)}` : ''}
+      ${state && activePlayer ? renderPlayerSwitcher(state, activePlayer.id, historyDepth) : ''}
+      ${state && activePlayer ? renderPublicPlayerSummary(state, activePlayer.id) : ''}
+      ${state && activePlayer ? `<section class="players-grid single-player-grid">${renderPlayer(state, activePlayer, historyDepth)}</section>${renderLog(state, activePlayer.id)}` : ''}
       <section class="rule-panel"><h2>Modeled Rule Assumptions</h2><ul>${RULE_NOTES.map((note) => `<li>${escapeHtml(note)}</li>`).join('')}</ul></section>
       ${renderDeckReference()}
     </main>
@@ -441,6 +522,7 @@ const syncDeckSelectors = (root: HTMLElement) => {
 export const mountFoodCourtApp = (root: HTMLElement) => {
   let state: GameState | null = createGame(DECKS, defaultDecks, Math.floor(Date.now() / 1000));
   let history: GameState[] = [];
+  let activePlayerId: string | null = state.players[0]?.id ?? null;
 
   const remember = () => {
     if (!state) return;
@@ -448,7 +530,12 @@ export const mountFoodCourtApp = (root: HTMLElement) => {
     if (history.length > maxHistory) history = history.slice(history.length - maxHistory);
   };
 
-  const renderCurrent = () => render(root, state, history.length);
+  const renderCurrent = () => {
+    if (state && !state.players.some((player) => player.id === activePlayerId)) {
+      activePlayerId = state.players[0]?.id ?? null;
+    }
+    render(root, state, activePlayerId, history.length);
+  };
 
   const mutate = (action: () => void) => {
     remember();
@@ -471,6 +558,7 @@ export const mountFoodCourtApp = (root: HTMLElement) => {
     if (action === 'new-game') {
       const seed = Number(root.querySelector<HTMLInputElement>('#seed')?.value || Date.now());
       state = createGame(DECKS, selectedDeckIds(root), seed);
+      activePlayerId = state.players[0]?.id ?? null;
       history = [];
       renderCurrent();
       return;
@@ -487,6 +575,12 @@ export const mountFoodCourtApp = (root: HTMLElement) => {
     const player = target.dataset.player;
     const card = target.dataset.card;
     const dish = target.dataset.dish;
+
+    if (action === 'select-player' && player) {
+      activePlayerId = player;
+      renderCurrent();
+      return;
+    }
 
     if (action === 'refresh' && player) mutate(() => refreshHand(state as GameState, player));
     if (action === 'discard' && player && card) mutate(() => discardFromHand(state as GameState, player, card));

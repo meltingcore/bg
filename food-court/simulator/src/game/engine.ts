@@ -50,6 +50,7 @@ export interface PlayerState {
   scoring: CardInstance[];
   tips: CardInstance[];
   refreshDiscards: number;
+  refreshDraws: number;
 }
 
 export interface PlayerBreakdown {
@@ -78,12 +79,14 @@ export interface GameState {
 }
 
 const HAND_LIMIT = 6;
+const REFRESH_DRAW_LIMIT = 3;
+const REFRESH_DISCARD_LIMIT = 1;
 const MAX_TIPS = 4;
 
 const RECIPE_VALUES: Record<RecipeDifficulty, number> = {
   easy: 1,
-  normal: 2,
-  hard: 3,
+  normal: 1,
+  hard: 1,
 };
 
 const NORMAL_SLOTS: Record<RecipeDifficulty, number> = {
@@ -94,6 +97,8 @@ const NORMAL_SLOTS: Record<RecipeDifficulty, number> = {
 
 export const RULE_NOTES = [
   'One active customer is contested by all players each round.',
+  'Refresh allows discarding up to 1 card, then drawing up to 3 cards without exceeding hand limit 6.',
+  'All recipes have base serve value 1; difficulty controls normal ingredient slots.',
   'Recipes are served from hand up to the active customer Order Value.',
   'Primary and Secondary Ingredients fill normal slots for +1 each.',
   'Optional Ingredients use the optional slot for +2.',
@@ -118,6 +123,42 @@ const shuffle = <T>(items: T[], seed: number): T[] => {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
+};
+
+const shuffleCustomers = (customers: CardInstance[], seed: number): CardInstance[] => {
+  const rng = makeRng(seed);
+  const grouped = customers.reduce<Record<string, CardInstance[]>>((acc, customer) => {
+    acc[customer.deckId] = acc[customer.deckId] ?? [];
+    acc[customer.deckId].push(customer);
+    return acc;
+  }, {});
+
+  for (const [deckId, group] of Object.entries(grouped)) {
+    grouped[deckId] = shuffle(group, seed + deckId.length);
+  }
+
+  const result: CardInstance[] = [];
+  let previousDeckId: string | null = null;
+
+  while (Object.values(grouped).some((group) => group.length > 0)) {
+    const candidates = Object.entries(grouped)
+      .filter(([, group]) => group.length > 0)
+      .filter(([deckId]) => deckId !== previousDeckId);
+    const available = candidates.length > 0 ? candidates : Object.entries(grouped).filter(([, group]) => group.length > 0);
+    const totalRemaining = available.reduce((sum, [, group]) => sum + group.length, 0);
+    let pick = Math.floor(rng() * totalRemaining);
+    const [chosenDeckId, chosenGroup] =
+      available.find(([, group]) => {
+        pick -= group.length;
+        return pick < 0;
+      }) ?? available[0];
+    const customer = chosenGroup.shift();
+    if (!customer) continue;
+    result.push(customer);
+    previousDeckId = chosenDeckId;
+  }
+
+  return result;
 };
 
 let nextRuntimeId = 1;
@@ -187,6 +228,7 @@ const buildCustomers = (deck: DeckDefinition) =>
   }));
 
 const draw = (player: PlayerState, count: number, log: string[]) => {
+  let drawn = 0;
   for (let i = 0; i < count; i += 1) {
     if (player.drawPile.length === 0 && player.discard.length > 0) {
       player.drawPile = shuffle(player.discard, player.hand.length + player.meal.length + Date.now());
@@ -194,9 +236,11 @@ const draw = (player: PlayerState, count: number, log: string[]) => {
       log.unshift(`${player.name} reshuffled discard into draw pile.`);
     }
     const card = player.drawPile.shift();
-    if (!card) return;
+    if (!card) return drawn;
     player.hand.push(card);
+    drawn += 1;
   }
+  return drawn;
 };
 
 const revealNextCustomer = (state: GameState) => {
@@ -229,6 +273,7 @@ export const createGame = (decks: DeckDefinition[], selectedDeckIds: CuisineId[]
       scoring: [],
       tips: [],
       refreshDiscards: 0,
+      refreshDraws: 0,
     };
     draw(player, HAND_LIMIT, log);
     return player;
@@ -240,7 +285,7 @@ export const createGame = (decks: DeckDefinition[], selectedDeckIds: CuisineId[]
     phase: 'serve',
     players,
     activeCustomer: null,
-    customerDeck: shuffle(selectedDecks.flatMap(buildCustomers), seed + 101),
+    customerDeck: shuffleCustomers(selectedDecks.flatMap(buildCustomers), seed + 101),
     customerDiscard: [],
     log,
   };
@@ -275,16 +320,22 @@ export const scoreFor = (player: PlayerState) =>
 export const refreshHand = (state: GameState, playerId: string) => {
   const player = findPlayer(state, playerId);
   if (!player || state.phase !== 'serve') return;
-  const count = Math.max(0, HAND_LIMIT - player.hand.length);
-  draw(player, count, state.log);
-  state.log.unshift(`${player.name} drew ${count} card${count === 1 ? '' : 's'} up to ${HAND_LIMIT}.`);
+  const remainingRefreshDraws = Math.max(0, REFRESH_DRAW_LIMIT - player.refreshDraws);
+  const count = Math.min(remainingRefreshDraws, Math.max(0, HAND_LIMIT - player.hand.length));
+  const drawn = draw(player, count, state.log);
+  player.refreshDraws += drawn;
+  state.log.unshift(`${player.name} drew ${drawn} card${drawn === 1 ? '' : 's'} during refresh.`);
 };
 
 export const discardFromHand = (state: GameState, playerId: string, cardIdToDiscard: string) => {
   const player = findPlayer(state, playerId);
   if (!player || state.phase !== 'serve') return;
-  if (player.refreshDiscards >= 3) {
-    state.log.unshift(`${player.name} has already discarded 3 cards this round.`);
+  if (player.refreshDiscards >= REFRESH_DISCARD_LIMIT) {
+    state.log.unshift(`${player.name} has already discarded ${REFRESH_DISCARD_LIMIT} card this round.`);
+    return;
+  }
+  if (player.refreshDraws > 0) {
+    state.log.unshift(`${player.name} cannot discard during refresh after drawing.`);
     return;
   }
   const card = moveCard(player.hand, cardIdToDiscard);
@@ -385,10 +436,7 @@ const recipeBaseBreakdown = (players: PlayerState[], player: PlayerState, custom
     const difficulty = dish.recipe.difficulty ?? 'easy';
     recipe += RECIPE_VALUES[difficulty];
 
-    if (difficulty === 'easy') {
-      const combo = customer.deckId === 'usa' ? nonEasyCount : Math.min(nonEasyCount, 1);
-      easyCombo += combo;
-    }
+    if (customer.deckId === 'usa' && difficulty === 'easy') easyCombo += nonEasyCount;
 
     if (customer.deckId === 'china' && difficulty === 'easy') customerBonus += 1;
     if (customer.deckId === 'japan' && difficulty === 'hard') customerBonus += 1;
@@ -412,7 +460,8 @@ const recipeBaseBreakdown = (players: PlayerState[], player: PlayerState, custom
   if (customer.deckId === 'france') {
     const fullDish = player.meal.some((dish) => {
       const difficulty = dish.recipe.difficulty ?? 'easy';
-      return regularIngredientCount(dish) >= NORMAL_SLOTS[difficulty] && optionalIngredientCount(dish) >= 1;
+      const requiredSlots = NORMAL_SLOTS[difficulty];
+      return requiredSlots > 0 && regularIngredientCount(dish) >= requiredSlots;
     });
     if (fullDish) {
       customerBonus += 1;
@@ -648,6 +697,7 @@ const cleanupRound = (state: GameState) => {
     player.meal = [];
     player.drinkPlayed = null;
     player.refreshDiscards = 0;
+    player.refreshDraws = 0;
   }
 };
 

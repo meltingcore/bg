@@ -217,8 +217,7 @@ Deck special abilities apply only to the player using that cuisine deck.
 
 ## 🇺🇸 Liberty Grill
 
-- **Customer Effect** - Easy recipes gain +1 serve value for each non-easy recipe served with them
-  instead of just once.
+- **Customer Effect** - Easy recipes gain +1 serve value for each non-easy recipe served with them.
 - **Special Ability** - 1 extra Primary or Secondary Ingredient can be added to a dish above its 
   requirements to gain +1 serve value.
 - **Tips Tracking** - Attract a customer using a burger or steak dish and use the recipe card as 

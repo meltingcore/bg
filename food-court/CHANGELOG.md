@@ -12,8 +12,8 @@ CHANGES:
   additions used as serve value boosts.
 * Ingredient Limit, Cooking Limit, Swap Limit, Customer Limit, customer sides, and unresolved
   multi-turn customer competitions were removed.
-* Recipe values are standardized: easy recipes are worth 1, normal recipes are worth 2, and hard
-  recipes are worth 3. Easy recipes gain +1 if served with at least 1 non-easy recipe.
+* All recipes now have base serve value 1. Recipe difficulty now differentiates ingredient
+  capacity rather than automatic base value.
 * Ingredient values are standardized: Primary and Secondary Ingredients add +1, and Optional
   Ingredients add +2.
 * Recipe requirements are modifed as follows: easy recipes cannot have ingredients added, normal 
@@ -22,6 +22,8 @@ CHANGES:
 * Ties now use highest-unique-value resolution. If the highest value is tied, those tied players
   are ignored and the next highest value wins. If all competing values are tied, the customer is
   discarded.
+* Refresh now allows each player to discard up to 1 card, then draw up to 3 cards without
+  exceeding hand limit 6.
 * Drink Cards are now generic reactive tie-breakers that add +1 after reveal when the player is
   tied with another player.
 * Customer symbols were replaced with deck-agnostic nationality effects printed on Customer Cards.
