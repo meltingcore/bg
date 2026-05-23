@@ -7,11 +7,13 @@
   * [Setup](#setup)
   * [Round Structure](#round-structure)
   * [Serve Value](#serve-value)
-  * [Ties And Drink Cards](#ties-and-drink-cards)
+  * [Drink Cards](#drink-cards)
+  * [Ties](#ties)
   * [Card Types](#card-types)
     * [Recipe Cards](#recipe-cards)
     * [Ingredient Cards](#ingredient-cards)
-    * [Drink Cards](#drink-cards)
+    * [Flavor Cards](#flavor-cards)
+    * [Drink Cards](#drink-cards-1)
     * [Customer Cards](#customer-cards)
     * [Ability Card](#ability-card)
   * [Customer Effects](#customer-effects)
@@ -53,58 +55,65 @@ Tips Cards can increase customer scoring and can end the game early.
 
 Each round is a simultaneous contest for the active customer.
 
-1. **Refresh Hands** - Each player may discard up to 1 card, then draw up to 3 cards without
-   exceeding their hand limit. The default hand limit is 6 unless a card effect changes it. If the
-   draw pile is empty, the player reshuffles their discard pile as a new draw pile and continues
-   drawing.
+1. **Refresh Hands** - Each player may discard up to 1 card, then draw up to 3 cards if below their
+   hand limit and without exceeding it. The default hand limit is 6 unless a card effect changes it. 
+   If the draw pile is empty, the player reshuffles their discard pile as a new draw pile and 
+   continues drawing.
 2. **Serve Dishes** - Each player may secretly serve a meal of a number of Recipe Cards from their 
    hand as cooked dishes up to the active customer's Order Value.
-3. **Add Ingredients** - Players may add Ingredient Cards to a recipe for bonus points based
-   on its ingredient requirements. Ingredients are optional boosts, not required costs.
-4. **Reveal** - All players reveal their served dishes at the same time.
+3. **Add Cards** - Players may add extra ingredients and flavor to recipes for bonus points.
+   Each Recipe Card states whether it can take 0, 1, or 2 Ingredient Cards. A player who served at 
+   least 1 Recipe Card may also add up to 1 Drink Card face down with their meal.
+4. **Reveal** - All players reveal their served cards at the same time.
 5. **Calculate Serve Value** - Each player totals the serve value of their revealed meal.
-6. **Play Drink Cards** - Tied players may play Drink Cards to try to break ties.
-7. **Determine Winner** - The highest unique serve value wins the customer. See
-   [Ties And Drink Cards](#ties-and-drink-cards).
-8. **Cleanup** - Served dishes, added ingredients, and played drinks are discarded. The winner
+6. **Determine Winner** - The highest unique serve value wins the customer. See also [Ties](#ties).
+7. **Cleanup** - Served dishes, added cards, and played drinks are discarded. The winner
    moves the attracted customer to their scoring pile and may move 1 eligible Tips Card used in
    that contest into tracking.
-9. **Reveal Next Customer** - Reveal the next customer from the customer deck, if possible.
+8. **Reveal Next Customer** - Reveal the next customer from the customer deck, if possible.
 
 ## Serve Value
 
-A player's serve value is the total value of their served meal.
+A player's serve value is the total value of their served meal, formed by Recipe Cards, added
+Ingredient Cards, added Flavor Cards, valid Drink Cards, customer effects, and the player's deck
+ability.
 
-Recipe values:
+A Recipe Card may have 0, 1, or 2 Ingredient Cards added as extra to it. Each Recipe Card may also
+have 1 Flavor Card added to it.
 
-- Easy recipe: 1 serve value.
-- Normal recipe: 1 serve value.
-- Hard recipe: 1 serve value.
+Served dish difficulty:
 
-Added ingredients:
+- Easy dish: 0 Ingredient Cards added.
+- Normal dish: 1 Ingredient Card added.
+- Hard dish: 2 Ingredient Cards added.
 
-- Easy recipes have 0 normal ingredient slots.
-- Normal recipes have 1 normal ingredient slot.
-- Hard recipes have 2 normal ingredient slots.
-- Any recipe may also have 1 Optional Ingredient added to it.
+Card values:
 
-Ingredient values:
-
+- Recipe Card: +1 serve value.
 - Primary Ingredient: +1 serve value.
 - Secondary Ingredient: +1 serve value.
-- Optional Ingredient: +2 serve value.
+- Flavor Card: +2 serve value.
+- Drink Card: +3 serve value if its requirement is met.
 
-A recipe cannot use more ingredients than its slots allow unless a card ability says otherwise.
-After recipe and ingredient values are counted, apply the active customer's effect and each player's
-deck ability.
+A Recipe Card cannot have more Ingredient Cards added than its printed number unless a card ability
+says otherwise. Flavor Cards do not count when determining whether a served dish is easy, normal,
+or hard.
+After recipe, ingredient, flavor, and valid drink values are counted, apply the active customer's
+effect and each player's deck ability.
 
-## Ties And Drink Cards
+## Drink Cards
 
-After meals are revealed, any player whose serve value is tied with another player's serve value may
-play 1 Drink Card from hand. A played Drink Card adds +1 serve value for that contest and is then
-discarded.
+When serving, each player who served at least 1 Recipe Card may include up to 1 Drink Card face
+down with their meal. Drink Cards are revealed with the rest of the meal. If the Drink Card's
+requirement is met, it adds +3 serve value for that contest.
 
-After any Drink Cards are played, determine the winner:
+Drink Card requirements check only the revealed Recipe Cards, Ingredient Cards, and Flavor Cards.
+If a revealed Drink Card's requirement is not met, it adds no serve value and is still discarded
+during cleanup.
+
+## Ties
+
+After serve values are calculated, determine the winner:
 
 - The highest unique serve value wins the customer.
 - If the highest serve value is tied, all players tied at that value are ignored.
@@ -128,30 +137,32 @@ China wins with 5.
 
 ### Recipe Cards
 
-Recipe cards represent dishes players serve to compete for customers. Each recipe has a difficulty:
-easy, normal, or hard. All recipes have the same base serve value of 1. Difficulty determines how
-many normal ingredients can be added to that recipe.
+Recipe Cards represent dishes players serve to compete for customers. Each Recipe Card states
+whether it can take 0, 1, or 2 extra Ingredient Cards. All recipes have the same base serve value
+of 1. A served dish's difficulty is determined by how many Ingredient Cards were added to it:
+0 for easy, 1 for normal, or 2 for hard.
 
 Some recipes also have deck-specific symbols, such as pasta type, meal course, food type (rice, 
 noodles, kebab, etc.). These tags are used by deck abilities or for Tips tracking.
 
 ### Ingredient Cards
 
-Ingredient cards are optional boosts that can be added to recipes when serving a dish.
+Ingredient Cards are extra additions to recipes. Each Ingredient Card added to a recipe gives that
+dish +1 serve value and increases its difficulty.
 
-- **Primary Ingredients** add +1 serve value.
-- **Secondary Ingredients** add +1 serve value.
-- **Optional Ingredients** add +2 serve value and may be added to any recipe.
+Some decks care about specific Ingredient Cards. For example, the Italian deck cares about exact
+pasta Ingredient Cards, while the Japanese deck cares about ginger, umami, and wasabi.
 
-Some decks care about specific ingredients. For example, the Italian deck cares about
-exact pasta ingredients, while the Japanese deck cares about ginger, umami, and wasabi.
+### Flavor Cards
+
+Flavor Cards are extra boosts that can be added to any recipe when serving a dish. Each recipe may
+have up to 1 Flavor Card. Flavor Cards add +2 serve value and do not change dish difficulty.
 
 ### Drink Cards
 
-Drink Cards are reactive tie-breakers. After reveal, if a player is tied with at least one other
-player, they may play 1 Drink Card from hand to add +1 serve value for that contest.
-
-Drink Cards are discarded after use.
+Drink Cards are conditional boosts played face down with a meal. A player may play up to 1 Drink
+Card if they served at least 1 Recipe Card. A revealed Drink Card adds +3 serve value for that
+contest if its requirement is met.
 
 ### Customer Cards
 
@@ -159,8 +170,8 @@ Customer cards represent diners in the food court. Each customer has:
 
 - **Order Value** - The maximum number of recipes each player may serve to that customer. It is
   also the customer's base VP at end game.
-- **Tips Value** - Extra VP gained only if the player has at least that many Tips Cards in
-  tracking.
+- **Tips Value** - Extra VP gained at end game only if the player has at least that many Tips Cards 
+  in tracking.
 - **Nationality** - Determines the customer's printed effect.
 - **Effect** - A deck-agnostic bonus that applies to every player competing for that customer.
 
@@ -171,24 +182,22 @@ Each deck includes an Ability Card that outlines:
 - The deck's unique special ability.
 - How to track Tips Cards.
 
-Special abilities are evaluated only from the recipes and ingredients served to the active
-customer.
+Special abilities are evaluated only from the Recipe Cards, Ingredient Cards, and Flavor Cards
+served to the active customer.
 
 ## Customer Effects
 
 Customer effects are printed on customer cards and apply to all players.
 
-- **Italian Customer** - If you serve at least 1 dish with an ingredient, gain +1 serve value.
-- **French Customer** - If you serve at least 1 dish with all of its normal ingredient slots
-  filled, gain +1 serve value.
-- **Chinese Customer** - Easy recipes gain +1 serve value.
-- **Indian Customer** - Secondary Ingredients add +1 serve value.
-- **American Customer** - Easy recipes gain +1 serve value for each non-easy recipe served with
-  them.
+- **Italian Customer** - Players hand limit is increased to 8 when refreshing.
+- **French Customer** - Players can discard their hand and draw new one when refreshing.
+- **Chinese Customer** - Easy dishes gain +1 serve value.
+- **Indian Customer** - A pair of added ingredients add +1 serve value.
+- **American Customer** - Gain +1 serve value for each pair of cards in hand.
 - **Turkish Customer** - Gain +1 serve value if you have fewer Tips Cards in tracking than at
   least one opponent.
-- **Japanese Customer** - Hard recipes gain +1 serve value.
-- **Mexican Customer** - Normal recipes gain +1 serve value.
+- **Japanese Customer** - Hard dishes gain +1 serve value.
+- **Mexican Customer** - Normal dishes gain +1 serve value.
 
 ## Winning the Game
 
@@ -207,11 +216,13 @@ Tiebreaker: the player who most recently cooked a real-life dish wins.
 
 - **Active Customer** - The face-up customer all players may compete for this round.
 - **Attracted Customer** - A customer a player has won and moved to their scoring pile.
-- **Order Value** - The number on a customer showing both the recipe capacity for that contest and
+- **Order Value** - The number on a customer showing both the recipe limit for that contest and
   the customer's base VP.
-- **Dish** - A served Recipe Card, with any ingredients added to it.
+- **Dish** - A served Recipe Card, with any Ingredient Cards or Flavor Card added to it.
+- **Dish Difficulty** - Whether a served dish is easy, normal, or hard, based on whether it has 0,
+  1, or 2 Ingredient Cards added to it.
 - **Meal** - All dishes a player serves to the active customer in one contest.
-- **Serve Value** - The total value of a player's revealed meal after recipe values, ingredient
-  values, customer effects, deck abilities, and drinks are counted.
+- **Serve Value** - The total value of a player's revealed meal after recipe, ingredient, flavor,
+  customer effect, deck ability, and drink values are counted.
 - **Tips Cards** - Deck-specific cards moved into tracking after winning a customer. Tips Cards can
   increase customer scoring and end the game.

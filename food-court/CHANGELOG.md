@@ -8,29 +8,31 @@ CHANGES:
   all players may serve meals to that customer at the same time.
 * Customer Order Value now defines both how many recipes each player may serve to that customer and
   how much base VP the customer gives at end game.
-* The previous prepare/cook/serve pipeline was removed. Ingredients are now optional recipe
-  additions used as serve value boosts.
+* The previous prepare/cook/serve pipeline was removed. Ingredient Cards and Flavor Cards are now
+  recipe additions used as serve value boosts.
 * Ingredient Limit, Cooking Limit, Swap Limit, Customer Limit, customer sides, and unresolved
   multi-turn customer competitions were removed.
-* All recipes now have base serve value 1. Recipe difficulty now differentiates ingredient
-  capacity rather than automatic base value.
-* Ingredient values are standardized: Primary and Secondary Ingredients add +1, and Optional
-  Ingredients add +2.
-* Recipe requirements are modifed as follows: easy recipes cannot have ingredients added, normal 
-  recipes can have 1 ingredient added and hard recipes can have 2. Any recipe may also take 1 
-  Optional Ingredient.
+* All recipes now have base serve value 1. Recipe cards now differ by how many extra Ingredient
+  Cards can be added to them rather than automatic base value.
+* Card values are standardized: Primary and Secondary Ingredients add +1, and Flavor Cards add +2.
+* Served dish difficulty is now dynamic: a dish is easy with 0 extra Ingredient Cards added, normal
+  with 1, and hard with 2. Any recipe may also take 1 Flavor Card, which does not count for
+  difficulty.
 * Ties now use highest-unique-value resolution. If the highest value is tied, those tied players
   are ignored and the next highest value wins. If all competing values are tied, the customer is
   discarded.
 * Refresh now allows each player to discard up to 1 card, then draw up to 3 cards without
   exceeding hand limit 6.
-* Drink Cards are now generic reactive tie-breakers that add +1 after reveal when the player is
-  tied with another player.
+* Drink Cards are now conditional meal cards played face down with the rest of the meal. Each
+  player who served at least 1 Recipe Card may include up to 1 Drink Card, which adds +3 serve
+  value if its requirement is met when revealed.
+* Drink Card requirements were made cuisine-specific for each deck.
 * Customer symbols were replaced with deck-agnostic nationality effects printed on Customer Cards.
 * Matching nationality no longer gives a separate +1 bonus.
-* Deck abilities were updated around meal composition and optional ingredient additions.
-* Deck ingredient counts were reduced to roughly 15 per cuisine deck while keeping recipe 
-  distributions close to the existing deck identities.
+* Customer effects were updated around refresh options, hand size, dish difficulty, and hand count.
+* Deck abilities were updated around meal composition and Flavor Card additions.
+* Deck Ingredient and Flavor Card counts were reduced to roughly 15 per cuisine deck while keeping
+  recipe distributions close to the existing deck identities.
 * Quick reference and README were aligned with the simultaneous contest rules.
 
 BUG FIXES:

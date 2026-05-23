@@ -14,8 +14,8 @@
 
 In this competitive cooking card game, each player chooses a restaurant deck representing a national
 cuisine and races to win customers while using that deck's unique ability and strategy. Each deck
-features primary, secondary, and optional ingredients; recipes of varying difficulty; Drink Cards;
-Customer Cards; and an Ability Card.
+features Primary and Secondary Ingredients, Flavor Cards, recipes that can take different numbers
+of extra Ingredient Cards, Drink Cards, Customer Cards, and an Ability Card.
 Each round, one customer appears in the middle and all players may serve a meal of cooked dishes at
 the same time. Players reveal together, compare serve values, and the highest unique value attracts 
 the customer. A player wins by having the most Victory Points (VP) from attracted customers at the 

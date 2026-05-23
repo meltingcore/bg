@@ -12,6 +12,12 @@ Nationality matches the deck section where the customer is listed.
 Each nationality has a customer effect that applies to all players competing for that customer.
 Deck special abilities apply only to the player using that cuisine deck.
 
+Recipe lists group cards by how many extra Ingredient Cards may be added to them. A served dish's
+difficulty is based on how many Ingredient Cards were actually added to it.
+
+Drink Cards list their requirement. A revealed Drink Card adds +3 serve value if its requirement
+is met.
+
 <!-- TOC -->
 * [Cuisine Decks](#cuisine-decks)
   * [🇮🇹 Piazza Romana](#-piazza-romana)
@@ -26,15 +32,15 @@ Deck special abilities apply only to the player using that cuisine deck.
 
 ## 🇮🇹 Piazza Romana
 
-- **Customer Effect** - If you serve at least 1 dish with an ingredient, gain +1 serve value.
-- **Special Ability** - Dishes served with their exact pasta ingredient gain +1 serve value.
-- **Tips Tracking** - Attract a customer using a dish with an exact pasta ingredient added and use 
-  the pasta ingredient card as a Tips Card.
+- **Customer Effect** - Players hand limit is increased to 8 when refreshing.
+- **Special Ability** - Dishes served with their exact pasta Ingredient Card gain +1 serve value.
+- **Tips Tracking** - Attract a customer using a dish with an exact pasta Ingredient Card added
+  and use the pasta Ingredient Card as a Tips Card.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (16)
+- Ingredient And Flavor Cards (16)
   - Primary / Exact Pasta (8):
     - Spaghetti
     - Fettuccine
@@ -45,17 +51,17 @@ Deck special abilities apply only to the player using that cuisine deck.
     - Gnocchi
     - Ravioli
   - Secondary (5)
-  - Optional (3):
+  - Flavor Cards (3):
     - Basil
     - Balsamic Vinegar
     - Parmigiano
 - Recipe Cards (14):
-  - Easy Recipes (4)
+  - Recipes without extra ingredients (4)
     - Farfalle al Salmone
     - Fusilli Caprese
     - Rigatoni alla Gricia
     - Cannelloni Ricotta e Spinaci
-  - Normal Recipes (7)
+  - Recipes with 1 extra ingredient (7)
     - Spaghetti Carbonara (Spaghetti)
     - Fettuccine Alfredo (Fettuccine)
     - Lasagna Verde (Lasagna Sheets)
@@ -63,22 +69,21 @@ Deck special abilities apply only to the player using that cuisine deck.
     - Cacio e Pepe (Spaghetti)
     - Penne all'Arrabbiata (Penne)
     - Penne al Pesto (Penne)
-  - Hard Recipes (3)
+  - Recipes with 2 extra ingredients (3)
     - Lasagna al Forno (Lasagna Sheets)
     - Fettuccine ai Porcini e Tartufo (Fettuccine)
     - Tagliatelle ai Funghi Porcini (Tagliatelle)
 - Drink Cards (3)
-  - Cappuccino
-  - Aperol Spritz
-  - Limoncello
+  - Cappuccino - Play if you served 1 dish with its exact pasta ingredient added.
+  - Aperol Spritz - Play if you served at least 2 normal dishes.
+  - Limoncello - Play if you served dishes with at least 2 different pasta types.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇫🇷 Le Petit Paris
 
-- **Customer Effect** - If you serve at least 1 dish with all of its ingredients added, gain +1 
-  serve value.
+- **Customer Effect** - Players can discard their hand and draw new one when refreshing.
 - **Special Ability** - Each adjacent course pair served in the same meal gains +1 serve value:
   entrée + appetizer, appetizer + main, or main + dessert.
 - **Tips Tracking** - Attract a customer using dish in order: entrée, appetizer, main & dessert and
@@ -87,20 +92,20 @@ Deck special abilities apply only to the player using that cuisine deck.
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (15)
+- Ingredient And Flavor Cards (15)
   - Primary (7)
   - Secondary (5)
-  - Optional (3):
+  - Flavor Cards (3):
     - Herbs de Provence
     - Butter
     - Cream
 - Recipe Cards (15):
-  - Easy Recipes (4)
+  - Recipes without extra ingredients (4)
     - Soupe à l'Oignon (entrée)
     - Bouillabaisse (entrée)
     - Garbure (entrée)
     - Tourin (entrée)
-  - Normal Recipes (8):
+  - Recipes with 1 extra ingredient (8):
     - Quiche Lorraine (appetizer)
     - Escargots de Bourguignon (appetizer)
     - Salade Niçoise (appetizer)
@@ -109,21 +114,21 @@ Deck special abilities apply only to the player using that cuisine deck.
     - Boeuf Bourguignon (main)
     - Châteaubriand (main)
     - Croque Monsieur (main)
-  - Hard Recipes (3):
+  - Recipes with 2 extra ingredients (3):
     - Pain Perdu (dessert)
     - Crème Brûlée (dessert)
     - Tarte Tatin (dessert)
 - Drink Cards (3)
-  - Champagne
-  - Cognac
-  - Pernod
+  - Champagne - Play if you served an adjacent course pair.
+  - Cognac - Play if you served a hard recipe.
+  - Pernod - Play if every served dish is from a different course.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇨🇳 Jin Long
 
-- **Customer Effect** - Easy recipes gain +1 serve value.
+- **Customer Effect** - Easy dishes gain +1 serve value.
 - **Special Ability** - Each pair of dishes of the same type served in the same meal gains +1
   serve value.
 - **Tips Tracking** - Attract a customer serving a pair of rice and noodles dishes in the same meal
@@ -132,52 +137,52 @@ Deck special abilities apply only to the player using that cuisine deck.
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (15)
+- Ingredient And Flavor Cards (15)
   - Primary (7)
   - Secondary (5)
-  - Optional (3):
+  - Flavor Cards (3):
     - Shiitake Mushrooms
     - Soy Sauce
     - Mung Bean Sprouts
 - Recipe Cards (15):
-  - Easy Recipes (6)
+  - Recipes without extra ingredients (6)
     - Mapo Tofu
     - Congee
     - Sticky Rice with Mango (rice)
     - Dry-Fried Green Beans
     - Kung Pao Chicken
     - Zha Jiang Mian (noodles)
-  - Normal Recipes (6):
+  - Recipes with 1 extra ingredient (6):
     - Soup Noodles with Chicken (noodles)
     - Hainanese Chicken Rice (rice)
     - Claypot Rice (rice)
     - Yangzhou Fried Rice (rice)
     - Cantonese Beef Chow Fun (noodles)
     - Sichuan Dan Dan Noodles (noodles)
-  - Hard Recipes (3)
+  - Recipes with 2 extra ingredients (3)
     - Lo Mein
     - Peking Duck Fried Rice (rice)
     - Dragon Beard Noodles (noodles)
 - Drink Cards (3)
-  - Baijiu
-  - Huangjiu
-  - Green Tea
+  - Baijiu - Play if you served both a rice dish and a noodles dish.
+  - Huangjiu - Play if you served at least 2 dishes of the same type.
+  - Green Tea - Play if you served at least 1 dish with no Ingredient Cards added.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇮🇳 Raj Mahal
 
-- **Customer Effect** - Secondary Ingredients add +1 additional serve value.
+- **Customer Effect** - A pair of added ingredients add +1 serve value.
 - **Special Ability** - Each pair of Secondary Ingredients used in served dishes gains +1 serve
   value.
-- **Tips Tracking** - Attract a customer using a dish with a secondary ingredient added and use the
-  secondary ingredient card as a Tips Card. Tips cards must be different spices.
+- **Tips Tracking** - Attract a customer using a dish with a Secondary Ingredient added and use the
+  Secondary Ingredient Card as a Tips Card. Tips cards must be different spices.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (16):
+- Ingredient And Flavor Cards (16):
   - Primary (6)
   - Secondary (7):
     - Cumin (2)
@@ -185,17 +190,17 @@ Deck special abilities apply only to the player using that cuisine deck.
     - Coriander
     - Cinnamon
     - Cardamom
-  - Optional (3):
+  - Flavor Cards (3):
     - Ghee
     - Coconut Milk
     - Cashew
 - Recipe Cards (14):
-  - Easy Recipes (4):
+  - Recipes without extra ingredients (4):
     - Jeera Rice
     - Spiced Lentil Soup
     - Tamarind Rice
     - Lemon Rice
-  - Normal Recipes (7):
+  - Recipes with 1 extra ingredient (7):
     - Biryani
     - Dal Tadka
     - Masoor Dal
@@ -203,43 +208,43 @@ Deck special abilities apply only to the player using that cuisine deck.
     - Aloo Gobi
     - Paneer Butter Masala
     - Vegetable Korma
-  - Hard Recipes (3):
+  - Recipes with 2 extra ingredients (3):
     - Coconut Curry
     - Rogan Josh
     - Malai Kofta
 - Drink Cards (3)
-  - Feni
-  - Lassi
-  - Masala Chai
+  - Feni - Play if you added at least 2 Ingredients.
+  - Lassi - Play if you served a dish a Flavor Card added.
+  - Masala Chai - Play if you added at least 2 different spice Ingredient Cards.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇺🇸 Liberty Grill
 
-- **Customer Effect** - Easy recipes gain +1 serve value for each non-easy recipe served with them.
+- **Customer Effect** - Gain +1 serve value for each pair of cards in hand.
 - **Special Ability** - 1 extra Primary or Secondary Ingredient can be added to a dish above its 
-  requirements to gain +1 serve value.
+  printed number of extra Ingredient Cards to gain +1 serve value.
 - **Tips Tracking** - Attract a customer using a burger or steak dish and use the recipe card as 
   a Tips Card. Tips cards must be of the same type (burger or steak).
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (15)
+- Ingredient And Flavor Cards (15)
   - Primary (6)
   - Secondary (6)
-  - Optional (3):
+  - Flavor Cards (3):
     - Ketchup
     - Mustard
     - Mayo
 - Recipe Cards (15):
-  - Easy Recipes (4)
+  - Recipes without extra ingredients (4)
     - Lobster Roll
     - Cornbread
     - Clam Chowder
     - Johnny Cakes
-  - Normal Recipes (8):
+  - Recipes with 1 extra ingredient (8):
     - Juicy Lucy (burger)
     - Classic Cheeseburger (burger)
     - Bacon Cheeseburger (burger)
@@ -248,14 +253,14 @@ Deck special abilities apply only to the player using that cuisine deck.
     - Tomahawk Steak (steak)
     - Porterhouse Steak (steak)
     - Ribeye Steak (steak)
-  - Hard Recipes (3):
+  - Recipes with 2 extra ingredients (3):
     - Deep-fried Burger (burger)
     - T-bone Steak (steak)
     - Apple Pie
 - Drink Cards (3)
-  - Coke
-  - Bourbon
-  - Root Beer
+  - Coke - Play if you served a burger dish.
+  - Bourbon - Play if you served a steak dish.
+  - Root Beer - Play if a dish has an extra Ingredient Card above its printed number of extras.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
@@ -271,67 +276,67 @@ Deck special abilities apply only to the player using that cuisine deck.
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (15):
+- Ingredient And Flavor Cards (15):
   - Primary (6)
   - Secondary (6)
-  - Optional (3):
+  - Flavor Cards (3):
     - Sumac
     - Paprika
     - Pomegranate Juice
 - Recipe Cards (15):
-  - Easy Recipes (6):
+  - Recipes without extra ingredients (6):
     - Shish Kebab (kebab)
     - Adana Kebab (kebab)
     - Iskender Kebab (kebab)
     - Ciğer Kebab (kebab)
     - Döner Kebab (kebab)
     - Beyti Kebab (kebab)
-  - Normal Recipes (6):
+  - Recipes with 1 extra ingredient (6):
     - Patlican Dolmasi
     - Lahmacun
     - Pide
     - Köftesi
     - Muhammara
     - Imam Bayildi
-  - Hard Recipes (3):
+  - Recipes with 2 extra ingredients (3):
     - Baklava
     - Turkish Delight
     - Kadayif
 - Drink Cards (3)
-  - Raki
-  - Salep
-  - Ayran
+  - Raki - Play if you served at least 1 kebab dish and at least 1 non-kebab dish.
+  - Salep - Play if every served dish is a kebab dish.
+  - Ayran - Play if you served at least 2 non-kebab dishes.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇯🇵 Sakura House
 
-- **Customer Effect** - Hard recipes gain +1 serve value.
-- **Special Ability** - Pair of different secondary ingredients used in a meal gains +1 serve value.
-- **Tips Tracking** - Attract a customer using a dish with a secondary ingredient added and use the
-  ingredient card as Tips Cards. Tips cards can be 2 of the same type maximum.
+- **Customer Effect** - Hard dishes gain +1 serve value.
+- **Special Ability** - Pair of different Secondary Ingredients used in a meal gains +1 serve value.
+- **Tips Tracking** - Attract a customer using a dish with a Secondary Ingredient added and use the
+  Ingredient Card as Tips Cards. Tips cards can be 2 of the same type maximum.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (16):
+- Ingredient And Flavor Cards (16):
   - Primary (6)
   - Secondary (7):
     - Umami (2)
     - Wasabi (3)
     - Ginger (3)
-  - Optional (3):
+  - Flavor Cards (3):
     - Nori
     - Sesame Oil
     - Yuzu
 - Recipe Cards (14):
-  - Easy Recipes (4)
+  - Recipes without extra ingredients (4)
     - Shoyu Ramen
     - Onigiri
     - Edamame Salad
     - Tamago Sushi
-  - Normal Recipes (7):
+  - Recipes with 1 extra ingredient (7):
     - Miso Ramen
     - Tonkotsu Ramen
     - California Roll
@@ -339,61 +344,61 @@ Deck special abilities apply only to the player using that cuisine deck.
     - Udon Noodles with Tempura
     - Okonomiyaki
     - Takoyaki
-  - Hard Recipes (3):
+  - Recipes with 2 extra ingredients (3):
     - Unagi Sushi Platter
     - Omurice
     - Gyoza
 - Drink Cards (3)
-  - Sake
-  - Matcha Tea
-  - Umeshu
+  - Sake - Play if you added Wasabi.
+  - Matcha Tea - Play if you added at least 2 different Ingredients.
+  - Umeshu - Play if you served a hard dish.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
 
 ## 🇲🇽 El Nopalito
 
-- **Customer Effect** - Normal recipes gain +1 serve value.
-- **Special Ability** - Hot secondary ingredients gain +1 serve value and up to 2 can be added to 
+- **Customer Effect** - Normal dishes gain +1 serve value.
+- **Special Ability** - Hot Secondary Ingredients gain +1 serve value and up to 2 can be added to 
   dishes in a meal.
-- **Tips Tracking** - Attract a customer using a dish with a hot secondary ingredient added and use 
-  the ingredient card as a Tips Card.
+- **Tips Tracking** - Attract a customer using a dish with a hot Secondary Ingredient added and use
+  the Ingredient Card as a Tips Card.
 
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient Cards (16):
+- Ingredient And Flavor Cards (16):
   - Primary (5)
   - Secondary (8):
     - Cayenne Pepper (hot) (3)
     - Jalapeño (hot) (3)
     - Avocado (2)
-  - Optional (3):
+  - Flavor Cards (3):
     - Lime
     - Cilantro
     - Sour Cream
 - Recipe Cards (14):
-  - Easy Recipes (5):
+  - Recipes without extra ingredients (5):
     - Quesadilla
     - Taco de Frijoles
     - Chilaquiles Verdes
     - Carne Asada Tacos
     - Enchiladas Rojas
-  - Normal Recipes (6):
+  - Recipes with 1 extra ingredient (6):
     - Mole Poblano with Rice
     - Burrito de Frijoles
     - Chicken Fajitas
     - Tostadas de Pollo
     - Pico de Gallo Nachos
     - Taco al Pastor
-  - Hard Recipes (3):
+  - Recipes with 2 extra ingredients (3):
     - Pozole Rojo
     - Chiles Rellenos
     - Tamales
 - Drink Cards (3)
-  - Mezcal
-  - Tequila
-  - Tepache
+  - Mezcal - Play if you added at least 1 hot Ingredient.
+  - Tequila - Play if you added at least 2 hot Ingredients.
+  - Tepache - Play if you served a normal dish with a Flavor Card.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
