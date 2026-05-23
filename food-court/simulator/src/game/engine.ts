@@ -8,7 +8,7 @@ import type {
 } from '../data/decks';
 
 export type CardKind = 'ingredient' | 'recipe' | 'drink' | 'customer';
-export type Phase = 'serve' | 'drink' | 'game-over';
+export type Phase = 'serve' | 'reveal' | 'game-over';
 
 export interface CardInstance {
   id: string;
@@ -56,7 +56,7 @@ export interface PlayerState {
 export interface PlayerBreakdown {
   playerId: string;
   recipe: number;
-  easyCombo: number;
+  hand: number;
   ingredients: number;
   customer: number;
   ability: number;
@@ -95,14 +95,16 @@ const NORMAL_SLOTS: Record<RecipeDifficulty, number> = {
   hard: 2,
 };
 
+const handLimitFor = (state: GameState) => (state.activeCustomer?.deckId === 'italy' ? 8 : HAND_LIMIT);
+
 export const RULE_NOTES = [
   'One active customer is contested by all players each round.',
   'Refresh allows discarding up to 1 card, then drawing up to 3 cards without exceeding hand limit 6.',
   'All recipes have base serve value 1; difficulty controls normal ingredient slots.',
   'Recipes are served from hand up to the active customer Order Value.',
-  'Primary and Secondary Ingredients fill normal slots for +1 each.',
-  'Optional Ingredients use the optional slot for +2.',
-  'After reveal, tied players may play 1 Drink Card for +1 before highest-unique resolution.',
+  'Ingredient Cards fill ingredient slots for +1 each.',
+  'Flavor Cards use the flavor slot for +2.',
+  'One Drink Card may be served face down with a meal and adds +3 if its requirement is met.',
 ];
 
 const makeRng = (seed: number) => {
@@ -317,14 +319,32 @@ export const scoreFor = (player: PlayerState) =>
     return total + order + (player.tips.length >= tips ? tips : 0);
   }, 0);
 
+export const currentHandLimit = (state: GameState) => handLimitFor(state);
+
 export const refreshHand = (state: GameState, playerId: string) => {
   const player = findPlayer(state, playerId);
   if (!player || state.phase !== 'serve') return;
   const remainingRefreshDraws = Math.max(0, REFRESH_DRAW_LIMIT - player.refreshDraws);
-  const count = Math.min(remainingRefreshDraws, Math.max(0, HAND_LIMIT - player.hand.length));
+  const count = Math.min(remainingRefreshDraws, Math.max(0, handLimitFor(state) - player.hand.length));
   const drawn = draw(player, count, state.log);
   player.refreshDraws += drawn;
   state.log.unshift(`${player.name} drew ${drawn} card${drawn === 1 ? '' : 's'} during refresh.`);
+};
+
+export const discardHandForRefresh = (state: GameState, playerId: string) => {
+  const player = findPlayer(state, playerId);
+  if (!player || state.phase !== 'serve' || state.activeCustomer?.deckId !== 'france') return;
+  if (player.refreshDiscards > 0 || player.refreshDraws > 0) {
+    state.log.unshift(`${player.name} has already refreshed this round.`);
+    return;
+  }
+  const discarded = player.hand.length;
+  player.discard.push(...player.hand.splice(0));
+  const drawn = draw(player, handLimitFor(state), state.log);
+  player.refreshDiscards = REFRESH_DISCARD_LIMIT;
+  player.refreshDraws = REFRESH_DRAW_LIMIT;
+  state.log.unshift(`${player.name} discarded their hand and drew ${drawn} card${drawn === 1 ? '' : 's'}.`);
+  if (discarded === 0) state.log.unshift(`${player.name} had no cards to discard for the French customer refresh.`);
 };
 
 export const discardFromHand = (state: GameState, playerId: string, cardIdToDiscard: string) => {
@@ -361,20 +381,29 @@ export const serveRecipe = (state: GameState, playerId: string, cardIdToServe: s
 };
 
 const regularIngredientCount = (dish: Dish) =>
-  dish.ingredients.filter((card) => card.ingredientType === 'primary' || card.ingredientType === 'secondary').length;
+  dish.ingredients.filter((card) => card.ingredientType === 'ingredient').length;
 
-const optionalIngredientCount = (dish: Dish) => dish.ingredients.filter((card) => card.ingredientType === 'optional').length;
+const flavorCount = (dish: Dish) => dish.ingredients.filter((card) => card.ingredientType === 'flavor').length;
+
+const servedDifficulty = (dish: Dish): RecipeDifficulty => {
+  const count = regularIngredientCount(dish);
+  if (count === 0) return 'easy';
+  if (count === 1) return 'normal';
+  return 'hard';
+};
+
+const printedIngredientCapacity = (dish: Dish) => (dish.recipe.difficulty ? NORMAL_SLOTS[dish.recipe.difficulty] : 0);
 
 const mexicanExtraHotCount = (player: PlayerState) =>
   player.meal
     .flatMap((dish) => dish.ingredients)
-    .filter((card) => card.ingredientType === 'secondary' && card.tags.includes('hot')).length;
+    .filter((card) => card.tags.includes('hot')).length;
 
 const canAddIngredientToDish = (player: PlayerState, dish: Dish, ingredient: CardInstance) => {
   if (!dish.recipe.difficulty || ingredient.kind !== 'ingredient') return false;
-  if (ingredient.ingredientType === 'optional') return optionalIngredientCount(dish) < 1;
+  if (ingredient.ingredientType === 'flavor') return flavorCount(dish) < 1;
 
-  const normalCapacity = NORMAL_SLOTS[dish.recipe.difficulty] + (player.deckId === 'usa' ? 1 : 0);
+  const normalCapacity = printedIngredientCapacity(dish) + (player.deckId === 'usa' ? 1 : 0);
   if (regularIngredientCount(dish) < normalCapacity) return true;
 
   return player.deckId === 'mexico' && ingredient.tags.includes('hot') && mexicanExtraHotCount(player) < 2;
@@ -416,6 +445,31 @@ export const returnIngredient = (state: GameState, playerId: string, dishId: str
   state.log.unshift(`${player.name} returned ${ingredient.name} to hand.`);
 };
 
+export const canPlayDrink = (state: GameState, playerId: string) => {
+  if (state.phase !== 'serve') return false;
+  const player = findPlayer(state, playerId);
+  return Boolean(player && player.meal.length > 0 && !player.drinkPlayed && player.hand.some((card) => card.kind === 'drink'));
+};
+
+export const playDrink = (state: GameState, playerId: string, cardIdToPlay: string) => {
+  const player = findPlayer(state, playerId);
+  if (!player || !canPlayDrink(state, playerId)) return;
+  const drink = player.hand.find((card) => card.id === cardIdToPlay && card.kind === 'drink');
+  if (!drink) return;
+  moveCard(player.hand, cardIdToPlay);
+  player.drinkPlayed = drink;
+  state.log.unshift(`${player.name} added a Drink Card to their meal.`);
+};
+
+export const returnDrink = (state: GameState, playerId: string) => {
+  const player = findPlayer(state, playerId);
+  if (!player || state.phase !== 'serve' || !player.drinkPlayed) return;
+  const drink = player.drinkPlayed;
+  player.drinkPlayed = null;
+  player.hand.push(drink);
+  state.log.unshift(`${player.name} returned their Drink Card to hand.`);
+};
+
 const pairDifferentNames = (cards: CardInstance[]) => {
   const counts = new Map<string, number>();
   for (const card of cards) counts.set(card.name, (counts.get(card.name) ?? 0) + 1);
@@ -425,48 +479,36 @@ const pairDifferentNames = (cards: CardInstance[]) => {
 };
 
 const recipeBaseBreakdown = (players: PlayerState[], player: PlayerState, customer: CardInstance) => {
-  const nonEasyCount = player.meal.filter((dish) => dish.recipe.difficulty !== 'easy').length;
   let recipe = 0;
-  let easyCombo = 0;
+  let hand = 0;
   let ingredients = 0;
   let customerBonus = 0;
   const notes: string[] = [];
 
   for (const dish of player.meal) {
-    const difficulty = dish.recipe.difficulty ?? 'easy';
-    recipe += RECIPE_VALUES[difficulty];
-
-    if (customer.deckId === 'usa' && difficulty === 'easy') easyCombo += nonEasyCount;
+    const difficulty = servedDifficulty(dish);
+    recipe += RECIPE_VALUES[dish.recipe.difficulty ?? 'easy'];
 
     if (customer.deckId === 'china' && difficulty === 'easy') customerBonus += 1;
     if (customer.deckId === 'japan' && difficulty === 'hard') customerBonus += 1;
     if (customer.deckId === 'mexico' && difficulty === 'normal') customerBonus += 1;
 
     for (const ingredient of dish.ingredients) {
-      if (ingredient.ingredientType === 'optional') {
+      if (ingredient.ingredientType === 'flavor') {
         ingredients += 2;
       } else {
         ingredients += 1;
-        if (customer.deckId === 'india' && ingredient.ingredientType === 'secondary') customerBonus += 1;
       }
     }
   }
 
-  if (customer.deckId === 'italy' && player.meal.some((dish) => dish.ingredients.length > 0)) {
-    customerBonus += 1;
-    notes.push('Italian customer +1');
-  }
+  if (customer.deckId === 'usa') hand += Math.floor(player.hand.length / 2);
 
-  if (customer.deckId === 'france') {
-    const fullDish = player.meal.some((dish) => {
-      const difficulty = dish.recipe.difficulty ?? 'easy';
-      const requiredSlots = NORMAL_SLOTS[difficulty];
-      return requiredSlots > 0 && regularIngredientCount(dish) >= requiredSlots;
-    });
-    if (fullDish) {
-      customerBonus += 1;
-      notes.push('French customer +1');
-    }
+  if (customer.deckId === 'india') {
+    const ingredientCount = player.meal
+      .flatMap((dish) => dish.ingredients)
+      .filter((card) => card.ingredientType === 'ingredient').length;
+    customerBonus += Math.floor(ingredientCount / 2);
   }
 
   if (customer.deckId === 'turkiye' && hasFewerTips(players, player)) {
@@ -474,7 +516,7 @@ const recipeBaseBreakdown = (players: PlayerState[], player: PlayerState, custom
     notes.push('Turkish customer +1');
   }
 
-  return { recipe, easyCombo, ingredients, customer: customerBonus, notes };
+  return { recipe, hand, ingredients, customer: customerBonus, notes };
 };
 
 const hasFewerTips = (players: PlayerState[], player: PlayerState) =>
@@ -504,10 +546,10 @@ const abilityBonus = (player: PlayerState) => {
   }
 
   if (player.deckId === 'india') {
-    const secondaryCount = player.meal
+    const spiceCount = player.meal
       .flatMap((dish) => dish.ingredients)
-      .filter((card) => card.ingredientType === 'secondary').length;
-    return Math.floor(secondaryCount / 2);
+      .filter((card) => card.tags.includes('spice')).length;
+    return Math.floor(spiceCount / 2);
   }
 
   if (player.deckId === 'turkiye') {
@@ -517,10 +559,10 @@ const abilityBonus = (player: PlayerState) => {
   }
 
   if (player.deckId === 'japan') {
-    const secondaries = player.meal
+    const seasonings = player.meal
       .flatMap((dish) => dish.ingredients)
-      .filter((card) => card.ingredientType === 'secondary');
-    return pairDifferentNames(secondaries);
+      .filter((card) => card.tags.includes('seasoning'));
+    return pairDifferentNames(seasonings);
   }
 
   if (player.deckId === 'mexico') {
@@ -532,17 +574,119 @@ const abilityBonus = (player: PlayerState) => {
   return 0;
 };
 
+const mealIngredients = (player: PlayerState) =>
+  player.meal.flatMap((dish) => dish.ingredients).filter((card) => card.ingredientType === 'ingredient');
+
+const mealFlavors = (player: PlayerState) =>
+  player.meal.flatMap((dish) => dish.ingredients).filter((card) => card.ingredientType === 'flavor');
+
+const hasDishTag = (player: PlayerState, tag: string) => player.meal.some((dish) => dish.recipe.tags.includes(tag));
+
+const differentTaggedIngredientNames = (player: PlayerState, tag: string) =>
+  new Set(mealIngredients(player).filter((card) => card.tags.includes(tag)).map((card) => card.name)).size;
+
+const hasAdjacentCoursePair = (player: PlayerState) => {
+  const courses = new Set(player.meal.flatMap((dish) => dish.recipe.tags));
+  return (courses.has('entree') && courses.has('appetizer')) ||
+    (courses.has('appetizer') && courses.has('main')) ||
+    (courses.has('main') && courses.has('dessert'));
+};
+
+const hasEveryDishDifferentCourse = (player: PlayerState) => {
+  const courses = player.meal.map((dish) => dish.recipe.tags.find((tag) => ['entree', 'appetizer', 'main', 'dessert'].includes(tag)));
+  return courses.length > 0 && courses.every(Boolean) && new Set(courses).size === courses.length;
+};
+
+const hasSameDishTypePair = (player: PlayerState) => {
+  const counts = player.meal.reduce<Record<string, number>>((acc, dish) => {
+    for (const tag of dish.recipe.tags) acc[tag] = (acc[tag] ?? 0) + 1;
+    return acc;
+  }, {});
+  return Object.values(counts).some((count) => count >= 2);
+};
+
+const hasExtraIngredientAbovePrintedCapacity = (player: PlayerState) =>
+  player.meal.some((dish) => regularIngredientCount(dish) > printedIngredientCapacity(dish));
+
+const drinkRequirementMet = (player: PlayerState, drink: CardInstance) => {
+  const normalDishes = player.meal.filter((dish) => servedDifficulty(dish) === 'normal').length;
+  const hardDishes = player.meal.filter((dish) => servedDifficulty(dish) === 'hard').length;
+  const ingredients = mealIngredients(player);
+  const hotIngredients = ingredients.filter((card) => card.tags.includes('hot')).length;
+  const kebabs = player.meal.filter((dish) => dish.recipe.tags.includes('kebab')).length;
+  const nonKebabs = player.meal.length - kebabs;
+
+  switch (`${player.deckId}:${drink.name}`) {
+    case 'italy:Cappuccino':
+      return player.meal.some((dish) => {
+        const exact = dish.recipe.exactIngredient;
+        return exact && dish.ingredients.some((ingredient) => ingredient.name === exact);
+      });
+    case 'italy:Aperol Spritz':
+      return normalDishes >= 2;
+    case 'italy:Limoncello':
+      return new Set(player.meal.map((dish) => dish.recipe.exactIngredient).filter(Boolean)).size >= 2;
+    case 'france:Champagne':
+      return hasAdjacentCoursePair(player);
+    case 'france:Cognac':
+      return hardDishes >= 1;
+    case 'france:Pernod':
+      return hasEveryDishDifferentCourse(player);
+    case 'china:Baijiu':
+      return hasDishTag(player, 'rice') && hasDishTag(player, 'noodles');
+    case 'china:Huangjiu':
+      return hasSameDishTypePair(player);
+    case 'china:Green Tea':
+      return player.meal.some((dish) => regularIngredientCount(dish) === 0);
+    case 'india:Feni':
+      return ingredients.length >= 2;
+    case 'india:Lassi':
+      return mealFlavors(player).length >= 1;
+    case 'india:Masala Chai':
+      return differentTaggedIngredientNames(player, 'spice') >= 2;
+    case 'usa:Coke':
+      return hasDishTag(player, 'burger');
+    case 'usa:Bourbon':
+      return hasDishTag(player, 'steak');
+    case 'usa:Root Beer':
+      return hasExtraIngredientAbovePrintedCapacity(player);
+    case 'turkiye:Raki':
+      return kebabs >= 1 && nonKebabs >= 1;
+    case 'turkiye:Salep':
+      return player.meal.length > 0 && kebabs === player.meal.length;
+    case 'turkiye:Ayran':
+      return nonKebabs >= 2;
+    case 'japan:Sake':
+      return ingredients.some((card) => card.tags.includes('wasabi'));
+    case 'japan:Matcha Tea':
+      return new Set(ingredients.map((card) => card.name)).size >= 2;
+    case 'japan:Umeshu':
+      return hardDishes >= 1;
+    case 'mexico:Mezcal':
+      return hotIngredients >= 1;
+    case 'mexico:Tequila':
+      return hotIngredients >= 2;
+    case 'mexico:Tepache':
+      return player.meal.some((dish) => servedDifficulty(dish) === 'normal' && flavorCount(dish) > 0);
+    default:
+      return false;
+  }
+};
+
+const drinkValue = (player: PlayerState) =>
+  player.drinkPlayed && drinkRequirementMet(player, player.drinkPlayed) ? 3 : 0;
+
 export const valueBreakdown = (state: GameState, player: PlayerState): PlayerBreakdown => {
   if (!state.activeCustomer || player.meal.length === 0) {
     return {
       playerId: player.id,
       recipe: 0,
-      easyCombo: 0,
+      hand: 0,
       ingredients: 0,
       customer: 0,
       ability: 0,
-      drink: player.drinkPlayed ? 1 : 0,
-      total: player.drinkPlayed ? 1 : 0,
+      drink: 0,
+      total: 0,
       notes: [],
       tied: false,
       competing: false,
@@ -551,13 +695,13 @@ export const valueBreakdown = (state: GameState, player: PlayerState): PlayerBre
 
   const base = recipeBaseBreakdown(state.players, player, state.activeCustomer);
   const ability = abilityBonus(player);
-  const drink = player.drinkPlayed ? 1 : 0;
-  const total = base.recipe + base.easyCombo + base.ingredients + base.customer + ability + drink;
+  const drink = drinkValue(player);
+  const total = base.recipe + base.hand + base.ingredients + base.customer + ability + drink;
 
   return {
     playerId: player.id,
     recipe: base.recipe,
-    easyCombo: base.easyCombo,
+    hand: base.hand,
     ingredients: base.ingredients,
     customer: base.customer,
     ability,
@@ -585,25 +729,8 @@ export const roundBreakdowns = (state: GameState) => {
 
 export const revealMeals = (state: GameState) => {
   if (state.phase !== 'serve') return;
-  state.phase = 'drink';
-  state.log.unshift('Meals revealed. Tied players may play 1 Drink Card.');
-};
-
-export const canPlayDrink = (state: GameState, playerId: string) => {
-  if (state.phase !== 'drink') return false;
-  const player = findPlayer(state, playerId);
-  const breakdown = roundBreakdowns(state).find((item) => item.playerId === playerId);
-  return Boolean(player && !player.drinkPlayed && breakdown?.tied && player.hand.some((card) => card.kind === 'drink'));
-};
-
-export const playDrink = (state: GameState, playerId: string, cardIdToPlay: string) => {
-  const player = findPlayer(state, playerId);
-  if (!player || !canPlayDrink(state, playerId)) return;
-  const drink = player.hand.find((card) => card.id === cardIdToPlay && card.kind === 'drink');
-  if (!drink) return;
-  moveCard(player.hand, cardIdToPlay);
-  player.drinkPlayed = drink;
-  state.log.unshift(`${player.name} played ${drink.name} for +1 serve value.`);
+  state.phase = 'reveal';
+  state.log.unshift('Meals revealed. Resolve by highest unique serve value.');
 };
 
 const winningBreakdown = (state: GameState) => {
@@ -643,7 +770,7 @@ const eligibleTipCard = (player: PlayerState) => {
     const tracked = new Set(player.tips.map((card) => card.name));
     return player.meal
       .flatMap((dish) => dish.ingredients)
-      .find((card) => card.ingredientType === 'secondary' && !tracked.has(card.name));
+      .find((card) => card.tags.includes('spice') && !tracked.has(card.name));
   }
 
   if (player.deckId === 'usa') {
@@ -667,7 +794,7 @@ const eligibleTipCard = (player: PlayerState) => {
     }, {});
     return player.meal
       .flatMap((dish) => dish.ingredients)
-      .find((card) => card.ingredientType === 'secondary' && (counts[card.name] ?? 0) < 2);
+      .find((card) => card.tags.includes('seasoning') && (counts[card.name] ?? 0) < 2);
   }
 
   if (player.deckId === 'mexico') {
@@ -703,7 +830,7 @@ const cleanupRound = (state: GameState) => {
 
 export const resolveRound = (state: GameState) => {
   if (state.phase === 'serve') revealMeals(state);
-  if (state.phase !== 'drink' || !state.activeCustomer) return;
+  if (state.phase !== 'reveal' || !state.activeCustomer) return;
 
   const customer = state.activeCustomer;
   const winnerBreakdown = winningBreakdown(state);

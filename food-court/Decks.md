@@ -41,7 +41,7 @@ is met.
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (16)
-  - Primary / Exact Pasta (8):
+  - Pasta Ingredient Cards (8):
     - Spaghetti
     - Fettuccine
     - Tagliatelle
@@ -50,7 +50,7 @@ is met.
     - Campanelle
     - Gnocchi
     - Ravioli
-  - Secondary (5)
+  - Other Ingredient Cards (5)
   - Flavor Cards (3):
     - Basil
     - Balsamic Vinegar
@@ -87,14 +87,13 @@ is met.
 - **Special Ability** - Each adjacent course pair served in the same meal gains +1 serve value:
   entrée + appetizer, appetizer + main, or main + dessert.
 - **Tips Tracking** - Attract a customer using dish in order: entrée, appetizer, main & dessert and
-  use the recipe card as a Tips Card. Tips cards must be different pasta types.
+  use the recipe card as a Tips Card. Tips cards must be different courses.
 
 <details>
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (15)
-  - Primary (7)
-  - Secondary (5)
+  - Ingredient Cards (12)
   - Flavor Cards (3):
     - Herbs de Provence
     - Butter
@@ -138,8 +137,7 @@ is met.
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (15)
-  - Primary (7)
-  - Secondary (5)
+  - Ingredient Cards (12)
   - Flavor Cards (3):
     - Shiitake Mushrooms
     - Soy Sauce
@@ -174,17 +172,17 @@ is met.
 ## 🇮🇳 Raj Mahal
 
 - **Customer Effect** - A pair of added ingredients add +1 serve value.
-- **Special Ability** - Each pair of Secondary Ingredients used in served dishes gains +1 serve
+- **Special Ability** - Each pair of spice Ingredient Cards used in served dishes gains +1 serve
   value.
-- **Tips Tracking** - Attract a customer using a dish with a Secondary Ingredient added and use the
-  Secondary Ingredient Card as a Tips Card. Tips cards must be different spices.
+- **Tips Tracking** - Attract a customer using a dish with a spice Ingredient Card added and use
+  the spice Ingredient Card as a Tips Card. Tips cards must be different spices.
 
 <details>
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (16):
-  - Primary (6)
-  - Secondary (7):
+  - Other Ingredient Cards (6)
+  - Spice Ingredient Cards (7):
     - Cumin (2)
     - Saffron (2)
     - Coriander
@@ -214,7 +212,7 @@ is met.
     - Malai Kofta
 - Drink Cards (3)
   - Feni - Play if you added at least 2 Ingredients.
-  - Lassi - Play if you served a dish a Flavor Card added.
+  - Lassi - Play if you served a dish with a Flavor Card added.
   - Masala Chai - Play if you added at least 2 different spice Ingredient Cards.
 - Customer Cards (6)
 - Ability Card (1)
@@ -223,8 +221,8 @@ is met.
 ## 🇺🇸 Liberty Grill
 
 - **Customer Effect** - Gain +1 serve value for each pair of cards in hand.
-- **Special Ability** - 1 extra Primary or Secondary Ingredient can be added to a dish above its 
-  printed number of extra Ingredient Cards to gain +1 serve value.
+- **Special Ability** - 1 extra Ingredient Card can be added to a dish above its printed number of
+  extra Ingredient Cards to gain +1 serve value.
 - **Tips Tracking** - Attract a customer using a burger or steak dish and use the recipe card as 
   a Tips Card. Tips cards must be of the same type (burger or steak).
 
@@ -232,8 +230,7 @@ is met.
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (15)
-  - Primary (6)
-  - Secondary (6)
+  - Ingredient Cards (12)
   - Flavor Cards (3):
     - Ketchup
     - Mustard
@@ -277,8 +274,7 @@ is met.
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (15):
-  - Primary (6)
-  - Secondary (6)
+  - Ingredient Cards (12)
   - Flavor Cards (3):
     - Sumac
     - Paprika
@@ -313,19 +309,20 @@ is met.
 ## 🇯🇵 Sakura House
 
 - **Customer Effect** - Hard dishes gain +1 serve value.
-- **Special Ability** - Pair of different Secondary Ingredients used in a meal gains +1 serve value.
-- **Tips Tracking** - Attract a customer using a dish with a Secondary Ingredient added and use the
-  Ingredient Card as Tips Cards. Tips cards can be 2 of the same type maximum.
+- **Special Ability** - Pair of different seasoning Ingredient Cards used in a meal gains +1 serve
+  value.
+- **Tips Tracking** - Attract a customer using a dish with a seasoning Ingredient Card added and
+  use the seasoning Ingredient Card as Tips Cards. Tips cards can be 2 of the same type maximum.
 
 <details>
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (16):
-  - Primary (6)
-  - Secondary (7):
+  - Other Ingredient Cards (6)
+  - Seasoning Ingredient Cards (7):
     - Umami (2)
     - Wasabi (3)
-    - Ginger (3)
+    - Ginger (2)
   - Flavor Cards (3):
     - Nori
     - Sesame Oil
@@ -359,20 +356,21 @@ is met.
 ## 🇲🇽 El Nopalito
 
 - **Customer Effect** - Normal dishes gain +1 serve value.
-- **Special Ability** - Hot Secondary Ingredients gain +1 serve value and up to 2 can be added to 
+- **Special Ability** - Hot Ingredient Cards gain +1 serve value and up to 2 can be added to
   dishes in a meal.
-- **Tips Tracking** - Attract a customer using a dish with a hot Secondary Ingredient added and use
-  the Ingredient Card as a Tips Card.
+- **Tips Tracking** - Attract a customer using a dish with a hot Ingredient Card added and use the
+  Ingredient Card as a Tips Card.
 
 <details>
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (16):
-  - Primary (5)
-  - Secondary (8):
+  - Hot Ingredient Cards (6):
     - Cayenne Pepper (hot) (3)
     - Jalapeño (hot) (3)
+  - Other Ingredient Cards (7):
     - Avocado (2)
+    - Other Ingredient Cards (5)
   - Flavor Cards (3):
     - Lime
     - Cilantro

@@ -14,7 +14,9 @@ CHANGES:
   multi-turn customer competitions were removed.
 * All recipes now have base serve value 1. Recipe cards now differ by how many extra Ingredient
   Cards can be added to them rather than automatic base value.
-* Card values are standardized: Primary and Secondary Ingredients add +1, and Flavor Cards add +2.
+* Card values are standardized: Ingredient Cards add +1, and Flavor Cards add +2.
+* Primary and Secondary Ingredients were removed as global rules terms. Deck-specific ingredient
+  groups are now described directly, such as pasta, spice, seasoning, or hot Ingredient Cards.
 * Served dish difficulty is now dynamic: a dish is easy with 0 extra Ingredient Cards added, normal
   with 1, and hard with 2. Any recipe may also take 1 Flavor Card, which does not count for
   difficulty.

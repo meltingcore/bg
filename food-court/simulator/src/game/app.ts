@@ -4,11 +4,14 @@ import {
   addIngredient,
   canPlayDrink,
   createGame,
+  currentHandLimit,
+  discardHandForRefresh,
   discardFromHand,
   refreshHand,
   playDrink,
   resolveRound,
   returnDish,
+  returnDrink,
   returnIngredient,
   revealMeals,
   roundBreakdowns,
@@ -38,14 +41,24 @@ const cardClasses = (card: CardInstance) => `card ${card.kind} ${card.ingredient
 
 const cardStyle = (card: CardInstance) => `style="--deck-color:${card.deckColor}"`;
 
+const recipeSlotLabel = (difficulty?: string) => {
+  if (difficulty === 'easy') return '0 extras';
+  if (difficulty === 'normal') return '1 extra';
+  if (difficulty === 'hard') return '2 extras';
+  return '';
+};
+
 const cardSubtype = (card: CardInstance) => {
-  if (card.kind === 'ingredient') return card.ingredientType ?? '';
-  if (card.kind === 'recipe') return card.difficulty ?? '';
+  if (card.kind === 'ingredient') return card.ingredientType === 'flavor' ? 'flavor' : 'ingredient';
+  if (card.kind === 'recipe') return recipeSlotLabel(card.difficulty);
   if (card.kind === 'customer') return `Order ${card.order} / Tips ${card.tips}`;
   return 'drink';
 };
 
-const cardType = (card: CardInstance) => card.kind[0].toUpperCase() + card.kind.slice(1);
+const cardType = (card: CardInstance) => {
+  if (card.kind === 'ingredient' && card.ingredientType === 'flavor') return 'Flavor';
+  return card.kind[0].toUpperCase() + card.kind.slice(1);
+};
 
 const recipeValue = (difficulty?: string) => (difficulty === 'easy' || difficulty === 'normal' || difficulty === 'hard' ? 1 : 0);
 
@@ -61,7 +74,7 @@ const cardRail = (card: CardInstance) => {
   }
 
   if (card.kind === 'recipe') {
-    const slots = card.difficulty === 'easy' ? '0+Opt' : card.difficulty === 'normal' ? '1+Opt' : '2+Opt';
+    const slots = card.difficulty === 'easy' ? '0+F' : card.difficulty === 'normal' ? '1+F' : '2+F';
     return `
       <div class="card-rail">
         <span>${slots}</span>
@@ -83,7 +96,7 @@ const cardRail = (card: CardInstance) => {
 
   return `
     <div class="card-rail">
-      <span>+1</span>
+      <span>+3</span>
       <strong>${cardType(card)}</strong>
       <span>${card.emoji}</span>
     </div>
@@ -97,7 +110,9 @@ const cardBody = (card: CardInstance) => {
       : card.kind === 'ingredient'
         ? card.tags.length
           ? card.tags.join(', ')
-          : `${cardSubtype(card)} ingredient`
+          : card.ingredientType === 'flavor'
+            ? 'Flavor Card'
+            : 'Ingredient Card'
         : card.kind === 'recipe'
           ? card.tags.length
             ? card.tags.join(', ')
@@ -106,11 +121,11 @@ const cardBody = (card: CardInstance) => {
   const value =
     card.kind === 'recipe'
       ? recipeValue(card.difficulty)
-      : card.kind === 'customer'
-        ? (card.order ?? 0)
+        : card.kind === 'customer'
+          ? (card.order ?? 0)
         : card.kind === 'drink'
-          ? 1
-          : card.ingredientType === 'optional'
+          ? 3
+          : card.ingredientType === 'flavor'
             ? 2
             : 1;
 
@@ -125,21 +140,21 @@ const cardBody = (card: CardInstance) => {
     <div class="card-rule">${escapeHtml(detail ?? '')}</div>
     <div class="card-value-strip">
       <b>${value}</b>
-      <span>${card.kind === 'ingredient' ? 'Ingredient' : card.kind === 'drink' ? 'Tie' : 'Value'}</span>
+      <span>${card.kind === 'ingredient' ? cardType(card) : card.kind === 'drink' ? 'Drink' : 'Value'}</span>
     </div>
   `;
 };
 
 const customerEffect = (deckId: CuisineId) => {
   const effects: Record<CuisineId, string> = {
-    italy: 'If you serve at least 1 dish with an ingredient, gain +1.',
-    france: 'If you serve at least 1 dish with all normal ingredient slots filled, gain +1.',
+    italy: 'Players hand limit is increased to 8 when refreshing.',
+    france: 'Players can discard their hand and draw a new one when refreshing.',
     china: 'Easy recipes gain +1.',
-    india: 'Secondary Ingredients add +1 additional serve value.',
-    usa: 'Easy recipes gain +1 for each non-easy recipe served with them.',
+    india: 'Each pair of Ingredient Cards adds +1.',
+    usa: 'Gain +1 for each pair of cards in hand.',
     turkiye: 'Gain +1 if you have fewer Tips Cards than at least one opponent.',
-    japan: 'Hard recipes gain +1.',
-    mexico: 'Normal recipes gain +1.',
+    japan: 'Hard dishes gain +1.',
+    mexico: 'Normal dishes gain +1.',
   };
   return effects[deckId];
 };
@@ -151,7 +166,7 @@ const renderBreakdown = (breakdown: PlayerBreakdown) => {
   return `
     <span><b>${breakdown.total}</b> total</span>
     <span>${breakdown.recipe} recipe</span>
-    <span>${breakdown.easyCombo} easy bonus</span>
+    <span>${breakdown.hand} hand</span>
     <span>${breakdown.ingredients} ingredients</span>
     <span>${breakdown.customer} customer</span>
     <span>${breakdown.ability} ability</span>
@@ -190,11 +205,18 @@ const renderDish = (dish: Dish, player: PlayerState, phase: GameState['phase']) 
   </article>
 `;
 
-const renderHandActions = (state: GameState, player: PlayerState, card: CardInstance) => {
-  if (state.phase === 'drink' && card.kind === 'drink' && canPlayDrink(state, player.id)) {
-    return `<button class="primary" data-action="play-drink" data-player="${player.id}" data-card="${card.id}">Play +1</button>`;
-  }
+const renderPlayedDrink = (player: PlayerState, phase: GameState['phase']) => {
+  if (!player.drinkPlayed) return '<p class="empty-text">No Drink Card served.</p>';
+  const drink = player.drinkPlayed;
+  return `
+    <div class="served-drink">
+      <span>${drink.emoji} ${escapeHtml(drink.name)}</span>
+      ${phase === 'serve' ? `<button data-action="return-drink" data-player="${player.id}">Return</button>` : ''}
+    </div>
+  `;
+};
 
+const renderHandActions = (state: GameState, player: PlayerState, card: CardInstance) => {
   if (state.phase !== 'serve') return '';
 
   if (card.kind === 'recipe') {
@@ -212,6 +234,12 @@ const renderHandActions = (state: GameState, player: PlayerState, card: CardInst
       )
       .join('');
     return addButtons || '<span class="muted">Serve a recipe first.</span>';
+  }
+
+  if (card.kind === 'drink') {
+    return canPlayDrink(state, player.id)
+      ? `<button class="primary" data-action="play-drink" data-player="${player.id}" data-card="${card.id}">Serve Drink</button>`
+      : '<span class="muted">Serve a recipe first.</span>';
   }
 
   return '';
@@ -260,14 +288,14 @@ const renderCustomerPanel = (state: GameState) => {
       <div class="active-customer-grid">
         ${renderMiniCard(customer)}
         <div class="round-controls">
-          <h3>Round ${state.round} · ${state.phase === 'serve' ? 'Build meals' : 'Drink tie-breaks'}</h3>
+          <h3>Round ${state.round} · ${state.phase === 'serve' ? 'Build meals' : 'Meals revealed'}</h3>
           <p>
             Serve up to ${customer.order} recipe${customer.order === 1 ? '' : 's'} per player.
-            Reveal values, let tied players add one drink, then resolve by highest unique value.
+            Optionally include 1 Drink Card with your meal, then reveal and resolve by highest unique value.
           </p>
           <div class="button-row">
             <button class="primary" data-action="reveal" ${state.phase === 'serve' ? '' : 'disabled'}>Reveal Values</button>
-            <button data-action="resolve" ${state.phase === 'drink' ? '' : 'disabled'}>Resolve Customer</button>
+            <button data-action="resolve" ${state.phase === 'reveal' ? '' : 'disabled'}>Resolve Customer</button>
           </div>
         </div>
       </div>
@@ -339,6 +367,7 @@ const renderPublicPlayerSummary = (state: GameState, activePlayerId: string) => 
 
 const renderPlayer = (state: GameState, player: PlayerState, historyDepth: number) => {
   const breakdown = roundBreakdowns(state).find((item) => item.playerId === player.id);
+  const handLimit = currentHandLimit(state);
   return `
     <section class="player-panel" style="--accent:${player.color}">
       <header class="player-header">
@@ -353,7 +382,7 @@ const renderPlayer = (state: GameState, player: PlayerState, historyDepth: numbe
       </header>
 
       <div class="limit-row">
-        <span><b>${player.hand.length}/6</b> Hand</span>
+        <span><b>${player.hand.length}/${handLimit}</b> Hand</span>
         <span><b>${player.refreshDiscards}/1</b> Refresh discards</span>
         <span><b>${player.refreshDraws}/3</b> Refresh draws</span>
         <span><b>${player.meal.length}/${state.activeCustomer?.order ?? 0}</b> Recipes</span>
@@ -362,7 +391,8 @@ const renderPlayer = (state: GameState, player: PlayerState, historyDepth: numbe
       </div>
 
       <div class="player-actions">
-        <button data-action="refresh" data-player="${player.id}" ${state.phase === 'serve' && player.refreshDraws < 3 && player.hand.length < 6 ? '' : 'disabled'}>Draw Up To 3</button>
+        <button data-action="refresh" data-player="${player.id}" ${state.phase === 'serve' && player.refreshDraws < 3 && player.hand.length < handLimit ? '' : 'disabled'}>Draw Up To 3</button>
+        <button data-action="discard-hand" data-player="${player.id}" ${state.phase === 'serve' && state.activeCustomer?.deckId === 'france' && player.refreshDiscards === 0 && player.refreshDraws === 0 ? '' : 'disabled'}>Redraw Hand</button>
         <button class="undo-button" data-action="undo" ${historyDepth > 0 ? '' : 'disabled'}>Undo Action</button>
       </div>
 
@@ -370,6 +400,7 @@ const renderPlayer = (state: GameState, player: PlayerState, historyDepth: numbe
         <summary>Served Meal <span>${player.meal.length}</span></summary>
         <div class="breakdown-row">${breakdown ? renderBreakdown(breakdown) : ''}</div>
         <div class="dish-list">${player.meal.map((dish) => renderDish(dish, player, state.phase)).join('') || '<p class="empty-text">No recipes served.</p>'}</div>
+        <div class="drink-slot">${renderPlayedDrink(player, state.phase)}</div>
       </details>
 
       <details open>
@@ -455,7 +486,7 @@ const redactPrivateLog = (entry: string, state: GameState, activePlayerId: strin
   if (entry.includes(' staged ')) return `${hiddenPlayer.name} staged a recipe.`;
   if (entry.includes(' added ')) return `${hiddenPlayer.name} added an ingredient to a recipe.`;
   if (entry.includes(' returned ')) return `${hiddenPlayer.name} returned a card to hand.`;
-  if (entry.includes(' played ')) return `${hiddenPlayer.name} played a Drink Card for +1 serve value.`;
+  if (entry.includes(' added a Drink Card ')) return `${hiddenPlayer.name} added a Drink Card to their meal.`;
   if (entry.includes(' tracked ')) return `${hiddenPlayer.name} tracked a Tips Card.`;
   return entry;
 };
@@ -583,6 +614,7 @@ export const mountFoodCourtApp = (root: HTMLElement) => {
     }
 
     if (action === 'refresh' && player) mutate(() => refreshHand(state as GameState, player));
+    if (action === 'discard-hand' && player) mutate(() => discardHandForRefresh(state as GameState, player));
     if (action === 'discard' && player && card) mutate(() => discardFromHand(state as GameState, player, card));
     if (action === 'serve-recipe' && player && card) mutate(() => serveRecipe(state as GameState, player, card));
     if (action === 'add-ingredient' && player && dish && card) {
@@ -592,6 +624,7 @@ export const mountFoodCourtApp = (root: HTMLElement) => {
     if (action === 'return-ingredient' && player && dish && card) {
       mutate(() => returnIngredient(state as GameState, player, dish, card));
     }
+    if (action === 'return-drink' && player) mutate(() => returnDrink(state as GameState, player));
     if (action === 'reveal') mutate(() => revealMeals(state as GameState));
     if (action === 'play-drink' && player && card) mutate(() => playDrink(state as GameState, player, card));
     if (action === 'resolve') mutate(() => resolveRound(state as GameState));

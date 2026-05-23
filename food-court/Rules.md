@@ -90,8 +90,7 @@ Served dish difficulty:
 Card values:
 
 - Recipe Card: +1 serve value.
-- Primary Ingredient: +1 serve value.
-- Secondary Ingredient: +1 serve value.
+- Ingredient Card: +1 serve value.
 - Flavor Card: +2 serve value.
 - Drink Card: +3 serve value if its requirement is met.
 
@@ -150,8 +149,9 @@ noodles, kebab, etc.). These tags are used by deck abilities or for Tips trackin
 Ingredient Cards are extra additions to recipes. Each Ingredient Card added to a recipe gives that
 dish +1 serve value and increases its difficulty.
 
-Some decks care about specific Ingredient Cards. For example, the Italian deck cares about exact
-pasta Ingredient Cards, while the Japanese deck cares about ginger, umami, and wasabi.
+Some Ingredient Cards have deck-specific tags used by abilities or Tips tracking. For example, the
+Italian deck cares about exact pasta Ingredient Cards, the Indian deck cares about spice Ingredient
+Cards, and the Mexican deck cares about hot Ingredient Cards.
 
 ### Flavor Cards
 

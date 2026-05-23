@@ -591,17 +591,7 @@ summary span {
   --card-accent: #724c9d;
 }
 
-.card.primary {
-  --card-bg:
-    linear-gradient(180deg, color-mix(in srgb, var(--deck-color) 28%, #ffffff), color-mix(in srgb, var(--deck-color) 16%, #ffffff));
-}
-
-.card.secondary {
-  --card-bg:
-    linear-gradient(180deg, color-mix(in srgb, var(--deck-color) 17%, #ffffff), color-mix(in srgb, var(--deck-color) 10%, #ffffff));
-}
-
-.card.optional {
+.card.flavor {
   --card-bg:
     linear-gradient(180deg, color-mix(in srgb, var(--deck-color) 9%, #ffffff), color-mix(in srgb, var(--deck-color) 5%, #ffffff));
 }

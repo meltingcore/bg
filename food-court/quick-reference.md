@@ -60,8 +60,7 @@ Served dish difficulty:
 
 Cards:
 
-- Primary Ingredient: +1.
-- Secondary Ingredient: +1.
+- Ingredient Card: +1.
 - Flavor Card: +2.
 - Drink Card: +3 if its requirement is met.
 
