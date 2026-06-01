@@ -1,5 +1,49 @@
 # Changelog
 
+## [0.12.0]
+
+CHANGES:
+
+* Customer flow redesigned into a simultaneous meal contest: each round has 1 active customer, and
+  all players may serve meals to that customer at the same time.
+* Customer Order Value now defines both how many recipes each player may serve to that customer and
+  how much base VP the customer gives at end game.
+* The previous prepare/cook/serve pipeline was removed. Ingredient Cards and Flavor Cards are now
+  recipe additions used as serve value boosts.
+* Ingredient Limit, Cooking Limit, Swap Limit, Customer Limit, customer sides, and unresolved
+  multi-turn customer competitions were removed.
+* All recipes now have base serve value 1. Recipe cards now differ by how many extra Ingredient
+  Cards can be added to them rather than automatic base value.
+* Card values are standardized: Ingredient Cards add +1, and Flavor Cards add +2.
+* Primary and Secondary Ingredients were removed as global rules terms. Deck-specific ingredient
+  groups are now described directly, such as pasta, spice, seasoning, or hot Ingredient Cards.
+* Served dish difficulty is now dynamic: a dish is easy with 0 extra Ingredient Cards added, normal
+  with 1, and hard with 2. Any recipe may also take 1 Flavor Card, which does not count for
+  difficulty.
+* Ties now use highest-unique-value resolution. If the highest value is tied, those tied players
+  are ignored and the next highest value wins. If all competing values are tied, the customer is
+  discarded.
+* Refresh now allows each player to discard up to 1 card, then draw up to 3 cards without
+  exceeding hand limit 6.
+* Drink Cards are now conditional meal cards played face down with the rest of the meal. Each
+  player who served at least 1 Recipe Card may include up to 1 Drink Card, which adds +3 serve
+  value if its requirement is met when revealed.
+* Drink Card requirements were made cuisine-specific for each deck.
+* Customer symbols were replaced with deck-agnostic nationality effects printed on Customer Cards.
+* Matching nationality no longer gives a separate +1 bonus.
+* Customer effects were updated around refresh options, hand size, dish difficulty, and hand count.
+* Deck abilities were updated around meal composition and Flavor Card additions.
+* Deck Ingredient and Flavor Card counts were reduced to roughly 15 per cuisine deck while keeping
+  recipe distributions close to the existing deck identities.
+* Quick reference and README were aligned with the simultaneous contest rules.
+
+BUG FIXES:
+
+* Multiple fixes and clarifications in the rules and quick reference including:
+  * Standardized terminology: Tips Cards, Tips Value, Drink Cards, and End Condition.
+  * Removed obsolete references to prepared ingredients, cooked dishes, and customer limit bonuses.
+  * Fixed rule discrepancies caused by the shift from customer queues to active-customer contests.
+
 ## [0.11.0]
 
 CHANGES:
@@ -28,7 +72,7 @@ CHANGES:
 BUG FIXES:
 
 * Multiple fixes and clarifications in the rules and quick reference including:
-  * Unified pronoun style to second person (“you/your”).
+  * Unified pronoun style to second person ("you/your").
   * Standardized terminology: Tips Cards, Tips Value, Drink Cards, and End Condition.
   * Fixed rule discrepancies.
 

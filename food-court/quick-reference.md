@@ -4,119 +4,83 @@
 * [Quick Reference Rules](#quick-reference-rules)
   * [Objective](#objective)
   * [Setup](#setup)
-  * [Turn Structure](#turn-structure)
-  * [Limits](#limits)
-  * [Card Types](#card-types)
-    * [Ingredient Cards](#ingredient-cards)
-    * [Recipe Cards](#recipe-cards)
-    * [Drink Cards](#drink-cards)
-    * [Customer Cards](#customer-cards)
-    * [Ability Card](#ability-card)
+  * [Round Flow](#round-flow)
+  * [Serve Value](#serve-value)
+  * [Customer Effects](#customer-effects)
   * [Winning the Game](#winning-the-game)
 <!-- TOC -->
 
 ## Objective
 
-The goal is to score the most Victory Points (VP). All VP come from attracted customers: each
-customer scores its Base Value plus its full Tips Value only if the player has at least that many
-Tips Cards in tracking.
+Score the most victory points (VP) from attracted customers.
 
 ## Setup
 
-1. Deck Selection: Each player selects one restaurant deck.
-2. Customer Deck:
-   - Remove all Customer Cards from the cuisine decks and combine them into a shared customer deck.
-   - Shuffle, then reveal a central queue of face-up customers equal to the number of players.
-   - Players place the rest face down as the customer draw pile.
-3. Player Station:
-   - Each player places their Ability Card in front of them.
-   - Each player places their deck face down as a draw pile and draws 6 cards.
-   - Each player reserves space for a discard pile, Tips Cards in tracking, prepared ingredients,
-     cooked dishes, and a scoring pile for attracted customers.
-4. First Player: players choose randomly. Turns proceed clockwise.
+1. Each player selects one restaurant deck.
+2. Remove all Customer Cards from the decks and combine them into a shared customer deck.
+3. Shuffle the customer deck and reveal 1 active customer.
+4. Each player places their Ability Card in front of them for reference.
+5. Each player shuffles their remaining deck and draws 6 cards.
 
-## Turn Structure
+## Round Flow
 
-On a player's turn:
+1. Each player may discard up to 1 card, then draw up to 3 cards, up to hand limit 6 if possible.
+2. Each player may serve 0 or more recipes face down, up to the active customer's Order Value.
+3. Players may add extra Ingredient Cards and Flavor Cards to recipes. A player who served a
+   recipe may also add up to 1 Drink Card to their meal.
+4. Reveal all served cards at the same time.
+5. Calculate each player's serve value.
+6. The highest unique serve value wins the customer.
+7. If the highest value is tied, ignore those tied players and check the next highest value.
+8. If every competing value is tied, discard the customer.
+9. If no player served any recipes, discard the customer.
+10. The winner attracts the customer and may track 1 eligible Tips Card used in the contest.
+11. Discard served recipes, added cards, and played drinks.
+12. Reveal the next customer.
 
-1. The player plays Drink Cards if their requirements are met.
-2. The player serves cooked dishes if possible:
-   - The player chooses a customer in the central queue that has fewer than 2 competing players, or
-     one the player is already competing for but has not completed.
-   - The player serves cooked dishes to that customer until they have served a number of dishes
-     equal to the customer's Base Value.
-   - The first competing player places served dishes on either the left or right side of the
-     customer card. The second competing player uses the opposite side.
-   - When 2 players have completed a customer, players compare competition value. The winner
-     attracts the customer by moving it to their scoring pile. Tied customers are discarded.
-   - Players refill the central queue after a customer is attracted or discarded, if the customer
-     deck allows it.
-   - If the player attracts the customer, they may move 1 eligible Tips Card that
-     participated in serving that customer into tracking.
+## Serve Value
 
-Outside a player's turn:
+Recipes:
 
-- They may discard any number of cards, then draw up to their hand limit.
-- They may prepare ingredient cards up to their Ingredient Limit.
-- They may cook dishes using prepared ingredients up to their Cooking Limit.
+- Each recipe: 1 value.
 
-## Limits
+Extra Ingredients:
 
-Symbols on customers a player competes for increase limits and stack.
+- Some recipes can take 0 extra Ingredient Cards.
+- Some recipes can take 1 extra Ingredient Card.
+- Some recipes can take 2 extra Ingredient Cards.
+- Any recipe may also have 1 Flavor Card.
 
-- Customer Limit: 2 customers.
-- Ingredient Limit: 4 ingredients, +2 per Cutting Board symbol.
-- Swap Limit: 0 cooked dishes, +1 per Swap symbol.
-- Cooking Limit: 2 cooked dishes, +1 per Cooking Pot symbol.
-- Hand Limit: 6 cards, +1 per Playing Card symbol.
+Served dish difficulty:
 
-## Card Types
+- Easy: 0 Ingredient Cards added.
+- Normal: 1 Ingredient Card added.
+- Hard: 2 Ingredient Cards added.
+- Flavor Cards do not count for difficulty.
 
-### Ingredient Cards
+Cards:
 
-- Primary: required in every recipe.
-- Secondary: required in normal and hard recipes.
-- Optional: can be added to any recipe to increase its serve value by 1. More than one optional
-  ingredient is allowed.
+- Ingredient Card: +1.
+- Flavor Card: +2.
+- Drink Card: +3 if its requirement is met.
 
-### Recipe Cards
+Then apply customer effects and deck abilities.
 
-Recipes are cooked with prepared ingredients. Players serve cooked dishes to compete for
-customers; recipes do not score directly.
+## Customer Effects
 
-When calculating competition value, include:
-
-- recipe serve values
-- optional ingredient bonuses
-- special ability bonuses
-- +1 if the customer nationality matches the player's deck
-
-### Drink Cards
-
-A player plays a Drink Card when its requirement is met to immediately attract the top card of the
-customer deck to the player's scoring pile, then discards the drink.
-
-### Customer Cards
-
-- Base Value (1-4): how many cooked dishes each competing player must serve to compete for the
-  customer.
-- Tips Value (1-3): full Tips VP gained only if the player has at least that many Tips Cards in
-  tracking; otherwise gain 0 Tips VP from that customer.
-- Nationality: grants +1 competition value when it matches the player's deck.
-- Symbol: grants the matching limit bonus while the player competes for that customer: Cutting
-  Board for Ingredient Limit, Cooking Pot for Cooking Limit, Swap for Swap Limit, or Playing Cards
-  for Hand Limit.
-
-### Ability Card
-
-Lists the deck's unique ability, and Tips tracking method. Special abilities are
-evaluated only from dishes served to the same customer, and a card cannot participate in more than
-one special ability occurrence.
+- Italian: Players hand limit is increased to 8 when refreshing.
+- French: Players can discard their hand and draw new one when refreshing.
+- Chinese: Easy dishes gain +1.
+- Indian: A pair of added ingredients add +1.
+- American: Gain +1 for each pair of cards in hand.
+- Turkish: Gain +1 if you have fewer Tips Cards in tracking than at least one opponent.
+- Japanese: Hard dishes gain +1.
+- Mexican: Normal dishes gain +1.
 
 ## Winning the Game
 
-The game ends after the round in which a player puts 4 Tips Cards into tracking or the
-customer deck is emptied. Players finish the current round. Then each player totals VP from
-attracted customers. Highest total wins.
+The game ends after the round in which a player puts 4 Tips Cards into tracking or the customer deck
+is emptied. Players score the total VP from attracted customers. Each attracted customer scores its
+Order Value plus its full Tips Value (if the player has at least that many Tips Cards in tracking).
 
 Tiebreaker: the player who most recently cooked a real-life meal wins.
