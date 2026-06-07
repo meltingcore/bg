@@ -1,5 +1,5 @@
 {
-  "name": "food-court-simulator",
+  "name": "foodcourt",
   "compatibility_date": "2026-06-01",
   "assets": {
     "directory": "./dist"
