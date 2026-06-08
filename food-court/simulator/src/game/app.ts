@@ -41,10 +41,16 @@ const cardClasses = (card: CardInstance) => `card ${card.kind} ${card.ingredient
 
 const cardStyle = (card: CardInstance) => `style="--deck-color:${card.deckColor}"`;
 
+const recipeIngredientSlots = (difficulty?: string) => {
+  if (difficulty === 'normal') return 1;
+  if (difficulty === 'hard') return 2;
+  return 0;
+};
+
 const recipeSlotLabel = (difficulty?: string) => {
-  if (difficulty === 'easy') return '0 extras';
-  if (difficulty === 'normal') return '1 extra';
-  if (difficulty === 'hard') return '2 extras';
+  if (difficulty === 'easy') return 'Easy · 0 Ingredients';
+  if (difficulty === 'normal') return 'Normal · 1 Ingredient';
+  if (difficulty === 'hard') return 'Hard · 2 Ingredients';
   return '';
 };
 
@@ -62,86 +68,118 @@ const cardType = (card: CardInstance) => {
 
 const recipeValue = (difficulty?: string) => (difficulty === 'easy' || difficulty === 'normal' || difficulty === 'hard' ? 1 : 0);
 
-const cardRail = (card: CardInstance) => {
-  if (card.kind === 'customer') {
-    return `
-      <div class="card-rail">
-        <span>${card.order} Order</span>
-        <strong>${cardType(card)}</strong>
-        <span>${card.tips} Tips</span>
-      </div>
-    `;
-  }
+const tagLabel = (tags: string[]) => tags.map((tag) => tag[0].toUpperCase() + tag.slice(1)).join(', ');
 
-  if (card.kind === 'recipe') {
-    const slots = card.difficulty === 'easy' ? '0+F' : card.difficulty === 'normal' ? '1+F' : '2+F';
-    return `
-      <div class="card-rail">
-        <span>${slots}</span>
-        <strong>${cardType(card)}</strong>
-        <span>${escapeHtml(cardSubtype(card))}</span>
-      </div>
-    `;
-  }
+const displayCardName = (card: CardInstance) =>
+  card.kind === 'customer' ? `${card.deckName} Customer` : card.name;
 
-  if (card.kind === 'ingredient') {
-    return `
-      <div class="card-rail">
-        <span>${card.emoji}</span>
-        <strong>${cardType(card)}</strong>
-        <span>${escapeHtml(cardSubtype(card))}</span>
-      </div>
-    `;
-  }
+const countryFlagEmoji = (deckId: CuisineId) => {
+  const flags: Record<CuisineId, string> = {
+    italy: '🇮🇹',
+    france: '🇫🇷',
+    china: '🇨🇳',
+    india: '🇮🇳',
+    usa: '🇺🇸',
+    turkiye: '🇹🇷',
+    japan: '🇯🇵',
+    mexico: '🇲🇽',
+  };
+  return flags[deckId];
+};
 
-  return `
-    <div class="card-rail">
-      <span>+3</span>
-      <strong>${cardType(card)}</strong>
-      <span>${card.emoji}</span>
-    </div>
-  `;
+const cardArtEmoji = (card: CardInstance) => (card.kind === 'customer' ? countryFlagEmoji(card.deckId) : card.emoji);
+
+const drinkRequirement = (requirement?: string) =>
+  (requirement ?? '')
+    .replace(/^Play if you /, '')
+    .replace(/^Play if /, '')
+    .replace(/\.$/, '')
+    .replace(/Ingredient Cards?/g, 'Ingredients')
+    .replace(/Recipe Cards?/g, 'Recipes');
+
+const customerEffectShort = (deckId: CuisineId) => {
+  const effects: Record<CuisineId, string> = {
+    italy: 'Refresh hand limit is 8.',
+    france: 'May discard hand and redraw.',
+    china: 'Easy dishes gain +1 SV.',
+    india: 'Each ingredient pair gains +1 SV.',
+    usa: '+1 SV per 2 cards in hand.',
+    turkiye: '+1 SV if behind on Tips.',
+    japan: 'Hard dishes gain +1 SV.',
+    mexico: 'Normal dishes gain +1 SV.',
+  };
+  return effects[deckId];
 };
 
 const cardBody = (card: CardInstance) => {
-  const detail =
+  const kind = cardType(card);
+  const stat =
     card.kind === 'customer'
-      ? customerEffect(card.deckId)
-      : card.kind === 'ingredient'
-        ? card.tags.length
-          ? card.tags.join(', ')
-          : card.ingredientType === 'flavor'
-            ? 'Flavor Card'
-            : 'Ingredient Card'
-        : card.kind === 'recipe'
-          ? card.tags.length
-            ? card.tags.join(', ')
-            : `${cardSubtype(card)} recipe`
-          : card.requirement;
-  const value =
-    card.kind === 'recipe'
-      ? recipeValue(card.difficulty)
-        : card.kind === 'customer'
-          ? (card.order ?? 0)
+      ? `O${card.order} T${card.tips}`
+      : card.kind === 'recipe'
+        ? `+${recipeValue(card.difficulty)} SV · I${recipeIngredientSlots(card.difficulty)}`
+      : card.kind === 'drink'
+        ? '+3 if'
+      : card.ingredientType === 'flavor'
+        ? '+2 SV'
+        : '+1 SV';
+
+  const detailRows =
+    card.kind === 'customer'
+      ? [
+          ['Effect', customerEffectShort(card.deckId)],
+        ]
+      : card.kind === 'recipe'
+        ? [
+            ...(card.tags.length ? [['Tags', tagLabel(card.tags)]] : []),
+            ...(card.exactIngredient ? [['Exact', card.exactIngredient]] : []),
+          ]
+        : card.kind === 'ingredient' && card.ingredientType === 'flavor'
+          ? [
+              ['Slot', 'Flavor slot'],
+              ['Rule', 'No difficulty change'],
+            ]
+          : card.kind === 'ingredient'
+            ? [
+                ['Slot', 'Ingredient slot'],
+                ...(card.tags.length ? [['Tags', tagLabel(card.tags)]] : []),
+              ]
+            : [
+                ['Need', drinkRequirement(card.requirement)],
+                ['Limit', '1 Drink per meal'],
+              ];
+
+  const footer =
+    card.kind === 'customer'
+      ? ''
+      : card.kind === 'recipe'
+        ? 'Serve as one dish'
         : card.kind === 'drink'
-          ? 3
-          : card.ingredientType === 'flavor'
-            ? 2
-            : 1;
+          ? 'Missed requirement scores +0'
+          : card.tags.length
+            ? 'Deck-relevant card'
+            : card.ingredientType === 'flavor'
+              ? 'One Flavor per dish'
+              : 'Adds to dish difficulty';
 
   return `
-    ${cardRail(card)}
-    <div class="card-title">${escapeHtml(card.name)}</div>
-    <div class="card-art">${card.emoji}</div>
-    <div class="card-meta">
-      <span>${escapeHtml(cardType(card))}</span>
-      <span>${escapeHtml(cardSubtype(card))}</span>
+    <div class="card-top">
+      <span class="card-kind">${escapeHtml(kind)}</span>
+      <span class="card-stat">${escapeHtml(stat)}</span>
     </div>
-    <div class="card-rule">${escapeHtml(detail ?? '')}</div>
-    <div class="card-value-strip">
-      <b>${value}</b>
-      <span>${card.kind === 'ingredient' ? cardType(card) : card.kind === 'drink' ? 'Drink' : 'Value'}</span>
+    <div class="card-title">${escapeHtml(displayCardName(card))}</div>
+    <div class="card-art">${cardArtEmoji(card)}</div>
+    <div class="card-details">
+      ${detailRows
+        .map(([label, value]) => `
+          <div class="card-detail-row">
+            <b>${escapeHtml(label)}</b>
+            <span>${escapeHtml(value)}</span>
+          </div>
+        `)
+        .join('')}
     </div>
+    ${footer ? `<div class="card-footer">${escapeHtml(footer)}</div>` : ''}
   `;
 };
 
@@ -233,13 +271,13 @@ const renderHandActions = (state: GameState, player: PlayerState, card: CardInst
         `,
       )
       .join('');
-    return addButtons || '<span class="muted">Serve a recipe first.</span>';
+    return addButtons || '<span class="muted">Need recipe first</span>';
   }
 
   if (card.kind === 'drink') {
     return canPlayDrink(state, player.id)
       ? `<button class="primary" data-action="play-drink" data-player="${player.id}" data-card="${card.id}">Serve Drink</button>`
-      : '<span class="muted">Serve a recipe first.</span>';
+      : '<span class="muted">Need recipe first</span>';
   }
 
   return '';
@@ -505,15 +543,20 @@ const render = (root: HTMLElement, state: GameState | null, activePlayerId: stri
     <main>
       <header class="app-header">
         <div>
-          <p class="eyebrow">Food Court digital playtest</p>
-          <h1>Simultaneous Serve Simulator</h1>
+          <h1>Food Court Simulator</h1>
         </div>
-        <div class="header-stats">
-          ${
-            state
-              ? `<span>Round ${state.round}</span><span>${state.phase}</span><span>${state.customerDeck.length} customers left</span><button class="undo-button" data-action="undo" ${historyDepth > 0 ? '' : 'disabled'}>Undo</button>`
-              : ''
-          }
+        <div class="header-tools">
+          <nav class="mode-nav" aria-label="Simulator modes">
+            <a href="/" aria-current="page">Manual Simulator</a>
+            <a href="/simulate/">Simulation Lab</a>
+          </nav>
+          <div class="header-stats">
+            ${
+              state
+                ? `<span>Round ${state.round}</span><span>${state.phase}</span><span>${state.customerDeck.length} customers left</span><button class="undo-button" data-action="undo" ${historyDepth > 0 ? '' : 'disabled'}>Undo</button>`
+                : ''
+            }
+          </div>
         </div>
       </header>
 
