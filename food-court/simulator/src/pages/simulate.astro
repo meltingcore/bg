@@ -1,0 +1,25 @@
+---
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Automated playtest simulation dashboard for the Food Court board game rules."
+    />
+    <title>Food Court Simulation Lab</title>
+  </head>
+  <body>
+    <div id="simulation-app"></div>
+    <script>
+      import { mountSimulationApp } from '../game/simulationApp';
+
+      const root = document.getElementById('simulation-app');
+      if (root) mountSimulationApp(root);
+    </script>
+  </body>
+</html>

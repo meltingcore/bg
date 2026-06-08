@@ -51,6 +51,7 @@ export interface PlayerState {
   tips: CardInstance[];
   refreshDiscards: number;
   refreshDraws: number;
+  reshuffles: number;
 }
 
 export interface PlayerBreakdown {
@@ -229,11 +230,15 @@ const buildCustomers = (deck: DeckDefinition) =>
     tips: customer.tips,
   }));
 
-const draw = (player: PlayerState, count: number, log: string[]) => {
+const draw = (player: PlayerState, count: number, log: string[], reshuffleSeed: number) => {
   let drawn = 0;
   for (let i = 0; i < count; i += 1) {
     if (player.drawPile.length === 0 && player.discard.length > 0) {
-      player.drawPile = shuffle(player.discard, player.hand.length + player.meal.length + Date.now());
+      player.reshuffles = (player.reshuffles ?? 0) + 1;
+      player.drawPile = shuffle(
+        player.discard,
+        reshuffleSeed + player.reshuffles * 9973 + player.hand.length + player.meal.length,
+      );
       player.discard = [];
       log.unshift(`${player.name} reshuffled discard into draw pile.`);
     }
@@ -276,8 +281,9 @@ export const createGame = (decks: DeckDefinition[], selectedDeckIds: CuisineId[]
       tips: [],
       refreshDiscards: 0,
       refreshDraws: 0,
+      reshuffles: 0,
     };
-    draw(player, HAND_LIMIT, log);
+    draw(player, HAND_LIMIT, log, seed + index + 17);
     return player;
   });
 
@@ -326,7 +332,8 @@ export const refreshHand = (state: GameState, playerId: string) => {
   if (!player || state.phase !== 'serve') return;
   const remainingRefreshDraws = Math.max(0, REFRESH_DRAW_LIMIT - player.refreshDraws);
   const count = Math.min(remainingRefreshDraws, Math.max(0, handLimitFor(state) - player.hand.length));
-  const drawn = draw(player, count, state.log);
+  const playerIndex = state.players.findIndex((item) => item.id === player.id);
+  const drawn = draw(player, count, state.log, state.seed + state.round * 1009 + playerIndex * 917);
   player.refreshDraws += drawn;
   state.log.unshift(`${player.name} drew ${drawn} card${drawn === 1 ? '' : 's'} during refresh.`);
 };
@@ -340,7 +347,8 @@ export const discardHandForRefresh = (state: GameState, playerId: string) => {
   }
   const discarded = player.hand.length;
   player.discard.push(...player.hand.splice(0));
-  const drawn = draw(player, handLimitFor(state), state.log);
+  const playerIndex = state.players.findIndex((item) => item.id === player.id);
+  const drawn = draw(player, handLimitFor(state), state.log, state.seed + state.round * 1231 + playerIndex * 917);
   player.refreshDiscards = REFRESH_DISCARD_LIMIT;
   player.refreshDraws = REFRESH_DRAW_LIMIT;
   state.log.unshift(`${player.name} discarded their hand and drew ${drawn} card${drawn === 1 ? '' : 's'}.`);
