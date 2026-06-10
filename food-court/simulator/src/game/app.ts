@@ -1,4 +1,5 @@
 import { DECKS, type CuisineId } from '../data/decks';
+import { playBotPlayers } from './bot';
 import {
   RULE_NOTES,
   addIngredient,
@@ -24,8 +25,9 @@ import {
   type PlayerState,
 } from './engine';
 
-const defaultDecks: CuisineId[] = ['italy', 'france'];
+const defaultDecks: CuisineId[] = ['italy', 'france', 'china', 'india'];
 const maxHistory = 50;
+const humanPlayerId = 'p1';
 
 const cloneGameState = (state: GameState): GameState => JSON.parse(JSON.stringify(state)) as GameState;
 
@@ -344,21 +346,17 @@ const renderCustomerPanel = (state: GameState) => {
 const renderPlayerSwitcher = (state: GameState, activePlayerId: string, historyDepth: number) => `
   <section class="player-switch-panel">
     <div>
-      <h2>Current Player</h2>
-      <p>Only the selected player's hand and station are shown.</p>
+      <h2>Your Seat</h2>
+      <p>You play ${escapeHtml(state.players.find((player) => player.id === activePlayerId)?.deckName ?? 'Player 1')}; other seats are automated bots.</p>
     </div>
     <div class="player-switch-actions">
       <div class="player-switcher">
         ${state.players
           .map(
             (player) => `
-              <button
-                class="${player.id === activePlayerId ? 'primary' : ''}"
-                data-action="select-player"
-                data-player="${player.id}"
-              >
-                ${player.flag} ${escapeHtml(player.name)}
-              </button>
+              <span class="seat-pill ${player.id === activePlayerId ? 'human' : ''}">
+                ${player.flag} ${player.id === activePlayerId ? 'You' : `Bot ${player.id.replace(/\D/g, '')}`}
+              </span>
             `,
           )
           .join('')}
@@ -373,7 +371,7 @@ const renderPublicPlayerSummary = (state: GameState, activePlayerId: string) => 
     <header class="section-header">
       <div>
         <h2>Public Table</h2>
-        <p>Opponent hands and card names stay hidden.</p>
+        <p>Opponent hands stay hidden; revealed meals show after Reveal Values.</p>
       </div>
     </header>
     <div class="public-player-grid">
@@ -381,6 +379,7 @@ const renderPublicPlayerSummary = (state: GameState, activePlayerId: string) => 
         .map((player) => {
           const breakdown = roundBreakdowns(state).find((item) => item.playerId === player.id);
           const revealed = state.phase !== 'serve';
+          const showPlayedCards = revealed && player.id !== activePlayerId;
           return `
             <article class="public-player ${player.id === activePlayerId ? 'active' : ''}" style="--accent:${player.color}">
               <strong>${player.flag} ${escapeHtml(player.name)}</strong>
@@ -395,12 +394,50 @@ const renderPublicPlayerSummary = (state: GameState, activePlayerId: string) => 
                 ${revealed && breakdown?.competing ? `<span>${breakdown.ability} Ability</span>` : ''}
                 ${revealed && breakdown?.tied ? '<span>Tied</span>' : ''}
               </div>
+              ${showPlayedCards ? renderPublicPlayedCards(player) : ''}
             </article>
           `;
         })
         .join('')}
     </div>
   </section>
+`;
+
+const renderPublicPlayedCards = (player: PlayerState) => `
+  <details class="public-played-cards" open>
+    <summary>Played Cards <span>${player.meal.reduce((sum, dish) => sum + 1 + dish.ingredients.length, 0) + (player.drinkPlayed ? 1 : 0)}</span></summary>
+    ${
+      player.meal.length > 0 || player.drinkPlayed
+        ? `
+          <div class="public-played-list">
+            ${player.meal
+              .map(
+                (dish, index) => `
+                  <div class="public-played-group">
+                    <strong>Dish ${index + 1}</strong>
+                    <div class="public-card-strip">
+                      ${renderMiniCard(dish.recipe)}
+                      ${dish.ingredients.map(renderMiniCard).join('')}
+                    </div>
+                  </div>
+                `,
+              )
+              .join('')}
+            ${
+              player.drinkPlayed
+                ? `
+                  <div class="public-played-group">
+                    <strong>Drink</strong>
+                    <div class="public-card-strip">${renderMiniCard(player.drinkPlayed)}</div>
+                  </div>
+                `
+                : ''
+            }
+          </div>
+        `
+        : '<p class="empty-text">No cards served.</p>'
+    }
+  </details>
 `;
 
 const renderPlayer = (state: GameState, player: PlayerState, historyDepth: number) => {
@@ -441,6 +478,8 @@ const renderPlayer = (state: GameState, player: PlayerState, historyDepth: numbe
         <div class="drink-slot">${renderPlayedDrink(player, state.phase)}</div>
       </details>
 
+      ${state.phase !== 'serve' ? renderOwnPlayedCards(player) : ''}
+
       <details open>
         <summary>Hand <span>${player.hand.length}</span></summary>
         <div class="card-grid">${player.hand.map((card) => renderHandCard(state, player, card)).join('') || '<p class="empty-text">No cards in hand.</p>'}</div>
@@ -461,6 +500,43 @@ const renderPlayer = (state: GameState, player: PlayerState, historyDepth: numbe
   `;
 };
 
+const renderOwnPlayedCards = (player: PlayerState) => `
+  <details class="own-played-cards" open>
+    <summary>Played Cards <span>${player.meal.reduce((sum, dish) => sum + 1 + dish.ingredients.length, 0) + (player.drinkPlayed ? 1 : 0)}</span></summary>
+    ${
+      player.meal.length > 0 || player.drinkPlayed
+        ? `
+          <div class="public-played-list">
+            ${player.meal
+              .map(
+                (dish, index) => `
+                  <div class="public-played-group">
+                    <strong>Dish ${index + 1}</strong>
+                    <div class="public-card-strip">
+                      ${renderMiniCard(dish.recipe)}
+                      ${dish.ingredients.map(renderMiniCard).join('')}
+                    </div>
+                  </div>
+                `,
+              )
+              .join('')}
+            ${
+              player.drinkPlayed
+                ? `
+                  <div class="public-played-group">
+                    <strong>Drink</strong>
+                    <div class="public-card-strip">${renderMiniCard(player.drinkPlayed)}</div>
+                  </div>
+                `
+                : ''
+            }
+          </div>
+        `
+        : '<p class="empty-text">No cards served.</p>'
+    }
+  </details>
+`;
+
 const renderSetup = (state: GameState | null) => {
   const selected = state?.players.map((player) => player.deckId) ?? defaultDecks;
   return `
@@ -475,7 +551,7 @@ const renderSetup = (state: GameState | null) => {
         ${selected
           .map(
             (deckId, index) => `
-              <label>Player ${index + 1}
+              <label>${index === 0 ? 'Your Deck' : `Bot ${index + 1} Deck`}
                 <select class="deck-select" data-index="${index}">${optionDecks(deckId)}</select>
               </label>
             `,
@@ -585,7 +661,7 @@ const syncDeckSelectors = (root: HTMLElement) => {
   container.innerHTML = next
     .map(
       (deckId, index) => `
-        <label>Player ${index + 1}
+        <label>${index === 0 ? 'Your Deck' : `Bot ${index + 1} Deck`}
           <select class="deck-select" data-index="${index}">${optionDecks(deckId)}</select>
         </label>
       `,
@@ -596,7 +672,7 @@ const syncDeckSelectors = (root: HTMLElement) => {
 export const mountFoodCourtApp = (root: HTMLElement) => {
   let state: GameState | null = createGame(DECKS, defaultDecks, Math.floor(Date.now() / 1000));
   let history: GameState[] = [];
-  let activePlayerId: string | null = state.players[0]?.id ?? null;
+  let activePlayerId: string | null = humanPlayerId;
 
   const remember = () => {
     if (!state) return;
@@ -632,7 +708,7 @@ export const mountFoodCourtApp = (root: HTMLElement) => {
     if (action === 'new-game') {
       const seed = Number(root.querySelector<HTMLInputElement>('#seed')?.value || Date.now());
       state = createGame(DECKS, selectedDeckIds(root), seed);
-      activePlayerId = state.players[0]?.id ?? null;
+      activePlayerId = humanPlayerId;
       history = [];
       renderCurrent();
       return;
@@ -650,12 +726,6 @@ export const mountFoodCourtApp = (root: HTMLElement) => {
     const card = target.dataset.card;
     const dish = target.dataset.dish;
 
-    if (action === 'select-player' && player) {
-      activePlayerId = player;
-      renderCurrent();
-      return;
-    }
-
     if (action === 'refresh' && player) mutate(() => refreshHand(state as GameState, player));
     if (action === 'discard-hand' && player) mutate(() => discardHandForRefresh(state as GameState, player));
     if (action === 'discard' && player && card) mutate(() => discardFromHand(state as GameState, player, card));
@@ -668,7 +738,16 @@ export const mountFoodCourtApp = (root: HTMLElement) => {
       mutate(() => returnIngredient(state as GameState, player, dish, card));
     }
     if (action === 'return-drink' && player) mutate(() => returnDrink(state as GameState, player));
-    if (action === 'reveal') mutate(() => revealMeals(state as GameState));
+    if (action === 'reveal') {
+      mutate(() => {
+        const current = state as GameState;
+        playBotPlayers(
+          current,
+          current.players.filter((item) => item.id !== humanPlayerId).map((item) => item.id),
+        );
+        revealMeals(current);
+      });
+    }
     if (action === 'play-drink' && player && card) mutate(() => playDrink(state as GameState, player, card));
     if (action === 'resolve') mutate(() => resolveRound(state as GameState));
   });

@@ -17,6 +17,7 @@ interface UiState {
   result: SimulationResult | null;
   selectedGameIndex: number;
   running: boolean;
+  randomizeSeed: boolean;
   progress: { completed: number; total: number } | null;
   error: string | null;
 }
@@ -47,6 +48,12 @@ const uniqueDecksForPlayerCount = (current: CuisineId[], players: number) => {
   return next;
 };
 
+const randomSeed = () => {
+  const values = new Uint32Array(1);
+  window.crypto?.getRandomValues(values);
+  return (values[0] % 1_000_000_000) + 1;
+};
+
 const renderDeckSelectors = (options: SimulationOptions) =>
   uniqueDecksForPlayerCount(options.decks, options.players)
     .map(
@@ -72,7 +79,7 @@ const renderSetup = (state: UiState) => `
         </select>
       </label>
       <label>Seed
-        <input id="sim-seed" type="number" min="1" step="1" value="${state.options.seed}" />
+        <input id="sim-seed" type="number" min="1" step="1" value="${state.options.seed}" ${state.randomizeSeed ? 'disabled' : ''} />
       </label>
       <label>Policy
         <select id="sim-policy">
@@ -80,6 +87,10 @@ const renderSetup = (state: UiState) => `
         </select>
       </label>
     </div>
+    <label class="checkbox-control">
+      <input id="sim-random-seed" type="checkbox" ${state.randomizeSeed ? 'checked' : ''} />
+      <span>Random seed each run</span>
+    </label>
     <div class="simulation-decks" id="sim-decks">
       ${renderDeckSelectors(state.options)}
     </div>
@@ -113,6 +124,10 @@ const renderSummary = (result: SimulationResult) => `
       <strong>${result.options.games}</strong>
     </article>
     <article>
+      <span>Seed Range</span>
+      <strong>${result.options.seed}-${result.options.seed + result.options.games - 1}</strong>
+    </article>
+    <article>
       <span>Average Rounds</span>
       <strong>${fixed(result.averageRounds)}</strong>
     </article>
@@ -123,6 +138,10 @@ const renderSummary = (result: SimulationResult) => `
     <article>
       <span>Drinks Played</span>
       <strong>${fixed(result.averageDrinksPlayed)}</strong>
+    </article>
+    <article>
+      <span>Avg Score Spread</span>
+      <strong>${fixed(avg(result.games.reduce((sum, game) => sum + game.scoreSpread, 0), result.games.length))}</strong>
     </article>
   </section>
 `;
@@ -147,6 +166,8 @@ const renderAggregateTable = (result: SimulationResult) => `
             <th>Avg Tips</th>
             <th>Avg SV</th>
             <th>Drinks/Game</th>
+            <th>Drink Success</th>
+            <th>Tips Complete</th>
           </tr>
         </thead>
         <tbody>
@@ -162,6 +183,8 @@ const renderAggregateTable = (result: SimulationResult) => `
                   <td>${fixed(avg(deck.totalTips, deck.games))}</td>
                   <td>${fixed(avg(deck.totalServeValue, deck.serveValueSamples))}</td>
                   <td>${fixed(avg(deck.drinkAttempts, deck.games))}</td>
+                  <td>${pct(avg(deck.drinkSuccesses, deck.drinkAttempts))}</td>
+                  <td>${pct(avg(deck.tipsCompletions, deck.games))}</td>
                 </tr>
               `,
             )
@@ -183,6 +206,221 @@ const renderInsights = (result: SimulationResult) => `
     <ul class="insight-list">
       ${result.insights.map((line) => `<li>${escapeHtml(line)}</li>`).join('')}
     </ul>
+  </section>
+`;
+
+const renderRecommendations = (result: SimulationResult) => `
+  <section class="simulation-panel insights-panel">
+    <div class="section-header">
+      <div>
+        <h2>Balance Recommendations</h2>
+        <p>Suggested follow-up changes from this batch.</p>
+      </div>
+    </div>
+    <ul class="insight-list">
+      ${result.recommendations.map((line) => `<li>${escapeHtml(line)}</li>`).join('')}
+    </ul>
+  </section>
+`;
+
+const renderDiagnostics = (result: SimulationResult) => `
+  <section class="simulation-panel">
+    <div class="section-header">
+      <div>
+        <h2>Balance Diagnostics</h2>
+        <p>Richer aggregate checks for matchup shape, scoring, seat order, customers, drinks, and Tips.</p>
+      </div>
+    </div>
+    <div class="diagnostic-grid">
+      <div class="diagnostic-block">
+        <h3>Deck-vs-Deck Matchups</h3>
+        <div class="table-scroll">
+          <table class="simulation-table">
+            <thead>
+              <tr>
+                <th>Deck</th>
+                <th>Opponent</th>
+                <th>Score Share</th>
+                <th>Tie Rate</th>
+                <th>Avg Delta</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${result.diagnostics.matchups
+                .map(
+                  (matchup) => `
+                    <tr>
+                      <td><strong>${escapeHtml(matchup.deckName)}</strong></td>
+                      <td>${escapeHtml(matchup.opponentDeckName)}</td>
+                      <td>${pct(avg(matchup.winShare, matchup.games))}</td>
+                      <td>${pct(avg(matchup.ties, matchup.games))}</td>
+                      <td>${fixed(avg(matchup.totalScoreDelta, matchup.games))}</td>
+                    </tr>
+                  `,
+                )
+                .join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="diagnostic-block">
+        <h3>Score Distribution</h3>
+        <div class="table-scroll">
+          <table class="simulation-table">
+            <thead>
+              <tr>
+                <th>Deck</th>
+                <th>Mean</th>
+                <th>P10</th>
+                <th>Median</th>
+                <th>P90</th>
+                <th>Range</th>
+                <th>Std Dev</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${result.diagnostics.scoreDistributions
+                .map(
+                  (score) => `
+                    <tr>
+                      <td><strong>${escapeHtml(score.deckName)}</strong></td>
+                      <td>${fixed(score.mean)}</td>
+                      <td>${fixed(score.p10)}</td>
+                      <td>${fixed(score.median)}</td>
+                      <td>${fixed(score.p90)}</td>
+                      <td>${score.min}-${score.max}</td>
+                      <td>${fixed(score.standardDeviation)}</td>
+                    </tr>
+                  `,
+                )
+                .join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="diagnostic-block">
+        <h3>First-Seat Bias</h3>
+        <div class="table-scroll">
+          <table class="simulation-table">
+            <thead>
+              <tr>
+                <th>Seat</th>
+                <th>Win Share</th>
+                <th>Top</th>
+                <th>Avg VP</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${result.diagnostics.seatBias
+                .map(
+                  (seat) => `
+                    <tr>
+                      <td><strong>${seat.seat}</strong></td>
+                      <td>${pct(avg(seat.winShare, seat.games))}</td>
+                      <td>${seat.topFinishes}</td>
+                      <td>${fixed(seat.averageScore)}</td>
+                    </tr>
+                  `,
+                )
+                .join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="diagnostic-block">
+        <h3>Customer Nationality Impact</h3>
+        <div class="table-scroll">
+          <table class="simulation-table">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Awarded</th>
+                <th>Discarded</th>
+                <th>Avg Winning SV</th>
+                <th>Top Winner</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${result.diagnostics.customerImpact
+                .map((impact) => {
+                  const topWinner = impact.winnerDecks[0];
+                  return `
+                    <tr>
+                      <td><strong>${escapeHtml(impact.customerDeckName)}</strong></td>
+                      <td>${pct(avg(impact.awarded, impact.appearances))}</td>
+                      <td>${pct(avg(impact.discarded, impact.appearances))}</td>
+                      <td>${fixed(impact.averageWinningServeValue)}</td>
+                      <td>${topWinner ? `${escapeHtml(topWinner.deckName)} (${pct(avg(topWinner.wins, impact.awarded))})` : 'None'}</td>
+                    </tr>
+                  `;
+                })
+                .join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="diagnostic-block">
+        <h3>Drink Success</h3>
+        <div class="table-scroll">
+          <table class="simulation-table">
+            <thead>
+              <tr>
+                <th>Deck</th>
+                <th>Attempts/Game</th>
+                <th>Success Rate</th>
+                <th>Successes</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${result.diagnostics.drinkSuccess
+                .map(
+                  (drink) => `
+                    <tr>
+                      <td><strong>${escapeHtml(drink.deckName)}</strong></td>
+                      <td>${fixed(avg(drink.attempts, drink.games))}</td>
+                      <td>${pct(avg(drink.successes, drink.attempts))}</td>
+                      <td>${drink.successes}/${drink.attempts}</td>
+                    </tr>
+                  `,
+                )
+                .join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="diagnostic-block">
+        <h3>Tips Completion</h3>
+        <div class="table-scroll">
+          <table class="simulation-table">
+            <thead>
+              <tr>
+                <th>Deck</th>
+                <th>Complete</th>
+                <th>Avg Tips</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${result.diagnostics.tipsCompletion
+                .map(
+                  (tips) => `
+                    <tr>
+                      <td><strong>${escapeHtml(tips.deckName)}</strong></td>
+                      <td>${pct(avg(tips.completions, tips.games))}</td>
+                      <td>${fixed(tips.averageTips)}</td>
+                    </tr>
+                  `,
+                )
+                .join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </section>
 `;
 
@@ -333,7 +571,9 @@ const renderResults = (state: UiState) => {
   return [
     renderSummary(state.result),
     renderAggregateTable(state.result),
+    renderDiagnostics(state.result),
     renderInsights(state.result),
+    renderRecommendations(state.result),
     renderGamePicker(state.result, state.selectedGameIndex),
     renderGameList(state.result),
     renderJson(state.result),
@@ -404,6 +644,7 @@ export const mountSimulationApp = (root: HTMLElement) => {
     result: null,
     selectedGameIndex: 0,
     running: false,
+    randomizeSeed: true,
     progress: null,
     error: null,
   };
@@ -417,6 +658,13 @@ export const mountSimulationApp = (root: HTMLElement) => {
     if (target.id === 'sim-players') {
       state.options = readOptions(root, state.options);
       state.options.decks = uniqueDecksForPlayerCount(state.options.decks, state.options.players);
+      renderCurrent();
+      return;
+    }
+
+    if (target.id === 'sim-random-seed') {
+      state.randomizeSeed = (target as HTMLInputElement).checked;
+      state.options = readOptions(root, state.options);
       renderCurrent();
       return;
     }
@@ -455,6 +703,7 @@ export const mountSimulationApp = (root: HTMLElement) => {
 
     if (action === 'run-simulation') {
       state.options = readOptions(root, state.options);
+      if (state.randomizeSeed) state.options.seed = randomSeed();
       state.running = true;
       state.progress = { completed: 0, total: state.options.games };
       state.error = null;

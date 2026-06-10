@@ -616,7 +616,7 @@ const hasSameDishTypePair = (player: PlayerState) => {
 const hasExtraIngredientAbovePrintedCapacity = (player: PlayerState) =>
   player.meal.some((dish) => regularIngredientCount(dish) > printedIngredientCapacity(dish));
 
-const drinkRequirementMet = (player: PlayerState, drink: CardInstance) => {
+export const drinkRequirementMet = (player: PlayerState, drink: CardInstance) => {
   const normalDishes = player.meal.filter((dish) => servedDifficulty(dish) === 'normal').length;
   const hardDishes = player.meal.filter((dish) => servedDifficulty(dish) === 'hard').length;
   const ingredients = mealIngredients(player);
