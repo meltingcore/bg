@@ -5,6 +5,7 @@ import {
   currentHandLimit,
   discardFromHand,
   discardHandForRefresh,
+  drinkRequirementMet,
   playDrink,
   refreshHand,
   resolveRound,
@@ -21,10 +22,17 @@ export type BotPolicy = 'greedy';
 export interface BotTurnSummary {
   playerId: string;
   deckId: CuisineId;
+  deckName: string;
+  seat: number;
+  activeCustomerDeckId: CuisineId | null;
+  activeCustomerDeckName: string | null;
   servedRecipes: number;
   addedIngredients: number;
   playedDrink: boolean;
+  drinkSuccessful: boolean;
   serveValue: number;
+  wonCustomer: boolean;
+  customerDiscarded: boolean;
 }
 
 const cloneGameState = (state: GameState): GameState => JSON.parse(JSON.stringify(state)) as GameState;
@@ -195,28 +203,68 @@ export const refreshForBot = (state: GameState, playerId: string, policy: BotPol
   refreshHand(state, playerId);
 };
 
-export const playBotRound = (state: GameState, policy: BotPolicy = 'greedy'): BotTurnSummary[] => {
-  if (state.phase !== 'serve') return [];
+const uniqueWinningPlayerId = (state: GameState) => {
+  const breakdowns = state.players
+    .map((player) => valueBreakdown(state, player))
+    .filter((breakdown) => breakdown.competing)
+    .sort((a, b) => b.total - a.total);
 
-  for (const player of [...state.players].sort((a, b) => playerNumber(a.id) - playerNumber(b.id))) {
+  for (const breakdown of breakdowns) {
+    if (breakdowns.filter((item) => item.total === breakdown.total).length === 1) return breakdown.playerId;
+  }
+
+  return null;
+};
+
+export const playBotPlayers = (
+  state: GameState,
+  playerIds: string[],
+  policy: BotPolicy = 'greedy',
+): BotTurnSummary[] => {
+  if (state.phase !== 'serve') return [];
+  const botIds = new Set(playerIds);
+
+  for (const player of [...state.players].filter((item) => botIds.has(item.id)).sort((a, b) => playerNumber(a.id) - playerNumber(b.id))) {
     refreshForBot(state, player.id, policy);
   }
 
   let current = state;
-  for (const player of [...state.players].sort((a, b) => playerNumber(a.id) - playerNumber(b.id))) {
+  for (const player of [...state.players].filter((item) => botIds.has(item.id)).sort((a, b) => playerNumber(a.id) - playerNumber(b.id))) {
     current = chooseMeal(current, player.id);
   }
 
   Object.assign(state, current);
 
-  const summaries = state.players.map((player) => ({
+  const winningPlayerId = uniqueWinningPlayerId(state);
+  const customerDiscarded = !winningPlayerId;
+  const activeCustomerDeckId = state.activeCustomer?.deckId ?? null;
+  const activeCustomerDeckName = state.activeCustomer?.deckName ?? null;
+
+  return [...state.players]
+    .filter((player) => botIds.has(player.id))
+    .map((player, index) => ({
     playerId: player.id,
     deckId: player.deckId,
+    deckName: player.deckName,
+    seat: state.players.findIndex((item) => item.id === player.id) + 1 || index + 1,
+    activeCustomerDeckId,
+    activeCustomerDeckName,
     servedRecipes: player.meal.length,
     addedIngredients: player.meal.reduce((sum: number, dish: Dish) => sum + dish.ingredients.length, 0),
     playedDrink: Boolean(player.drinkPlayed),
+    drinkSuccessful: Boolean(player.drinkPlayed && drinkRequirementMet(player, player.drinkPlayed)),
     serveValue: valueBreakdown(state, player).total,
+    wonCustomer: winningPlayerId === player.id,
+    customerDiscarded,
   }));
+};
+
+export const playBotRound = (state: GameState, policy: BotPolicy = 'greedy'): BotTurnSummary[] => {
+  const summaries = playBotPlayers(
+    state,
+    state.players.map((player) => player.id),
+    policy,
+  );
 
   resolveRound(state);
   return summaries;

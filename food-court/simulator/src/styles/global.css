@@ -379,6 +379,25 @@ label {
   gap: 8px;
 }
 
+.seat-pill {
+  min-height: 34px;
+  border: 1px solid #d8cab7;
+  border-radius: 999px;
+  background: #fffdf8;
+  color: #25302d;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.72rem;
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.seat-pill.human {
+  border-color: #20344d;
+  background: #20344d;
+  color: #fff;
+}
+
 .public-player-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -397,8 +416,8 @@ label {
   outline: 3px solid color-mix(in srgb, var(--accent) 32%, transparent);
 }
 
-.public-player strong,
-.public-player span {
+.public-player > strong,
+.public-player > span {
   display: block;
 }
 
@@ -407,6 +426,45 @@ label {
   color: #59645f;
   font-size: 0.84rem;
   font-weight: 800;
+}
+
+.public-played-cards {
+  --playing-card-width: 150px;
+  margin-top: 10px;
+  background: color-mix(in srgb, var(--accent) 5%, #ffffff);
+}
+
+.own-played-cards {
+  --playing-card-width: 160px;
+}
+
+.public-played-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.public-played-group {
+  display: grid;
+  gap: 6px;
+}
+
+.public-played-group > strong {
+  color: #25302d;
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.public-card-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.public-card-strip .card {
+  flex: 0 0 var(--playing-card-width);
 }
 
 .players-grid {
@@ -1042,6 +1100,25 @@ summary span {
   gap: 8px;
 }
 
+.checkbox-control {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 8px;
+  color: #25302d;
+  font-size: 0.9rem;
+}
+
+.checkbox-control input {
+  width: 18px;
+  min-height: 18px;
+  accent-color: #c78d2e;
+}
+
+.checkbox-control span {
+  font-weight: 900;
+}
+
 .game-browser-controls {
   justify-content: flex-end;
 }
@@ -1078,7 +1155,7 @@ summary span {
 
 .simulation-summary {
   display: grid;
-  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 12px;
   margin-bottom: 18px;
 }
@@ -1149,6 +1226,19 @@ summary span {
 
 .simulation-table .winner-row {
   background: #fff3dc;
+}
+
+.diagnostic-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.diagnostic-block {
+  min-width: 0;
+}
+
+.diagnostic-block h3 {
+  margin-bottom: 8px;
 }
 
 .insight-list {

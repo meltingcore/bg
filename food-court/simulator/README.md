@@ -31,6 +31,9 @@ The current bot policy is `greedy`: each player refreshes, chooses the meal with
 immediate serve value, adds the best legal Ingredient/Flavor Cards, and plays a Drink Card only
 when it increases serve value.
 
+The Simulation Lab UI randomizes the base seed by default so repeated runs produce fresh samples.
+Turn off "Random seed each run" to reproduce a specific seed range.
+
 ## What It Models
 
 - 2-4 player setup with selected cuisine decks.
