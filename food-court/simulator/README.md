@@ -25,11 +25,23 @@ Useful options:
 - `--players <n>` supports 2-4 players.
 - `--decks <ids>` chooses comma-separated cuisine ids.
 - `--seed <n>` sets the base seed; game `i` uses `seed + i`.
-- `--json` prints machine-readable results.
+- `--policy <name>` chooses `greedy`, `tips`, `cautious`, `adaptive`, or `mixed`.
+- `--json` prints machine-readable results, including every player's decision and serve value for
+  every round of every game.
 
-The current bot policy is `greedy`: each player refreshes, chooses the meal with the highest
-immediate serve value, adds the best legal Ingredient/Flavor Cards, and plays a Drink Card only
-when it increases serve value.
+Bot policies:
+
+- `greedy` maximizes immediate serve value.
+- `tips` values Tips-eligible meals, Tips scoring thresholds, and the 4-Tips End Condition.
+- `cautious` uses previously revealed serve values to avoid historically common ties and conserves
+  cards when extra value is unlikely to help.
+- `adaptive` balances serve value, Tips progress, tie risk, and cards remaining in hand.
+- `mixed` assigns all four policies across seats and rotates them by seed. This is the default and
+  is the preferred mode for deck balance work.
+
+Refresh decisions are policy-aware. Bots can use the French full-hand redraw before reaching an
+empty-recipe hand, discard cards based on deck-specific Tips paths, and account for customer effects
+when choosing how many cards to commit.
 
 The Simulation Lab UI randomizes the base seed by default so repeated runs produce fresh samples.
 Turn off "Random seed each run" to reproduce a specific seed range.
@@ -43,8 +55,13 @@ Turn off "Random seed each run" to reproduce a specific seed range.
 - Refresh discard and draw limits, recipe serving, ingredient and flavor boosts, reveal, Drink
   Card serve-value boosts, customer resolution, Tips tracking, end trigger, and scoring.
 - Highest unique serve value resolution, including cancellation of tied values.
+- Public serve history used by cautious and adaptive bots to estimate tie risk without reading
+  hidden opponent hands or meals.
 - Current customer effects from `Rules.md`.
 - Deck-specific serve-value bonuses as data-driven rules in `src/game/engine.ts`.
+- Strategy diagnostics including win share, Tips paths, and accepted tie risk by policy.
+- Per-game `roundResults` containing the customer, all player serve values, cards committed, Drink
+  use, Tips eligibility, tie estimate, and winner for every round.
 
 ## Current Assumptions
 
@@ -62,3 +79,11 @@ Turn off "Random seed each run" to reproduce a specific seed range.
 
 Deck and card definitions live in `src/data/decks.ts` so rule and balance changes are easy to
 iterate without rewriting the UI.
+
+## Validation
+
+```sh
+pnpm test
+pnpm check
+pnpm build
+```

@@ -6,7 +6,14 @@ FIXES:
 
 * Rebalanced all cuisine decks using automated four-player simulations across every possible
   four-deck table combination.
-* The automated simulator was aligned with all balance changes.
+* The automated simulator was aligned with all balance changes and now supports greedy,
+  Tips-focused, cautious, adaptive, and mixed bot strategies.
+* Bots can pursue Tips Cards, use broader French customer redraw decisions, account for customer
+  effects when committing cards, and avoid ties using previously revealed serve values.
+* Strategy-level diagnostics and policy selection were added to the CLI and Simulation Lab.
+* Full per-round player decisions and results were added to JSON output and the Game Browser.
+* The simulator was realigned with the corrected Jin Long, Raj Mahal, Liberty Grill, Sakura House,
+  and El Nopalito deck rules and rerun across all four-deck combinations.
 
 ## [0.12.0]
 

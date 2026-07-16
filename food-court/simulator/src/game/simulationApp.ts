@@ -1,4 +1,5 @@
 import { DECKS, type CuisineId } from '../data/decks.ts';
+import { SIMULATION_POLICIES, type SimulationPolicy } from './bot.ts';
 import {
   avg,
   buildSimulationResult,
@@ -83,7 +84,11 @@ const renderSetup = (state: UiState) => `
       </label>
       <label>Policy
         <select id="sim-policy">
-          <option value="greedy" selected>Greedy</option>
+          ${SIMULATION_POLICIES.map((policy) => `
+            <option value="${policy}" ${policy === state.options.policy ? 'selected' : ''}>
+              ${policy[0].toUpperCase() + policy.slice(1)}
+            </option>
+          `).join('')}
         </select>
       </label>
     </div>
@@ -166,7 +171,8 @@ const renderAggregateTable = (result: SimulationResult) => `
             <th>Avg Tips</th>
             <th>Avg SV</th>
             <th>Drinks/Game</th>
-            <th>Drink Success</th>
+            <th>Tips Meals/Game</th>
+            <th>Avg Tie Risk</th>
             <th>Tips Complete</th>
           </tr>
         </thead>
@@ -183,7 +189,8 @@ const renderAggregateTable = (result: SimulationResult) => `
                   <td>${fixed(avg(deck.totalTips, deck.games))}</td>
                   <td>${fixed(avg(deck.totalServeValue, deck.serveValueSamples))}</td>
                   <td>${fixed(avg(deck.drinkAttempts, deck.games))}</td>
-                  <td>${pct(avg(deck.drinkSuccesses, deck.drinkAttempts))}</td>
+                  <td>${fixed(avg(deck.tipEligibleMeals, deck.games))}</td>
+                  <td>${pct(avg(deck.totalTieRisk, deck.tieRiskSamples))}</td>
                   <td>${pct(avg(deck.tipsCompletions, deck.games))}</td>
                 </tr>
               `,
@@ -420,6 +427,42 @@ const renderDiagnostics = (result: SimulationResult) => `
           </table>
         </div>
       </div>
+
+      <div class="diagnostic-block">
+        <h3>Strategy Impact</h3>
+        <div class="table-scroll">
+          <table class="simulation-table">
+            <thead>
+              <tr>
+                <th>Policy</th>
+                <th>Games</th>
+                <th>Win Share</th>
+                <th>Avg VP</th>
+                <th>Avg Tips</th>
+                <th>Tips Meals/Game</th>
+                <th>Avg Tie Risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${result.diagnostics.strategyImpact
+                .map(
+                  (strategy) => `
+                    <tr>
+                      <td><strong>${escapeHtml(strategy.policy)}</strong></td>
+                      <td>${strategy.games}</td>
+                      <td>${pct(avg(strategy.winShare, strategy.games))}</td>
+                      <td>${fixed(strategy.averageScore)}</td>
+                      <td>${fixed(strategy.averageTips)}</td>
+                      <td>${fixed(strategy.tipEligibleMealsPerGame)}</td>
+                      <td>${pct(strategy.averageTieRisk)}</td>
+                    </tr>
+                  `,
+                )
+                .join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </section>
 `;
@@ -481,6 +524,7 @@ const renderGamePicker = (result: SimulationResult, selectedGameIndex: number) =
             <tr>
               <th>Player</th>
               <th>Deck</th>
+              <th>Policy</th>
               <th>VP</th>
               <th>Customers</th>
               <th>Tips</th>
@@ -495,6 +539,7 @@ const renderGamePicker = (result: SimulationResult, selectedGameIndex: number) =
                   <tr class="${player.topFinish ? 'winner-row' : ''}">
                     <td>${escapeHtml(player.playerId.toUpperCase())}</td>
                     <td><strong>${escapeHtml(player.deckName)}</strong></td>
+                    <td>${escapeHtml(player.policy)}</td>
                     <td>${player.score}</td>
                     <td>${player.customers}</td>
                     <td>${player.tips}</td>
@@ -507,6 +552,43 @@ const renderGamePicker = (result: SimulationResult, selectedGameIndex: number) =
           </tbody>
         </table>
       </div>
+      <details class="round-browser">
+        <summary>Round Results <span>${selectedGame.roundResults.length}</span></summary>
+        <div class="table-scroll">
+          <table class="simulation-table">
+            <thead>
+              <tr>
+                <th>Round</th>
+                <th>Customer</th>
+                <th>Winner</th>
+                <th>Serve Results</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${selectedGame.roundResults
+                .map(
+                  (round) => `
+                    <tr>
+                      <td>${round.round}</td>
+                      <td><strong>${escapeHtml(round.customerDeckName)}</strong> ${round.customerOrder}/${round.customerTips}</td>
+                      <td>${escapeHtml(round.winnerDeckName ?? 'Discarded')}${round.winnerDeckName ? ` (${round.winningServeValue})` : ''}</td>
+                      <td>${escapeHtml(round.players
+                        .map((player) => {
+                          const flags = [
+                            player.playedDrink ? 'Drink' : '',
+                            player.tipEligible ? 'Tips' : '',
+                          ].filter(Boolean).join(', ');
+                          return `${player.deckName} ${player.serveValue} [${player.servedRecipes}R/${player.addedIngredients}I${flags ? `; ${flags}` : ''}]`;
+                        })
+                        .join(' | '))}</td>
+                    </tr>
+                  `,
+                )
+                .join('')}
+            </tbody>
+          </table>
+        </div>
+      </details>
     </section>
   `;
 };
@@ -587,7 +669,7 @@ const readOptions = (root: HTMLElement, current: SimulationOptions): SimulationO
     players,
     decks: uniqueDecksForPlayerCount(selectedDeckIds(root), players),
     seed: Number(root.querySelector<HTMLInputElement>('#sim-seed')?.value ?? current.seed),
-    policy: 'greedy',
+    policy: (root.querySelector<HTMLSelectElement>('#sim-policy')?.value ?? current.policy) as SimulationPolicy,
   };
 };
 

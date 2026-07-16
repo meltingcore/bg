@@ -33,7 +33,7 @@ is met.
 ## 🇮🇹 Piazza Romana
 
 - **Customer Effect** - Players hand limit is increased to 8 when refreshing.
-- **Special Ability** - Dishes served with their exact pasta Ingredient Card gain +2 serve value.
+- **Special Ability** - Dishes served with their exact pasta Ingredient Card gain +1 serve value.
 - **Tips Tracking** - Attract a customer using a dish with an exact pasta Ingredient Card added
   and use the pasta Ingredient Card as a Tips Card.
 
@@ -127,8 +127,7 @@ is met.
 ## 🇨🇳 Jin Long
 
 - **Customer Effect** - Easy dishes gain +1 serve value.
-- **Special Ability** - Each pair of dishes of the same type served in the same meal gains +1
-  serve value.
+- **Special Ability** - Each pair of recipes of the same type grants +1 serve value.
 - **Tips Tracking** - Attract a customer serving a pair of rice and noodles dishes in the same meal
   and use one of the recipe cards as a Tips Card.
 
@@ -144,7 +143,7 @@ is met.
 - Recipe Cards (15):
   - Recipes without extra ingredients (6)
     - Mapo Tofu
-    - Congee
+    - Congee (rice)
     - Sticky Rice with Mango (rice)
     - Dry-Fried Green Beans
     - Kung Pao Chicken
@@ -157,7 +156,7 @@ is met.
     - Cantonese Beef Chow Fun (noodles)
     - Sichuan Dan Dan Noodles (noodles)
   - Recipes with 2 extra ingredients (3)
-    - Lo Mein
+    - Lo Mein (noodles)
     - Peking Duck Fried Rice (rice)
     - Dragon Beard Noodles (noodles)
 - Drink Cards (3)
@@ -171,7 +170,7 @@ is met.
 ## 🇮🇳 Raj Mahal
 
 - **Customer Effect** - A pair of added ingredients add +1 serve value.
-- **Special Ability** - Each served dish with at least one spice Ingredient Card gains +1 serve
+- **Special Ability** - Each distinct pair of different Ingredient Cards gains +1 serve
   value.
 - **Tips Tracking** - Attract a customer using a dish with a spice Ingredient Card added and use
   the spice Ingredient Card as a Tips Card. Tips cards must be different spices.
@@ -179,26 +178,25 @@ is met.
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient And Flavor Cards (16):
-  - Other Ingredient Cards (6)
-  - Spice Ingredient Cards (7):
-    - Cumin
-    - Saffron
-    - Coriander
-    - Cinnamon
-    - Cardamom
-    - Turmeric
-    - Nutmeg
+- Ingredient And Flavor Cards (15):
+  - Ingredient Cards (12):
+    - Cumin (2)
+    - Saffron (2)
+    - Coriander (2)
+    - Cinnamon (2)
+    - Cardamom (2)
+    - Turmeric (2)
   - Flavor Cards (3):
     - Ghee
     - Coconut Milk
     - Cashew
 - Recipe Cards (14):
-  - Recipes without extra ingredients (4):
+  - Recipes without extra ingredients (5):
     - Jeera Rice
     - Spiced Lentil Soup
     - Tamarind Rice
     - Lemon Rice
+    - Chicken Curry
   - Recipes with 1 extra ingredient (7):
     - Biryani
     - Dal Tadka
@@ -222,10 +220,10 @@ is met.
 ## 🇺🇸 Liberty Grill
 
 - **Customer Effect** - Gain +1 serve value for each pair of cards in hand.
-- **Special Ability** - 1 extra Ingredient Card can be added to a dish above its printed number of
-  extra Ingredient Cards to gain +1 serve value.
+- **Special Ability** - Up to 2 extra Ingredient Cards can be added to dishes in a meal above their
+  printed number of extra Ingredient Cards.
 - **Tips Tracking** - Attract a customer using a burger or steak dish and use the recipe card as 
-  a Tips Card. Tips cards must be of the same type (burger or steak).
+  a Tips Card. 
 
 <details>
   <summary>Deck Composition</summary>
@@ -310,19 +308,21 @@ is met.
 ## 🇯🇵 Sakura House
 
 - **Customer Effect** - Hard dishes gain +1 serve value.
-- **Special Ability** - Each seasoning Ingredient used only once in a meal gains +1 serve value.
+- **Special Ability** - If at least one seasoning Ingredient is used exactly once in a meal, gain
+  +1 serve value.
 - **Tips Tracking** - Attract a customer using a dish with a seasoning Ingredient Card added and
-  use the seasoning Ingredient Card as Tips Cards. Tips cards can be 2 of the same type maximum.
+  use the seasoning Ingredient Card as Tips Cards.
 
 <details>
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (16):
-  - Other Ingredient Cards (6)
-  - Seasoning Ingredient Cards (7):
+  - Other Ingredient Cards (5)
+  - Seasoning Ingredient Cards (8):
     - Umami (2)
-    - Wasabi (3)
+    - Wasabi (2)
     - Ginger (2)
+    - Garlic (2)
   - Flavor Cards (3):
     - Nori
     - Sesame Oil

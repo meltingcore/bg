@@ -1,4 +1,5 @@
 import { DECKS, type CuisineId } from './data/decks.ts';
+import { SIMULATION_POLICIES, type SimulationPolicy } from './game/bot.ts';
 import {
   defaultSimulationOptions,
   formatSimulationReport,
@@ -23,7 +24,7 @@ Options:
   --players <n>    Player count from 2 to 4. Default: ${defaultSimulationOptions.players}
   --decks <ids>    Comma-separated cuisine ids. Default: ${defaultSimulationOptions.decks.join(',')}
   --seed <n>       Base seed. Game i uses seed + i. Default: ${defaultSimulationOptions.seed}
-  --policy <name>  Bot policy. Currently: greedy
+  --policy <name>  Bot policy: ${SIMULATION_POLICIES.join(', ')}. Default: ${defaultSimulationOptions.policy}
   --json           Print raw JSON instead of a text report.
   --help           Show this help.
 
@@ -38,13 +39,16 @@ const parseInteger = (name: string, value: string | undefined) => {
   return parsed;
 };
 
-const parseArgs = (argv: string[]): CliOptions => {
+const parseArgs = (argv: string[]): CliOptions | null => {
   const options: CliOptions = { ...defaultSimulationOptions, json: false };
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     if (arg === '--') continue;
-    if (arg === '--help' || arg === '-h') throw new Error(usage());
+    if (arg === '--help' || arg === '-h') {
+      console.log(usage());
+      return null;
+    }
     if (arg === '--json') {
       options.json = true;
       continue;
@@ -57,8 +61,10 @@ const parseArgs = (argv: string[]): CliOptions => {
     else if (arg === '--players') options.players = parseInteger('--players', value);
     else if (arg === '--seed') options.seed = parseInteger('--seed', value);
     else if (arg === '--policy') {
-      if (value !== 'greedy') throw new Error(`Unsupported policy "${value}".`);
-      options.policy = value;
+      if (!SIMULATION_POLICIES.includes(value as SimulationPolicy)) {
+        throw new Error(`Unsupported policy "${value}".`);
+      }
+      options.policy = value as SimulationPolicy;
     } else if (arg === '--decks') {
       options.decks = value.split(',').map((id) => id.trim()).filter(Boolean) as CuisineId[];
     } else {
@@ -74,6 +80,7 @@ const parseArgs = (argv: string[]): CliOptions => {
 const main = () => {
   try {
     const options = parseArgs(process.argv.slice(2));
+    if (!options) return;
     const result = runSimulation(options);
 
     if (options.json) {
