@@ -407,11 +407,15 @@ const mexicanExtraHotCount = (player: PlayerState) =>
     .flatMap((dish) => dish.ingredients)
     .filter((card) => card.tags.includes('hot')).length;
 
+const usaExtraIngredientUsed = (player: PlayerState) =>
+  player.meal.some((dish) => regularIngredientCount(dish) > printedIngredientCapacity(dish));
+
 const canAddIngredientToDish = (player: PlayerState, dish: Dish, ingredient: CardInstance) => {
   if (!dish.recipe.difficulty || ingredient.kind !== 'ingredient') return false;
   if (ingredient.ingredientType === 'flavor') return flavorCount(dish) < 1;
 
-  const normalCapacity = printedIngredientCapacity(dish) + (player.deckId === 'usa' ? 1 : 0);
+  const usaExtraCapacity = player.deckId === 'usa' && !usaExtraIngredientUsed(player) ? 1 : 0;
+  const normalCapacity = printedIngredientCapacity(dish) + usaExtraCapacity;
   if (regularIngredientCount(dish) < normalCapacity) return true;
 
   return player.deckId === 'mexico' && ingredient.tags.includes('hot') && mexicanExtraHotCount(player) < 2;
@@ -532,7 +536,7 @@ const hasFewerTips = (players: PlayerState[], player: PlayerState) =>
 
 const abilityBonus = (player: PlayerState) => {
   if (player.deckId === 'italy') {
-    return player.meal.filter((dish) => {
+    return 2 * player.meal.filter((dish) => {
       const exact = dish.recipe.exactIngredient;
       return exact && dish.ingredients.some((ingredient) => ingredient.name === exact);
     }).length;
@@ -540,9 +544,10 @@ const abilityBonus = (player: PlayerState) => {
 
   if (player.deckId === 'france') {
     const courses = new Set(player.meal.flatMap((dish) => dish.recipe.tags));
-    return Number(courses.has('entree') && courses.has('appetizer')) +
+    const adjacentPairs = Number(courses.has('entree') && courses.has('appetizer')) +
       Number(courses.has('appetizer') && courses.has('main')) +
       Number(courses.has('main') && courses.has('dessert'));
+    return Math.min(2, adjacentPairs);
   }
 
   if (player.deckId === 'china') {
@@ -554,10 +559,9 @@ const abilityBonus = (player: PlayerState) => {
   }
 
   if (player.deckId === 'india') {
-    const spiceCount = player.meal
-      .flatMap((dish) => dish.ingredients)
-      .filter((card) => card.tags.includes('spice')).length;
-    return Math.floor(spiceCount / 2);
+    return player.meal.filter((dish) =>
+      dish.ingredients.some((card) => card.tags.includes('spice')),
+    ).length;
   }
 
   if (player.deckId === 'turkiye') {
@@ -570,13 +574,14 @@ const abilityBonus = (player: PlayerState) => {
     const seasonings = player.meal
       .flatMap((dish) => dish.ingredients)
       .filter((card) => card.tags.includes('seasoning'));
-    return pairDifferentNames(seasonings);
+    return Number(player.meal.length >= 2 && seasonings.length > 0) + pairDifferentNames(seasonings);
   }
 
   if (player.deckId === 'mexico') {
-    return player.meal
+    const hotIngredients = player.meal
       .flatMap((dish) => dish.ingredients)
       .filter((card) => card.tags.includes('hot')).length;
+    return Math.min(1, hotIngredients);
   }
 
   return 0;
@@ -589,6 +594,9 @@ const mealFlavors = (player: PlayerState) =>
   player.meal.flatMap((dish) => dish.ingredients).filter((card) => card.ingredientType === 'flavor');
 
 const hasDishTag = (player: PlayerState, tag: string) => player.meal.some((dish) => dish.recipe.tags.includes(tag));
+
+const dishTagCount = (player: PlayerState, tag: string) =>
+  player.meal.filter((dish) => dish.recipe.tags.includes(tag)).length;
 
 const differentTaggedIngredientNames = (player: PlayerState, tag: string) =>
   new Set(mealIngredients(player).filter((card) => card.tags.includes(tag)).map((card) => card.name)).size;
@@ -653,9 +661,9 @@ export const drinkRequirementMet = (player: PlayerState, drink: CardInstance) =>
     case 'india:Masala Chai':
       return differentTaggedIngredientNames(player, 'spice') >= 2;
     case 'usa:Coke':
-      return hasDishTag(player, 'burger');
+      return dishTagCount(player, 'burger') >= 2;
     case 'usa:Bourbon':
-      return hasDishTag(player, 'steak');
+      return dishTagCount(player, 'steak') >= 2;
     case 'usa:Root Beer':
       return hasExtraIngredientAbovePrintedCapacity(player);
     case 'turkiye:Raki':
@@ -768,10 +776,10 @@ const eligibleTipCard = (player: PlayerState) => {
   }
 
   if (player.deckId === 'china') {
-    const recipes = player.meal.map((dish) => dish.recipe);
-    const hasRice = recipes.some((card) => card.tags.includes('rice'));
-    const hasNoodles = recipes.some((card) => card.tags.includes('noodles'));
-    return hasRice && hasNoodles ? recipes.find((card) => card.tags.includes('rice') || card.tags.includes('noodles')) ?? null : null;
+    const taggedRecipes = player.meal
+      .map((dish) => dish.recipe)
+      .filter((card) => card.tags.includes('rice') || card.tags.includes('noodles'));
+    return taggedRecipes[0] ?? null;
   }
 
   if (player.deckId === 'india') {
@@ -806,7 +814,13 @@ const eligibleTipCard = (player: PlayerState) => {
   }
 
   if (player.deckId === 'mexico') {
-    return player.meal.flatMap((dish) => dish.ingredients).find((card) => card.tags.includes('hot'));
+    const counts = player.tips.reduce<Record<string, number>>((acc, card) => {
+      acc[card.name] = (acc[card.name] ?? 0) + 1;
+      return acc;
+    }, {});
+    return player.meal
+      .flatMap((dish) => dish.ingredients)
+      .find((card) => card.tags.includes('hot') && (counts[card.name] ?? 0) < 2);
   }
 
   return null;

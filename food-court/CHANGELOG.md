@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.12.1]
+
+FIXES:
+
+* Rebalanced all cuisine decks using automated four-player simulations across every possible
+  four-deck table combination.
+* The automated simulator was aligned with all balance changes.
+
 ## [0.12.0]
 
 CHANGES:

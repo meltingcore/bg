@@ -33,7 +33,7 @@ is met.
 ## 🇮🇹 Piazza Romana
 
 - **Customer Effect** - Players hand limit is increased to 8 when refreshing.
-- **Special Ability** - Dishes served with their exact pasta Ingredient Card gain +1 serve value.
+- **Special Ability** - Dishes served with their exact pasta Ingredient Card gain +2 serve value.
 - **Tips Tracking** - Attract a customer using a dish with an exact pasta Ingredient Card added
   and use the pasta Ingredient Card as a Tips Card.
 
@@ -41,16 +41,15 @@ is met.
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (16)
-  - Pasta Ingredient Cards (8):
-    - Spaghetti
-    - Fettuccine
-    - Tagliatelle
-    - Lasagna Sheets
-    - Penne
+  - Pasta Ingredient Cards (13):
+    - Spaghetti (2)
+    - Fettuccine (2)
+    - Tagliatelle (2)
+    - Lasagna Sheets (2)
+    - Penne (2)
     - Campanelle
     - Gnocchi
     - Ravioli
-  - Other Ingredient Cards (5)
   - Flavor Cards (3):
     - Basil
     - Balsamic Vinegar
@@ -84,8 +83,8 @@ is met.
 ## 🇫🇷 Le Petit Paris
 
 - **Customer Effect** - Players can discard their hand and draw new one when refreshing.
-- **Special Ability** - Each adjacent course pair served in the same meal gains +1 serve value:
-  entrée + appetizer, appetizer + main, or main + dessert.
+- **Special Ability** - Each adjacent course pair served in the same meal gains +1 serve value,
+  to a maximum of +2 per meal: entrée + appetizer, appetizer + main, or main + dessert.
 - **Tips Tracking** - Attract a customer using dish in order: entrée, appetizer, main & dessert and
   use the recipe card as a Tips Card. Tips cards must be different courses.
 
@@ -172,7 +171,7 @@ is met.
 ## 🇮🇳 Raj Mahal
 
 - **Customer Effect** - A pair of added ingredients add +1 serve value.
-- **Special Ability** - Each pair of spice Ingredient Cards used in served dishes gains +1 serve
+- **Special Ability** - Each served dish with at least one spice Ingredient Card gains +1 serve
   value.
 - **Tips Tracking** - Attract a customer using a dish with a spice Ingredient Card added and use
   the spice Ingredient Card as a Tips Card. Tips cards must be different spices.
@@ -183,11 +182,13 @@ is met.
 - Ingredient And Flavor Cards (16):
   - Other Ingredient Cards (6)
   - Spice Ingredient Cards (7):
-    - Cumin (2)
-    - Saffron (2)
+    - Cumin
+    - Saffron
     - Coriander
     - Cinnamon
     - Cardamom
+    - Turmeric
+    - Nutmeg
   - Flavor Cards (3):
     - Ghee
     - Coconut Milk
@@ -255,8 +256,8 @@ is met.
     - T-bone Steak (steak)
     - Apple Pie
 - Drink Cards (3)
-  - Coke - Play if you served a burger dish.
-  - Bourbon - Play if you served a steak dish.
+  - Coke - Play if you served at least 2 burger dishes.
+  - Bourbon - Play if you served at least 2 steak dishes.
   - Root Beer - Play if a dish has an extra Ingredient Card above its printed number of extras.
 - Customer Cards (6)
 - Ability Card (1)
@@ -309,8 +310,7 @@ is met.
 ## 🇯🇵 Sakura House
 
 - **Customer Effect** - Hard dishes gain +1 serve value.
-- **Special Ability** - Pair of different seasoning Ingredient Cards used in a meal gains +1 serve
-  value.
+- **Special Ability** - Each seasoning Ingredient used only once in a meal gains +1 serve value.
 - **Tips Tracking** - Attract a customer using a dish with a seasoning Ingredient Card added and
   use the seasoning Ingredient Card as Tips Cards. Tips cards can be 2 of the same type maximum.
 
@@ -356,9 +356,8 @@ is met.
 ## 🇲🇽 El Nopalito
 
 - **Customer Effect** - Normal dishes gain +1 serve value.
-- **Special Ability** - Hot Ingredient Cards gain +1 serve value and up to 2 can be added to
-  dishes in a meal.
-- **Tips Tracking** - Attract a customer using a dish with a hot Ingredient Card added and use the
+- **Special Ability** - Hot ingredients can be added also to Recipes without extra ingredients.
+- **Tips Tracking** - Attract a customer using a dish with a non-hot Ingredient Card and use the
   Ingredient Card as a Tips Card.
 
 <details>
@@ -366,11 +365,15 @@ is met.
 
 - Ingredient And Flavor Cards (16):
   - Hot Ingredient Cards (6):
-    - Cayenne Pepper (hot) (3)
-    - Jalapeño (hot) (3)
+    - Cayenne Pepper (hot)
+    - Chipotle (hot)
+    - Habanero (hot)
+    - Serrano (hot)
+    - Jalapeño (hot)
+    - Poblano (hot)
   - Other Ingredient Cards (7):
-    - Avocado (2)
-    - Other Ingredient Cards (5)
+    - Avocado (4)
+    - Corn (3)
   - Flavor Cards (3):
     - Lime
     - Cilantro
