@@ -127,9 +127,9 @@ is met.
 ## 🇨🇳 Jin Long
 
 - **Customer Effect** - Easy dishes gain +1 serve value.
-- **Special Ability** - Each pair of recipes of the same type grants +1 serve value.
-- **Tips Tracking** - Attract a customer serving a pair of rice and noodles dishes in the same meal
-  and use one of the recipe cards as a Tips Card.
+- **Special Ability** - Each pair of recipes served grants +1 serve value.
+- **Tips Tracking** - Attract a customer using a pair of dishes of the same type and use one of the
+  recipe cards as Tips Card. 
 
 <details>
   <summary>Deck Composition</summary>
@@ -308,10 +308,10 @@ is met.
 ## 🇯🇵 Sakura House
 
 - **Customer Effect** - Hard dishes gain +1 serve value.
-- **Special Ability** - If at least one seasoning Ingredient is used exactly once in a meal, gain
-  +1 serve value.
+- **Special Ability** - If exactly 1 seasoning Ingredient Card is used in a meal, gain +1 serve
+  value.
 - **Tips Tracking** - Attract a customer using a dish with a seasoning Ingredient Card added and
-  use the seasoning Ingredient Card as Tips Cards.
+  use the seasoning Ingredient Card as a Tips Card. Tips Cards must be different seasonings.
 
 <details>
   <summary>Deck Composition</summary>
@@ -356,8 +356,9 @@ is met.
 ## 🇲🇽 El Nopalito
 
 - **Customer Effect** - Normal dishes gain +1 serve value.
-- **Special Ability** - Hot ingredients can be added also to Recipes without extra ingredients.
-- **Tips Tracking** - Attract a customer using a dish with a non-hot Ingredient Card and use the
+- **Special Ability** - Hot Ingredient Cards can be added also to Recipe Cards without printed
+  Ingredient slots to gain +1 serve value but a meal can have max 2 hot Ingredient Cards total.
+- **Tips Tracking** - Attract a customer using a dish with a hot Ingredient Card and use the hot
   Ingredient Card as a Tips Card.
 
 <details>

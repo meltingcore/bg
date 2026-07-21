@@ -38,6 +38,9 @@ export interface BotTurnSummary {
   drinkSuccessful: boolean;
   tipEligible: boolean;
   estimatedTieRisk: number;
+  customerEffectValue: number;
+  usedFrenchRedraw: boolean;
+  usedItalianHandLimit: boolean;
   serveValue: number;
   wonCustomer: boolean;
   customerDiscarded: boolean;
@@ -56,6 +59,8 @@ interface CandidateMetrics {
   tipScoreSwing: number;
   completesTips: boolean;
   tieRisk: number;
+  customerEffectValue: number;
+  abilityValue: number;
 }
 
 interface BotDecision {
@@ -154,9 +159,10 @@ const candidateUtility = (
 
   if (policy === 'greedy') {
     return metrics.value * 100 +
-      Number(metrics.playedDrink) * 0.3 +
-      metrics.ingredients * 0.02 +
-      metrics.recipes * 0.001;
+      metrics.customerEffectValue * 0.1 +
+      metrics.abilityValue * 0.05 +
+      Number(metrics.playedDrink) * 0.03 -
+      metrics.cardsSpent * 0.001;
   }
 
   if (policy === 'tips') {
@@ -164,6 +170,7 @@ const candidateUtility = (
       tipBonus * 1.5 -
       metrics.tieRisk * 4 -
       metrics.cardsSpent * 0.08 +
+      metrics.customerEffectValue * 0.04 +
       jitter;
   }
 
@@ -173,6 +180,7 @@ const candidateUtility = (
       metrics.tieRisk * 18 -
       metrics.cardsSpent * 0.2 +
       metrics.handSize * 0.05 +
+      metrics.customerEffectValue * 0.04 +
       jitter;
   }
 
@@ -181,6 +189,7 @@ const candidateUtility = (
     metrics.tieRisk * 10 -
     metrics.cardsSpent * 0.12 +
     metrics.handSize * 0.08 +
+    metrics.customerEffectValue * 0.04 +
     jitter;
 };
 
@@ -192,7 +201,8 @@ const metricsFor = (
   const player = findPlayer(state, playerId);
   if (!player) return null;
 
-  const value = valueBreakdown(state, player).total;
+  const breakdown = valueBreakdown(state, player);
+  const value = breakdown.total;
   const tipEligible = Boolean(eligibleTipCard(player));
   const recipes = player.meal.length;
   const ingredients = player.meal.reduce((sum, dish) => sum + dish.ingredients.length, 0);
@@ -209,6 +219,8 @@ const metricsFor = (
     tipScoreSwing: tipEligible ? tipScoreSwing(player) : 0,
     completesTips: tipEligible && player.tips.length === 3,
     tieRisk: tieRiskFor(state, player, value),
+    customerEffectValue: breakdown.customer + breakdown.hand,
+    abilityValue: breakdown.ability,
   };
 
   return {
@@ -346,6 +358,13 @@ const chooseMeal = (
 const nextFrenchCourse = (player: PlayerState) =>
   ['entree', 'appetizer', 'main', 'dessert'][player.tips.length];
 
+const nextChinaRecipeType = (player: PlayerState) => {
+  const lastTip = player.tips[player.tips.length - 1];
+  if (lastTip?.tags.includes('rice')) return 'noodles';
+  if (lastTip?.tags.includes('noodles')) return 'rice';
+  return null;
+};
+
 const supportsTips = (player: PlayerState, card: CardInstance) => {
   if (player.deckId === 'italy') {
     return card.kind === 'ingredient' && card.tags.includes('exact');
@@ -354,7 +373,11 @@ const supportsTips = (player: PlayerState, card: CardInstance) => {
     return card.kind === 'recipe' && card.tags.includes(nextFrenchCourse(player));
   }
   if (player.deckId === 'china') {
-    return card.kind === 'recipe' && (card.tags.includes('rice') || card.tags.includes('noodles'));
+    const requiredType = nextChinaRecipeType(player);
+    return card.kind === 'recipe' &&
+      (requiredType
+        ? card.tags.includes(requiredType)
+        : card.tags.includes('rice') || card.tags.includes('noodles'));
   }
   if (player.deckId === 'india') {
     const tracked = new Set(player.tips.map((tip) => tip.name));
@@ -368,17 +391,14 @@ const supportsTips = (player: PlayerState, card: CardInstance) => {
     return card.kind === 'recipe' && card.tags.includes('kebab');
   }
   if (player.deckId === 'japan') {
-    const counts = player.tips.reduce<Record<string, number>>((acc, tip) => {
-      acc[tip.name] = (acc[tip.name] ?? 0) + 1;
-      return acc;
-    }, {});
+    const tracked = new Set(player.tips.map((tip) => tip.name));
     return card.kind === 'ingredient' &&
       card.tags.includes('seasoning') &&
-      (counts[card.name] ?? 0) < 2;
+      !tracked.has(card.name);
   }
   return card.kind === 'ingredient' &&
     card.ingredientType === 'ingredient' &&
-    !card.tags.includes('hot');
+    card.tags.includes('hot');
 };
 
 const cardKeepValue = (
@@ -412,9 +432,7 @@ const hasImmediateTipPotential = (player: PlayerState) => {
     return recipes.some((recipe) => recipe.exactIngredient && ingredients.has(recipe.exactIngredient));
   }
   if (player.deckId === 'china') {
-    const recipes = player.hand.filter((card) => card.kind === 'recipe');
-    return recipes.some((card) => card.tags.includes('rice')) &&
-      recipes.some((card) => card.tags.includes('noodles'));
+    return player.hand.some((card) => supportsTips(player, card));
   }
   return player.hand.some((card) => supportsTips(player, card));
 };
@@ -491,16 +509,17 @@ export const refreshForBot = (
   policy: BotPolicy = 'adaptive',
 ) => {
   const player = findPlayer(state, playerId);
-  if (!player || state.phase !== 'serve') return;
+  if (!player || state.phase !== 'serve') return false;
 
   if (shouldRedrawFrenchHand(state, player, policy)) {
     discardHandForRefresh(state, playerId);
-    return;
+    return true;
   }
 
   const discard = chooseRefreshDiscard(state, player, policy);
   if (discard) discardFromHand(state, playerId, discard.id);
   refreshHand(state, playerId);
+  return false;
 };
 
 const uniqueWinningPlayerId = (state: GameState) => {
@@ -529,9 +548,18 @@ export const playBotPlayers = (
     .filter((player) => botIds.has(player.id))
     .sort((a, b) => playerNumber(a.id) - playerNumber(b.id));
   const policies = resolveAssignments(assignment, orderedPlayers.map((player) => player.id), state.seed);
+  const frenchRedraws = new Map<string, boolean>();
+  const italianHandLimitUses = new Map<string, boolean>();
 
   for (const player of orderedPlayers) {
-    refreshForBot(state, player.id, policies.get(player.id) ?? 'adaptive');
+    frenchRedraws.set(
+      player.id,
+      refreshForBot(state, player.id, policies.get(player.id) ?? 'adaptive'),
+    );
+    italianHandLimitUses.set(
+      player.id,
+      state.activeCustomer?.deckId === 'italy' && player.hand.length > 6,
+    );
   }
 
   let current = state;
@@ -576,6 +604,9 @@ export const playBotPlayers = (
       ),
       tipEligible: Boolean(eligibleTipCard(currentPlayer)),
       estimatedTieRisk: metrics?.tieRisk ?? 0,
+      customerEffectValue: metrics?.customerEffectValue ?? 0,
+      usedFrenchRedraw: frenchRedraws.get(player.id) ?? false,
+      usedItalianHandLimit: italianHandLimitUses.get(player.id) ?? false,
       serveValue: valueBreakdown(state, currentPlayer).total,
       wonCustomer: winningPlayerId === currentPlayer.id,
       customerDiscarded,

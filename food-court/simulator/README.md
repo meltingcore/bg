@@ -19,6 +19,15 @@ Run headless bot simulations without opening the Astro UI:
 pnpm sim -- --games 10 --players 4 --decks italy,france,china,india --seed 1000
 ```
 
+Run the exhaustive balance study across all 28 two-player matchups and all 70 four-player tables:
+
+```sh
+pnpm balance -- --games2 300 --games4 40 --workers 4 --seed 700000
+```
+
+The balance study prints compact JSON containing aggregate deck performance, every matchup/table,
+customer-effect usage, nationality impact, strategy performance, and seat diagnostics.
+
 Useful options:
 
 - `--games <n>` controls how many full games are simulated.
@@ -41,7 +50,8 @@ Bot policies:
 
 Refresh decisions are policy-aware. Bots can use the French full-hand redraw before reaching an
 empty-recipe hand, discard cards based on deck-specific Tips paths, and account for customer effects
-when choosing how many cards to commit.
+when choosing how many cards to commit. When two meals have the same serve value, bots prefer the
+meal that gains more from the active customer effect and conserves more cards.
 
 The Simulation Lab UI randomizes the base seed by default so repeated runs produce fresh samples.
 Turn off "Random seed each run" to reproduce a specific seed range.

@@ -418,12 +418,21 @@ const canAddIngredientToDish = (player: PlayerState, dish: Dish, ingredient: Car
   if (ingredient.ingredientType === 'flavor') return flavorCount(dish) < 1;
 
   const printedCapacity = printedIngredientCapacity(dish);
-  const abilityCapacity =
-    player.deckId === 'usa' ||
-    (player.deckId === 'mexico' && printedCapacity === 0 && ingredient.tags.includes('hot'))
-      ? 1
-      : 0;
-  return regularIngredientCount(dish) < printedCapacity + abilityCapacity;
+  if (regularIngredientCount(dish) < printedCapacity) return true;
+
+  if (player.deckId === 'usa') {
+    const extraIngredientsUsed = player.meal.reduce(
+      (total, mealDish) =>
+        total + Math.max(0, regularIngredientCount(mealDish) - printedIngredientCapacity(mealDish)),
+      0,
+    );
+    return extraIngredientsUsed < 2;
+  }
+
+  return player.deckId === 'mexico' &&
+    printedCapacity === 0 &&
+    ingredient.tags.includes('hot') &&
+    regularIngredientCount(dish) < 1;
 };
 
 export const addIngredient = (state: GameState, playerId: string, dishId: string, cardIdToAdd: string) => {
@@ -548,13 +557,21 @@ const abilityBonus = (player: PlayerState) => {
   }
 
   if (player.deckId === 'china') {
-    return player.meal.length * (player.meal.length - 1) / 2;
+    const typeCounts = player.meal.reduce<Record<string, number>>((counts, dish) => {
+      for (const tag of dish.recipe.tags.filter((item) => item === 'rice' || item === 'noodles')) {
+        counts[tag] = (counts[tag] ?? 0) + 1;
+      }
+      return counts;
+    }, {});
+    return Object.values(typeCounts).reduce(
+      (total, count) => total + count * (count - 1) / 2,
+      0,
+    );
   }
 
   if (player.deckId === 'india') {
-    return player.meal.filter((dish) =>
-      dish.ingredients.some((card) => card.tags.includes('spice')),
-    ).length;
+    const distinctIngredients = new Set(mealIngredients(player).map((card) => card.name)).size;
+    return distinctIngredients * (distinctIngredients - 1) / 2;
   }
 
   if (player.deckId === 'turkiye') {
@@ -567,11 +584,17 @@ const abilityBonus = (player: PlayerState) => {
     const seasonings = player.meal
       .flatMap((dish) => dish.ingredients)
       .filter((card) => card.tags.includes('seasoning'));
-    const counts = seasonings.reduce<Record<string, number>>((acc, card) => {
-      acc[card.name] = (acc[card.name] ?? 0) + 1;
-      return acc;
-    }, {});
-    return Math.min(1, Object.values(counts).filter((count) => count === 1).length);
+    return Number(seasonings.length === 1);
+  }
+
+  if (player.deckId === 'mexico') {
+    return player.meal.reduce(
+      (total, dish) =>
+        total +
+        Number(printedIngredientCapacity(dish) === 0) *
+          dish.ingredients.filter((card) => card.tags.includes('hot')).length,
+      0,
+    );
   }
 
   return 0;
@@ -767,11 +790,17 @@ export const eligibleTipCard = (player: PlayerState) => {
 
   if (player.deckId === 'china') {
     const recipes = player.meal.map((dish) => dish.recipe);
-    const hasRice = recipes.some((card) => card.tags.includes('rice'));
-    const hasNoodles = recipes.some((card) => card.tags.includes('noodles'));
-    return hasRice && hasNoodles
-      ? recipes.find((card) => card.tags.includes('rice') || card.tags.includes('noodles')) ?? null
-      : null;
+    const lastTip = player.tips[player.tips.length - 1];
+    const requiredType = lastTip?.tags.includes('rice')
+      ? 'noodles'
+      : lastTip?.tags.includes('noodles')
+        ? 'rice'
+        : null;
+    return recipes.find((card) =>
+      requiredType
+        ? card.tags.includes(requiredType)
+        : card.tags.includes('rice') || card.tags.includes('noodles'),
+    ) ?? null;
   }
 
   if (player.deckId === 'india') {
@@ -792,19 +821,16 @@ export const eligibleTipCard = (player: PlayerState) => {
   }
 
   if (player.deckId === 'japan') {
-    const counts = player.tips.reduce<Record<string, number>>((acc, card) => {
-      acc[card.name] = (acc[card.name] ?? 0) + 1;
-      return acc;
-    }, {});
+    const tracked = new Set(player.tips.map((card) => card.name));
     return player.meal
       .flatMap((dish) => dish.ingredients)
-      .find((card) => card.tags.includes('seasoning') && (counts[card.name] ?? 0) < 2);
+      .find((card) => card.tags.includes('seasoning') && !tracked.has(card.name));
   }
 
   if (player.deckId === 'mexico') {
     return player.meal
       .flatMap((dish) => dish.ingredients)
-      .find((card) => card.ingredientType === 'ingredient' && !card.tags.includes('hot'));
+      .find((card) => card.ingredientType === 'ingredient' && card.tags.includes('hot'));
   }
 
   return null;
