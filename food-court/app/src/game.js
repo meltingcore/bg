@@ -19,7 +19,13 @@ export const shuffle = (items, random = gameRandom) => {
     const target = Math.floor(random() * (index + 1));
     [copy[index], copy[target]] = [copy[target], copy[index]];
   }
-  return copy;
+
+  // Finish with an independent cut, as players normally would with a physical
+  // deck. Card types are deliberately never inspected: streaks and uneven
+  // hands remain possible outcomes of an honest shuffle.
+  if (copy.length < 2) return copy;
+  const cutIndex = Math.floor(random() * copy.length);
+  return [...copy.slice(cutIndex), ...copy.slice(0, cutIndex)];
 };
 
 export const emptyMeal = () => ({ dishes: [], drink: null });

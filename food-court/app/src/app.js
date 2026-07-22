@@ -42,32 +42,68 @@ const ui = {
 
 const TUTORIAL_STEPS = [
   {
-    kicker: "The guest sets the challenge",
-    title: "Read the order before you cook",
+    kicker: "Welcome to the mall food court",
+    title: "Turn browsing shoppers into your restaurant's guests",
+    symbol: "★",
+    visual: "goal",
+    body: "You run one of several restaurants in a busy mall food court. Shoppers wander between the available options, wondering what to eat. Each round, every restaurant secretly prepares an offer for the same shopper.",
+    note: "The game ends when any restaurant tracks 4 Tips Cards or the customer deck runs out. Then the restaurant with the most VP wins.",
+  },
+  {
+    kicker: "First · A shopper considers the court",
+    title: "Read what could attract this customer",
     symbol: "◎",
-    body: "Order Value is the maximum number of recipes you may serve. It is also the guest's base VP if you attract them.",
-    note: "Tips Value is bonus VP. You score it when your tracked Tips Cards meet that number.",
+    visual: "customer",
+    body: "The active Customer Card represents a shopper comparing the food court's restaurants. Order Value limits how many Recipe Cards you may serve and becomes base VP if they choose you. Tips Value is possible bonus VP, and the printed effect applies to every restaurant.",
+    note: "Example: Order 2 means you may serve at most 2 recipes and the guest is worth 2 base VP. Tips +2 is gained only when you have at least 2 tracked Tips Cards.",
+  },
+  {
+    kicker: "Know your cards",
+    title: "Recipes become dishes; other cards improve them",
+    symbol: "♨",
+    visual: "formula",
+    body: "A Recipe starts a dish for +1. Ingredients fill that recipe's printed slots for +1 each. You may add one Flavor to each recipe for +2, plus one Drink to the whole meal for +3 when its requirement is met.",
+    note: "Ingredients determine dish difficulty: 0 is Easy, 1 is Normal, and 2 is Hard. Flavor Cards do not change difficulty.",
   },
   {
     kicker: "Phase 1 · Refresh",
-    title: "Tune your hand",
+    title: "Prepare your hand for this guest",
     symbol: "↻",
-    body: "You may mark one card to discard, then draw up to three cards without passing your hand limit.",
-    note: "Changed your mind? Undo is available until you commit the phase.",
+    visual: "refresh",
+    body: "You may discard up to one card, then draw up to three cards without passing your hand limit. You may also keep every card and simply draw into any open space in your hand.",
+    note: "The normal hand limit is 6. Some guests change Refresh: an Italian guest raises the limit to 8, while a French guest lets you replace your whole hand.",
   },
   {
     kicker: "Phase 2 · Serve",
-    title: "Build dishes from your hand",
-    symbol: "♨",
-    body: "Choose recipes first. Select a served dish, then add Ingredients and one Flavor Card. A meal may also include one Drink Card.",
-    note: "Recipe +1 · Ingredient +1 · Flavor +2 · valid Drink +3.",
+    title: "Prepare the meal that could draw them to your counter",
+    symbol: "＋",
+    visual: "build",
+    body: "Click a gold Recipe Card first. Select the dish you want to work on, then click Ingredients and a Flavor to add them there. If you want a Drink, add it after serving at least one recipe.",
+    note: "You may serve fewer recipes than the Order Value or pass completely. Each restaurant's offer stays face down while the shopper considers their options.",
+  },
+  {
+    kicker: "While everyone cooks",
+    title: "Use the public card counts as clues",
+    symbol: "◫",
+    visual: "counts",
+    body: "Each restaurant shows how many cards it committed to its face-down meal and how many remain in hand. Card names stay hidden until Reveal, like watching rival counters prepare while a shopper browses the court.",
+    note: "A large play may be a powerful meal—or several low-value cards. The counts are information, not certainty.",
   },
   {
     kicker: "Phase 3 · Reveal",
-    title: "Highest unique value wins",
+    title: "Total the meals, then find the highest unique value",
     symbol: "✦",
-    body: "All restaurants reveal together. Matching values cancel each other, then the next-highest unique Serve Value attracts the guest.",
-    note: "Win with a deck-specific card combination to track a Tips Card. Four tracked Tips Cards end the game.",
+    visual: "contest",
+    body: "Every restaurant reveals its offer. Add card values, then the customer effect and each restaurant's ability. A Drink that misses its requirement adds +0. The highest unique Serve Value attracts the browsing shopper.",
+    note: "Matching values cancel. If two restaurants score 7 and another scores 5, both 7s are ignored and the unique 5 attracts the guest.",
+  },
+  {
+    kicker: "After the winner is found",
+    title: "Collect guests, track Tips, and score at the end",
+    symbol: "◆",
+    visual: "tips",
+    body: "The shopper becomes a guest of the winning restaurant. If that meal meets the deck's tracking condition, its owner may set aside one eligible card as a Tips Card. Tracked cards leave the draw cycle.",
+    note: "At game end, each guest scores its Order Value plus its full Tips Value when your tracked Tips count meets that guest's threshold. Tracking 4 Tips Cards ends the game after that round.",
   },
 ];
 
@@ -162,7 +198,7 @@ function cuisineCard(cuisine) {
       data-cuisine="${cuisine.id}"
       aria-pressed="${selected}"
     >
-      <span class="cuisine-seal">${cuisine.monogram}</span>
+      <span class="cuisine-seal restaurant-flag" aria-hidden="true">${cuisine.flag}</span>
       <span class="cuisine-copy">
         <span class="cuisine-flag">${cuisine.flag}</span>
         <strong>${escapeHtml(cuisine.name)}</strong>
@@ -219,7 +255,7 @@ function opponentSetup() {
 function renderLobby() {
   const selected = CUISINES[selectedCuisineId];
   return `
-    <main class="lobby-shell">
+    <main class="lobby-shell cuisine-theme-${selectedCuisineId}">
       <div class="lobby-art" aria-hidden="true"></div>
       <div class="lobby-vignette" aria-hidden="true"></div>
       <section class="lobby-content">
@@ -341,7 +377,7 @@ function scorePill(player, side, index = 0) {
     : `<span class="score-tips"><b>${player.tips.length}/4</b><span>tips</span></span>`;
   return `
     <div class="score-pill ${side}">
-      <span class="score-avatar" style="--cuisine: ${cuisine.accent}">${cuisine.monogram}</span>
+      <span class="score-avatar" style="--cuisine: ${cuisine.accent}" aria-hidden="true">${cuisine.flag}</span>
       <span class="score-name"><small>${side === "player" ? "Your restaurant" : `Rival ${index + 1}`}</small>${escapeHtml(cuisine.name)}</span>
       <span class="score-value"><strong>${scorePlayer(player)}</strong><small>VP</small></span>
       ${tipsCounter}
@@ -442,16 +478,21 @@ function opponentZone() {
     <section class="opponent-zone" aria-label="Rival restaurants">
       ${game.opponents.map((opponent, rivalIndex) => {
         const cuisine = CUISINES[opponent.cuisineId];
+        const playedCount = flattenMeal(opponent.meal).length;
         const hiddenCards = Array.from({ length: Math.min(opponent.hand.length, 4) }, (_, cardIndex) =>
-          `<span class="card-back" style="--i:${cardIndex}"><i>${cuisine.monogram}</i></span>`).join("");
+          `<span class="card-back" style="--i:${cardIndex}"><i aria-hidden="true">${cuisine.flag}</i></span>`).join("");
         return `
           <article class="opponent-seat">
             <div class="opponent-identity">
-              <span class="mini-seal" style="--cuisine:${cuisine.accent}">${cuisine.monogram}</span>
+              <span class="mini-seal restaurant-flag" style="--cuisine:${cuisine.accent}" aria-hidden="true">${cuisine.flag}</span>
               <div><small>Rival ${rivalIndex + 1}</small><strong>${escapeHtml(cuisine.name)}</strong><span>${escapeHtml(cuisine.ability)}</span></div>
             </div>
             <div class="opponent-hand" aria-label="Rival ${rivalIndex + 1} has ${opponent.hand.length} cards">${hiddenCards}</div>
-            <div class="opponent-status">${opponent.hand.length} cards · ${game.phase === "reveal" ? "revealed" : game.phase === "serve" ? "cooking…" : "refreshing…"}</div>
+            <div class="opponent-status" aria-label="Rival ${rivalIndex + 1}: ${playedCount} cards played and ${opponent.hand.length} cards left in hand">
+              ${game.phase === "refresh"
+                ? `<span><b>${opponent.hand.length}</b> in hand</span><i>refreshing…</i>`
+                : `<span class="played-count"><b>${playedCount}</b> played</span><span><b>${opponent.hand.length}</b> in hand</span><i>${game.phase === "reveal" ? "revealed" : "cooking…"}</i>`}
+            </div>
           </article>
         `;
       }).join("")}
@@ -577,7 +618,7 @@ function phaseAction() {
     <aside class="phase-action serve-action">
       <div><span class="phase-step">2</span><div><small>Now · Serve</small><strong>${game.player.meal.dishes.length ? "Finish and commit your meal" : "Start with a Recipe Card"}</strong></div></div>
       <p>${game.player.meal.dishes.length ? "Select a dish to direct Ingredients and Flavors, then serve when ready." : "Gold Recipe Cards create dishes. This guest accepts up to " + game.activeCustomer.order + "."}</p>
-      <div class="phase-metrics"><span>Dishes <b>${game.player.meal.dishes.length}/${game.activeCustomer.order}</b></span><span>Hand <b>${game.player.hand.length}</b></span><span>Tips <b>${game.player.tips.length}/4</b></span></div>
+      <div class="phase-metrics"><span>Played <b>${flattenMeal(game.player.meal).length}</b></span><span>In hand <b>${game.player.hand.length}</b></span><span>Dishes <b>${game.player.meal.dishes.length}/${game.activeCustomer.order}</b></span></div>
       <div class="action-buttons">
         ${undoButton()}
         <button class="secondary-button" data-action="serve-meal" data-pass="true">Pass</button>
@@ -661,6 +702,63 @@ function breakdownRows(result, player) {
     .join("");
 }
 
+function revealedCard(card, value, note = cardDetail(card)) {
+  const meta = TYPE_META[card.type];
+  return `
+    <article class="revealed-card card-${card.type}">
+      <div><span>${meta.symbol} ${escapeHtml(meta.label)}</span><b>${value}</b></div>
+      <strong>${escapeHtml(card.name)}</strong>
+      <small>${escapeHtml(note)}</small>
+    </article>
+  `;
+}
+
+function revealedMealDetails(player, meal, result) {
+  const cuisine = CUISINES[player.cuisineId];
+  const playedCount = flattenMeal(meal).length;
+  const cardSubtotal = result.breakdown.Recipes
+    + result.breakdown.Ingredients
+    + result.breakdown.Flavors
+    + result.breakdown.Drink;
+  return `
+    <details class="result-details">
+      <summary>
+        <span>${playedCount ? "Examine the actual cards" : "Examine this pass"}<small>${playedCount ? `${playedCount} revealed card${playedCount === 1 ? "" : "s"} · click to inspect` : "No meal was served"}</small></span>
+        <b aria-hidden="true">⌄</b>
+      </summary>
+      <div class="revealed-meal">
+        ${meal.dishes.length ? meal.dishes.map((dish, index) => {
+          const difficulty = dish.ingredients.length === 0 ? "Easy" : dish.ingredients.length === 1 ? "Normal" : "Hard";
+          const dishSubtotal = 1 + dish.ingredients.length + (dish.flavor ? 2 : 0);
+          return `
+            <section class="revealed-dish">
+              <header><span>Dish ${index + 1} · ${difficulty}</span><b>+${dishSubtotal}</b></header>
+              <div class="revealed-card-grid">
+                ${revealedCard(dish.recipe, "+1")}
+                ${dish.ingredients.map((card) => revealedCard(card, "+1")).join("")}
+                ${dish.flavor ? revealedCard(dish.flavor, "+2") : ""}
+              </div>
+            </section>
+          `;
+        }).join("") : `<p class="revealed-pass">No Recipe Cards were served, so this restaurant did not compete for the customer.</p>`}
+        ${meal.drink ? `
+          <section class="revealed-dish revealed-drink">
+            <header><span>Drink Card · ${result.validDrink ? "requirement met" : "requirement missed"}</span><b>+${result.validDrink ? 3 : 0}</b></header>
+            <div class="revealed-card-grid">
+              ${revealedCard(meal.drink, result.validDrink ? "+3" : "+0", `${meal.drink.condition} · ${result.validDrink ? "valid" : "not met"}`)}
+            </div>
+          </section>` : ""}
+        <dl class="serve-ledger">
+          <div><dt>Revealed cards</dt><dd>+${cardSubtotal}</dd></div>
+          <div><dt>Customer effect<small>${escapeHtml(game.activeCustomer.effect)}</small></dt><dd>+${result.breakdown.Customer}</dd></div>
+          <div><dt>${escapeHtml(cuisine.ability)}<small>${escapeHtml(cuisine.abilityText)}</small></dt><dd>+${result.breakdown.Ability}</dd></div>
+          <div class="serve-ledger-total"><dt>Total Serve Value</dt><dd>${result.total}</dd></div>
+        </dl>
+      </div>
+    </details>
+  `;
+}
+
 function resultPanel(side, player, meal, result, label, status) {
   const cuisine = CUISINES[player.cuisineId];
   const statusText = {
@@ -673,15 +771,17 @@ function resultPanel(side, player, meal, result, label, status) {
     <article class="result-side ${side} status-${status}">
       <span class="result-status">${status === "winner" ? "✦" : status === "cancelled" ? "×" : "·"} ${statusText}</span>
       <div class="result-restaurant">
-        <span class="mini-seal" style="--cuisine:${cuisine.accent}">${cuisine.monogram}</span>
+        <span class="mini-seal restaurant-flag" style="--cuisine:${cuisine.accent}" aria-hidden="true">${cuisine.flag}</span>
         <div><small>${escapeHtml(label)}</small><strong>${escapeHtml(cuisine.name)}</strong></div>
       </div>
+      <div class="result-card-counts"><b>${flattenMeal(meal).length}</b> played · <b>${player.hand.length}</b> left in hand</div>
       <div class="result-total">${result.total}</div>
       <ul>${breakdownRows(result, player)}</ul>
       <div class="result-cards">
         ${meal.dishes.map((dish) => `<span title="${escapeHtml(dish.recipe.name)}">♨ ${escapeHtml(dish.recipe.name)}</span>`).join("") || `<span>Passed</span>`}
         ${meal.drink ? `<span title="${escapeHtml(meal.drink.name)}">◒ ${escapeHtml(meal.drink.name)} ${result.validDrink ? "+3" : "+0"}</span>` : ""}
       </div>
+      ${revealedMealDetails(player, meal, result)}
     </article>
   `;
 }
@@ -812,15 +912,27 @@ function rulesModal() {
   `;
 }
 
-function tutorialVisual(stepIndex) {
-  if (stepIndex === 0) {
+function tutorialVisual(visual) {
+  if (visual === "goal") {
+    return `<div class="tutorial-goal"><span>♨<small>Your restaurant</small></span><i>competes for</i><span>◎<small>The guest</small></span><i>earns</i><span>★<small>Victory points</small></span></div>`;
+  }
+  if (visual === "customer") {
     return `<div class="tutorial-values"><span><b>2</b><small>Order<br>max recipes + base VP</small></span><span><b>+2</b><small>Tips<br>conditional bonus VP</small></span></div>`;
   }
-  if (stepIndex === 1) {
+  if (visual === "refresh") {
     return `<div class="tutorial-cards"><i>Keep</i><i class="is-marked">Discard</i><span>→ draw up to 3</span></div>`;
   }
-  if (stepIndex === 2) {
+  if (visual === "formula") {
     return `<div class="tutorial-formula"><span class="recipe">♨ <b>+1</b></span><i>+</i><span class="ingredient">◇ <b>+1</b></span><i>+</i><span class="flavor">✦ <b>+2</b></span><i>+</i><span class="drink">◒ <b>+3</b></span></div>`;
+  }
+  if (visual === "build") {
+    return `<div class="tutorial-build"><span class="recipe">♨<small>1. Recipe</small></span><i>→</i><span class="dish">◎<small>2. Select dish</small></span><i>→</i><span class="extras">◇ ✦<small>3. Add extras</small></span></div>`;
+  }
+  if (visual === "counts") {
+    return `<div class="tutorial-counts"><span class="played-count"><b>4</b><small>cards played</small></span><i>face down</i><span><b>2</b><small>cards in hand</small></span></div>`;
+  }
+  if (visual === "tips") {
+    return `<div class="tutorial-tips"><span><b>◎ 2 VP</b><small>Order Value</small></span><i>+</i><span><b>◆ +2 VP</b><small>with 2+ tracked Tips</small></span><i>→</i><span class="tips-end"><b>4 ◆</b><small>ends the game</small></span></div>`;
   }
   return `<div class="tutorial-contest"><span class="is-tied">7 <small>tied</small></span><b>=</b><span class="is-tied">7 <small>tied</small></span><i>cancel</i><span class="is-winner">5 <small>wins</small></span></div>`;
 }
@@ -840,7 +952,7 @@ function tutorialModal() {
         <span class="tutorial-kicker">${escapeHtml(step.kicker)}</span>
         <h2 id="tutorial-title">${escapeHtml(step.title)}</h2>
         <p>${escapeHtml(step.body)}</p>
-        ${tutorialVisual(ui.tutorialStep)}
+        ${tutorialVisual(step.visual)}
         <div class="tutorial-note"><span>✦</span>${escapeHtml(step.note)}</div>
         <footer>
           <button class="text-button tutorial-skip" data-action="close-tutorial">Skip tour</button>
@@ -859,7 +971,7 @@ function tutorialModal() {
 function renderGame() {
   const phaseLabel = game.phase === "refresh" ? "Refresh" : game.phase === "serve" ? "Serve" : "Reveal";
   return `
-    <main class="game-shell">
+    <main class="game-shell cuisine-theme-${game.player.cuisineId}">
       <header class="game-header">
         <button class="wordmark" data-action="back-to-lobby" aria-label="Return to restaurant selection"><span>Food</span> Court</button>
         <div class="round-marker"><small>Round ${game.round}</small><strong>${phaseLabel}</strong>${phaseTrail()}</div>
@@ -871,8 +983,8 @@ function renderGame() {
           `).join("")}
         </div>
         <div class="header-tools">
-          <button class="icon-button dark tutorial-button" data-action="open-tutorial" aria-label="Open guided tutorial">▶</button>
-          <button class="icon-button dark" data-action="open-rules" aria-label="Open complete game rules">?</button>
+          <button class="icon-button dark" data-action="open-rules" aria-label="Open complete game rules" title="Complete rules">≡</button>
+          <button class="icon-button dark tutorial-button" data-action="open-tutorial" aria-label="Open guided tour" title="Guided tour">?</button>
         </div>
       </header>
       <div class="table-surface">
@@ -916,6 +1028,20 @@ function render() {
       (dialog?.querySelector("[data-dialog-primary]") || dialog?.querySelector("button, select"))?.focus();
     });
   }
+}
+
+function updateTutorialStep() {
+  const currentPanel = document.querySelector(".tutorial-overlay .tutorial-panel");
+  if (!currentPanel) {
+    render();
+    return;
+  }
+
+  const template = document.createElement("template");
+  template.innerHTML = tutorialModal();
+  const nextPanel = template.content.querySelector(".tutorial-panel");
+  currentPanel.replaceChildren(...nextPanel.childNodes);
+  currentPanel.querySelector("[data-dialog-primary]")?.focus({ preventScroll: true });
 }
 
 function openTutorial() {
@@ -969,9 +1095,18 @@ function refreshOpponents() {
   });
 }
 
+function prepareOpponentMeals() {
+  game.opponents.forEach((opponent) => {
+    const rivals = [game.player, ...game.opponents.filter((other) => other.id !== opponent.id)];
+    opponent.meal = chooseAiMeal(opponent, rivals, game.activeCustomer);
+    moveMealFromHand(opponent, opponent.meal);
+  });
+}
+
 function finishRefresh(mulligan = false) {
   refreshPlayer(game.player, game.activeCustomer, [...ui.discardIds], mulligan);
   refreshOpponents();
+  prepareOpponentMeals();
   ui.discardIds.clear();
   clearUndo();
   game.phase = "serve";
@@ -1090,13 +1225,7 @@ function resolveRound(pass = false) {
     flattenMeal(game.player.meal).forEach((card) => game.player.hand.push(card));
     game.player.meal = emptyMeal();
   }
-  const aiMeals = game.opponents.map((opponent) => {
-    const rivals = [game.player, ...game.opponents.filter((other) => other.id !== opponent.id)];
-    const meal = chooseAiMeal(opponent, rivals, game.activeCustomer);
-    opponent.meal = meal;
-    moveMealFromHand(opponent, meal);
-    return meal;
-  });
+  const aiMeals = game.opponents.map((opponent) => opponent.meal);
 
   const playerResult = calculateMeal(
     game.player.meal,
@@ -1222,12 +1351,12 @@ app.addEventListener("click", (event) => {
     closeTutorial();
   } else if (action === "tutorial-next") {
     ui.tutorialStep = Math.min(TUTORIAL_STEPS.length - 1, ui.tutorialStep + 1);
-    dialogFocusPending = true;
-    render();
+    updateTutorialStep();
+    announce(`Guided tour step ${ui.tutorialStep + 1} of ${TUTORIAL_STEPS.length}.`);
   } else if (action === "tutorial-back") {
     ui.tutorialStep = Math.max(0, ui.tutorialStep - 1);
-    dialogFocusPending = true;
-    render();
+    updateTutorialStep();
+    announce(`Guided tour step ${ui.tutorialStep + 1} of ${TUTORIAL_STEPS.length}.`);
   } else if (action === "back-to-lobby") {
     screen = "lobby";
     game = null;

@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.13.1]
+
+FIXES:
+
+* UI fixes for the standalone player-facing web app:
+  * Deck avatar circles now show country flags.
+  * Toured guide is now more elaborate
+  * Choosing a deck now applies a slight theme to the UI
+  * Ui now shows the amount of cards played and in hand for each player as well as the exact cards
+  played in the reveal phase.
+
 ## [0.13.0]
 
 CHANGES:
