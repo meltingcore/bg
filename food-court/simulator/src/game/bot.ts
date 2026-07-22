@@ -358,13 +358,6 @@ const chooseMeal = (
 const nextFrenchCourse = (player: PlayerState) =>
   ['entree', 'appetizer', 'main', 'dessert'][player.tips.length];
 
-const nextChinaRecipeType = (player: PlayerState) => {
-  const lastTip = player.tips[player.tips.length - 1];
-  if (lastTip?.tags.includes('rice')) return 'noodles';
-  if (lastTip?.tags.includes('noodles')) return 'rice';
-  return null;
-};
-
 const supportsTips = (player: PlayerState, card: CardInstance) => {
   if (player.deckId === 'italy') {
     return card.kind === 'ingredient' && card.tags.includes('exact');
@@ -373,11 +366,7 @@ const supportsTips = (player: PlayerState, card: CardInstance) => {
     return card.kind === 'recipe' && card.tags.includes(nextFrenchCourse(player));
   }
   if (player.deckId === 'china') {
-    const requiredType = nextChinaRecipeType(player);
-    return card.kind === 'recipe' &&
-      (requiredType
-        ? card.tags.includes(requiredType)
-        : card.tags.includes('rice') || card.tags.includes('noodles'));
+    return card.kind === 'recipe' && (card.tags.includes('rice') || card.tags.includes('noodles'));
   }
   if (player.deckId === 'india') {
     const tracked = new Set(player.tips.map((tip) => tip.name));
@@ -432,7 +421,10 @@ const hasImmediateTipPotential = (player: PlayerState) => {
     return recipes.some((recipe) => recipe.exactIngredient && ingredients.has(recipe.exactIngredient));
   }
   if (player.deckId === 'china') {
-    return player.hand.some((card) => supportsTips(player, card));
+    const recipes = player.hand.filter((card) => card.kind === 'recipe');
+    return ['rice', 'noodles'].some(
+      (tag) => recipes.filter((card) => card.tags.includes(tag)).length >= 2,
+    );
   }
   return player.hand.some((card) => supportsTips(player, card));
 };

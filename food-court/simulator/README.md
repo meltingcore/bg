@@ -1,28 +1,19 @@
 # Food Court Simulator
 
-Astro prototype for fast digital playtests of the current Food Court rules.
-
-## Run
-
-```sh
-pnpm install
-pnpm run dev
-```
-
-Open <http://127.0.0.1:4321/>.
+Local-only, headless balance-analysis tooling for the current Food Court rules.
 
 ## Automated Playtests
 
-Run headless bot simulations without opening the Astro UI:
+Run headless bot simulations:
 
 ```sh
-pnpm sim -- --games 10 --players 4 --decks italy,france,china,india --seed 1000
+npm run sim -- --games 10 --players 4 --decks italy,france,china,india --seed 1000
 ```
 
 Run the exhaustive balance study across all 28 two-player matchups and all 70 four-player tables:
 
 ```sh
-pnpm balance -- --games2 300 --games4 40 --workers 4 --seed 700000
+npm run balance -- --games2 300 --games4 40 --workers 4 --seed 700000
 ```
 
 The balance study prints compact JSON containing aggregate deck performance, every matchup/table,
@@ -53,13 +44,9 @@ empty-recipe hand, discard cards based on deck-specific Tips paths, and account 
 when choosing how many cards to commit. When two meals have the same serve value, bots prefer the
 meal that gains more from the active customer effect and conserves more cards.
 
-The Simulation Lab UI randomizes the base seed by default so repeated runs produce fresh samples.
-Turn off "Random seed each run" to reproduce a specific seed range.
-
 ## What It Models
 
 - 2-4 player setup with selected cuisine decks.
-- One selected-player station at a time so opponent hands and card names stay hidden.
 - Seeded player decks and shared customer deck.
 - One active customer contested by all players each round.
 - Refresh discard and draw limits, recipe serving, ingredient and flavor boosts, reveal, Drink
@@ -88,12 +75,10 @@ Turn off "Random seed each run" to reproduce a specific seed range.
 - Customer shuffle is spread by cuisine to avoid long same-nationality streaks during playtests.
 
 Deck and card definitions live in `src/data/decks.ts` so rule and balance changes are easy to
-iterate without rewriting the UI.
+iterate without changing the simulation engine.
 
 ## Validation
 
 ```sh
-pnpm test
-pnpm check
-pnpm build
+npm test
 ```

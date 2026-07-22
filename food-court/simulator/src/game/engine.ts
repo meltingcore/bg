@@ -417,6 +417,13 @@ const canAddIngredientToDish = (player: PlayerState, dish: Dish, ingredient: Car
   if (!dish.recipe.difficulty || ingredient.kind !== 'ingredient') return false;
   if (ingredient.ingredientType === 'flavor') return flavorCount(dish) < 1;
 
+  if (player.deckId === 'mexico' && ingredient.tags.includes('hot')) {
+    const hotIngredientsUsed = player.meal
+      .flatMap((mealDish) => mealDish.ingredients)
+      .filter((card) => card.tags.includes('hot')).length;
+    if (hotIngredientsUsed >= 2) return false;
+  }
+
   const printedCapacity = printedIngredientCapacity(dish);
   if (regularIngredientCount(dish) < printedCapacity) return true;
 
@@ -557,16 +564,7 @@ const abilityBonus = (player: PlayerState) => {
   }
 
   if (player.deckId === 'china') {
-    const typeCounts = player.meal.reduce<Record<string, number>>((counts, dish) => {
-      for (const tag of dish.recipe.tags.filter((item) => item === 'rice' || item === 'noodles')) {
-        counts[tag] = (counts[tag] ?? 0) + 1;
-      }
-      return counts;
-    }, {});
-    return Object.values(typeCounts).reduce(
-      (total, count) => total + count * (count - 1) / 2,
-      0,
-    );
+    return player.meal.length * (player.meal.length - 1) / 2;
   }
 
   if (player.deckId === 'india') {
@@ -790,17 +788,12 @@ export const eligibleTipCard = (player: PlayerState) => {
 
   if (player.deckId === 'china') {
     const recipes = player.meal.map((dish) => dish.recipe);
-    const lastTip = player.tips[player.tips.length - 1];
-    const requiredType = lastTip?.tags.includes('rice')
-      ? 'noodles'
-      : lastTip?.tags.includes('noodles')
-        ? 'rice'
-        : null;
-    return recipes.find((card) =>
-      requiredType
-        ? card.tags.includes(requiredType)
-        : card.tags.includes('rice') || card.tags.includes('noodles'),
-    ) ?? null;
+    const qualifyingType = ['rice', 'noodles'].find(
+      (tag) => recipes.filter((card) => card.tags.includes(tag)).length >= 2,
+    );
+    return qualifyingType
+      ? recipes.find((card) => card.tags.includes(qualifyingType)) ?? null
+      : null;
   }
 
   if (player.deckId === 'india') {

@@ -95,7 +95,7 @@ test('Italy, China, India, and Japan abilities use the latest scoring rules', ()
     { id: 'c3', recipe: cardNamed(china, 'Zha Jiang Mian'), ingredients: [] },
   ];
   chinaState.activeCustomer!.deckId = 'italy';
-  assert.equal(valueBreakdown(chinaState, china).ability, 1);
+  assert.equal(valueBreakdown(chinaState, china).ability, 3);
   china.meal = [
     { id: 'c1', recipe: cardNamed(china, 'Congee'), ingredients: [] },
     { id: 'c2', recipe: cardNamed(china, 'Sticky Rice with Mango'), ingredients: [] },
@@ -149,7 +149,7 @@ test('Italy, China, India, and Japan abilities use the latest scoring rules', ()
   assert.equal(valueBreakdown(japanState, japan).ability, 1);
 });
 
-test('USA can use two extra Ingredients and Mexico rewards hot Ingredients on easy recipes', () => {
+test('USA can use two extra Ingredients and Mexico caps hot Ingredients at two per meal', () => {
   const usaState = createGame(DECKS, ['usa'], 105);
   const usa = usaState.players[0];
   const usaCards = [
@@ -172,17 +172,27 @@ test('USA can use two extra Ingredients and Mexico rewards hot Ingredients on ea
   const mexicoState = createGame(DECKS, ['mexico'], 106);
   const mexico = mexicoState.players[0];
   const quesadilla = cardNamed(mexico, 'Quesadilla');
+  const taco = cardNamed(mexico, 'Taco de Frijoles');
+  const mole = cardNamed(mexico, 'Mole Poblano with Rice');
   const cayenne = cardNamed(mexico, 'Cayenne Pepper');
+  const chipotle = cardNamed(mexico, 'Chipotle');
+  const habanero = cardNamed(mexico, 'Habanero');
   const corn = cardNamed(mexico, 'Corn');
-  setHand(mexico, [quesadilla, cayenne, corn]);
-  mexicoState.activeCustomer!.order = 1;
+  setHand(mexico, [quesadilla, taco, mole, cayenne, chipotle, habanero, corn]);
+  mexicoState.activeCustomer!.order = 3;
   serveRecipe(mexicoState, mexico.id, quesadilla.id);
+  serveRecipe(mexicoState, mexico.id, taco.id);
+  serveRecipe(mexicoState, mexico.id, mole.id);
   addIngredient(mexicoState, mexico.id, mexico.meal[0].id, cayenne.id);
+  addIngredient(mexicoState, mexico.id, mexico.meal[1].id, chipotle.id);
+  addIngredient(mexicoState, mexico.id, mexico.meal[2].id, habanero.id);
   assert.equal(mexico.meal[0].ingredients[0]?.name, 'Cayenne Pepper');
+  assert.equal(mexico.meal[1].ingredients[0]?.name, 'Chipotle');
+  assert.equal(mexico.meal[2].ingredients.length, 0);
   mexicoState.activeCustomer!.deckId = 'italy';
   const mexicoBreakdown = valueBreakdown(mexicoState, mexico);
-  assert.equal(mexicoBreakdown.ability, 1);
-  assert.equal(mexicoBreakdown.total, 3);
+  assert.equal(mexicoBreakdown.ability, 2);
+  assert.equal(mexicoBreakdown.total, 7);
   addIngredient(mexicoState, mexico.id, mexico.meal[0].id, corn.id);
   assert.equal(mexico.meal[0].ingredients.length, 1);
 });
@@ -198,16 +208,10 @@ test('China, USA, Japan, and Mexico Tips eligibility follows the revised require
     { id: 'c1', recipe: rice1, ingredients: [] },
     { id: 'c2', recipe: noodles, ingredients: [] },
   ];
-  assert.equal(eligibleTipCard(china)?.name, 'Sticky Rice with Mango');
-  china.tips = [rice1];
-  china.meal = [{ id: 'c2', recipe: rice2, ingredients: [] }];
   assert.equal(eligibleTipCard(china), null);
-  china.meal = [{ id: 'c2', recipe: noodles, ingredients: [] }];
-  assert.equal(eligibleTipCard(china)?.name, 'Zha Jiang Mian');
-  china.tips.push(noodles);
-  china.meal = [{ id: 'c2', recipe: rice2, ingredients: [] }];
-  assert.equal(eligibleTipCard(china)?.name, 'Congee');
-  china.meal = [{ id: 'c2', recipe: untyped, ingredients: [] }];
+  china.meal[1] = { id: 'c2', recipe: rice2, ingredients: [] };
+  assert.equal(eligibleTipCard(china)?.name, 'Sticky Rice with Mango');
+  china.meal[1] = { id: 'c2', recipe: untyped, ingredients: [] };
   assert.equal(eligibleTipCard(china), null);
 
   const usaState = createGame(DECKS, ['usa'], 108);

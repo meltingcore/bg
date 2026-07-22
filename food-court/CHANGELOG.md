@@ -1,15 +1,22 @@
 # Changelog
 
-## [0.12.1]
+## [0.13.0]
+
+CHANGES:
+
+* Introduced the standalone player-facing web app with guided play, one to three configurable AI
+  rivals, deck selection, scoring, Tips Card inspection, and undo support.
+* Introduced the local headless simulator for reproducible automated playtests and exhaustive
+  matchup analysis using greedy, Tips-focused, cautious, adaptive, and mixed bot strategies.
 
 FIXES:
 
-* Rebalanced all cuisine decks using automated four and two-player simulations across every possible
-  combination.
-* The automated simulator was aligned with all balance changes and now supports greedy,
-  Tips-focused, cautious, adaptive, and mixed bot strategies.
-* Bots can pursue Tips Cards, account for customer effects when committing cards, and avoid ties 
-  using previously revealed serve values.
+* Rebalanced all eight cuisine decks through repeated two- and four-player simulation passes,
+  tuning abilities, Tips tracking paths, and card distributions while preserving deck identities.
+  * Improved ingredient consistency for Piazza Romana, Raj Mahal, Sakura House, and El Nopalito.
+  * Capped Le Petit Paris at +2, broadened Jin Long's recipe-pair bonus, changed Raj Mahal to
+    distinct Ingredient pairs, allowed Liberty Grill two extra Ingredients while tightening its
+    Drinks, and refined Sakura House and El Nopalito's Ingredient limits and Tips paths.
 
 ## [0.12.0]
 

@@ -181,9 +181,9 @@ export const DECKS: DeckDefinition[] = [
     shortName: 'China',
     flag: '🍜',
     color: '#c03a2b',
-    ability: 'Each pair of recipes of the same type grants +1 serve value.',
+    ability: 'Each pair of served recipes grants +1 serve value.',
     endCondition: 'Get 4 Tips Cards in tracking.',
-    tracking: 'Alternating rice and noodles Recipe Cards.',
+    tracking: 'A Recipe Card from a same-type rice or noodles pair.',
     ingredients: [
       ...repeat([], 12, 'ingredient', '🍚'),
       { name: 'Shiitake Mushrooms', count: 1, type: 'flavor', emoji: '🍄' },
@@ -384,7 +384,7 @@ export const DECKS: DeckDefinition[] = [
     shortName: 'Mexico',
     flag: '🌮',
     color: '#157f7a',
-    ability: 'Hot Ingredients can be added to zero-slot recipes and gain +1 serve value there.',
+    ability: 'Up to 2 hot Ingredients per meal; hot Ingredients on zero-slot recipes gain +1.',
     endCondition: 'Get 4 Tips Cards in tracking.',
     tracking: 'Hot Ingredient Cards.',
     ingredients: [
