@@ -39,6 +39,79 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.lobby-shell,
+.game-shell {
+  --theme-accent: #3f7a4d;
+  --theme-highlight: #b9d994;
+  --theme-companion: #b96b45;
+  --theme-deep: #10271b;
+  --theme-pattern: repeating-linear-gradient(135deg, transparent 0 24px, rgb(185 107 69 / 7%) 24px 27px);
+}
+
+.cuisine-theme-italy {
+  --theme-accent: #3f7a4d;
+  --theme-highlight: #b9d994;
+  --theme-companion: #b96b45;
+  --theme-deep: #10271b;
+  --theme-pattern: repeating-linear-gradient(135deg, transparent 0 24px, rgb(185 107 69 / 7%) 24px 27px);
+}
+
+.cuisine-theme-france {
+  --theme-accent: #3f55a5;
+  --theme-highlight: #bbc7ff;
+  --theme-companion: #8d5264;
+  --theme-deep: #151d3b;
+  --theme-pattern: repeating-linear-gradient(45deg, transparent 0 22px, rgb(141 82 100 / 7%) 22px 24px);
+}
+
+.cuisine-theme-china {
+  --theme-accent: #c12f32;
+  --theme-highlight: #ffd36f;
+  --theme-companion: #d3a231;
+  --theme-deep: #321112;
+  --theme-pattern: radial-gradient(circle, rgb(211 162 49 / 13%) 0 2px, transparent 3px);
+}
+
+.cuisine-theme-india {
+  --theme-accent: #d8781d;
+  --theme-highlight: #ffd08a;
+  --theme-companion: #ae4770;
+  --theme-deep: #321d0d;
+  --theme-pattern: radial-gradient(circle at center, transparent 0 8px, rgb(174 71 112 / 9%) 9px 10px, transparent 11px);
+}
+
+.cuisine-theme-usa {
+  --theme-accent: #257b98;
+  --theme-highlight: #a9e2ef;
+  --theme-companion: #9f413b;
+  --theme-deep: #0b2935;
+  --theme-pattern: repeating-linear-gradient(90deg, transparent 0 28px, rgb(159 65 59 / 7%) 28px 30px);
+}
+
+.cuisine-theme-turkey {
+  --theme-accent: #704a91;
+  --theme-highlight: #d9b7ef;
+  --theme-companion: #338c84;
+  --theme-deep: #24172f;
+  --theme-pattern: repeating-linear-gradient(135deg, transparent 0 20px, rgb(51 140 132 / 10%) 20px 22px);
+}
+
+.cuisine-theme-japan {
+  --theme-accent: #9f4e62;
+  --theme-highlight: #f2bfd1;
+  --theme-companion: #4f527f;
+  --theme-deep: #231e2b;
+  --theme-pattern: radial-gradient(circle at 30% 30%, rgb(242 191 209 / 8%) 0 3px, transparent 4px);
+}
+
+.cuisine-theme-mexico {
+  --theme-accent: #7b4b2a;
+  --theme-highlight: #dfb779;
+  --theme-companion: #4f7545;
+  --theme-deep: #291a11;
+  --theme-pattern: repeating-linear-gradient(60deg, transparent 0 23px, rgb(79 117 69 / 10%) 23px 26px);
+}
+
 button {
   font: inherit;
 }
@@ -164,6 +237,7 @@ button:focus-visible {
 .lobby-vignette {
   pointer-events: none;
   background:
+    radial-gradient(circle at 82% 18%, color-mix(in srgb, var(--theme-accent), transparent 72%), transparent 38%),
     radial-gradient(circle at 36% 48%, rgb(8 31 25 / 8%) 0 18%, rgb(8 31 25 / 60%) 70%),
     linear-gradient(90deg, rgb(6 25 20 / 92%) 0%, rgb(6 25 20 / 65%) 42%, rgb(6 25 20 / 15%) 72%),
     linear-gradient(0deg, rgb(6 25 20 / 85%) 0%, transparent 32%);
@@ -381,10 +455,15 @@ button:focus-visible {
   box-shadow: inset 0 0 0 3px rgb(255 255 255 / 28%), 0 2px 5px rgb(36 25 7 / 24%);
 }
 
+.restaurant-flag {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  line-height: 1;
+}
+
 .cuisine-seal {
   width: 44px;
   height: 44px;
-  font-size: 0.8rem;
+  font-size: 1.25rem;
 }
 
 .cuisine-copy {
@@ -596,7 +675,7 @@ button:focus-visible {
 .game-shell {
   min-height: 100vh;
   color: var(--cream);
-  background: var(--forest-950);
+  background: var(--theme-deep);
 }
 
 .game-header {
@@ -610,7 +689,7 @@ button:focus-visible {
   min-height: 72px;
   padding: 10px clamp(18px, 3vw, 48px);
   border-bottom: 1px solid rgb(255 255 255 / 10%);
-  background: rgb(8 32 26 / 93%);
+  background: color-mix(in srgb, var(--theme-deep), transparent 5%);
   box-shadow: 0 10px 30px rgb(0 0 0 / 20%);
   backdrop-filter: blur(16px);
 }
@@ -651,13 +730,13 @@ button:focus-visible {
 }
 
 .phase-trail li.is-current {
-  color: #f2d785;
+  color: var(--theme-highlight);
 }
 
 .phase-trail li.is-current > span {
-  color: #18382f;
-  border-color: #ebcf79;
-  background: #ebcf79;
+  color: var(--theme-deep);
+  border-color: var(--theme-highlight);
+  background: var(--theme-highlight);
 }
 
 .phase-trail li.is-complete {
@@ -676,7 +755,7 @@ button:focus-visible {
 }
 
 .wordmark span {
-  color: var(--gold-light);
+  color: var(--theme-highlight);
   font-style: italic;
   font-weight: 500;
 }
@@ -697,7 +776,7 @@ button:focus-visible {
 }
 
 .round-marker strong {
-  color: var(--gold-light);
+  color: var(--theme-highlight);
   font-family: var(--display);
   font-size: 0.95rem;
 }
@@ -742,7 +821,9 @@ button:focus-visible {
 .score-avatar {
   width: 34px;
   height: 34px;
-  font-size: 0.62rem;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size: 1.05rem;
+  line-height: 1;
 }
 
 .score-name {
@@ -771,7 +852,7 @@ button:focus-visible {
   display: flex;
   gap: 3px;
   align-items: baseline;
-  color: var(--gold-light);
+  color: var(--theme-highlight);
 }
 
 .score-value strong {
@@ -828,7 +909,7 @@ button:focus-visible {
   min-height: calc(100vh - 72px);
   padding: 24px clamp(18px, 3vw, 48px) 30px;
   background:
-    linear-gradient(rgb(10 46 37 / 88%), rgb(9 39 32 / 94%)),
+    linear-gradient(color-mix(in srgb, var(--theme-deep), transparent 8%), color-mix(in srgb, var(--theme-deep), black 8%)),
     url("assets/food-court-table.png") center / cover fixed;
 }
 
@@ -839,9 +920,24 @@ button:focus-visible {
   content: "";
   opacity: 0.32;
   background-image:
+    var(--theme-pattern),
     linear-gradient(30deg, transparent 48%, rgb(255 255 255 / 3%) 50%, transparent 52%),
     radial-gradient(circle at 50% 25%, rgb(227 182 76 / 20%), transparent 36%);
-  background-size: 18px 18px, auto;
+  background-size: 46px 46px, 18px 18px, auto;
+}
+
+.game-shell .primary-button,
+.lobby-shell .primary-button {
+  border-color: color-mix(in srgb, var(--theme-accent), white 34%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--theme-accent), white 12%),
+    color-mix(in srgb, var(--theme-accent), black 17%)
+  );
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 20%),
+    0 5px 0 color-mix(in srgb, var(--theme-accent), black 42%),
+    0 12px 24px color-mix(in srgb, var(--theme-accent), transparent 73%);
 }
 
 .opponent-zone,
@@ -861,7 +957,7 @@ button:focus-visible {
   align-items: center;
   min-height: 94px;
   padding: 8px;
-  border: 1px solid rgb(255 255 255 / 8%);
+  border: 1px solid color-mix(in srgb, var(--theme-accent), transparent 72%);
   border-radius: 16px;
   background: rgb(4 25 20 / 45%);
   box-shadow: inset 0 1px rgb(255 255 255 / 4%);
@@ -890,7 +986,7 @@ button:focus-visible {
 .mini-seal {
   width: 40px;
   height: 40px;
-  font-size: 0.68rem;
+  font-size: 1.1rem;
 }
 
 .opponent-identity div,
@@ -948,18 +1044,45 @@ button:focus-visible {
   border: 1px solid #e8cf88;
   border-radius: 50%;
   color: #f3d989;
-  font-family: var(--display);
-  font-size: 0.55rem;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size: 0.72rem;
   font-style: normal;
 }
 
 .opponent-status {
   grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
   justify-self: start;
   padding-left: 51px;
   color: #a3bdb2;
+  font-size: 0.57rem;
+}
+
+.opponent-status span {
+  padding: 3px 6px;
+  border: 1px solid rgb(255 255 255 / 11%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 6%);
+  font-weight: 750;
+}
+
+.opponent-status span b {
+  color: #f5dc92;
+  font-size: 0.68rem;
+}
+
+.opponent-status .played-count {
+  color: #f2dfaa;
+  border-color: rgb(232 203 118 / 31%);
+  background: rgb(213 167 68 / 12%);
+}
+
+.opponent-status i {
   font-family: var(--display);
-  font-size: 0.8rem;
+  font-size: 0.68rem;
   font-style: italic;
 }
 
@@ -1214,7 +1337,7 @@ button:focus-visible {
   height: 34px;
   color: #fff7df;
   border-radius: 50%;
-  background: var(--red);
+  background: var(--theme-accent);
   font-family: var(--display);
   font-weight: 800;
 }
@@ -1282,7 +1405,7 @@ button:focus-visible {
   grid-column: 1 / -1;
   min-width: 0;
   padding: 16px 18px 20px;
-  border: 1px solid rgb(255 255 255 / 9%);
+  border: 1px solid color-mix(in srgb, var(--theme-accent), transparent 72%);
   border-radius: 18px;
   background: rgb(4 27 21 / 63%);
   box-shadow: inset 0 1px rgb(255 255 255 / 5%), 0 18px 44px rgb(0 0 0 / 16%);
@@ -1303,14 +1426,14 @@ button:focus-visible {
   margin: -3px 0 4px;
   padding: 7px 9px;
   color: #c7d8d0;
-  border-left: 2px solid #c8a650;
+  border-left: 2px solid var(--theme-accent);
   background: rgb(255 255 255 / 4%);
   font-size: 0.65rem;
   line-height: 1.35;
 }
 
 .hand-coach span {
-  color: #f0d47f;
+  color: var(--theme-highlight);
   font-family: var(--display);
   font-size: 1rem;
 }
@@ -1585,7 +1708,7 @@ button:focus-visible {
   grid-column: 1 / -1;
   min-width: 0;
   color: var(--ink);
-  border: 1px solid #ccb77f;
+  border: 1px solid color-mix(in srgb, var(--theme-accent), #ccb77f 55%);
   border-radius: 18px;
   background:
     repeating-linear-gradient(0deg, rgb(75 53 18 / 3%) 0 1px, transparent 1px 6px),
@@ -1623,7 +1746,7 @@ button:focus-visible {
   padding: 7px 11px;
   color: #fff8e5;
   border-radius: 9px;
-  background: var(--forest-800);
+  background: color-mix(in srgb, var(--theme-deep), var(--theme-accent) 30%);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 14%);
 }
 
@@ -1636,7 +1759,7 @@ button:focus-visible {
 .serve-preview strong {
   grid-row: 1 / 3;
   grid-column: 2;
-  color: var(--gold-light);
+  color: var(--theme-highlight);
   font-family: var(--display);
   font-size: 1.7rem;
 }
@@ -2088,7 +2211,7 @@ button:focus-visible {
 
 .tutorial-panel {
   position: relative;
-  width: min(610px, 100%);
+  width: min(680px, 100%);
   padding: clamp(25px, 5vw, 45px);
   text-align: center;
 }
@@ -2102,7 +2225,10 @@ button:focus-visible {
 }
 
 .tutorial-progress i {
+  flex: 1 1 18px;
   width: 34px;
+  max-width: 34px;
+  min-width: 10px;
   height: 5px;
   border-radius: 999px;
   background: #c8b98f;
@@ -2160,7 +2286,11 @@ button:focus-visible {
 .tutorial-values,
 .tutorial-formula,
 .tutorial-contest,
-.tutorial-cards {
+.tutorial-cards,
+.tutorial-goal,
+.tutorial-build,
+.tutorial-counts,
+.tutorial-tips {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -2171,6 +2301,74 @@ button:focus-visible {
   border: 1px solid #cbbb8f;
   border-radius: 12px;
   background: rgb(255 255 255 / 31%);
+}
+
+.tutorial-goal span,
+.tutorial-build span,
+.tutorial-counts span,
+.tutorial-tips span {
+  display: grid;
+  gap: 5px;
+  place-items: center;
+  min-width: 92px;
+  min-height: 66px;
+  padding: 9px;
+  color: #355548;
+  border: 1px solid #bba873;
+  border-radius: 10px;
+  background: #f4e9c9;
+  font-family: var(--display);
+  font-size: 1.25rem;
+}
+
+.tutorial-goal span small,
+.tutorial-build span small,
+.tutorial-counts span small,
+.tutorial-tips span small {
+  font-family: var(--sans);
+  font-size: 0.52rem;
+  font-weight: 850;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.tutorial-goal i,
+.tutorial-build i,
+.tutorial-counts i,
+.tutorial-tips i {
+  color: #806d43;
+  font-family: var(--display);
+  font-size: 0.62rem;
+  font-style: italic;
+}
+
+.tutorial-build .recipe {
+  color: #704816;
+  background: #ead5a2;
+}
+
+.tutorial-build .extras {
+  color: #654474;
+  background: #e5d8ed;
+}
+
+.tutorial-counts span b,
+.tutorial-tips span b {
+  font-size: 1.25rem;
+}
+
+.tutorial-counts .played-count {
+  color: #fff7dd;
+  border-color: #d4b65f;
+  background: var(--forest-700);
+  box-shadow: 0 0 0 4px rgb(196 157 60 / 14%);
+}
+
+.tutorial-tips .tips-end {
+  color: #fff7dd;
+  border-color: #d4b65f;
+  background: var(--forest-700);
 }
 
 .tutorial-values > span {
@@ -2788,6 +2986,22 @@ button:focus-visible {
   font-family: var(--display);
 }
 
+.result-card-counts {
+  display: inline-block;
+  margin: 8px 0 -3px 49px;
+  padding: 4px 7px;
+  color: #6b6250;
+  border: 1px solid #cbb98b;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 31%);
+  font-size: 0.54rem;
+  font-weight: 750;
+}
+
+.result-card-counts b {
+  color: #3f5b4d;
+}
+
 .result-total {
   position: absolute;
   top: 14px;
@@ -2851,6 +3065,226 @@ button:focus-visible {
   background: #f7ecd2;
   font-family: var(--display);
   font-size: 0.6rem;
+}
+
+.result-details {
+  margin-top: 11px;
+  border: 1px solid #c8b585;
+  border-radius: 10px;
+  background: rgb(255 251 236 / 48%);
+}
+
+.result-details summary {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 8px 10px;
+  color: #4d5b54;
+  cursor: pointer;
+  list-style: none;
+}
+
+.result-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.result-details summary > span {
+  display: grid;
+  gap: 1px;
+  font-family: var(--display);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.result-details summary small {
+  color: #80775f;
+  font-family: var(--sans);
+  font-size: 0.49rem;
+  font-weight: 700;
+}
+
+.result-details summary > b {
+  display: grid;
+  place-items: center;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  color: #fff8e1;
+  border-radius: 50%;
+  background: #4d685a;
+  transition: transform 160ms ease;
+}
+
+.result-details[open] summary {
+  border-bottom: 1px solid #cfc099;
+  background: #f6e9c9;
+}
+
+.result-details[open] summary > b {
+  transform: rotate(180deg);
+}
+
+.result-side.status-cancelled .result-details[open] {
+  opacity: 1;
+}
+
+.revealed-meal {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+}
+
+.revealed-dish {
+  overflow: hidden;
+  border: 1px solid #ccb98b;
+  border-radius: 9px;
+  background: rgb(255 255 255 / 38%);
+}
+
+.revealed-dish > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  color: #6d6046;
+  border-bottom: 1px solid #d5c49d;
+  background: #eadbb6;
+  font-size: 0.53rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.revealed-dish > header b {
+  color: #315345;
+  font-family: var(--display);
+  font-size: 0.8rem;
+}
+
+.revealed-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  gap: 6px;
+  padding: 7px;
+}
+
+.revealed-card {
+  display: grid;
+  align-content: start;
+  min-height: 94px;
+  padding: 8px;
+  color: #3f4842;
+  border: 2px solid var(--card-edge);
+  border-radius: 8px;
+  background:
+    linear-gradient(rgb(255 255 255 / 45%), transparent 70%),
+    var(--card-bg);
+}
+
+.revealed-card > div {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--card-ink);
+  font-size: 0.48rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.revealed-card > div b {
+  font-family: var(--display);
+  font-size: 0.72rem;
+}
+
+.revealed-card > strong {
+  margin: 12px 0 5px;
+  font-family: var(--display);
+  font-size: 0.75rem;
+  line-height: 1.12;
+}
+
+.revealed-card > small {
+  margin-top: auto;
+  color: #5e6761;
+  font-size: 0.49rem;
+  line-height: 1.3;
+}
+
+.revealed-drink > header {
+  color: #315f72;
+  background: #d1e5e8;
+}
+
+.revealed-pass {
+  margin: 0;
+  padding: 14px;
+  color: #756d5b;
+  border: 1px dashed #baa675;
+  border-radius: 8px;
+  font-family: var(--display);
+  font-size: 0.68rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.serve-ledger {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #bba775;
+  border-radius: 9px;
+  background: #f3e7c8;
+}
+
+.serve-ledger > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  padding: 7px 9px;
+  border-bottom: 1px solid #d3c39d;
+}
+
+.serve-ledger > div:last-child {
+  border-bottom: 0;
+}
+
+.serve-ledger dt {
+  display: grid;
+  color: #555f59;
+  font-size: 0.57rem;
+  font-weight: 850;
+}
+
+.serve-ledger dt small {
+  margin-top: 2px;
+  color: #817a69;
+  font-size: 0.46rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.serve-ledger dd {
+  align-self: center;
+  margin: 0;
+  color: #315345;
+  font-family: var(--display);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.serve-ledger .serve-ledger-total {
+  color: #fff7df;
+  background: #35594a;
+}
+
+.serve-ledger-total dt,
+.serve-ledger-total dd {
+  color: inherit;
+  font-size: 0.78rem;
 }
 
 .versus-mark {
@@ -3325,10 +3759,22 @@ button:focus-visible {
   .tutorial-values,
   .tutorial-formula,
   .tutorial-contest,
-  .tutorial-cards { gap: 6px; min-height: 82px; margin: 12px 0; padding: 10px 7px; }
+  .tutorial-cards,
+  .tutorial-goal,
+  .tutorial-build,
+  .tutorial-counts,
+  .tutorial-tips { gap: 6px; min-height: 82px; margin: 12px 0; padding: 10px 7px; }
   .tutorial-values > span { width: 50%; padding: 8px; }
   .tutorial-formula span { width: 58px; min-height: 58px; }
   .tutorial-contest span { width: 58px; height: 58px; }
+  .tutorial-goal span,
+  .tutorial-build span,
+  .tutorial-counts span,
+  .tutorial-tips span { min-width: 0; min-height: 58px; padding: 7px 5px; font-size: 1rem; }
+  .tutorial-goal i,
+  .tutorial-build i,
+  .tutorial-counts i,
+  .tutorial-tips i { font-size: 0.5rem; }
   .tutorial-panel footer { margin-top: 15px; }
   .tutorial-panel footer .tutorial-skip { padding-inline: 2px; }
   .tutorial-panel footer .primary-button,

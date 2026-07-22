@@ -12,6 +12,7 @@ import {
   cleanupMeal,
   createGame,
   determineUniqueWinner,
+  drawCards,
   makePlayer,
   scorePlayer,
   shuffle,
@@ -19,6 +20,13 @@ import {
 } from "../src/game.js";
 
 const stableRandom = () => 0.42;
+const seededRandom = (seed) => {
+  let state = seed >>> 0;
+  return () => {
+    state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+    return state / 0x100000000;
+  };
+};
 
 test("every documented cuisine builds a complete deck", () => {
   for (const cuisine of CUISINE_LIST) {
@@ -49,6 +57,78 @@ test("Fisher-Yates shuffling preserves every card and changes game-start order",
     firstGame.opponents[0].hand.map((card) => card.name),
     secondGame.opponents[0].hand.map((card) => card.name),
   );
+});
+
+test("restaurant shuffling never uses card types to manufacture balanced hands", () => {
+  const grouped = [
+    { id: "a", type: "recipe" },
+    { id: "b", type: "recipe" },
+    { id: "c", type: "ingredient" },
+    { id: "d", type: "ingredient" },
+    { id: "e", type: "drink" },
+    { id: "f", type: "flavor" },
+  ];
+  const relabeled = grouped.map((card, index) => ({
+    ...card,
+    type: index % 2 === 0 ? "ingredient" : "recipe",
+  }));
+
+  assert.deepEqual(
+    shuffle(grouped, seededRandom(17)).map((card) => card.id),
+    shuffle(relabeled, seededRandom(17)).map((card) => card.id),
+  );
+});
+
+test("opening draws are statistically faithful for every restaurant deck", () => {
+  const samples = 1000;
+
+  CUISINE_LIST.forEach((cuisine, cuisineIndex) => {
+    const deckSize = cuisine.recipes.length
+      + cuisine.ingredients.reduce((sum, item) => sum + item.count, 0)
+      + cuisine.flavors.length
+      + cuisine.drinks.length;
+    const typeTotals = {
+      recipe: cuisine.recipes.length,
+      ingredient: cuisine.ingredients.reduce((sum, item) => sum + item.count, 0),
+      flavor: cuisine.flavors.length,
+      drink: cuisine.drinks.length,
+    };
+    const observed = { recipe: 0, ingredient: 0, flavor: 0, drink: 0 };
+
+    for (let sample = 0; sample < samples; sample += 1) {
+      const random = seededRandom(10000 + (cuisineIndex * samples) + sample);
+      buildRestaurantDeck(cuisine.id, random).slice(-6).forEach((card) => {
+        observed[card.type] += 1;
+      });
+    }
+
+    Object.entries(typeTotals).forEach(([type, total]) => {
+      const expectedPerHand = (6 * total) / deckSize;
+      const observedPerHand = observed[type] / samples;
+      assert.ok(
+        Math.abs(observedPerHand - expectedPerHand) < 0.15,
+        `${cuisine.name} ${type} draws drifted from the deck's real proportion`,
+      );
+    });
+  });
+});
+
+test("recycled discard piles receive the same fresh shuffle and cut", () => {
+  for (const cuisine of CUISINE_LIST) {
+    const discard = buildRestaurantDeck(cuisine.id, stableRandom)
+      .sort((left, right) => left.id.localeCompare(right.id));
+    const expectedDeck = shuffle(discard, seededRandom(404));
+    const player = { deck: [], discard: [...discard], hand: [] };
+
+    drawCards(player, discard.length, seededRandom(404));
+
+    assert.deepEqual(
+      player.hand.map((card) => card.id),
+      [...expectedDeck].reverse().map((card) => card.id),
+      cuisine.name,
+    );
+    assert.equal(player.discard.length, 0);
+  }
 });
 
 test("the customer deck contains only cuisines selected for the match", () => {
