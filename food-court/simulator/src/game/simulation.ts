@@ -1,5 +1,12 @@
 import { DECKS, type CuisineId } from '../data/decks.ts';
-import { playBotRound, type BotPolicy, type BotTurnSummary } from './bot.ts';
+import {
+  BOT_POLICIES,
+  assignBotPolicies,
+  playBotRound,
+  type BotPolicy,
+  type BotTurnSummary,
+  type SimulationPolicy,
+} from './bot.ts';
 import { createGame, scoreFor, type PlayerState } from './engine.ts';
 
 export interface SimulationOptions {
@@ -7,7 +14,7 @@ export interface SimulationOptions {
   players: number;
   decks: CuisineId[];
   seed: number;
-  policy: BotPolicy;
+  policy: SimulationPolicy;
 }
 
 export interface PlayerResult {
@@ -15,12 +22,15 @@ export interface PlayerResult {
   deckId: CuisineId;
   deckName: string;
   seat: number;
+  policy: BotPolicy;
   score: number;
   customers: number;
   tips: number;
   tipsCompleted: boolean;
   drinkAttempts: number;
   drinkSuccesses: number;
+  tipEligibleMeals: number;
+  averageTieRisk: number;
   averageServeValue: number;
   winShare: number;
   topFinish: boolean;
@@ -29,6 +39,19 @@ export interface PlayerResult {
 export interface CustomerRoundResult {
   customerDeckId: CuisineId;
   customerDeckName: string;
+  winnerDeckId: CuisineId | null;
+  winnerDeckName: string | null;
+  discarded: boolean;
+  winningServeValue: number;
+}
+
+export interface RoundResult {
+  round: number;
+  customerDeckId: CuisineId;
+  customerDeckName: string;
+  customerOrder: number;
+  customerTips: number;
+  players: BotTurnSummary[];
   winnerDeckId: CuisineId | null;
   winnerDeckName: string | null;
   discarded: boolean;
@@ -47,6 +70,7 @@ export interface GameResult {
   servedMeals: number;
   scoreSpread: number;
   customerResults: CustomerRoundResult[];
+  roundResults: RoundResult[];
 }
 
 export interface DeckAggregate {
@@ -62,6 +86,9 @@ export interface DeckAggregate {
   serveValueSamples: number;
   drinkAttempts: number;
   drinkSuccesses: number;
+  tipEligibleMeals: number;
+  totalTieRisk: number;
+  tieRiskSamples: number;
   tipsCompletions: number;
   totalScoreSquared: number;
 }
@@ -124,6 +151,19 @@ export interface TipsCompletionDiagnostic {
   averageTips: number;
 }
 
+export interface StrategyDiagnostic {
+  policy: BotPolicy;
+  games: number;
+  winShare: number;
+  topFinishes: number;
+  averageScore: number;
+  averageCustomers: number;
+  averageTips: number;
+  tipsCompletionRate: number;
+  tipEligibleMealsPerGame: number;
+  averageTieRisk: number;
+}
+
 export interface BalanceDiagnostics {
   matchups: MatchupRate[];
   scoreDistributions: ScoreDistribution[];
@@ -131,6 +171,7 @@ export interface BalanceDiagnostics {
   customerImpact: CustomerImpact[];
   drinkSuccess: DrinkDiagnostic[];
   tipsCompletion: TipsCompletionDiagnostic[];
+  strategyImpact: StrategyDiagnostic[];
 }
 
 export interface SimulationResult {
@@ -150,7 +191,7 @@ export const defaultSimulationOptions: SimulationOptions = {
   players: 4,
   decks: ['italy', 'france', 'china', 'india'],
   seed: 1000,
-  policy: 'greedy',
+  policy: 'mixed',
 };
 
 export const deckIds = new Set(DECKS.map((deck) => deck.id));
@@ -166,7 +207,9 @@ export const validateSimulationOptions = (options: SimulationOptions) => {
   if (!Number.isInteger(options.players) || options.players < 2 || options.players > 4) {
     throw new Error('Players must be between 2 and 4.');
   }
-  if (options.policy !== 'greedy') throw new Error(`Unsupported policy "${options.policy}".`);
+  if (options.policy !== 'mixed' && !BOT_POLICIES.includes(options.policy)) {
+    throw new Error(`Unsupported policy "${options.policy}".`);
+  }
   if (options.decks.length !== options.players) {
     throw new Error(`Choose exactly ${options.players} decks.`);
   }
@@ -190,12 +233,18 @@ const playerResult = (
     deckId: player.deckId,
     deckName: player.deckName,
     seat: Number(player.id.replace(/\D/g, '')) || 0,
+    policy: playerTurns[0]?.policy ?? 'adaptive',
     score: scoreFor(player),
     customers: player.scoring.length,
     tips: player.tips.length,
     tipsCompleted: player.tips.length >= 4,
     drinkAttempts: playerTurns.filter((summary) => summary.playedDrink).length,
     drinkSuccesses: playerTurns.filter((summary) => summary.drinkSuccessful).length,
+    tipEligibleMeals: playerTurns.filter((summary) => summary.tipEligible).length,
+    averageTieRisk: avg(
+      playerTurns.reduce((sum, summary) => sum + summary.estimatedTieRisk, 0),
+      playerTurns.length,
+    ),
     averageServeValue: avg(
       playerTurns.reduce((sum, summary) => sum + summary.serveValue, 0),
       playerTurns.length,
@@ -207,14 +256,22 @@ const playerResult = (
 
 export const runGame = (options: SimulationOptions, seed: number): GameResult => {
   const state = createGame(DECKS, options.decks, seed);
+  const policies = assignBotPolicies(
+    options.policy,
+    state.players.map((player) => player.id),
+    seed,
+  );
   const turnSummaries: BotTurnSummary[] = [];
   const customerResults: CustomerRoundResult[] = [];
+  const roundResults: RoundResult[] = [];
   let discardedCustomers = 0;
   let contestedRounds = 0;
 
   while (state.phase !== 'game-over') {
+    const round = state.round;
+    const customer = state.activeCustomer;
     const discardedBefore = state.customerDiscard.length;
-    const summaries = playBotRound(state, options.policy);
+    const summaries = playBotRound(state, policies);
     turnSummaries.push(...summaries);
     const firstSummary = summaries[0];
     const winnerSummary = summaries.find((summary) => summary.wonCustomer);
@@ -225,6 +282,20 @@ export const runGame = (options: SimulationOptions, seed: number): GameResult =>
         winnerDeckId: winnerSummary?.deckId ?? null,
         winnerDeckName: winnerSummary?.deckName ?? null,
         discarded: firstSummary.customerDiscarded,
+        winningServeValue: winnerSummary?.serveValue ?? 0,
+      });
+    }
+    if (customer?.deckId && customer.deckName) {
+      roundResults.push({
+        round,
+        customerDeckId: customer.deckId,
+        customerDeckName: customer.deckName,
+        customerOrder: customer.order ?? 0,
+        customerTips: customer.tips ?? 0,
+        players: summaries,
+        winnerDeckId: winnerSummary?.deckId ?? null,
+        winnerDeckName: winnerSummary?.deckName ?? null,
+        discarded: firstSummary?.customerDiscarded ?? true,
         winningServeValue: winnerSummary?.serveValue ?? 0,
       });
     }
@@ -252,6 +323,7 @@ export const runGame = (options: SimulationOptions, seed: number): GameResult =>
     servedMeals: turnSummaries.filter((summary) => summary.servedRecipes > 0).length,
     scoreSpread: Math.max(...scores) - Math.min(...scores),
     customerResults,
+    roundResults,
   };
 };
 
@@ -273,6 +345,9 @@ export const aggregateByDeck = (games: GameResult[]) => {
         serveValueSamples: 0,
         drinkAttempts: 0,
         drinkSuccesses: 0,
+        tipEligibleMeals: 0,
+        totalTieRisk: 0,
+        tieRiskSamples: 0,
         tipsCompletions: 0,
         totalScoreSquared: 0,
       };
@@ -287,6 +362,9 @@ export const aggregateByDeck = (games: GameResult[]) => {
       aggregate.serveValueSamples += 1;
       aggregate.drinkAttempts += player.drinkAttempts;
       aggregate.drinkSuccesses += player.drinkSuccesses;
+      aggregate.tipEligibleMeals += player.tipEligibleMeals;
+      aggregate.totalTieRisk += player.averageTieRisk;
+      aggregate.tieRiskSamples += 1;
       aggregate.tipsCompletions += player.tipsCompleted ? 1 : 0;
       aggregate.totalScoreSquared += player.score * player.score;
 
@@ -466,6 +544,67 @@ const buildCustomerImpact = (games: GameResult[]): CustomerImpact[] => {
     .sort((a, b) => a.customerDeckName.localeCompare(b.customerDeckName));
 };
 
+const buildStrategyImpact = (games: GameResult[]): StrategyDiagnostic[] => {
+  const strategies = new Map<
+    BotPolicy,
+    {
+      games: number;
+      winShare: number;
+      topFinishes: number;
+      totalScore: number;
+      totalCustomers: number;
+      totalTips: number;
+      tipsCompletions: number;
+      tipEligibleMeals: number;
+      totalTieRisk: number;
+    }
+  >();
+
+  for (const game of games) {
+    for (const player of game.players) {
+      const strategy = strategies.get(player.policy) ?? {
+        games: 0,
+        winShare: 0,
+        topFinishes: 0,
+        totalScore: 0,
+        totalCustomers: 0,
+        totalTips: 0,
+        tipsCompletions: 0,
+        tipEligibleMeals: 0,
+        totalTieRisk: 0,
+      };
+      strategy.games += 1;
+      strategy.winShare += player.winShare;
+      strategy.topFinishes += player.topFinish ? 1 : 0;
+      strategy.totalScore += player.score;
+      strategy.totalCustomers += player.customers;
+      strategy.totalTips += player.tips;
+      strategy.tipsCompletions += player.tipsCompleted ? 1 : 0;
+      strategy.tipEligibleMeals += player.tipEligibleMeals;
+      strategy.totalTieRisk += player.averageTieRisk;
+      strategies.set(player.policy, strategy);
+    }
+  }
+
+  return BOT_POLICIES
+    .filter((policy) => strategies.has(policy))
+    .map((policy) => {
+      const strategy = strategies.get(policy)!;
+      return {
+        policy,
+        games: strategy.games,
+        winShare: strategy.winShare,
+        topFinishes: strategy.topFinishes,
+        averageScore: avg(strategy.totalScore, strategy.games),
+        averageCustomers: avg(strategy.totalCustomers, strategy.games),
+        averageTips: avg(strategy.totalTips, strategy.games),
+        tipsCompletionRate: avg(strategy.tipsCompletions, strategy.games),
+        tipEligibleMealsPerGame: avg(strategy.tipEligibleMeals, strategy.games),
+        averageTieRisk: avg(strategy.totalTieRisk, strategy.games),
+      };
+    });
+};
+
 export const buildDiagnostics = (
   games: GameResult[],
   aggregates: DeckAggregate[],
@@ -492,6 +631,7 @@ export const buildDiagnostics = (
       averageTips: avg(deck.totalTips, deck.games),
     }))
     .sort((a, b) => avg(b.completions, b.games) - avg(a.completions, a.games)),
+  strategyImpact: buildStrategyImpact(games),
 });
 
 export const simulationInsights = (
@@ -548,7 +688,7 @@ export const balanceRecommendations = (
   for (const deck of aggregates) {
     const winRate = avg(deck.winShare, deck.games);
     const tipsCompletion = avg(deck.tipsCompletions, deck.games);
-    const drinkRate = avg(deck.drinkSuccesses, deck.drinkAttempts);
+    const tipEligibleMeals = avg(deck.tipEligibleMeals, deck.games);
 
     if (winRate >= expected + 0.12) {
       lines.push(
@@ -560,11 +700,11 @@ export const balanceRecommendations = (
       );
     }
 
-    if (deck.drinkAttempts >= deck.games * 0.35 && drinkRate < 0.3) {
-      lines.push(`${deck.deckName} drinks are often attempted but only succeed ${pct(drinkRate)} of the time; simplify at least one drink trigger.`);
+    if (avg(deck.drinkAttempts, deck.games) > 3.5) {
+      lines.push(`${deck.deckName} plays more than 3.5 Drinks per game; its Drink requirements may be too easy to repeat after reshuffling.`);
     }
-    if (deck.drinkAttempts >= deck.games * 0.35 && drinkRate > 0.8) {
-      lines.push(`${deck.deckName} drinks succeed ${pct(drinkRate)} of the time when played; consider making the easiest trigger narrower.`);
+    if (tipEligibleMeals < 1) {
+      lines.push(`${deck.deckName} creates fewer than 1 Tips-eligible meal per game even when strategies can pursue Tips.`);
     }
     if (tipsCompletion < 0.12) {
       lines.push(`${deck.deckName} almost never completes Tips tracking (${pct(tipsCompletion)}); check whether its tracking card type appears too late or too rarely.`);
@@ -644,7 +784,7 @@ const pad = (value: string, width: number) => value.padEnd(width, ' ');
 
 export const deckTable = (aggregates: DeckAggregate[]) => {
   const rows = [
-    ['Deck', 'Win Share', 'Top', 'Avg VP', 'Avg Cust', 'Avg Tips', 'Avg SV', 'Drink/G', 'Drink %', 'Tips %'],
+    ['Deck', 'Win', 'Top', 'Avg VP', 'Cust', 'Tips', 'Avg SV', 'Drink/G', 'Tip Meal/G', 'Tie Risk', 'Tips %'],
     ...aggregates.map((deck) => [
       deck.deckName,
       pct(deck.winShare / deck.games),
@@ -654,7 +794,8 @@ export const deckTable = (aggregates: DeckAggregate[]) => {
       fixed(avg(deck.totalTips, deck.games)),
       fixed(avg(deck.totalServeValue, deck.serveValueSamples)),
       fixed(avg(deck.drinkAttempts, deck.games)),
-      pct(avg(deck.drinkSuccesses, deck.drinkAttempts)),
+      fixed(avg(deck.tipEligibleMeals, deck.games)),
+      pct(avg(deck.totalTieRisk, deck.tieRiskSamples)),
       pct(avg(deck.tipsCompletions, deck.games)),
     ]),
   ];
@@ -741,6 +882,22 @@ const tipsTable = (diagnostics: BalanceDiagnostics) =>
     ]),
   ]);
 
+const strategyTable = (diagnostics: BalanceDiagnostics) =>
+  tableFromRows([
+    ['Policy', 'Games', 'Win', 'Avg VP', 'Cust', 'Tips', 'Tip Meal/G', 'Tie Risk', 'Tips %'],
+    ...diagnostics.strategyImpact.map((strategy) => [
+      strategy.policy,
+      String(strategy.games),
+      pct(avg(strategy.winShare, strategy.games)),
+      fixed(strategy.averageScore),
+      fixed(strategy.averageCustomers),
+      fixed(strategy.averageTips),
+      fixed(strategy.tipEligibleMealsPerGame),
+      pct(strategy.averageTieRisk),
+      pct(strategy.tipsCompletionRate),
+    ]),
+  ]);
+
 export const formatSimulationReport = (result: SimulationResult) => [
   'Food Court Automated Simulation',
   '',
@@ -774,6 +931,9 @@ export const formatSimulationReport = (result: SimulationResult) => [
   '',
   'Tips Completion:',
   tipsTable(result.diagnostics),
+  '',
+  'Strategy Impact:',
+  strategyTable(result.diagnostics),
   '',
   'Insights:',
   ...result.insights.map((line) => `- ${line}`),

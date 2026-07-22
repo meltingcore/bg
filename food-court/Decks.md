@@ -41,16 +41,15 @@ is met.
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (16)
-  - Pasta Ingredient Cards (8):
-    - Spaghetti
-    - Fettuccine
-    - Tagliatelle
-    - Lasagna Sheets
-    - Penne
+  - Pasta Ingredient Cards (13):
+    - Spaghetti (2)
+    - Fettuccine (2)
+    - Tagliatelle (2)
+    - Lasagna Sheets (2)
+    - Penne (2)
     - Campanelle
     - Gnocchi
     - Ravioli
-  - Other Ingredient Cards (5)
   - Flavor Cards (3):
     - Basil
     - Balsamic Vinegar
@@ -84,8 +83,8 @@ is met.
 ## 🇫🇷 Le Petit Paris
 
 - **Customer Effect** - Players can discard their hand and draw new one when refreshing.
-- **Special Ability** - Each adjacent course pair served in the same meal gains +1 serve value:
-  entrée + appetizer, appetizer + main, or main + dessert.
+- **Special Ability** - Each adjacent course pair served in the same meal gains +1 serve value,
+  to a maximum of +2 per meal: entrée + appetizer, appetizer + main, or main + dessert.
 - **Tips Tracking** - Attract a customer using dish in order: entrée, appetizer, main & dessert and
   use the recipe card as a Tips Card. Tips cards must be different courses.
 
@@ -128,10 +127,9 @@ is met.
 ## 🇨🇳 Jin Long
 
 - **Customer Effect** - Easy dishes gain +1 serve value.
-- **Special Ability** - Each pair of dishes of the same type served in the same meal gains +1
-  serve value.
-- **Tips Tracking** - Attract a customer serving a pair of rice and noodles dishes in the same meal
-  and use one of the recipe cards as a Tips Card.
+- **Special Ability** - Each pair of recipes served grants +1 serve value.
+- **Tips Tracking** - Attract a customer using a pair of dishes of the same type and use one of the
+  recipe cards as Tips Card. 
 
 <details>
   <summary>Deck Composition</summary>
@@ -145,7 +143,7 @@ is met.
 - Recipe Cards (15):
   - Recipes without extra ingredients (6)
     - Mapo Tofu
-    - Congee
+    - Congee (rice)
     - Sticky Rice with Mango (rice)
     - Dry-Fried Green Beans
     - Kung Pao Chicken
@@ -158,7 +156,7 @@ is met.
     - Cantonese Beef Chow Fun (noodles)
     - Sichuan Dan Dan Noodles (noodles)
   - Recipes with 2 extra ingredients (3)
-    - Lo Mein
+    - Lo Mein (noodles)
     - Peking Duck Fried Rice (rice)
     - Dragon Beard Noodles (noodles)
 - Drink Cards (3)
@@ -172,7 +170,7 @@ is met.
 ## 🇮🇳 Raj Mahal
 
 - **Customer Effect** - A pair of added ingredients add +1 serve value.
-- **Special Ability** - Each pair of spice Ingredient Cards used in served dishes gains +1 serve
+- **Special Ability** - Each distinct pair of different Ingredient Cards gains +1 serve
   value.
 - **Tips Tracking** - Attract a customer using a dish with a spice Ingredient Card added and use
   the spice Ingredient Card as a Tips Card. Tips cards must be different spices.
@@ -180,24 +178,25 @@ is met.
 <details>
   <summary>Deck Composition</summary>
 
-- Ingredient And Flavor Cards (16):
-  - Other Ingredient Cards (6)
-  - Spice Ingredient Cards (7):
+- Ingredient And Flavor Cards (15):
+  - Ingredient Cards (12):
     - Cumin (2)
     - Saffron (2)
-    - Coriander
-    - Cinnamon
-    - Cardamom
+    - Coriander (2)
+    - Cinnamon (2)
+    - Cardamom (2)
+    - Turmeric (2)
   - Flavor Cards (3):
     - Ghee
     - Coconut Milk
     - Cashew
 - Recipe Cards (14):
-  - Recipes without extra ingredients (4):
+  - Recipes without extra ingredients (5):
     - Jeera Rice
     - Spiced Lentil Soup
     - Tamarind Rice
     - Lemon Rice
+    - Chicken Curry
   - Recipes with 1 extra ingredient (7):
     - Biryani
     - Dal Tadka
@@ -221,10 +220,10 @@ is met.
 ## 🇺🇸 Liberty Grill
 
 - **Customer Effect** - Gain +1 serve value for each pair of cards in hand.
-- **Special Ability** - 1 extra Ingredient Card can be added to a dish above its printed number of
-  extra Ingredient Cards to gain +1 serve value.
+- **Special Ability** - Up to 2 extra Ingredient Cards can be added to dishes in a meal above their
+  printed number of extra Ingredient Cards.
 - **Tips Tracking** - Attract a customer using a burger or steak dish and use the recipe card as 
-  a Tips Card. Tips cards must be of the same type (burger or steak).
+  a Tips Card. 
 
 <details>
   <summary>Deck Composition</summary>
@@ -255,8 +254,8 @@ is met.
     - T-bone Steak (steak)
     - Apple Pie
 - Drink Cards (3)
-  - Coke - Play if you served a burger dish.
-  - Bourbon - Play if you served a steak dish.
+  - Coke - Play if you served at least 2 burger dishes.
+  - Bourbon - Play if you served at least 2 steak dishes.
   - Root Beer - Play if a dish has an extra Ingredient Card above its printed number of extras.
 - Customer Cards (6)
 - Ability Card (1)
@@ -309,20 +308,21 @@ is met.
 ## 🇯🇵 Sakura House
 
 - **Customer Effect** - Hard dishes gain +1 serve value.
-- **Special Ability** - Pair of different seasoning Ingredient Cards used in a meal gains +1 serve
+- **Special Ability** - If exactly 1 seasoning Ingredient Card is used in a meal, gain +1 serve
   value.
 - **Tips Tracking** - Attract a customer using a dish with a seasoning Ingredient Card added and
-  use the seasoning Ingredient Card as Tips Cards. Tips cards can be 2 of the same type maximum.
+  use the seasoning Ingredient Card as a Tips Card. Tips Cards must be different seasonings.
 
 <details>
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (16):
-  - Other Ingredient Cards (6)
-  - Seasoning Ingredient Cards (7):
+  - Other Ingredient Cards (5)
+  - Seasoning Ingredient Cards (8):
     - Umami (2)
-    - Wasabi (3)
+    - Wasabi (2)
     - Ginger (2)
+    - Garlic (2)
   - Flavor Cards (3):
     - Nori
     - Sesame Oil
@@ -356,9 +356,9 @@ is met.
 ## 🇲🇽 El Nopalito
 
 - **Customer Effect** - Normal dishes gain +1 serve value.
-- **Special Ability** - Hot Ingredient Cards gain +1 serve value and up to 2 can be added to
-  dishes in a meal.
-- **Tips Tracking** - Attract a customer using a dish with a hot Ingredient Card added and use the
+- **Special Ability** - Hot Ingredient Cards can be added also to Recipe Cards without printed
+  Ingredient slots to gain +1 serve value but a meal can have max 2 hot Ingredient Cards total.
+- **Tips Tracking** - Attract a customer using a dish with a hot Ingredient Card and use the hot
   Ingredient Card as a Tips Card.
 
 <details>
@@ -366,11 +366,15 @@ is met.
 
 - Ingredient And Flavor Cards (16):
   - Hot Ingredient Cards (6):
-    - Cayenne Pepper (hot) (3)
-    - Jalapeño (hot) (3)
+    - Cayenne Pepper (hot)
+    - Chipotle (hot)
+    - Habanero (hot)
+    - Serrano (hot)
+    - Jalapeño (hot)
+    - Poblano (hot)
   - Other Ingredient Cards (7):
-    - Avocado (2)
-    - Other Ingredient Cards (5)
+    - Avocado (4)
+    - Corn (3)
   - Flavor Cards (3):
     - Lime
     - Cilantro

@@ -4,14 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev --host 127.0.0.1 --port 4321",
     "sim": "node src/simulate.ts",
-    "build": "astro build",
-    "preview": "astro preview --host 127.0.0.1"
+    "balance": "node src/balance-study.ts",
+    "test": "node --test src/game/*.test.ts"
   },
-  "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "astro": "^6.4.2",
-    "typescript": "^5.9.3"
+  "engines": {
+    "node": ">=22.18"
   }
 }

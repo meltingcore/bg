@@ -1,0 +1,11 @@
+{
+  "name": "foodcourt",
+  "compatibility_date": "2026-07-22",
+  "main": "./worker/index.js",
+  "preview_urls": true,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  }
+}
