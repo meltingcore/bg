@@ -6,8 +6,11 @@
   "scripts": {
     "dev": "python3 -m http.server 4173",
     "build": "node scripts/build.mjs",
-    "check": "node --check src/data.js && node --check src/game.js && node --check src/app.js",
+    "check": "node --check src/data.js && node --check src/game.js && node --check src/app.js && node --check worker/access.js && node --check worker/index.js",
     "test": "node --test",
-    "deploy": "npm run build && npx wrangler@latest deploy"
+    "deploy": "npm run build && npx wrangler@latest deploy --keep-vars"
+  },
+  "dependencies": {
+    "jose": "6.2.4"
   }
 }

@@ -77,3 +77,8 @@ node_modules/
 .pnpm-store/
 .astro/
 dist/
+
+# Cloudflare local environment values
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
