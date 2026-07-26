@@ -42,7 +42,8 @@ Tips Cards can increase customer scoring and can end the game early.
 
 1. Deck Selection: Each player selects one restaurant deck.
 2. Customer Deck:
-   - Remove all Customer Cards from the cuisine decks and combine them into a shared customer deck.
+   - Remove all Customer Cards from the restaurant decks and combine them into a shared customer
+     deck.
    - Shuffle the customer deck and place it face down in the middle of the table.
    - Reveal the top customer as the active customer.
 3. Player Station:
@@ -66,7 +67,8 @@ Each round is a simultaneous contest for the active customer.
    least 1 Recipe Card may also add up to 1 Drink Card face down with their meal.
 4. **Reveal** - All players reveal their served cards at the same time.
 5. **Calculate Serve Value** - Each player totals the serve value of their revealed meal.
-6. **Determine Winner** - The highest unique serve value wins the customer. See also [Ties](#ties).
+6. **Determine Winner** - The highest unique serve value attracts the customer. See also
+   [Ties](#ties).
 7. **Cleanup** - Served dishes, added cards, and played drinks are discarded. The winner
    moves the attracted customer to their scoring pile and may move 1 eligible Tips Card used in
    that contest into tracking.
@@ -114,7 +116,7 @@ during cleanup.
 
 After serve values are calculated, determine the winner:
 
-- The highest unique serve value wins the customer.
+- The highest unique serve value attracts the customer.
 - If the highest serve value is tied, all players tied at that value are ignored.
 - Continue checking the next highest serve value until a unique value is found.
 - If every competing serve value is tied, the customer is discarded.
@@ -166,7 +168,7 @@ contest if its requirement is met.
 
 ### Customer Cards
 
-Customer cards represent diners in the food court. Each customer has:
+Customer Cards represent people choosing among the food court's restaurants. Each customer has:
 
 - **Order Value** - The maximum number of recipes each player may serve to that customer. It is
   also the customer's base VP at end game.
@@ -224,5 +226,5 @@ Tiebreaker: the player who most recently cooked a real-life dish wins.
 - **Meal** - All dishes a player serves to the active customer in one contest.
 - **Serve Value** - The total value of a player's revealed meal after recipe, ingredient, flavor,
   customer effect, deck ability, and drink values are counted.
-- **Tips Cards** - Deck-specific cards moved into tracking after winning a customer. Tips Cards can
-  increase customer scoring and end the game.
+- **Tips Cards** - Restaurant-specific cards moved into tracking after attracting a customer. Tips
+  Cards can increase customer scoring and end the game.

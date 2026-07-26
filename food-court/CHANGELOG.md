@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.13.2]
+
+FIXES:
+
+* Replaced placeholder generic Ingredient Cards with cuisine-appropriate names in the French,
+  Chinese, American, Turkish, and Japanese restaurant decks.
+* Web app UI improvements
+
 ## [0.13.1]
 
 FIXES:

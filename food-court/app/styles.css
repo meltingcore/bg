@@ -26,6 +26,7 @@
 
 html {
   min-width: 320px;
+  overflow-x: clip;
   background: var(--forest-950);
 }
 
@@ -33,6 +34,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: clip;
   font-family: var(--sans);
   color: var(--cream);
   background: var(--forest-950);
@@ -458,6 +460,18 @@ button:focus-visible {
 .restaurant-flag {
   font-family: "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
   line-height: 1;
+}
+
+.flag-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size: 1em;
+  line-height: 1;
+  transform: translateY(-0.035em);
 }
 
 .cuisine-seal {
@@ -901,6 +915,10 @@ button:focus-visible {
   font-style: italic;
 }
 
+.mobile-customer-summary {
+  display: none;
+}
+
 .table-surface {
   position: relative;
   display: grid;
@@ -981,6 +999,7 @@ button:focus-visible {
   display: flex;
   gap: 11px;
   align-items: center;
+  min-width: 0;
 }
 
 .mini-seal {
@@ -992,10 +1011,14 @@ button:focus-visible {
 .opponent-identity div,
 .result-restaurant div {
   display: grid;
+  min-width: 0;
 }
 
 .opponent-identity strong {
+  overflow: hidden;
   font-family: var(--display);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .opponent-identity small,
@@ -1155,8 +1178,10 @@ button:focus-visible {
   z-index: 1;
   right: -14px;
   bottom: -11px;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 44px;
   height: 44px;
   color: #2a2d22;
@@ -1166,14 +1191,20 @@ button:focus-visible {
   font-family: var(--display);
   font-size: 1rem;
   font-weight: 800;
+  line-height: 0.9;
   box-shadow: 0 5px 12px rgb(0 0 0 / 28%);
 }
 
 .stack-count small {
-  margin-top: -5px;
+  max-width: 100%;
+  margin-top: 4px;
   font-family: var(--sans);
   font-size: 0.4rem;
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .customer-card {
@@ -1213,19 +1244,19 @@ button:focus-visible {
   place-items: center;
   grid-row: 1 / 4;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 38%, #f6df9f 0 24%, transparent 25%),
-    linear-gradient(145deg, color-mix(in srgb, var(--customer), white 35%), var(--customer));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--customer), white 35%), var(--customer));
 }
 
 .customer-portrait::before,
 .customer-portrait::after {
   position: absolute;
+  top: 50%;
+  left: 50%;
   width: 70px;
   height: 70px;
   content: "";
   border: 1px solid rgb(255 255 255 / 26%);
-  transform: rotate(45deg);
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .customer-portrait::after {
@@ -1233,10 +1264,22 @@ button:focus-visible {
   height: 45px;
 }
 
-.customer-portrait span {
+.customer-portrait-medallion {
+  position: relative;
   z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #f6df9f;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 16%);
+}
+
+.customer-portrait .flag-glyph {
   font-size: 2.6rem;
   filter: drop-shadow(0 4px 5px rgb(0 0 0 / 22%));
+  transform: none;
 }
 
 .customer-title {
@@ -1253,6 +1296,7 @@ button:focus-visible {
 
 .customer-title h2 {
   margin: 2px 0 0;
+  overflow-wrap: anywhere;
   font-family: var(--display);
   font-size: 1.15rem;
   text-transform: capitalize;
@@ -1308,6 +1352,7 @@ button:focus-visible {
   border-top: 1px solid #d8cba8;
   font-size: 0.62rem;
   line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .customer-effect span {
@@ -3540,7 +3585,93 @@ button:focus-visible {
   .score-pill { width: min(260px, 44vw); }
   .header-tools { grid-column: 3; grid-row: 1; }
   .header-tools .icon-button { width: 36px; height: 36px; }
-  .table-surface { grid-template-columns: minmax(0, 1fr); gap: 12px; min-height: calc(100vh - 108px); padding-bottom: 86px; }
+  .game-shell { scroll-padding-bottom: calc(148px + env(safe-area-inset-bottom)); }
+  .table-surface {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    min-height: calc(100vh - 108px);
+    padding-bottom: calc(148px + env(safe-area-inset-bottom));
+  }
+  .mobile-customer-summary {
+    position: fixed;
+    z-index: 19;
+    top: calc(var(--mobile-customer-top, 112px) + 7px);
+    left: 50%;
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr) 45px 45px;
+    gap: 7px;
+    align-items: center;
+    width: min(calc(100% - 20px), 430px);
+    min-height: 48px;
+    padding: 6px 8px;
+    color: var(--cream);
+    border: 1px solid color-mix(in srgb, var(--customer), white 34%);
+    border-radius: 14px;
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--customer), transparent 72%), transparent 42%),
+      color-mix(in srgb, var(--theme-deep), black 5%);
+    box-shadow: 0 8px 22px rgb(0 0 0 / 30%);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -10px);
+    transition: opacity 150ms ease, transform 150ms ease;
+  }
+  .mobile-customer-summary.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  .mobile-customer-flag {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 32%);
+    border-radius: 50%;
+    background: var(--customer);
+    font-size: 1.05rem;
+    box-shadow: inset 0 0 0 2px rgb(255 255 255 / 16%);
+  }
+  .mobile-customer-name {
+    display: grid;
+    min-width: 0;
+  }
+  .mobile-customer-name small {
+    color: #b7c9c1;
+    font-size: 0.46rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .mobile-customer-name strong {
+    overflow: hidden;
+    font-family: var(--display);
+    font-size: 0.76rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mobile-customer-value {
+    display: grid;
+    place-items: center;
+    min-height: 34px;
+    color: #f6e4ae;
+    border: 1px solid rgb(246 228 174 / 25%);
+    border-radius: 8px;
+    background: rgb(255 255 255 / 7%);
+    line-height: 1;
+  }
+  .mobile-customer-value b {
+    font-family: var(--display);
+    font-size: 0.86rem;
+  }
+  .mobile-customer-value small {
+    margin-top: -2px;
+    color: #b7c9c1;
+    font-size: 0.42rem;
+    font-weight: 850;
+    text-transform: uppercase;
+  }
+  .mobile-customer-value.is-tips b { color: var(--theme-highlight); }
   .opponent-zone { display: flex; gap: 0; overflow-x: auto; padding: 5px; scroll-snap-type: x proximity; }
   .opponent-seat { flex: 0 0 210px; border-right: 1px solid rgb(255 255 255 / 8%); border-bottom: 0; scroll-snap-align: start; }
   .opponent-seat:last-child { border-right: 0; }
@@ -3582,6 +3713,7 @@ button:focus-visible {
   .mobile-action-bar .primary-button { flex: 1; max-width: 230px; }
   .mobile-action-bar .secondary-button,
   .mobile-action-bar .undo-button { flex: 0 1 auto; min-width: 64px; padding-inline: 10px; }
+  .mobile-action-bar .undo-button { min-height: 44px; }
   .toast { bottom: 84px; }
   .refresh-board { grid-template-columns: 56px 1fr; min-height: 112px; padding: 16px; }
   .refresh-emblem { width: 50px; height: 50px; font-size: 1.35rem; }
@@ -3707,12 +3839,13 @@ button:focus-visible {
   .phase-trail li + li::before { margin-inline: 2px; }
   .score-tips { display: grid; }
   .score-pill { width: auto; min-width: 138px; padding-right: 8px; }
-  .table-surface { padding: 12px 10px 20px; }
+  .table-surface { padding: 12px 10px calc(148px + env(safe-area-inset-bottom)); }
   .opponent-zone { padding: 10px; min-height: 70px; }
   .opponent-identity small { display: none; }
   .center-table { grid-template-columns: 56px 1fr; gap: 10px; }
   .deck-stack { width: 51px; height: 76px; }
-  .stack-count { width: 34px; height: 34px; right: -6px; font-size: 0.75rem; }
+  .stack-count { width: 38px; height: 38px; right: -8px; bottom: -9px; font-size: 0.78rem; }
+  .stack-count small { margin-top: 3px; font-size: 0.31rem; letter-spacing: 0; }
   .customer-card { grid-template-columns: 74px 1fr; }
   .customer-title { padding-top: 13px; }
   .customer-title h2 { font-size: 1rem; }

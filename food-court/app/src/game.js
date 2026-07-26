@@ -102,7 +102,7 @@ export function buildCustomerDeck(cuisineIds = CUISINE_LIST.map((cuisine) => cui
       cuisineId: cuisine.id,
       nationality: cuisine.id,
       flag: cuisine.flag,
-      name: `${cuisine.region.replace(" kitchen", "")} guest`,
+      name: `${cuisine.region.replace(" restaurant", "")} customer`,
       order,
       tips,
       effect: cuisine.customerEffect,
@@ -215,7 +215,7 @@ export function cardPlayability(card, meal, cuisineId, orderValue, selectedDishI
   if (card.type === "recipe") {
     return meal.dishes.length < orderValue
       ? { playable: true, reason: "Starts a new dish" }
-      : { playable: false, reason: `This guest orders at most ${orderValue} dish${orderValue === 1 ? "" : "es"}.` };
+      : { playable: false, reason: `This customer orders at most ${orderValue} dish${orderValue === 1 ? "" : "es"}.` };
   }
   if (card.type === "ingredient") {
     if (!meal.dishes.length) return { playable: false, reason: "Serve a recipe before adding ingredients." };

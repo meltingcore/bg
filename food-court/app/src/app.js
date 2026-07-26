@@ -28,6 +28,8 @@ let game = null;
 let toastTimer = null;
 let dialogFocusPending = false;
 let focusReturnAction = null;
+let customerCardObserver = null;
+let responsiveLayoutTimer = null;
 const ui = {
   discardIds: new Set(),
   selectedDish: 0,
@@ -43,19 +45,19 @@ const ui = {
 const TUTORIAL_STEPS = [
   {
     kicker: "Welcome to the mall food court",
-    title: "Turn browsing shoppers into your restaurant's guests",
+    title: "Attract browsing customers to your restaurant",
     symbol: "★",
     visual: "goal",
-    body: "You run one of several restaurants in a busy mall food court. Shoppers wander between the available options, wondering what to eat. Each round, every restaurant secretly prepares an offer for the same shopper.",
+    body: "You run one of several restaurants in a busy mall food court. Customers wander between the available options, wondering what to eat. Each round, every restaurant secretly prepares an offer for the same customer.",
     note: "The game ends when any restaurant tracks 4 Tips Cards or the customer deck runs out. Then the restaurant with the most VP wins.",
   },
   {
-    kicker: "First · A shopper considers the court",
+    kicker: "First · A customer considers the court",
     title: "Read what could attract this customer",
     symbol: "◎",
     visual: "customer",
-    body: "The active Customer Card represents a shopper comparing the food court's restaurants. Order Value limits how many Recipe Cards you may serve and becomes base VP if they choose you. Tips Value is possible bonus VP, and the printed effect applies to every restaurant.",
-    note: "Example: Order 2 means you may serve at most 2 recipes and the guest is worth 2 base VP. Tips +2 is gained only when you have at least 2 tracked Tips Cards.",
+    body: "The active Customer Card represents a customer comparing the food court's restaurants. Order Value limits how many Recipe Cards you may serve and becomes base VP if they choose you. Tips Value is possible bonus VP, and the printed effect applies to every restaurant.",
+    note: "Example: Order 2 means you may serve at most 2 recipes and the customer is worth 2 base VP. Tips +2 is gained only when you have at least 2 tracked Tips Cards.",
   },
   {
     kicker: "Know your cards",
@@ -67,11 +69,11 @@ const TUTORIAL_STEPS = [
   },
   {
     kicker: "Phase 1 · Refresh",
-    title: "Prepare your hand for this guest",
+    title: "Prepare your hand for this customer",
     symbol: "↻",
     visual: "refresh",
     body: "You may discard up to one card, then draw up to three cards without passing your hand limit. You may also keep every card and simply draw into any open space in your hand.",
-    note: "The normal hand limit is 6. Some guests change Refresh: an Italian guest raises the limit to 8, while a French guest lets you replace your whole hand.",
+    note: "The normal hand limit is 6. Some customers change Refresh: an Italian customer raises the limit to 8, while a French customer lets you replace your whole hand.",
   },
   {
     kicker: "Phase 2 · Serve",
@@ -79,14 +81,14 @@ const TUTORIAL_STEPS = [
     symbol: "＋",
     visual: "build",
     body: "Click a gold Recipe Card first. Select the dish you want to work on, then click Ingredients and a Flavor to add them there. If you want a Drink, add it after serving at least one recipe.",
-    note: "You may serve fewer recipes than the Order Value or pass completely. Each restaurant's offer stays face down while the shopper considers their options.",
+    note: "You may serve fewer recipes than the Order Value or pass completely. Each restaurant's offer stays face down while the customer considers their options.",
   },
   {
     kicker: "While everyone cooks",
     title: "Use the public card counts as clues",
     symbol: "◫",
     visual: "counts",
-    body: "Each restaurant shows how many cards it committed to its face-down meal and how many remain in hand. Card names stay hidden until Reveal, like watching rival counters prepare while a shopper browses the court.",
+    body: "Each restaurant shows how many cards it committed to its face-down meal and how many remain in hand. Card names stay hidden until Reveal, like watching rival counters prepare while a customer browses the court.",
     note: "A large play may be a powerful meal—or several low-value cards. The counts are information, not certainty.",
   },
   {
@@ -94,16 +96,16 @@ const TUTORIAL_STEPS = [
     title: "Total the meals, then find the highest unique value",
     symbol: "✦",
     visual: "contest",
-    body: "Every restaurant reveals its offer. Add card values, then the customer effect and each restaurant's ability. A Drink that misses its requirement adds +0. The highest unique Serve Value attracts the browsing shopper.",
-    note: "Matching values cancel. If two restaurants score 7 and another scores 5, both 7s are ignored and the unique 5 attracts the guest.",
+    body: "Every restaurant reveals its offer. Add card values, then the customer effect and each restaurant's ability. A Drink that misses its requirement adds +0. The highest unique Serve Value attracts the browsing customer.",
+    note: "Matching values cancel. If two restaurants score 7 and another scores 5, both 7s are ignored and the unique 5 attracts the customer.",
   },
   {
     kicker: "After the winner is found",
-    title: "Collect guests, track Tips, and score at the end",
+    title: "Attract customers, track Tips, and score at the end",
     symbol: "◆",
     visual: "tips",
-    body: "The shopper becomes a guest of the winning restaurant. If that meal meets the deck's tracking condition, its owner may set aside one eligible card as a Tips Card. Tracked cards leave the draw cycle.",
-    note: "At game end, each guest scores its Order Value plus its full Tips Value when your tracked Tips count meets that guest's threshold. Tracking 4 Tips Cards ends the game after that round.",
+    body: "The customer chooses the winning restaurant. If that meal meets the restaurant deck's tracking condition, its owner may set aside one eligible card as a Tips Card. Tracked cards leave the draw cycle.",
+    note: "At game end, each customer scores its Order Value plus its full Tips Value when your tracked Tips count meets that customer's threshold. Tracking 4 Tips Cards ends the game after that round.",
   },
 ];
 
@@ -198,7 +200,7 @@ function cuisineCard(cuisine) {
       data-cuisine="${cuisine.id}"
       aria-pressed="${selected}"
     >
-      <span class="cuisine-seal restaurant-flag" aria-hidden="true">${cuisine.flag}</span>
+      <span class="cuisine-seal restaurant-flag" aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></span>
       <span class="cuisine-copy">
         <span class="cuisine-flag">${cuisine.flag}</span>
         <strong>${escapeHtml(cuisine.name)}</strong>
@@ -262,14 +264,14 @@ function renderLobby() {
         <div class="brand-lockup">
           <span class="brand-kicker">A competitive cooking card game</span>
           <h1><span>Food</span> Court</h1>
-          <p>Build a menu. Read the room. Win the regulars.</p>
+          <p>Build a menu. Read the room. Attract customers.</p>
           <div class="game-facts"><span>2–4 restaurants</span><span>Simultaneous turns</span><span>About 15 minutes</span></div>
         </div>
 
         <div class="restaurant-picker panel-parchment">
           <div class="picker-heading">
             <div>
-              <span class="step-label"><b>1</b> Choose your kitchen</span>
+              <span class="step-label"><b>1</b> Choose your restaurant</span>
               <h2>Who is opening tonight?</h2>
             </div>
             <div class="picker-actions">
@@ -295,7 +297,7 @@ function renderLobby() {
           </button>
         </div>
       </section>
-      <footer class="lobby-footer">Eight kitchens · one shared court · highest unique meal wins</footer>
+      <footer class="lobby-footer">Eight restaurants · one shared court · highest unique meal wins</footer>
       ${ui.rulesOpen ? rulesModal() : ""}
       ${ui.tutorialOpen ? tutorialModal() : ""}
     </main>
@@ -349,8 +351,7 @@ function customerCard(customer) {
     <article class="customer-card" style="--customer: ${customer.accent}">
       <div class="customer-ribbon">Now ordering</div>
       <div class="customer-portrait" aria-hidden="true">
-        <span>${customer.flag}</span>
-        <i></i>
+        <span class="customer-portrait-medallion"><span class="flag-glyph">${customer.flag}</span></span>
       </div>
       <div class="customer-title">
         <span>${escapeHtml(cuisine.region)}</span>
@@ -362,6 +363,22 @@ function customerCard(customer) {
       </div>
       <p class="customer-effect"><span>✦</span>${escapeHtml(customer.effect)}</p>
     </article>
+  `;
+}
+
+function mobileCustomerSummary(customer) {
+  return `
+    <aside
+      class="mobile-customer-summary"
+      aria-label="Current customer: ${escapeHtml(customer.name)}. Order Value ${customer.order}. Tips Value ${customer.tips}."
+      aria-hidden="true"
+      style="--customer:${customer.accent}"
+    >
+      <span class="mobile-customer-flag restaurant-flag" aria-hidden="true"><span class="flag-glyph">${customer.flag}</span></span>
+      <span class="mobile-customer-name"><small>Current customer</small><strong>${escapeHtml(customer.name)}</strong></span>
+      <span class="mobile-customer-value"><b>${customer.order}</b><small>Order</small></span>
+      <span class="mobile-customer-value is-tips"><b>+${customer.tips}</b><small>Tips</small></span>
+    </aside>
   `;
 }
 
@@ -377,7 +394,7 @@ function scorePill(player, side, index = 0) {
     : `<span class="score-tips"><b>${player.tips.length}/4</b><span>tips</span></span>`;
   return `
     <div class="score-pill ${side}">
-      <span class="score-avatar" style="--cuisine: ${cuisine.accent}" aria-hidden="true">${cuisine.flag}</span>
+      <span class="score-avatar restaurant-flag" style="--cuisine: ${cuisine.accent}" aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></span>
       <span class="score-name"><small>${side === "player" ? "Your restaurant" : `Rival ${index + 1}`}</small>${escapeHtml(cuisine.name)}</span>
       <span class="score-value"><strong>${scorePlayer(player)}</strong><small>VP</small></span>
       ${tipsCounter}
@@ -442,13 +459,13 @@ function tipsModal() {
             <span aria-hidden="true">✦</span>
             <strong>No Tips Cards tracked yet</strong>
             <p>
-              Win a guest with your restaurant's tracking combination, then choose an eligible
+              Attract a customer with your restaurant's tracking combination, then choose an eligible
               card during the reveal.
             </p>
           </div>`}
         <p class="tips-score-impact">
           <strong>Current scoring:</strong> ${bonusCustomers.length} of ${game.player.customers.length}
-          attracted guests receive their Tips Value, adding <b>+${bonusVp} VP</b>.
+          attracted customers receive their Tips Value, adding <b>+${bonusVp} VP</b>.
         </p>
       </section>
     </div>
@@ -480,11 +497,11 @@ function opponentZone() {
         const cuisine = CUISINES[opponent.cuisineId];
         const playedCount = flattenMeal(opponent.meal).length;
         const hiddenCards = Array.from({ length: Math.min(opponent.hand.length, 4) }, (_, cardIndex) =>
-          `<span class="card-back" style="--i:${cardIndex}"><i aria-hidden="true">${cuisine.flag}</i></span>`).join("");
+          `<span class="card-back" style="--i:${cardIndex}"><i aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></i></span>`).join("");
         return `
           <article class="opponent-seat">
             <div class="opponent-identity">
-              <span class="mini-seal restaurant-flag" style="--cuisine:${cuisine.accent}" aria-hidden="true">${cuisine.flag}</span>
+              <span class="mini-seal restaurant-flag" style="--cuisine:${cuisine.accent}" aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></span>
               <div><small>Rival ${rivalIndex + 1}</small><strong>${escapeHtml(cuisine.name)}</strong><span>${escapeHtml(cuisine.ability)}</span></div>
             </div>
             <div class="opponent-hand" aria-label="Rival ${rivalIndex + 1} has ${opponent.hand.length} cards">${hiddenCards}</div>
@@ -576,7 +593,7 @@ function mealBuilder() {
           <div class="empty-dish-slot">
             <span>＋</span>
             <strong>${meal.dishes.length ? "Add another recipe" : "Choose a recipe from your hand"}</strong>
-            <small>Up to ${maxRecipes} dish${maxRecipes === 1 ? "" : "es"} for this guest</small>
+            <small>Up to ${maxRecipes} dish${maxRecipes === 1 ? "" : "es"} for this customer</small>
           </div>` : ""}
       </div>
       <div class="meal-footer">
@@ -617,7 +634,7 @@ function phaseAction() {
   return `
     <aside class="phase-action serve-action">
       <div><span class="phase-step">2</span><div><small>Now · Serve</small><strong>${game.player.meal.dishes.length ? "Finish and commit your meal" : "Start with a Recipe Card"}</strong></div></div>
-      <p>${game.player.meal.dishes.length ? "Select a dish to direct Ingredients and Flavors, then serve when ready." : "Gold Recipe Cards create dishes. This guest accepts up to " + game.activeCustomer.order + "."}</p>
+      <p>${game.player.meal.dishes.length ? "Select a dish to direct Ingredients and Flavors, then serve when ready." : "Gold Recipe Cards create dishes. This customer accepts up to " + game.activeCustomer.order + "."}</p>
       <div class="phase-metrics"><span>Played <b>${flattenMeal(game.player.meal).length}</b></span><span>In hand <b>${game.player.hand.length}</b></span><span>Dishes <b>${game.player.meal.dishes.length}/${game.activeCustomer.order}</b></span></div>
       <div class="action-buttons">
         ${undoButton()}
@@ -693,7 +710,7 @@ function breakdownRows(result, player) {
     Ingredients: "Ingredient Cards",
     Flavors: "Flavor Cards",
     Drink: "Valid Drink Card",
-    Customer: "Guest effect",
+    Customer: "Customer effect",
     Ability: cuisine.ability,
   };
   return Object.entries(result.breakdown)
@@ -765,13 +782,13 @@ function resultPanel(side, player, meal, result, label, status) {
     winner: "Highest unique · wins",
     cancelled: "Tied value · canceled",
     outscored: "Unique, but lower",
-    passed: "Passed this guest",
+    passed: "Passed this customer",
   }[status];
   return `
     <article class="result-side ${side} status-${status}">
       <span class="result-status">${status === "winner" ? "✦" : status === "cancelled" ? "×" : "·"} ${statusText}</span>
       <div class="result-restaurant">
-        <span class="mini-seal restaurant-flag" style="--cuisine:${cuisine.accent}" aria-hidden="true">${cuisine.flag}</span>
+        <span class="mini-seal restaurant-flag" style="--cuisine:${cuisine.accent}" aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></span>
         <div><small>${escapeHtml(label)}</small><strong>${escapeHtml(cuisine.name)}</strong></div>
       </div>
       <div class="result-card-counts"><b>${flattenMeal(meal).length}</b> played · <b>${player.hand.length}</b> left in hand</div>
@@ -811,8 +828,8 @@ function revealOverlay() {
   const heading = isPlayerWinner
     ? "Your table wins!"
     : winner
-      ? `${CUISINES[winner.cuisineId].name} attracts the guest`
-      : "The guest walks away";
+      ? `${CUISINES[winner.cuisineId].name} attracts the customer`
+      : "The customer walks away";
   const subheading = winner
     ? `${isPlayerWinner ? "Your meal" : "Their meal"} had the highest unique serve value.`
     : "Tied values canceled out, leaving no unique winner.";
@@ -841,11 +858,11 @@ function revealOverlay() {
               <button class="tip-option ${pending.selectedTipId === null ? "is-selected" : ""}" data-action="skip-tip">Skip</button>
             </div>
             <p class="tip-impact">${pending.selectedTipId
-              ? `Tracking this card moves you to <b>${game.player.tips.length + 1}/4 Tips</b>. Attracted guests with Tips Value ${game.player.tips.length + 1} or less now score their bonus.${game.player.tips.length + 1 === 4 ? " This ends the game." : ""}`
+              ? `Tracking this card moves you to <b>${game.player.tips.length + 1}/4 Tips</b>. Attracted customers with Tips Value ${game.player.tips.length + 1} or less now score their bonus.${game.player.tips.length + 1 === 4 ? " This ends the game." : ""}`
               : `Skipping leaves you at <b>${game.player.tips.length}/4 Tips</b>. The eligible card returns to your discard cycle.`}</p>
           </div>` : ""}
         <button class="primary-button continue-button" data-action="continue-round">
-          ${game.customerDeck.length === 0 ? "See final scores" : "Continue to next guest"} <span>→</span>
+          ${game.customerDeck.length === 0 ? "See final scores" : "Continue to next customer"} <span>→</span>
         </button>
       </div>
     </div>
@@ -866,13 +883,13 @@ function gameOverOverlay() {
         <span class="end-ornament">✦</span>
         <span class="eyebrow">The court is closed</span>
         <h2 id="end-title">${playerWon ? "You rule the food court" : playerTied ? "A delicious draw" : "A rival takes the crown"}</h2>
-        <p>${playerWon ? "Your guests leave happy—and they are already planning their next visit." : playerTied ? "The top restaurants finish with the same score." : "A close service. Sharpen the menu and open again tomorrow."}</p>
+        <p>${playerWon ? "Your customers leave happy—and they are already planning their next visit." : playerTied ? "The top restaurants finish with the same score." : "A close service. Sharpen the menu and open again tomorrow."}</p>
         <div class="final-score final-count-${standings.length}">
           ${standings.map(({ player, index, score }) => `
             <div class="${score === topScore ? "winner" : ""}">
               <small>${player.id === game.player.id ? "You" : `Rival ${index}`}</small>
               <strong>${score}</strong>
-              <span>${escapeHtml(CUISINES[player.cuisineId].name)} · ${player.customers.length} guests · ${player.tips.length} tips</span>
+              <span>${escapeHtml(CUISINES[player.cuisineId].name)} · ${player.customers.length} customers · ${player.tips.length} tips</span>
             </div>
           `).join("")}
         </div>
@@ -891,12 +908,12 @@ function rulesModal() {
       <div class="rules-panel panel-parchment">
         <button class="close-button" data-action="close-rules" aria-label="Close rules">×</button>
         <span class="eyebrow">How to play</span>
-        <h2 id="rules-title">Win the regulars</h2>
-        <p class="rules-lead">Every round, all restaurants secretly build a meal for the same guest.</p>
+        <h2 id="rules-title">Attract customers</h2>
+        <p class="rules-lead">Every round, all restaurants secretly build a meal for the same customer.</p>
         <ol class="rules-flow">
           <li><span>1</span><div><strong>Refresh</strong><p>Discard up to one card, then draw up to three without passing your hand limit.</p></div></li>
-          <li><span>2</span><div><strong>Build</strong><p>Serve recipes up to the guest's Order Value. Add ingredients, one flavor per recipe, and one drink per meal.</p></div></li>
-          <li><span>3</span><div><strong>Reveal</strong><p>Recipes and ingredients add +1, flavors +2, and a valid drink +3. Then abilities and the guest effect apply.</p></div></li>
+          <li><span>2</span><div><strong>Build</strong><p>Serve recipes up to the customer's Order Value. Add ingredients, one flavor per recipe, and one drink per meal.</p></div></li>
+          <li><span>3</span><div><strong>Reveal</strong><p>Recipes and ingredients add +1, flavors +2, and a valid drink +3. Then abilities and the customer effect apply.</p></div></li>
           <li><span>4</span><div><strong>Attract</strong><p>The highest unique serve value wins. Tied values are ignored until a unique value is found.</p></div></li>
         </ol>
         <div class="rules-values">
@@ -905,7 +922,7 @@ function rulesModal() {
           <span class="flavor">✦ Flavor <b>+2</b></span>
           <span class="drink">◒ Drink <b>+3</b></span>
         </div>
-        <div class="rules-finish"><strong>End Condition</strong><p>Play ends when a restaurant tracks 4 Tips Cards or the customer deck empties. Score each guest's Order Value, plus their Tips Value when you have enough tracked Tips Cards.</p></div>
+        <div class="rules-finish"><strong>End Condition</strong><p>Play ends when a restaurant tracks 4 Tips Cards or the customer deck empties. Score each customer's Order Value, plus their Tips Value when you have enough tracked Tips Cards.</p></div>
         <button class="primary-button" data-action="close-rules" data-dialog-primary>Back to the table</button>
       </div>
     </div>
@@ -914,7 +931,7 @@ function rulesModal() {
 
 function tutorialVisual(visual) {
   if (visual === "goal") {
-    return `<div class="tutorial-goal"><span>♨<small>Your restaurant</small></span><i>competes for</i><span>◎<small>The guest</small></span><i>earns</i><span>★<small>Victory points</small></span></div>`;
+    return `<div class="tutorial-goal"><span>♨<small>Your restaurant</small></span><i>competes for</i><span>◎<small>The customer</small></span><i>earns</i><span>★<small>Victory points</small></span></div>`;
   }
   if (visual === "customer") {
     return `<div class="tutorial-values"><span><b>2</b><small>Order<br>max recipes + base VP</small></span><span><b>+2</b><small>Tips<br>conditional bonus VP</small></span></div>`;
@@ -987,12 +1004,13 @@ function renderGame() {
           <button class="icon-button dark tutorial-button" data-action="open-tutorial" aria-label="Open guided tour" title="Guided tour">?</button>
         </div>
       </header>
+      ${mobileCustomerSummary(game.activeCustomer)}
       <div class="table-surface">
         ${opponentZone()}
         <section class="center-table">
           <div class="deck-stack" aria-label="${game.customerDeck.length} customers remain">
             <span class="stack-card back-3"></span><span class="stack-card back-2"></span><span class="stack-card back-1"></span>
-            <span class="stack-count">${game.customerDeck.length}<small>guests</small></span>
+            <span class="stack-count">${game.customerDeck.length}<small>left</small></span>
           </div>
           ${customerCard(game.activeCustomer)}
           ${phaseAction()}
@@ -1002,7 +1020,7 @@ function renderGame() {
             <div class="refresh-emblem">↻</div>
             <div class="refresh-copy"><span class="eyebrow">Before service</span>
             <h2>Tune your hand</h2>
-            <p>Keep what works, discard one weak card, and draw toward a meal that fits this guest.</p></div>
+            <p>Keep what works, discard one weak card, and draw toward a meal that fits this customer.</p></div>
             <div class="refresh-hint"><span>✦</span><div><strong>${escapeHtml(CUISINES[game.player.cuisineId].ability)}</strong><small>${escapeHtml(CUISINES[game.player.cuisineId].abilityText)}</small></div></div>
           </section>`}
         ${handSection()}
@@ -1020,6 +1038,7 @@ function renderGame() {
 
 function render() {
   app.innerHTML = screen === "lobby" ? renderLobby() : renderGame();
+  setupMobileCustomerSummary();
   if (dialogFocusPending) {
     dialogFocusPending = false;
     window.queueMicrotask(() => {
@@ -1028,6 +1047,35 @@ function render() {
       (dialog?.querySelector("[data-dialog-primary]") || dialog?.querySelector("button, select"))?.focus();
     });
   }
+}
+
+function setupMobileCustomerSummary() {
+  customerCardObserver?.disconnect();
+  customerCardObserver = null;
+
+  const summary = document.querySelector(".mobile-customer-summary");
+  const customer = document.querySelector(".customer-card");
+  const header = document.querySelector(".game-header");
+  if (!summary || !customer || !header || !window.matchMedia("(max-width: 780px)").matches) return;
+
+  const headerOffset = Math.ceil(header.getBoundingClientRect().height);
+  summary.style.setProperty("--mobile-customer-top", `${headerOffset}px`);
+
+  const setVisibility = (visible) => {
+    summary.classList.toggle("is-visible", visible);
+    summary.setAttribute("aria-hidden", String(!visible));
+  };
+  const customerBounds = customer.getBoundingClientRect();
+  setVisibility(customerBounds.bottom <= headerOffset);
+
+  if (!("IntersectionObserver" in window)) return;
+  customerCardObserver = new IntersectionObserver(([entry]) => {
+    setVisibility(!entry.isIntersecting && entry.boundingClientRect.top < headerOffset);
+  }, {
+    rootMargin: `-${headerOffset}px 0px 0px 0px`,
+    threshold: 0,
+  });
+  customerCardObserver.observe(customer);
 }
 
 function updateTutorialStep() {
@@ -1128,7 +1176,7 @@ function playCard(cardId) {
 
   if (card.type === "recipe") {
     if (meal.dishes.length >= game.activeCustomer.order) {
-      showToast(`This guest orders at most ${game.activeCustomer.order} dish${game.activeCustomer.order === 1 ? "" : "es"}.`);
+      showToast(`This customer orders at most ${game.activeCustomer.order} dish${game.activeCustomer.order === 1 ? "" : "es"}.`);
       return;
     }
     pushUndo(`playing ${card.name}`);
@@ -1274,7 +1322,7 @@ function resolveRound(pass = false) {
   clearUndo();
   game.phase = "reveal";
   dialogFocusPending = true;
-  announce(winnerId === game.player.id ? "You won the guest." : winner ? `${CUISINES[winner.cuisineId].name} won the guest.` : "Tied values canceled out.");
+  announce(winnerId === game.player.id ? "You attracted the customer." : winner ? `${CUISINES[winner.cuisineId].name} attracted the customer.` : "Tied values canceled out.");
   render();
 }
 
@@ -1443,6 +1491,11 @@ document.addEventListener("keydown", (event) => {
     ui.selectedDish = Number(event.target.dataset.dishIndex);
     render();
   }
+});
+
+window.addEventListener("resize", () => {
+  window.clearTimeout(responsiveLayoutTimer);
+  responsiveLayoutTimer = window.setTimeout(setupMobileCustomerSummary, 120);
 });
 
 render();

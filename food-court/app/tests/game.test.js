@@ -40,6 +40,28 @@ test("every documented cuisine builds a complete deck", () => {
   }
 });
 
+test("generic Ingredient Cards use cuisine-specific names without overlapping Flavor Cards", () => {
+  const placeholderNames = new Set([
+    "Market Ingredient",
+    "Kitchen Ingredient",
+    "Grill Ingredient",
+    "Saray Ingredient",
+    "House Ingredient",
+  ]);
+
+  for (const cuisine of CUISINE_LIST) {
+    const flavorNames = new Set(cuisine.flavors.map((name) => name.toLocaleLowerCase()));
+    for (const item of cuisine.ingredients) {
+      assert.equal(placeholderNames.has(item.name), false, `${cuisine.name}: ${item.name}`);
+      assert.equal(
+        flavorNames.has(item.name.toLocaleLowerCase()),
+        false,
+        `${cuisine.name}: ${item.name} is both an Ingredient Card and a Flavor Card`,
+      );
+    }
+  }
+});
+
 test("Fisher-Yates shuffling preserves every card and changes game-start order", () => {
   const ordered = ["recipe-a", "recipe-b", "ingredient-a", "flavor-a", "drink-a"];
   const shuffled = shuffle(ordered, () => 0);
@@ -263,7 +285,7 @@ test("tracked Tips Cards remain set aside from the discard and draw cycle", () =
   assert.equal(player.discard.includes(trackedCard), false);
 });
 
-test("AI builds a legal meal within the guest order", () => {
+test("AI builds a legal meal within the customer order", () => {
   const player = makePlayer("usa", "Rival", stableRandom);
   const opponent = makePlayer("mexico", "Player", stableRandom);
   player.hand = buildRestaurantDeck("usa", stableRandom)

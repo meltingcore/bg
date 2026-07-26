@@ -13,7 +13,7 @@
 ## Description
 
 In this competitive cooking card game, each player chooses a restaurant deck representing a national
-cuisine and races to win customers while using that deck's unique ability and strategy. Each deck
+cuisine and races to attract customers while using that deck's unique ability and strategy. Each deck
 features Ingredient Cards, Flavor Cards, recipes that can take different numbers of extra
 Ingredient Cards, Drink Cards, Customer Cards, and an Ability Card.
 Each round, one customer appears in the middle and all players may serve a meal of cooked dishes at
