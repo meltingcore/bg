@@ -13,6 +13,7 @@ import {
   handLimit,
   moveMealFromHand,
   refreshPlayer,
+  scoreCustomer,
   scorePlayer,
   tipCandidates,
 } from "./game.js";
@@ -35,6 +36,7 @@ const ui = {
   selectedDish: 0,
   rulesOpen: false,
   tipsOpen: false,
+  customersPlayerId: null,
   tutorialOpen: false,
   tutorialStep: 0,
   pending: null,
@@ -384,6 +386,7 @@ function mobileCustomerSummary(customer) {
 
 function scorePill(player, side, index = 0) {
   const cuisine = CUISINES[player.cuisineId];
+  const restaurantLabel = side === "player" ? "your restaurant" : `Rival ${index + 1}`;
   const tipsCounter = side === "player"
     ? `<button
         class="score-tips score-tips-button"
@@ -396,7 +399,14 @@ function scorePill(player, side, index = 0) {
     <div class="score-pill ${side}">
       <span class="score-avatar restaurant-flag" style="--cuisine: ${cuisine.accent}" aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></span>
       <span class="score-name"><small>${side === "player" ? "Your restaurant" : `Rival ${index + 1}`}</small>${escapeHtml(cuisine.name)}</span>
-      <span class="score-value"><strong>${scorePlayer(player)}</strong><small>VP</small></span>
+      <button
+        type="button"
+        class="score-value score-value-button"
+        data-action="open-customers"
+        data-player-id="${player.id}"
+        aria-haspopup="dialog"
+        aria-label="View ${restaurantLabel}'s ${player.customers.length} attracted customer${player.customers.length === 1 ? "" : "s"} contributing ${scorePlayer(player)} victory points"
+      ><strong>${scorePlayer(player)}</strong><small>VP</small></button>
       ${tipsCounter}
     </div>
   `;
@@ -470,6 +480,126 @@ function tipsModal() {
       </section>
     </div>
   `;
+}
+
+function restaurantPlayers() {
+  return game ? [game.player, ...game.opponents] : [];
+}
+
+function restaurantLabel(player) {
+  if (player.id === game.player.id) return "Your restaurant";
+  return `Rival ${game.opponents.findIndex((opponent) => opponent.id === player.id) + 1}`;
+}
+
+function attractedCustomerCard(customer, trackedTips, index) {
+  const cuisine = CUISINES[customer.cuisineId];
+  const scoring = scoreCustomer(customer, trackedTips);
+  return `
+    <article
+      class="attracted-customer-card ${scoring.tipsUnlocked ? "has-tips" : "needs-tips"}"
+      style="--customer:${customer.accent}"
+      aria-label="Attracted Customer ${index + 1}: ${escapeHtml(customer.name)}. Scores ${scoring.total} victory points."
+    >
+      <header>
+        <span class="attracted-customer-flag restaurant-flag" aria-hidden="true">
+          <span class="flag-glyph">${customer.flag}</span>
+        </span>
+        <span>
+          <small>Attracted Customer ${index + 1}</small>
+          <strong>${escapeHtml(customer.name)}</strong>
+          <i>${escapeHtml(cuisine.region)}</i>
+        </span>
+      </header>
+      <div class="attracted-customer-values">
+        <span><b>${customer.order}</b><small>Order VP</small></span>
+        <span class="${scoring.tipsUnlocked ? "is-unlocked" : ""}"><b>+${customer.tips}</b><small>Tips Value</small></span>
+      </div>
+      <p><span aria-hidden="true">✦</span>${escapeHtml(customer.effect)}</p>
+      <footer class="${scoring.tipsUnlocked ? "is-unlocked" : ""}">
+        <span>${scoring.tipsUnlocked
+          ? `Tips unlocked with ${trackedTips} tracked`
+          : `Needs ${customer.tips} tracked Tips · currently ${trackedTips}`}</span>
+        <strong>${scoring.orderVp} + ${scoring.tipsVp} = ${scoring.total} VP</strong>
+      </footer>
+    </article>
+  `;
+}
+
+function customersModal() {
+  const player = restaurantPlayers().find((candidate) => candidate.id === ui.customersPlayerId);
+  if (!player) return "";
+
+  const cuisine = CUISINES[player.cuisineId];
+  const baseVp = player.customers.reduce(
+    (total, customer) => total + scoreCustomer(customer, player.tips.length).orderVp,
+    0,
+  );
+  const tipsVp = player.customers.reduce(
+    (total, customer) => total + scoreCustomer(customer, player.tips.length).tipsVp,
+    0,
+  );
+  const label = restaurantLabel(player);
+  return `
+    <div
+      class="overlay customers-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="customers-title"
+      aria-describedby="customers-summary"
+    >
+      <section class="customers-panel panel-parchment">
+        <button
+          class="close-button"
+          data-action="close-customers"
+          data-dialog-primary
+          aria-label="Close attracted customers"
+        >×</button>
+        <div class="customers-heading" style="--cuisine:${cuisine.accent}">
+          <span class="customers-restaurant-flag restaurant-flag" aria-hidden="true">
+            <span class="flag-glyph">${cuisine.flag}</span>
+          </span>
+          <div>
+            <span class="eyebrow">${label}</span>
+            <h2 id="customers-title">${escapeHtml(cuisine.name)} customers</h2>
+          </div>
+        </div>
+        <div id="customers-summary" class="customers-score-summary">
+          <p>
+            <strong>${scorePlayer(player)} VP</strong>
+            from ${player.customers.length} attracted customer${player.customers.length === 1 ? "" : "s"}
+          </p>
+          <div aria-label="${baseVp} Order Value points plus ${tipsVp} Tips Value points">
+            <span><b>${baseVp}</b><small>Order VP</small></span>
+            <i aria-hidden="true">+</i>
+            <span><b>${tipsVp}</b><small>Tips VP</small></span>
+            <i aria-hidden="true">=</i>
+            <span class="is-total"><b>${scorePlayer(player)}</b><small>Total VP</small></span>
+          </div>
+          <small>${player.tips.length}/4 Tips Cards tracked</small>
+        </div>
+        ${player.customers.length ? `
+          <div class="attracted-customers-grid" aria-label="${label}'s attracted Customer Cards">
+            ${player.customers.map((customer, index) =>
+              attractedCustomerCard(customer, player.tips.length, index)).join("")}
+          </div>` : `
+          <div class="customers-empty">
+            <span aria-hidden="true">◎</span>
+            <strong>No customers attracted yet</strong>
+            <p>Customer Cards will appear here after this restaurant wins a meal contest.</p>
+          </div>`}
+      </section>
+    </div>
+  `;
+}
+
+function closeCustomers() {
+  const playerId = ui.customersPlayerId;
+  ui.customersPlayerId = null;
+  render();
+  window.queueMicrotask(() => {
+    [...document.querySelectorAll('[data-action="open-customers"]')]
+      .find((button) => button.dataset.playerId === playerId)?.focus();
+  });
 }
 
 function phaseTrail() {
@@ -888,7 +1018,14 @@ function gameOverOverlay() {
           ${standings.map(({ player, index, score }) => `
             <div class="${score === topScore ? "winner" : ""}">
               <small>${player.id === game.player.id ? "You" : `Rival ${index}`}</small>
-              <strong>${score}</strong>
+              <button
+                type="button"
+                class="final-score-vp"
+                data-action="open-customers"
+                data-player-id="${player.id}"
+                aria-haspopup="dialog"
+                aria-label="View ${player.id === game.player.id ? "your restaurant" : `Rival ${index}`}'s ${player.customers.length} attracted customer${player.customers.length === 1 ? "" : "s"} contributing ${score} victory points"
+              >${score}<span>VP</span></button>
               <span>${escapeHtml(CUISINES[player.cuisineId].name)} · ${player.customers.length} customers · ${player.tips.length} tips</span>
             </div>
           `).join("")}
@@ -1028,10 +1165,11 @@ function renderGame() {
       ${mobileActionBar()}
       ${ui.toast ? `<div class="toast" role="status">${escapeHtml(ui.toast)}</div>` : ""}
       ${game.phase === "reveal" ? revealOverlay() : ""}
-      ${game.phase === "ended" ? gameOverOverlay() : ""}
+      ${game.phase === "ended" && !ui.customersPlayerId ? gameOverOverlay() : ""}
       ${ui.rulesOpen ? rulesModal() : ""}
       ${ui.tipsOpen ? tipsModal() : ""}
       ${ui.tutorialOpen ? tutorialModal() : ""}
+      ${ui.customersPlayerId ? customersModal() : ""}
     </main>
   `;
 }
@@ -1117,6 +1255,7 @@ function startGame() {
   ui.selectedDish = 0;
   ui.pending = null;
   ui.tipsOpen = false;
+  ui.customersPlayerId = null;
   clearUndo();
   if (!tutorialWasSeen()) {
     ui.tutorialOpen = true;
@@ -1385,6 +1524,15 @@ app.addEventListener("click", (event) => {
     ui.tipsOpen = true;
     dialogFocusPending = true;
     render();
+  } else if (action === "open-customers") {
+    const player = restaurantPlayers().find((candidate) => candidate.id === target.dataset.playerId);
+    if (!player) return;
+    ui.customersPlayerId = player.id;
+    dialogFocusPending = true;
+    announce(`${restaurantLabel(player)} has ${player.customers.length} attracted customer${player.customers.length === 1 ? "" : "s"} worth ${scorePlayer(player)} points.`);
+    render();
+  } else if (action === "close-customers") {
+    closeCustomers();
   } else if (action === "close-tips") {
     ui.tipsOpen = false;
     render();
@@ -1411,6 +1559,7 @@ app.addEventListener("click", (event) => {
     ui.pending = null;
     ui.rulesOpen = false;
     ui.tipsOpen = false;
+    ui.customersPlayerId = null;
     clearUndo();
     render();
     window.queueMicrotask(() => window.scrollTo({ top: 0, left: 0 }));
@@ -1477,6 +1626,8 @@ document.addEventListener("keydown", (event) => {
         first.focus();
       }
     }
+  } else if (event.key === "Escape" && ui.customersPlayerId) {
+    closeCustomers();
   } else if (event.key === "Escape" && ui.tutorialOpen) {
     closeTutorial();
   } else if (event.key === "Escape" && ui.tipsOpen) {

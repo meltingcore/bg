@@ -529,9 +529,21 @@ export function cleanupMeal(player, meal, tipCard = null) {
   player.meal = emptyMeal();
 }
 
+export function scoreCustomer(customer, trackedTips) {
+  const orderVp = customer.order;
+  const tipsUnlocked = trackedTips >= customer.tips;
+  const tipsVp = tipsUnlocked ? customer.tips : 0;
+  return {
+    orderVp,
+    tipsVp,
+    tipsUnlocked,
+    total: orderVp + tipsVp,
+  };
+}
+
 export function scorePlayer(player) {
   return player.customers.reduce(
-    (score, customer) => score + customer.order + (player.tips.length >= customer.tips ? customer.tips : 0),
+    (score, customer) => score + scoreCustomer(customer, player.tips.length).total,
     0,
   );
 }

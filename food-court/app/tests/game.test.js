@@ -14,6 +14,7 @@ import {
   determineUniqueWinner,
   drawCards,
   makePlayer,
+  scoreCustomer,
   scorePlayer,
   shuffle,
   tipCandidates,
@@ -263,6 +264,20 @@ test("a multiplayer table falls through tied leaders to the next unique meal", (
 });
 
 test("customer score adds Tips Value only after its threshold", () => {
+  const customer = { order: 2, tips: 2 };
+  assert.deepEqual(scoreCustomer(customer, 1), {
+    orderVp: 2,
+    tipsVp: 0,
+    tipsUnlocked: false,
+    total: 2,
+  });
+  assert.deepEqual(scoreCustomer(customer, 2), {
+    orderVp: 2,
+    tipsVp: 2,
+    tipsUnlocked: true,
+    total: 4,
+  });
+
   const player = { customers: [{ order: 2, tips: 2 }, { order: 3, tips: 1 }], tips: [] };
   assert.equal(scorePlayer(player), 5);
   player.tips.push({ id: "t1" });
