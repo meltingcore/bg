@@ -12,6 +12,19 @@ function accessError(message, status) {
   });
 }
 
+function applyBrowserCachePolicy(request, response) {
+  const { pathname } = new URL(request.url);
+  if (pathname !== "/" && !pathname.endsWith(".html")) return response;
+
+  const headers = new Headers(response.headers);
+  headers.set("Cache-Control", "no-cache, must-revalidate");
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(request, env) {
     const { hostname } = new URL(request.url);
@@ -28,6 +41,7 @@ export default {
       }
     }
 
-    return env.ASSETS.fetch(request);
+    const response = await env.ASSETS.fetch(request);
+    return applyBrowserCachePolicy(request, response);
   },
 };

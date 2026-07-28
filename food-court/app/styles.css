@@ -230,7 +230,7 @@ button:focus-visible {
 }
 
 .lobby-art {
-  background-image: url("assets/food-court-table.png");
+  background-image: url("assets/food-court-mall.png");
   background-position: center;
   background-size: cover;
   animation: settle 1100ms ease-out both;
@@ -941,8 +941,11 @@ button:focus-visible {
   min-height: calc(100vh - 72px);
   padding: 24px clamp(18px, 3vw, 48px) 30px;
   background:
-    linear-gradient(color-mix(in srgb, var(--theme-deep), transparent 8%), color-mix(in srgb, var(--theme-deep), black 8%)),
-    url("assets/food-court-table.png") center / cover fixed;
+    linear-gradient(
+      color-mix(in srgb, var(--theme-deep), transparent 25%),
+      color-mix(in srgb, var(--theme-deep), transparent 14%)
+    ),
+    url("assets/food-court-mall.png") center / cover fixed;
 }
 
 .table-surface::before {
@@ -1531,6 +1534,7 @@ button:focus-visible {
 .legend-ingredient { color: #9dd1ad; }
 .legend-flavor { color: #d6aeeb; }
 .legend-drink { color: #8ec8df; }
+.legend-ability { color: #d9e2dd; }
 
 .discard-counter {
   justify-self: end;
@@ -1579,6 +1583,20 @@ button:focus-visible {
   border-radius: 7px;
 }
 
+.ability-card-marker {
+  position: absolute;
+  z-index: 8;
+  top: 9px;
+  right: 10px;
+  color: var(--card-ink);
+  font-family: var(--display);
+  font-size: 1.08rem;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0.82;
+  pointer-events: none;
+}
+
 .card-recipe { --card-edge: #a56e2a; --card-bg: #f4e6bc; --card-ink: #8b561d; }
 .card-ingredient { --card-edge: #477a4e; --card-bg: #dce9ca; --card-ink: #34613b; }
 .card-flavor { --card-edge: #76528b; --card-bg: #e8dcf0; --card-ink: #684578; }
@@ -1617,6 +1635,10 @@ button:focus-visible {
   font-size: 0.48rem;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+.game-card.has-ability-marker .card-state-badge {
+  top: 31px;
 }
 
 .card-state-badge b {
@@ -1739,6 +1761,11 @@ button:focus-visible {
   text-align: center;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+.card-drink .card-rule {
+  font-size: 0.52rem;
+  -webkit-line-clamp: 5;
 }
 
 .slot-row {
@@ -2967,6 +2994,10 @@ button:focus-visible {
   text-align: center;
 }
 
+.tracked-tip-card.has-ability-marker .tracked-tip-number {
+  padding-inline: 18px;
+}
+
 .tracked-tip-number {
   color: #77684a;
   font-size: 0.52rem;
@@ -3537,6 +3568,7 @@ button:focus-visible {
 }
 
 .revealed-card {
+  position: relative;
   display: grid;
   align-content: start;
   min-height: 94px;
@@ -3547,6 +3579,16 @@ button:focus-visible {
   background:
     linear-gradient(rgb(255 255 255 / 45%), transparent 70%),
     var(--card-bg);
+}
+
+.revealed-card .ability-card-marker {
+  top: 7px;
+  right: 8px;
+  font-size: 0.8rem;
+}
+
+.revealed-card.has-ability-marker > div {
+  padding-right: 18px;
 }
 
 .revealed-card > div {
@@ -3946,6 +3988,8 @@ button:focus-visible {
     gap: 12px;
     min-height: calc(100vh - 108px);
     padding-bottom: calc(148px + env(safe-area-inset-bottom));
+    background-position: center, 38% center;
+    background-attachment: scroll;
   }
   .mobile-customer-summary {
     position: fixed;

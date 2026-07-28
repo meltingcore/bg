@@ -5,6 +5,7 @@ import { CUISINES, CUISINE_LIST } from "../src/data.js";
 import {
   buildCustomerDeck,
   buildRestaurantDeck,
+  cardParticipatesInAbility,
   cardPlayability,
   calculateMeal,
   chooseAiMeal,
@@ -61,6 +62,63 @@ test("generic Ingredient Cards use cuisine-specific names without overlapping Fl
       );
     }
   }
+});
+
+test("Drink Card requirements use explicit card types and quantities", () => {
+  const vagueTerms = /overstuffed|exact pasta pairing|same type|hard dish|normal dish|with flavor/i;
+  const drinks = CUISINE_LIST.flatMap((cuisine) => cuisine.drinks);
+  const rootBeer = CUISINES.usa.drinks.find((card) => card.name === "Root Beer");
+
+  assert.equal(
+    rootBeer.condition,
+    "At least 1 dish has more Ingredient Cards than its Recipe Card's printed slots",
+  );
+  for (const drinkCard of drinks) {
+    assert.equal(
+      vagueTerms.test(drinkCard.condition),
+      false,
+      `${drinkCard.name}: ${drinkCard.condition}`,
+    );
+  }
+});
+
+test("ability markers identify only cards that can participate in each special ability", () => {
+  const expectedCounts = {
+    italy: 20,
+    france: 15,
+    china: 15,
+    india: 12,
+    usa: 27,
+    turkey: 15,
+    japan: 8,
+    mexico: 11,
+  };
+
+  for (const cuisine of CUISINE_LIST) {
+    const deck = buildRestaurantDeck(cuisine.id, stableRandom);
+    assert.equal(
+      deck.filter((card) => cardParticipatesInAbility(card)).length,
+      expectedCounts[cuisine.id],
+      cuisine.name,
+    );
+  }
+
+  const italianDeck = buildRestaurantDeck("italy", stableRandom);
+  for (const unmatchedPasta of ["Campanelle", "Gnocchi", "Ravioli"]) {
+    assert.equal(
+      cardParticipatesInAbility(italianDeck.find((card) => card.name === unmatchedPasta)),
+      false,
+      `${unmatchedPasta} has no exact matching recipe`,
+    );
+  }
+  assert.equal(
+    cardParticipatesInAbility(italianDeck.find((card) => card.name === "Spaghetti")),
+    true,
+  );
+  assert.equal(
+    cardParticipatesInAbility(italianDeck.find((card) => card.name === "Spaghetti Carbonara")),
+    true,
+  );
 });
 
 test("Fisher-Yates shuffling preserves every card and changes game-start order", () => {

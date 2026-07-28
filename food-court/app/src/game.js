@@ -1,4 +1,4 @@
-import { CUISINES, CUISINE_LIST, CUSTOMER_VALUES } from "./data.js";
+import { CUISINES, CUISINE_LIST, CUSTOMER_VALUES } from "./data.js?v=0.13.3-1";
 
 let nextId = 1;
 
@@ -38,6 +38,38 @@ export const flattenMeal = (meal) => [
   ]),
   ...(meal.drink ? [meal.drink] : []),
 ];
+
+export function cardParticipatesInAbility(card, cuisineId = card?.cuisineId) {
+  if (!card || !cuisineId) return false;
+
+  switch (cuisineId) {
+    case "italy": {
+      if (card.type === "recipe") return Boolean(card.match);
+      if (card.type !== "ingredient" || !card.subtype) return false;
+      const exactPastaTypes = new Set(
+        CUISINES.italy.recipes.map((recipeCard) => recipeCard.match).filter(Boolean),
+      );
+      return exactPastaTypes.has(card.subtype);
+    }
+    case "france":
+      return card.type === "recipe" && Boolean(card.tag);
+    case "china":
+      return card.type === "recipe";
+    case "india":
+      return card.type === "ingredient" && card.tag === "spice";
+    case "usa":
+      return card.type === "recipe" || card.type === "ingredient";
+    case "turkey":
+      return card.type === "recipe";
+    case "japan":
+      return card.type === "ingredient" && card.tag === "seasoning";
+    case "mexico":
+      return (card.type === "ingredient" && card.tag === "hot")
+        || (card.type === "recipe" && card.slots === 0);
+    default:
+      return false;
+  }
+}
 
 export function buildRestaurantDeck(cuisineId, random = gameRandom) {
   const cuisine = CUISINES[cuisineId];

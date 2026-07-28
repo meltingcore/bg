@@ -1,5 +1,6 @@
-import { CUISINES, CUISINE_LIST, TYPE_META } from "./data.js";
+import { CUISINES, CUISINE_LIST, TYPE_META } from "./data.js?v=0.13.3-1";
 import {
+  cardParticipatesInAbility,
   cardPlayability,
   calculateMeal,
   canAttachIngredient,
@@ -16,7 +17,7 @@ import {
   scoreCustomer,
   scorePlayer,
   tipCandidates,
-} from "./game.js";
+} from "./game.js?v=0.13.3-1";
 
 const app = document.querySelector("#app");
 const announcer = document.querySelector("#announcer");
@@ -67,7 +68,7 @@ const TUTORIAL_STEPS = [
     symbol: "♨",
     visual: "formula",
     body: "A Recipe starts a dish for +1. Ingredients fill that recipe's printed slots for +1 each. You may add one Flavor to each recipe for +2, plus one Drink to the whole meal for +3 when its requirement is met.",
-    note: "Ingredients determine dish difficulty: 0 is Easy, 1 is Normal, and 2 is Hard. Flavor Cards do not change difficulty.",
+    note: "Ingredients determine dish difficulty: 0 is Easy, 1 is Normal, and 2 is Hard. A ↯ in a card's upper-right corner means it can participate in your restaurant's special ability.",
   },
   {
     kicker: "Phase 1 · Refresh",
@@ -316,8 +317,29 @@ function cardDetail(card) {
   return card.condition;
 }
 
+function cardAbilityContext(card) {
+  if (!cardParticipatesInAbility(card)) return null;
+  const cuisine = CUISINES[card.cuisineId];
+  if (!cuisine) return null;
+  return {
+    label: `Ability marker: works with ${cuisine.ability}`,
+  };
+}
+
+function abilityMarker(context) {
+  if (!context) return "";
+  return `
+    <span
+      class="ability-card-marker"
+      title="${escapeHtml(context.label)}"
+      aria-hidden="true"
+    >↯</span>
+  `;
+}
+
 function cardMarkup(card, options = {}) {
   const meta = TYPE_META[card.type];
+  const abilityContext = cardAbilityContext(card);
   const selected = options.selected ? "is-selected" : "";
   const compact = options.compact ? "is-compact" : "";
   const action = options.action || "play-card";
@@ -325,12 +347,13 @@ function cardMarkup(card, options = {}) {
   const unplayable = playability && !playability.playable;
   return `
     <button
-      class="game-card card-${card.type} ${selected} ${compact} ${unplayable ? "is-unplayable" : ""}"
+      class="game-card card-${card.type} ${abilityContext ? "has-ability-marker" : ""} ${selected} ${compact} ${unplayable ? "is-unplayable" : ""}"
       data-action="${action}"
       data-card-id="${card.id}"
       aria-disabled="${unplayable ? "true" : "false"}"
-      aria-label="${escapeHtml(meta.label)}: ${escapeHtml(card.name)}. ${escapeHtml(cardDetail(card))}${playability ? `. ${escapeHtml(playability.reason)}` : ""}"
+      aria-label="${escapeHtml(meta.label)}: ${escapeHtml(card.name)}. ${escapeHtml(cardDetail(card))}${abilityContext ? `. ${escapeHtml(abilityContext.label)}` : ""}${playability ? `. ${escapeHtml(playability.reason)}` : ""}"
     >
+      ${abilityMarker(abilityContext)}
       ${unplayable ? `<span class="card-state-badge"><b>×</b> Not playable</span>` : ""}
       <span class="card-corner">
         <span class="type-symbol">${meta.symbol}</span>
@@ -414,11 +437,13 @@ function scorePill(player, side, index = 0) {
 
 function trackedTipCard(card, index) {
   const meta = TYPE_META[card.type];
+  const abilityContext = cardAbilityContext(card);
   return `
     <article
-      class="tracked-tip-card card-${card.type}"
-      aria-label="Tracked Tips Card ${index + 1}: ${escapeHtml(card.name)}"
+      class="tracked-tip-card card-${card.type} ${abilityContext ? "has-ability-marker" : ""}"
+      aria-label="Tracked Tips Card ${index + 1}: ${escapeHtml(card.name)}${abilityContext ? `. ${escapeHtml(abilityContext.label)}` : ""}"
     >
+      ${abilityMarker(abilityContext)}
       <span class="tracked-tip-number">Tips Card ${index + 1}</span>
       <span class="tracked-tip-symbol" aria-hidden="true">${meta.symbol}</span>
       <span class="card-type">${meta.label}</span>
@@ -818,6 +843,7 @@ function handSection() {
         <div><span class="eyebrow">Your hand</span><strong>${game.player.hand.length} cards</strong></div>
         <div class="hand-legend">
           ${Object.entries(TYPE_META).map(([type, meta]) => `<span class="legend-${type}">${meta.symbol} ${counts[type]}</span>`).join("")}
+          <span class="legend-ability" title="Cards marked with ↯ can participate in your restaurant's special ability">↯ ability</span>
         </div>
         ${refresh ? `<span class="discard-counter">${ui.discardIds.size}/1 selected to discard</span>` : ""}
       </div>
@@ -851,8 +877,13 @@ function breakdownRows(result, player) {
 
 function revealedCard(card, value, note = cardDetail(card)) {
   const meta = TYPE_META[card.type];
+  const abilityContext = cardAbilityContext(card);
   return `
-    <article class="revealed-card card-${card.type}">
+    <article
+      class="revealed-card card-${card.type} ${abilityContext ? "has-ability-marker" : ""}"
+      aria-label="${escapeHtml(meta.label)}: ${escapeHtml(card.name)}. Value ${escapeHtml(value)}${abilityContext ? `. ${escapeHtml(abilityContext.label)}` : ""}"
+    >
+      ${abilityMarker(abilityContext)}
       <div><span>${meta.symbol} ${escapeHtml(meta.label)}</span><b>${value}</b></div>
       <strong>${escapeHtml(card.name)}</strong>
       <small>${escapeHtml(note)}</small>

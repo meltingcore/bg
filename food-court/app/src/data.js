@@ -56,9 +56,9 @@ export const CUISINES = {
     ],
     flavors: ["Basil", "Balsamic Vinegar", "Parmigiano"],
     drinks: [
-      drink("Cappuccino", "An exact pasta pairing", "italyExact"),
-      drink("Aperol Spritz", "At least 2 normal dishes", "twoNormal"),
-      drink("Limoncello", "At least 2 different pasta types", "twoPasta"),
+      drink("Cappuccino", "At least 1 recipe with its exact matching pasta Ingredient Card", "italyExact"),
+      drink("Aperol Spritz", "At least 2 dishes with exactly 1 Ingredient Card each", "twoNormal"),
+      drink("Limoncello", "At least 2 different pasta Ingredient Card types", "twoPasta"),
     ],
   },
   france: {
@@ -99,9 +99,9 @@ export const CUISINES = {
     ],
     flavors: ["Herbes de Provence", "Butter", "Cream"],
     drinks: [
-      drink("Champagne", "An adjacent course pair", "adjacentCourse"),
-      drink("Cognac", "At least 1 hard dish", "hardDish"),
-      drink("Pernod", "Every dish has a different course", "differentCourses"),
+      drink("Champagne", "An entrée + appetizer, appetizer + main, or main + dessert pair", "adjacentCourse"),
+      drink("Cognac", "At least 1 dish with 2 Ingredient Cards added", "hardDish"),
+      drink("Pernod", "Every served Recipe Card has a different course tag", "differentCourses"),
     ],
   },
   china: {
@@ -142,9 +142,9 @@ export const CUISINES = {
     ],
     flavors: ["Shiitake Mushrooms", "Soy Sauce", "Mung Bean Sprouts"],
     drinks: [
-      drink("Baijiu", "Both a rice and a noodle dish", "riceAndNoodles"),
-      drink("Huangjiu", "At least 2 dishes of one type", "sameType"),
-      drink("Green Tea", "At least 1 easy dish", "easyDish"),
+      drink("Baijiu", "At least 1 rice Recipe Card and 1 noodle Recipe Card", "riceAndNoodles"),
+      drink("Huangjiu", "At least 2 rice Recipe Cards or 2 noodle Recipe Cards", "sameType"),
+      drink("Green Tea", "At least 1 dish with no Ingredient Cards added", "easyDish"),
     ],
   },
   india: {
@@ -185,9 +185,9 @@ export const CUISINES = {
     ],
     flavors: ["Ghee", "Coconut Milk", "Cashew"],
     drinks: [
-      drink("Feni", "At least 2 ingredients", "twoIngredients"),
-      drink("Lassi", "A dish with flavor", "flavoredDish"),
-      drink("Masala Chai", "At least 2 different spices", "twoSpices"),
+      drink("Feni", "At least 2 Ingredient Cards added across the meal", "twoIngredients"),
+      drink("Lassi", "At least 1 dish with a Flavor Card added", "flavoredDish"),
+      drink("Masala Chai", "At least 2 different spice Ingredient Card types", "twoSpices"),
     ],
   },
   usa: {
@@ -228,9 +228,13 @@ export const CUISINES = {
     ],
     flavors: ["Ketchup", "Mustard", "Mayo"],
     drinks: [
-      drink("Coke", "At least 2 burger dishes", "twoBurgers"),
-      drink("Bourbon", "At least 2 steak dishes", "twoSteaks"),
-      drink("Root Beer", "An overstuffed dish", "overstuffed"),
+      drink("Coke", "At least 2 burger Recipe Cards", "twoBurgers"),
+      drink("Bourbon", "At least 2 steak Recipe Cards", "twoSteaks"),
+      drink(
+        "Root Beer",
+        "At least 1 dish has more Ingredient Cards than its Recipe Card's printed slots",
+        "overstuffed",
+      ),
     ],
   },
   turkey: {
@@ -271,9 +275,9 @@ export const CUISINES = {
     ],
     flavors: ["Sumac", "Paprika", "Pomegranate Juice"],
     drinks: [
-      drink("Raki", "A kebab and a non-kebab dish", "mixedKebab"),
-      drink("Salep", "Every dish is a kebab", "allKebab"),
-      drink("Ayran", "At least 2 non-kebab dishes", "twoNonKebab"),
+      drink("Raki", "At least 1 kebab Recipe Card and 1 non-kebab Recipe Card", "mixedKebab"),
+      drink("Salep", "Every served Recipe Card is a kebab", "allKebab"),
+      drink("Ayran", "At least 2 non-kebab Recipe Cards", "twoNonKebab"),
     ],
   },
   japan: {
@@ -312,9 +316,9 @@ export const CUISINES = {
     ],
     flavors: ["Nori", "Sesame Oil", "Yuzu"],
     drinks: [
-      drink("Sake", "Wasabi was added", "wasabi"),
-      drink("Matcha Tea", "At least 2 different ingredients", "twoDifferentIngredients"),
-      drink("Umeshu", "At least 1 hard dish", "hardDish"),
+      drink("Sake", "A Wasabi Ingredient Card was added", "wasabi"),
+      drink("Matcha Tea", "At least 2 differently named Ingredient Cards were added", "twoDifferentIngredients"),
+      drink("Umeshu", "At least 1 dish with 2 Ingredient Cards added", "hardDish"),
     ],
   },
   mexico: {
@@ -356,9 +360,9 @@ export const CUISINES = {
     ],
     flavors: ["Lime", "Cilantro", "Sour Cream"],
     drinks: [
-      drink("Mezcal", "At least 1 hot ingredient", "oneHot"),
-      drink("Tequila", "At least 2 hot ingredients", "twoHot"),
-      drink("Tepache", "A normal flavored dish", "normalFlavor"),
+      drink("Mezcal", "At least 1 hot Ingredient Card was added", "oneHot"),
+      drink("Tequila", "At least 2 hot Ingredient Cards were added", "twoHot"),
+      drink("Tepache", "At least 1 dish with exactly 1 Ingredient Card and a Flavor Card added", "normalFlavor"),
     ],
   },
 };
