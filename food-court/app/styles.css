@@ -5491,7 +5491,7 @@ button:focus-visible {
   padding: 5px;
   border: 1px solid rgba(55, 43, 28, 0.16);
   border-radius: 14px;
-  background: rgba(75, 55, 31, 0.07);
+  background: rgb(255 251 234 / 36%);
 }
 
 .play-mode-switcher button {
@@ -5499,18 +5499,35 @@ button:focus-visible {
   gap: 2px;
   min-height: 54px;
   padding: 9px 12px;
-  border: 1px solid transparent;
+  border: 1px solid rgba(97, 69, 31, 0.18);
   border-radius: 10px;
   color: var(--ink, #2c261f);
+  background: #fffaf0;
   text-align: left;
+  cursor: pointer;
+  box-shadow: 0 2px 7px rgb(51 37 20 / 7%);
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
 }
 
 .play-mode-switcher button span { font-weight: 800; }
 .play-mode-switcher button small { color: rgba(44, 38, 31, 0.64); }
+.play-mode-switcher button:hover {
+  border-color: var(--theme-accent);
+  transform: translateY(-1px);
+}
 .play-mode-switcher button.is-selected {
-  border-color: rgba(97, 69, 31, 0.2);
-  background: #fffaf0;
-  box-shadow: 0 4px 14px rgba(51, 37, 20, 0.1);
+  color: #fffaf0;
+  border-color: color-mix(in srgb, var(--theme-accent), black 12%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--theme-accent), white 10%),
+    color-mix(in srgb, var(--theme-accent), black 12%)
+  );
+  box-shadow: 0 5px 14px color-mix(in srgb, var(--theme-accent), transparent 68%);
+}
+
+.play-mode-switcher button.is-selected small {
+  color: rgb(255 250 240 / 78%);
 }
 
 .cuisine-option.is-unavailable {

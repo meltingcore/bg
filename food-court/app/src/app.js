@@ -504,10 +504,10 @@ function modeSwitcher() {
   return `
     <div class="play-mode-switcher" aria-label="Game mode">
       <button data-action="set-play-mode" data-mode="solo" class="${playMode === "solo" ? "is-selected" : ""}" aria-pressed="${playMode === "solo"}">
-        <span>Solo table</span><small>Play against AI</small>
+        <span>Single player</span><small>Play with AI bots</small>
       </button>
       <button data-action="set-play-mode" data-mode="online" class="${playMode === "online" ? "is-selected" : ""}" aria-pressed="${playMode === "online"}">
-        <span>Private online table</span><small>Invite up to 3 people</small>
+        <span>Multi player</span><small>Play with up to 3 people</small>
       </button>
     </div>
   `;
