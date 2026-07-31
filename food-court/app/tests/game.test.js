@@ -5,6 +5,7 @@ import { CUISINES, CUISINE_LIST } from "../src/data.js";
 import {
   buildCustomerDeck,
   buildRestaurantDeck,
+  cardParticipatesInAbility,
   cardPlayability,
   calculateMeal,
   chooseAiMeal,
@@ -14,6 +15,7 @@ import {
   determineUniqueWinner,
   drawCards,
   makePlayer,
+  scoreCustomer,
   scorePlayer,
   shuffle,
   tipCandidates,
@@ -38,6 +40,85 @@ test("every documented cuisine builds a complete deck", () => {
     assert.equal(deck.length, expected, cuisine.name);
     assert.equal(deck.filter((card) => card.type === "drink").length, 3);
   }
+});
+
+test("generic Ingredient Cards use cuisine-specific names without overlapping Flavor Cards", () => {
+  const placeholderNames = new Set([
+    "Market Ingredient",
+    "Kitchen Ingredient",
+    "Grill Ingredient",
+    "Saray Ingredient",
+    "House Ingredient",
+  ]);
+
+  for (const cuisine of CUISINE_LIST) {
+    const flavorNames = new Set(cuisine.flavors.map((name) => name.toLocaleLowerCase()));
+    for (const item of cuisine.ingredients) {
+      assert.equal(placeholderNames.has(item.name), false, `${cuisine.name}: ${item.name}`);
+      assert.equal(
+        flavorNames.has(item.name.toLocaleLowerCase()),
+        false,
+        `${cuisine.name}: ${item.name} is both an Ingredient Card and a Flavor Card`,
+      );
+    }
+  }
+});
+
+test("Drink Card requirements use explicit card types and quantities", () => {
+  const vagueTerms = /overstuffed|exact pasta pairing|same type|hard dish|normal dish|with flavor/i;
+  const drinks = CUISINE_LIST.flatMap((cuisine) => cuisine.drinks);
+  const rootBeer = CUISINES.usa.drinks.find((card) => card.name === "Root Beer");
+
+  assert.equal(
+    rootBeer.condition,
+    "At least 1 dish has more Ingredient Cards than its Recipe Card's printed slots",
+  );
+  for (const drinkCard of drinks) {
+    assert.equal(
+      vagueTerms.test(drinkCard.condition),
+      false,
+      `${drinkCard.name}: ${drinkCard.condition}`,
+    );
+  }
+});
+
+test("ability markers identify only cards that can participate in each special ability", () => {
+  const expectedCounts = {
+    italy: 20,
+    france: 15,
+    china: 15,
+    india: 12,
+    usa: 27,
+    turkey: 15,
+    japan: 8,
+    mexico: 11,
+  };
+
+  for (const cuisine of CUISINE_LIST) {
+    const deck = buildRestaurantDeck(cuisine.id, stableRandom);
+    assert.equal(
+      deck.filter((card) => cardParticipatesInAbility(card)).length,
+      expectedCounts[cuisine.id],
+      cuisine.name,
+    );
+  }
+
+  const italianDeck = buildRestaurantDeck("italy", stableRandom);
+  for (const unmatchedPasta of ["Campanelle", "Gnocchi", "Ravioli"]) {
+    assert.equal(
+      cardParticipatesInAbility(italianDeck.find((card) => card.name === unmatchedPasta)),
+      false,
+      `${unmatchedPasta} has no exact matching recipe`,
+    );
+  }
+  assert.equal(
+    cardParticipatesInAbility(italianDeck.find((card) => card.name === "Spaghetti")),
+    true,
+  );
+  assert.equal(
+    cardParticipatesInAbility(italianDeck.find((card) => card.name === "Spaghetti Carbonara")),
+    true,
+  );
 });
 
 test("Fisher-Yates shuffling preserves every card and changes game-start order", () => {
@@ -241,6 +322,20 @@ test("a multiplayer table falls through tied leaders to the next unique meal", (
 });
 
 test("customer score adds Tips Value only after its threshold", () => {
+  const customer = { order: 2, tips: 2 };
+  assert.deepEqual(scoreCustomer(customer, 1), {
+    orderVp: 2,
+    tipsVp: 0,
+    tipsUnlocked: false,
+    total: 2,
+  });
+  assert.deepEqual(scoreCustomer(customer, 2), {
+    orderVp: 2,
+    tipsVp: 2,
+    tipsUnlocked: true,
+    total: 4,
+  });
+
   const player = { customers: [{ order: 2, tips: 2 }, { order: 3, tips: 1 }], tips: [] };
   assert.equal(scorePlayer(player), 5);
   player.tips.push({ id: "t1" });
@@ -263,7 +358,7 @@ test("tracked Tips Cards remain set aside from the discard and draw cycle", () =
   assert.equal(player.discard.includes(trackedCard), false);
 });
 
-test("AI builds a legal meal within the guest order", () => {
+test("AI builds a legal meal within the customer order", () => {
   const player = makePlayer("usa", "Rival", stableRandom);
   const opponent = makePlayer("mexico", "Player", stableRandom);
   player.hand = buildRestaurantDeck("usa", stableRandom)

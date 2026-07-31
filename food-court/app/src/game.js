@@ -39,6 +39,38 @@ export const flattenMeal = (meal) => [
   ...(meal.drink ? [meal.drink] : []),
 ];
 
+export function cardParticipatesInAbility(card, cuisineId = card?.cuisineId) {
+  if (!card || !cuisineId) return false;
+
+  switch (cuisineId) {
+    case "italy": {
+      if (card.type === "recipe") return Boolean(card.match);
+      if (card.type !== "ingredient" || !card.subtype) return false;
+      const exactPastaTypes = new Set(
+        CUISINES.italy.recipes.map((recipeCard) => recipeCard.match).filter(Boolean),
+      );
+      return exactPastaTypes.has(card.subtype);
+    }
+    case "france":
+      return card.type === "recipe" && Boolean(card.tag);
+    case "china":
+      return card.type === "recipe";
+    case "india":
+      return card.type === "ingredient" && card.tag === "spice";
+    case "usa":
+      return card.type === "recipe" || card.type === "ingredient";
+    case "turkey":
+      return card.type === "recipe";
+    case "japan":
+      return card.type === "ingredient" && card.tag === "seasoning";
+    case "mexico":
+      return (card.type === "ingredient" && card.tag === "hot")
+        || (card.type === "recipe" && card.slots === 0);
+    default:
+      return false;
+  }
+}
+
 export function buildRestaurantDeck(cuisineId, random = gameRandom) {
   const cuisine = CUISINES[cuisineId];
   const cards = [];
@@ -102,7 +134,7 @@ export function buildCustomerDeck(cuisineIds = CUISINE_LIST.map((cuisine) => cui
       cuisineId: cuisine.id,
       nationality: cuisine.id,
       flag: cuisine.flag,
-      name: `${cuisine.region.replace(" kitchen", "")} guest`,
+      name: `${cuisine.region.replace(" restaurant", "")} customer`,
       order,
       tips,
       effect: cuisine.customerEffect,
@@ -215,7 +247,7 @@ export function cardPlayability(card, meal, cuisineId, orderValue, selectedDishI
   if (card.type === "recipe") {
     return meal.dishes.length < orderValue
       ? { playable: true, reason: "Starts a new dish" }
-      : { playable: false, reason: `This guest orders at most ${orderValue} dish${orderValue === 1 ? "" : "es"}.` };
+      : { playable: false, reason: `This customer orders at most ${orderValue} dish${orderValue === 1 ? "" : "es"}.` };
   }
   if (card.type === "ingredient") {
     if (!meal.dishes.length) return { playable: false, reason: "Serve a recipe before adding ingredients." };
@@ -529,9 +561,21 @@ export function cleanupMeal(player, meal, tipCard = null) {
   player.meal = emptyMeal();
 }
 
+export function scoreCustomer(customer, trackedTips) {
+  const orderVp = customer.order;
+  const tipsUnlocked = trackedTips >= customer.tips;
+  const tipsVp = tipsUnlocked ? customer.tips : 0;
+  return {
+    orderVp,
+    tipsVp,
+    tipsUnlocked,
+    total: orderVp + tipsVp,
+  };
+}
+
 export function scorePlayer(player) {
   return player.customers.reduce(
-    (score, customer) => score + customer.order + (player.tips.length >= customer.tips ? customer.tips : 0),
+    (score, customer) => score + scoreCustomer(customer, player.tips.length).total,
     0,
   );
 }

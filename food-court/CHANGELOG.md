@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.14.0]
+
+CHANGES:
+
+* Introduced multiplayer support for the player-facing web app with up to 4 players, including 
+  local and online play, room creation, and game state synchronization.
+
+FIXES:
+
+* Replaced placeholder generic Ingredient Cards with cuisine-appropriate names in the French,
+  Chinese, American, Turkish, and Japanese restaurant decks.
+* Various Web app UI improvements and bugfixes
+
 ## [0.13.1]
 
 FIXES:

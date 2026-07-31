@@ -30,7 +30,7 @@ Score the most victory points (VP) from attracted customers.
    recipe may also add up to 1 Drink Card to their meal.
 4. Reveal all served cards at the same time.
 5. Calculate each player's serve value.
-6. The highest unique serve value wins the customer.
+6. The highest unique serve value attracts the customer.
 7. If the highest value is tied, ignore those tied players and check the next highest value.
 8. If every competing value is tied, discard the customer.
 9. If no player served any recipes, discard the customer.

@@ -1,4 +1,4 @@
-# Cuisine Decks
+# Restaurant Decks
 
 Customer Cards have the following `order value/tips value`:
   - 1/2
@@ -10,7 +10,7 @@ Customer Cards have the following `order value/tips value`:
 Nationality matches the deck section where the customer is listed.
 
 Each nationality has a customer effect that applies to all players competing for that customer.
-Deck special abilities apply only to the player using that cuisine deck.
+Restaurant deck special abilities apply only to the player using that restaurant deck.
 
 Recipe lists group cards by how many extra Ingredient Cards may be added to them. A served dish's
 difficulty is based on how many Ingredient Cards were actually added to it.
@@ -19,7 +19,7 @@ Drink Cards list their requirement. A revealed Drink Card adds +3 serve value if
 is met.
 
 <!-- TOC -->
-* [Cuisine Decks](#cuisine-decks)
+* [Restaurant Decks](#restaurant-decks)
   * [🇮🇹 Piazza Romana](#-piazza-romana)
   * [🇫🇷 Le Petit Paris](#-le-petit-paris)
   * [🇨🇳 Jin Long](#-jin-long)
@@ -73,9 +73,9 @@ is met.
     - Fettuccine ai Porcini e Tartufo (Fettuccine)
     - Tagliatelle ai Funghi Porcini (Tagliatelle)
 - Drink Cards (3)
-  - Cappuccino - Play if you served 1 dish with its exact pasta ingredient added.
-  - Aperol Spritz - Play if you served at least 2 normal dishes.
-  - Limoncello - Play if you served dishes with at least 2 different pasta types.
+  - Cappuccino - At least 1 recipe with its exact matching pasta Ingredient Card.
+  - Aperol Spritz - At least 2 dishes with exactly 1 Ingredient Card each.
+  - Limoncello - At least 2 different pasta Ingredient Card types.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
@@ -92,9 +92,15 @@ is met.
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (15)
-  - Ingredient Cards (12)
+  - Ingredient Cards (12):
+    - Shallots (2)
+    - Leeks (2)
+    - Carrots (2)
+    - Champignons (2)
+    - Gruyère (2)
+    - Apples (2)
   - Flavor Cards (3):
-    - Herbs de Provence
+    - Herbes de Provence
     - Butter
     - Cream
 - Recipe Cards (15):
@@ -117,9 +123,9 @@ is met.
     - Crème Brûlée (dessert)
     - Tarte Tatin (dessert)
 - Drink Cards (3)
-  - Champagne - Play if you served an adjacent course pair.
-  - Cognac - Play if you served a hard recipe.
-  - Pernod - Play if every served dish is from a different course.
+  - Champagne - An entrée + appetizer, appetizer + main, or main + dessert pair.
+  - Cognac - At least 1 dish with 2 Ingredient Cards added.
+  - Pernod - Every served Recipe Card has a different course tag.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
@@ -135,7 +141,13 @@ is met.
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (15)
-  - Ingredient Cards (12)
+  - Ingredient Cards (12):
+    - Jasmine Rice (2)
+    - Wheat Noodles (2)
+    - Bok Choy (2)
+    - Chinese Eggplant (2)
+    - Tofu (2)
+    - Scallions (2)
   - Flavor Cards (3):
     - Shiitake Mushrooms
     - Soy Sauce
@@ -160,9 +172,9 @@ is met.
     - Peking Duck Fried Rice (rice)
     - Dragon Beard Noodles (noodles)
 - Drink Cards (3)
-  - Baijiu - Play if you served both a rice dish and a noodles dish.
-  - Huangjiu - Play if you served at least 2 dishes of the same type.
-  - Green Tea - Play if you served at least 1 dish with no Ingredient Cards added.
+  - Baijiu - At least 1 rice Recipe Card and 1 noodle Recipe Card.
+  - Huangjiu - At least 2 rice Recipe Cards or 2 noodle Recipe Cards.
+  - Green Tea - At least 1 dish with no Ingredient Cards added.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
@@ -210,9 +222,9 @@ is met.
     - Rogan Josh
     - Malai Kofta
 - Drink Cards (3)
-  - Feni - Play if you added at least 2 Ingredients.
-  - Lassi - Play if you served a dish with a Flavor Card added.
-  - Masala Chai - Play if you added at least 2 different spice Ingredient Cards.
+  - Feni - At least 2 Ingredient Cards added across the meal.
+  - Lassi - At least 1 dish with a Flavor Card added.
+  - Masala Chai - At least 2 different spice Ingredient Card types.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
@@ -229,7 +241,13 @@ is met.
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (15)
-  - Ingredient Cards (12)
+  - Ingredient Cards (12):
+    - Cheddar Cheese (2)
+    - Bacon (2)
+    - Pickles (2)
+    - Caramelized Onions (2)
+    - Lettuce (2)
+    - Tomato (2)
   - Flavor Cards (3):
     - Ketchup
     - Mustard
@@ -254,9 +272,9 @@ is met.
     - T-bone Steak (steak)
     - Apple Pie
 - Drink Cards (3)
-  - Coke - Play if you served at least 2 burger dishes.
-  - Bourbon - Play if you served at least 2 steak dishes.
-  - Root Beer - Play if a dish has an extra Ingredient Card above its printed number of extras.
+  - Coke - At least 2 burger Recipe Cards.
+  - Bourbon - At least 2 steak Recipe Cards.
+  - Root Beer - At least 1 dish has more Ingredient Cards than its Recipe Card's printed slots.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
@@ -273,7 +291,13 @@ is met.
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (15):
-  - Ingredient Cards (12)
+  - Ingredient Cards (12):
+    - Lamb (2)
+    - Eggplant (2)
+    - Tomato (2)
+    - Yogurt (2)
+    - Pistachios (2)
+    - Bulgur (2)
   - Flavor Cards (3):
     - Sumac
     - Paprika
@@ -298,9 +322,9 @@ is met.
     - Turkish Delight
     - Kadayif
 - Drink Cards (3)
-  - Raki - Play if you served at least 1 kebab dish and at least 1 non-kebab dish.
-  - Salep - Play if every served dish is a kebab dish.
-  - Ayran - Play if you served at least 2 non-kebab dishes.
+  - Raki - At least 1 kebab Recipe Card and 1 non-kebab Recipe Card.
+  - Salep - Every served Recipe Card is a kebab.
+  - Ayran - At least 2 non-kebab Recipe Cards.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
@@ -317,7 +341,8 @@ is met.
   <summary>Deck Composition</summary>
 
 - Ingredient And Flavor Cards (16):
-  - Other Ingredient Cards (5)
+  - Other Ingredient Cards (5):
+    - Dashi Stock (5)
   - Seasoning Ingredient Cards (8):
     - Umami (2)
     - Wasabi (2)
@@ -346,9 +371,9 @@ is met.
     - Omurice
     - Gyoza
 - Drink Cards (3)
-  - Sake - Play if you added Wasabi.
-  - Matcha Tea - Play if you added at least 2 different Ingredients.
-  - Umeshu - Play if you served a hard dish.
+  - Sake - A Wasabi Ingredient Card was added.
+  - Matcha Tea - At least 2 differently named Ingredient Cards were added.
+  - Umeshu - At least 1 dish with 2 Ingredient Cards added.
 - Customer Cards (6)
 - Ability Card (1)
 </details>
@@ -398,9 +423,9 @@ is met.
     - Chiles Rellenos
     - Tamales
 - Drink Cards (3)
-  - Mezcal - Play if you added at least 1 hot Ingredient.
-  - Tequila - Play if you added at least 2 hot Ingredients.
-  - Tepache - Play if you served a normal dish with a Flavor Card.
+  - Mezcal - At least 1 hot Ingredient Card was added.
+  - Tequila - At least 2 hot Ingredient Cards were added.
+  - Tepache - At least 1 dish with exactly 1 Ingredient Card and a Flavor Card added.
 - Customer Cards (6)
 - Ability Card (1)
 </details>

@@ -1,12 +1,12 @@
 {
   "name": "food-court-game",
-  "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "python3 -m http.server 4173",
+    "dev:online": "npm run build && npx wrangler@latest dev",
     "build": "node scripts/build.mjs",
-    "check": "node --check src/data.js && node --check src/game.js && node --check src/app.js && node --check worker/access.js && node --check worker/index.js",
+    "check": "node --check src/data.js && node --check src/game.js && node --check src/multiplayer.js && node --check src/app.js && node --check worker/access.js && node --check worker/room-game.js && node --check worker/game-room.js && node --check worker/index.js",
     "test": "node --test",
     "deploy": "npm run build && npx wrangler@latest deploy --keep-vars"
   },

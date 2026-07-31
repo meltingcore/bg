@@ -76,6 +76,26 @@ test('deck data matches the revised card distributions', () => {
   assert.equal(mexico.ingredients.find((card) => card.name === 'Corn')?.count, 3);
 });
 
+test('Drink Card requirements use explicit card types and quantities', () => {
+  const vagueTerms = /overstuffed|exact pasta pairing|same type|hard dish|normal dish|with flavor/i;
+  const drinks = DECKS.flatMap((deck) => deck.drinks);
+  const rootBeer = DECKS
+    .find((deck) => deck.id === 'usa')!
+    .drinks.find((card) => card.name === 'Root Beer')!;
+
+  assert.equal(
+    rootBeer.requirement,
+    "At least 1 dish has more Ingredient Cards than its Recipe Card's printed slots.",
+  );
+  for (const drinkCard of drinks) {
+    assert.equal(
+      vagueTerms.test(drinkCard.requirement),
+      false,
+      `${drinkCard.name}: ${drinkCard.requirement}`,
+    );
+  }
+});
+
 test('Italy, China, India, and Japan abilities use the latest scoring rules', () => {
   const italyState = createGame(DECKS, ['italy'], 101);
   const italy = italyState.players[0];
