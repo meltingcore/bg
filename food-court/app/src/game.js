@@ -1,4 +1,4 @@
-import { CUISINES, CUISINE_LIST, CUSTOMER_VALUES } from "./data.js?v=0.13.3-1";
+import { CUISINES, CUISINE_LIST, CUSTOMER_VALUES } from "./data.js";
 
 let nextId = 1;
 

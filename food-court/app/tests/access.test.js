@@ -94,11 +94,11 @@ test("the Worker gates previews and serves production assets", async () => {
     "no-cache, must-revalidate",
   );
 
-  const versionedAssetResponse = await worker.fetch(
-    new Request("https://foodcourt.example.workers.dev/src/app.js?v=0.13.3-1"),
+  const staticAssetResponse = await worker.fetch(
+    new Request("https://foodcourt.example.workers.dev/src/app.js"),
     env,
   );
-  assert.equal(versionedAssetResponse.headers.get("Cache-Control"), null);
+  assert.equal(staticAssetResponse.headers.get("Cache-Control"), null);
 
   const unconfiguredPreviewResponse = await worker.fetch(
     new Request("https://version-foodcourt.example.workers.dev/"),

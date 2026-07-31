@@ -1,4 +1,4 @@
-import { CUISINES, CUISINE_LIST, TYPE_META } from "./data.js?v=0.13.3-1";
+import { CUISINES, CUISINE_LIST, TYPE_META } from "./data.js";
 import {
   cardParticipatesInAbility,
   cardPlayability,
@@ -17,7 +17,20 @@ import {
   scoreCustomer,
   scorePlayer,
   tipCandidates,
-} from "./game.js?v=0.13.3-1";
+} from "./game.js";
+import {
+  connectToRoom,
+  createRoom,
+  forgetRoomToken,
+  joinRoom,
+  leaveRoom,
+  loadRoom,
+  roomIdFromUrl,
+  serializeMeal,
+  shareableRoomUrl,
+  storedRoomToken,
+  storeRoomToken,
+} from "./multiplayer.js";
 
 const app = document.querySelector("#app");
 const announcer = document.querySelector("#announcer");
@@ -27,11 +40,23 @@ let selectedCuisineId = "italy";
 let opponentCount = 1;
 let selectedOpponentCuisineIds = ["france"];
 let game = null;
+let playMode = roomIdFromUrl() ? "online" : "solo";
+let playerName = "Guest chef";
 let toastTimer = null;
 let dialogFocusPending = false;
 let focusReturnAction = null;
 let customerCardObserver = null;
 let responsiveLayoutTimer = null;
+const online = {
+  roomId: roomIdFromUrl(),
+  token: null,
+  room: null,
+  connection: null,
+  connectionStatus: "disconnected",
+  busy: false,
+  error: "",
+  pendingAction: null,
+};
 const ui = {
   discardIds: new Set(),
   selectedDish: 0,
@@ -150,6 +175,218 @@ function showToast(message) {
   render();
 }
 
+function isOnlineGame() {
+  return Boolean(game?.multiplayer && online.roomId);
+}
+
+function onlineActionLocked() {
+  return isOnlineGame() && (game.multiplayer.submitted || online.pendingAction === game.phase);
+}
+
+function rememberPlayerName() {
+  try {
+    window.localStorage.setItem("food-court-player-name", playerName);
+  } catch {
+    // The name is still retained for the current page.
+  }
+}
+
+function restorePlayerName() {
+  try {
+    playerName = window.localStorage.getItem("food-court-player-name") || playerName;
+  } catch {
+    // Use the default guest name when storage is unavailable.
+  }
+}
+
+function setRoomUrl(roomId = null) {
+  const url = new URL(window.location.href);
+  if (roomId) url.searchParams.set("room", roomId);
+  else url.searchParams.delete("room");
+  window.history.replaceState({}, "", url);
+}
+
+function sendRoomAction(action) {
+  try {
+    if (!online.connection) throw new Error("The table is not connected yet.");
+    online.connection.send(action);
+  } catch (error) {
+    online.pendingAction = null;
+    showToast(error.message || "The table is reconnecting.");
+  }
+}
+
+function applyOnlineRoomState(roomState) {
+  const previousPhase = game?.phase;
+  const previousRound = game?.round;
+  const previousGame = game;
+  online.room = roomState;
+  online.error = "";
+
+  const currentSeat = roomState.players.find((player) => player.id === roomState.you);
+  if (currentSeat) {
+    selectedCuisineId = currentSeat.cuisineId;
+    playerName = currentSeat.name;
+  }
+
+  if (roomState.game) {
+    const nextGame = roomState.game;
+    const preserveServeDraft = previousGame?.multiplayer
+      && previousGame.round === nextGame.round
+      && previousGame.phase === "serve"
+      && nextGame.phase === "serve"
+      && !previousGame.multiplayer.submitted
+      && !nextGame.multiplayer.submitted;
+    if (preserveServeDraft) {
+      nextGame.player.hand = previousGame.player.hand;
+      nextGame.player.meal = previousGame.player.meal;
+    }
+    game = nextGame;
+    if (game.multiplayer.submitted || previousPhase !== game.phase || previousRound !== game.round) {
+      online.pendingAction = null;
+    }
+    ui.pending = nextGame.pending;
+    screen = "game";
+    if (previousPhase !== game.phase || previousRound !== game.round) {
+      ui.discardIds.clear();
+      ui.selectedDish = 0;
+      clearUndo();
+    }
+  } else {
+    game = null;
+    ui.pending = null;
+    screen = "lobby";
+  }
+  render();
+}
+
+function connectOnlineSession(session) {
+  online.connection?.close();
+  online.roomId = session.roomId;
+  online.token = session.token;
+  online.busy = false;
+  online.error = "";
+  playMode = "online";
+  storeRoomToken(session.roomId, session.token);
+  setRoomUrl(session.roomId);
+  online.connection = connectToRoom(session.roomId, session.token, {
+    onState: applyOnlineRoomState,
+    onError: (error) => {
+      online.pendingAction = null;
+      online.error = error.message;
+      showToast(error.message);
+    },
+    onStatus: (status) => {
+      online.connectionStatus = status;
+      render();
+    },
+  });
+  render();
+}
+
+async function createOnlineRoom() {
+  online.busy = true;
+  online.error = "";
+  rememberPlayerName();
+  render();
+  try {
+    connectOnlineSession(await createRoom({ name: playerName, cuisineId: selectedCuisineId }));
+  } catch (error) {
+    online.busy = false;
+    online.error = error.message;
+    render();
+  }
+}
+
+async function joinOnlineRoom() {
+  if (!online.roomId) return;
+  online.busy = true;
+  online.error = "";
+  rememberPlayerName();
+  render();
+  try {
+    connectOnlineSession(await joinRoom(online.roomId, {
+      name: playerName,
+      cuisineId: selectedCuisineId,
+    }));
+  } catch (error) {
+    online.busy = false;
+    online.error = error.message;
+    render();
+  }
+}
+
+async function initializeOnlineRoom() {
+  if (!online.roomId) return;
+  online.busy = true;
+  render();
+  const token = storedRoomToken(online.roomId);
+  if (token) {
+    try {
+      connectOnlineSession(await joinRoom(online.roomId, { token }));
+      return;
+    } catch (error) {
+      if (error.code === "INVALID_SESSION") forgetRoomToken(online.roomId);
+      else if (error.code !== "GAME_STARTED") online.error = error.message;
+    }
+  }
+  try {
+    const { room } = await loadRoom(online.roomId);
+    online.room = room;
+    const availableCuisine = CUISINE_LIST.find((cuisine) =>
+      !room.players.some((player) => player.cuisineId === cuisine.id));
+    if (availableCuisine) selectedCuisineId = availableCuisine.id;
+  } catch (error) {
+    online.error = error.message;
+  } finally {
+    online.busy = false;
+    render();
+  }
+}
+
+async function leaveOnlineTable() {
+  const roomId = online.roomId;
+  const token = online.token;
+  const inProgress = Boolean(online.room?.game);
+  if (inProgress && !window.confirm("Leave this game? You can return with the same invite URL on this device.")) {
+    return;
+  }
+  if (!inProgress && roomId && token) {
+    try {
+      await leaveRoom(roomId, token);
+      forgetRoomToken(roomId);
+    } catch (error) {
+      showToast(error.message);
+      return;
+    }
+  }
+  online.connection?.close();
+  online.connection = null;
+  online.roomId = null;
+  online.token = null;
+  online.room = null;
+  online.error = "";
+  online.busy = false;
+  online.connectionStatus = "disconnected";
+  online.pendingAction = null;
+  game = null;
+  screen = "lobby";
+  playMode = "solo";
+  setRoomUrl();
+  clearUndo();
+  render();
+}
+
+async function copyInviteLink() {
+  const invite = shareableRoomUrl(online.roomId);
+  try {
+    await navigator.clipboard.writeText(invite);
+    showToast("Invite link copied.");
+  } catch {
+    window.prompt("Copy this invite link", invite);
+  }
+}
+
 function cloneMeal(meal) {
   return {
     dishes: meal.dishes.map((dish) => ({
@@ -178,6 +415,7 @@ function clearUndo() {
 }
 
 function undoLastAction() {
+  if (onlineActionLocked()) return;
   const snapshot = ui.undoStack.pop();
   if (!snapshot || snapshot.phase !== game.phase) return;
   game.player.hand = snapshot.hand;
@@ -195,13 +433,17 @@ function undoButton() {
 
 function cuisineCard(cuisine) {
   const selected = selectedCuisineId === cuisine.id;
+  const currentPlayerId = online.room?.you || null;
+  const takenOnline = playMode === "online" && online.room?.players.some((player) =>
+    player.id !== currentPlayerId && player.cuisineId === cuisine.id);
   return `
     <button
-      class="cuisine-option ${selected ? "is-selected" : ""}"
+      class="cuisine-option ${selected ? "is-selected" : ""} ${takenOnline ? "is-unavailable" : ""}"
       style="--cuisine: ${cuisine.accent}"
       data-action="select-cuisine"
       data-cuisine="${cuisine.id}"
       aria-pressed="${selected}"
+      ${takenOnline ? "disabled" : ""}
     >
       <span class="cuisine-seal restaurant-flag" aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></span>
       <span class="cuisine-copy">
@@ -210,7 +452,7 @@ function cuisineCard(cuisine) {
         <small>${escapeHtml(cuisine.region)}</small>
       </span>
       <span class="cuisine-ability">${escapeHtml(cuisine.ability)}</span>
-      <span class="cuisine-check">✓</span>
+      <span class="cuisine-check">${takenOnline ? "Taken" : "✓"}</span>
     </button>
   `;
 }
@@ -257,50 +499,171 @@ function opponentSetup() {
   `;
 }
 
+function modeSwitcher() {
+  if (online.room?.you) return "";
+  return `
+    <div class="play-mode-switcher" aria-label="Game mode">
+      <button data-action="set-play-mode" data-mode="solo" class="${playMode === "solo" ? "is-selected" : ""}" aria-pressed="${playMode === "solo"}">
+        <span>Solo table</span><small>Play against AI</small>
+      </button>
+      <button data-action="set-play-mode" data-mode="online" class="${playMode === "online" ? "is-selected" : ""}" aria-pressed="${playMode === "online"}">
+        <span>Private online table</span><small>Invite up to 3 people</small>
+      </button>
+    </div>
+  `;
+}
+
+function roomConnectionBadge() {
+  const labels = {
+    connected: "Live",
+    connecting: "Connecting",
+    reconnecting: "Reconnecting",
+    failed: "Connection lost",
+    disconnected: "Offline",
+  };
+  return `<span class="room-connection is-${online.connectionStatus}"><i></i>${labels[online.connectionStatus] || "Connecting"}</span>`;
+}
+
+function roomPlayerCard(player, index) {
+  const cuisine = CUISINES[player.cuisineId];
+  const isYou = player.id === online.room.you;
+  const isHost = player.id === online.room.hostPlayerId;
+  const canManageAi = online.room.isHost && player.isAi;
+  const availableCuisines = CUISINE_LIST.filter((candidate) =>
+    candidate.id === player.cuisineId
+      || !online.room.players.some((seat) => seat.id !== player.id && seat.cuisineId === candidate.id));
+  return `
+    <article class="room-seat ${isYou ? "is-you" : ""} ${player.connected ? "is-connected" : "is-disconnected"}">
+      <span class="room-seat-number">${index + 1}</span>
+      <span class="mini-seal restaurant-flag" style="--cuisine:${cuisine.accent}" aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></span>
+      <div class="room-seat-copy">
+        <small>${isYou ? "You" : player.isAi ? "AI rival" : player.connected ? "Joined" : "Reconnecting"}${isHost ? " · Host" : ""}</small>
+        <strong>${escapeHtml(player.name)}</strong>
+        ${canManageAi ? `
+          <select data-ai-player-id="${player.id}" aria-label="Restaurant deck for ${escapeHtml(player.name)}">
+            ${availableCuisines.map((candidate) => `<option value="${candidate.id}" ${candidate.id === player.cuisineId ? "selected" : ""}>${candidate.flag} ${escapeHtml(candidate.name)}</option>`).join("")}
+          </select>` : `<span>${escapeHtml(cuisine.name)}</span>`}
+      </div>
+      ${canManageAi ? `<button class="room-seat-remove" data-action="remove-ai" data-player-id="${player.id}" aria-label="Remove ${escapeHtml(player.name)}">×</button>` : ""}
+    </article>
+  `;
+}
+
+function joinedRoomSetup() {
+  const room = online.room;
+  const isHost = room.isHost;
+  const availableCuisine = CUISINE_LIST.find((cuisine) =>
+    !room.players.some((player) => player.cuisineId === cuisine.id));
+  const enoughPlayers = room.players.length >= 2;
+  return `
+    <section class="online-room-panel" aria-label="Private online table">
+      <header class="online-room-heading">
+        <div><span class="step-label"><b>2</b> Private table</span><strong>Room ${room.id}</strong></div>
+        ${roomConnectionBadge()}
+      </header>
+      <div class="room-invite-row">
+        <div><small>Invite link</small><code>${escapeHtml(shareableRoomUrl(room.id))}</code></div>
+        <button class="secondary-button" data-action="copy-invite">Copy link</button>
+      </div>
+      <div class="room-seats">
+        ${room.players.map(roomPlayerCard).join("")}
+        ${Array.from({ length: room.maxPlayers - room.players.length }, (_, index) => `
+          <div class="room-seat is-empty"><span class="room-seat-number">${room.players.length + index + 1}</span><span class="empty-seat-icon">＋</span><div><small>Open seat</small><strong>Share the link to invite a player</strong></div></div>
+        `).join("")}
+      </div>
+      ${isHost ? `
+        <div class="room-host-actions">
+          <button class="secondary-button" data-action="add-ai" ${availableCuisine && room.players.length < room.maxPlayers ? "" : "disabled"}>＋ Add AI rival</button>
+          <button class="primary-button" data-action="start-online-game" ${enoughPlayers && online.connectionStatus === "connected" ? "" : "disabled"}>
+            Start game <span>→</span>
+          </button>
+        </div>
+        <p class="setup-note">Human guests can take an AI seat until the game starts. Every restaurant deck must be unique.</p>
+      ` : `<div class="room-waiting"><span></span><div><strong>Waiting for the host</strong><small>You can change your restaurant while the table is open.</small></div></div>`}
+      <button class="text-button leave-room-button" data-action="leave-room">Leave table</button>
+    </section>
+  `;
+}
+
+function onlineEntrySetup() {
+  if (online.busy && !online.room) {
+    return `<div class="online-entry-state"><span class="loading-spinner"></span><strong>Opening the private table…</strong></div>`;
+  }
+  if (online.room?.you) return joinedRoomSetup();
+
+  const joining = Boolean(online.roomId);
+  const roomUnavailable = joining && online.room && !online.room.joinable;
+  return `
+    <section class="online-entry-panel">
+      <label class="player-name-field">
+        <span>Your display name</span>
+        <input data-player-name maxlength="24" value="${escapeHtml(playerName)}" autocomplete="nickname" placeholder="Guest chef" />
+      </label>
+      ${joining && online.room ? `
+        <div class="room-preview">
+          <span>Room ${online.room.id}</span>
+          <strong>${online.room.players.length} seated player${online.room.players.length === 1 ? "" : "s"}</strong>
+          <small>${online.room.players.map((player) => escapeHtml(player.name)).join(" · ")}</small>
+        </div>` : ""}
+      ${online.error ? `<p class="online-error" role="alert">${escapeHtml(online.error)}</p>` : ""}
+      ${roomUnavailable ? `
+        <div class="online-entry-state is-error"><strong>${online.room.status === "playing" ? "This game is already in progress." : "This table is full."}</strong><small>Ask the host to open a seat, or create a new table.</small></div>
+      ` : `
+        <button class="primary-button online-entry-button" data-action="${joining ? "join-room" : "create-room"}" ${online.busy ? "disabled" : ""}>
+          ${online.busy ? "Connecting…" : joining ? "Join private table" : "Create private table"} <span>→</span>
+        </button>
+        <p class="setup-note">No account needed. Your session stays on this device so you can reconnect after a refresh.</p>
+      `}
+    </section>
+  `;
+}
+
 function renderLobby() {
   const selected = CUISINES[selectedCuisineId];
   return `
     <main class="lobby-shell cuisine-theme-${selectedCuisineId}">
-      <div class="lobby-art" aria-hidden="true"></div>
       <div class="lobby-vignette" aria-hidden="true"></div>
       <section class="lobby-content">
         <div class="brand-lockup">
           <span class="brand-kicker">A competitive cooking card game</span>
           <h1><span>Food</span> Court</h1>
-          <p>Build a menu. Read the room. Attract customers.</p>
+          <p>Cook dishes. Serve meals. Attract customers.</p>
           <div class="game-facts"><span>2–4 restaurants</span><span>Simultaneous turns</span><span>About 15 minutes</span></div>
+          <button class="secondary-button how-to-button" data-action="open-tutorial">How to Play</button>
         </div>
 
         <div class="restaurant-picker panel-parchment">
           <div class="picker-heading">
-            <div>
+            <div class="picker-title">
               <span class="step-label"><b>1</b> Choose your restaurant</span>
               <h2>Who is opening tonight?</h2>
             </div>
             <div class="picker-actions">
-              <button class="text-button" data-action="open-tutorial"><span>▶</span> Guided tour</button>
               <button class="icon-button" data-action="open-rules" aria-label="Open complete game rules">?</button>
             </div>
           </div>
+          ${modeSwitcher()}
           <div class="cuisine-grid">
             ${CUISINE_LIST.map(cuisineCard).join("")}
           </div>
           <div class="selected-brief" style="--cuisine: ${selected.accent}">
-            <span class="brief-icon">✦</span>
+            <span class="brief-icon">↯</span>
             <div>
               <small>Your signature ability</small>
               <strong>${escapeHtml(selected.ability)}</strong>
               <p>${escapeHtml(selected.abilityText)}</p>
             </div>
           </div>
-          ${opponentSetup()}
-          <button class="primary-button lobby-start" data-action="start-game">
-            <span>Open for service <b>→</b></span>
-            <small>You + ${opponentCount} AI rival${opponentCount === 1 ? "" : "s"}</small>
-          </button>
+          ${playMode === "online" ? onlineEntrySetup() : `
+            ${opponentSetup()}
+            <button class="primary-button lobby-start" data-action="start-game">
+              <span>Open for service <b>→</b></span>
+              <small>You + ${opponentCount} AI rival${opponentCount === 1 ? "" : "s"}</small>
+            </button>
+          `}
         </div>
       </section>
-      <footer class="lobby-footer">Eight restaurants · one shared court · highest unique meal wins</footer>
+      <footer class="lobby-footer">Eight restaurants compete for customers in the food corner of the mall</footer>
       ${ui.rulesOpen ? rulesModal() : ""}
       ${ui.tutorialOpen ? tutorialModal() : ""}
     </main>
@@ -421,7 +784,7 @@ function scorePill(player, side, index = 0) {
   return `
     <div class="score-pill ${side}">
       <span class="score-avatar restaurant-flag" style="--cuisine: ${cuisine.accent}" aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></span>
-      <span class="score-name"><small>${side === "player" ? "Your restaurant" : `Rival ${index + 1}`}</small>${escapeHtml(cuisine.name)}</span>
+      <span class="score-name"><small>${side === "player" ? "Your restaurant" : player.isAi ? `AI rival ${index + 1}` : `Rival ${index + 1}`}</small>${escapeHtml(player.name || cuisine.name)}${player.name ? `<em>${escapeHtml(cuisine.name)}</em>` : ""}</span>
       <button
         type="button"
         class="score-value score-value-button"
@@ -650,20 +1013,20 @@ function opponentZone() {
     <section class="opponent-zone" aria-label="Rival restaurants">
       ${game.opponents.map((opponent, rivalIndex) => {
         const cuisine = CUISINES[opponent.cuisineId];
-        const playedCount = flattenMeal(opponent.meal).length;
+        const playedCount = opponent.playedCount ?? flattenMeal(opponent.meal).length;
         const hiddenCards = Array.from({ length: Math.min(opponent.hand.length, 4) }, (_, cardIndex) =>
           `<span class="card-back" style="--i:${cardIndex}"><i aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></i></span>`).join("");
         return `
           <article class="opponent-seat">
             <div class="opponent-identity">
               <span class="mini-seal restaurant-flag" style="--cuisine:${cuisine.accent}" aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></span>
-              <div><small>Rival ${rivalIndex + 1}</small><strong>${escapeHtml(cuisine.name)}</strong><span>${escapeHtml(cuisine.ability)}</span></div>
+              <div><small>${opponent.isAi ? `AI rival ${rivalIndex + 1}` : `Rival ${rivalIndex + 1}`}</small><strong>${escapeHtml(opponent.name || cuisine.name)}</strong><span>${escapeHtml(cuisine.name)} · ${escapeHtml(cuisine.ability)}</span></div>
             </div>
             <div class="opponent-hand" aria-label="Rival ${rivalIndex + 1} has ${opponent.hand.length} cards">${hiddenCards}</div>
             <div class="opponent-status" aria-label="Rival ${rivalIndex + 1}: ${playedCount} cards played and ${opponent.hand.length} cards left in hand">
               ${game.phase === "refresh"
-                ? `<span><b>${opponent.hand.length}</b> in hand</span><i>refreshing…</i>`
-                : `<span class="played-count"><b>${playedCount}</b> played</span><span><b>${opponent.hand.length}</b> in hand</span><i>${game.phase === "reveal" ? "revealed" : "cooking…"}</i>`}
+                ? `<span><b>${opponent.hand.length}</b> in hand</span><i>${opponent.connected === false ? "disconnected" : game.multiplayer?.readyPlayerIds.includes(opponent.id) ? "ready ✓" : "refreshing…"}</i>`
+                : `<span class="played-count"><b>${playedCount}</b> played</span><span><b>${opponent.hand.length}</b> in hand</span><i>${opponent.connected === false ? "disconnected" : game.phase === "reveal" ? "revealed" : game.multiplayer?.readyPlayerIds.includes(opponent.id) ? "served ✓" : "cooking…"}</i>`}
             </div>
           </article>
         `;
@@ -685,31 +1048,99 @@ function ingredientSlots(dish) {
   `;
 }
 
+function servedAttachmentCard(card, index, total) {
+  const meta = TYPE_META[card.type];
+  const abilityContext = cardAbilityContext(card);
+  const center = (total - 1) / 2;
+  const shift = index * 35;
+  const tilt = (index - center) * 2.5;
+  return `
+    <button
+      class="served-card served-attachment-card card-${card.type} ${abilityContext ? "has-ability-marker" : ""}"
+      style="--card-shift:${shift}px; --card-tilt:${tilt}deg; --card-layer:${index + 1}"
+      data-action="remove-meal-card"
+      data-card-id="${card.id}"
+      aria-label="Return ${escapeHtml(meta.label)} ${escapeHtml(card.name)} to your hand"
+    >
+      ${abilityMarker(abilityContext)}
+      <span class="served-card-corner"><b>${meta.symbol}</b><small>${meta.value}</small></span>
+      <span class="served-card-art" aria-hidden="true">${meta.symbol}</span>
+      <span class="served-card-type">${meta.label}</span>
+      <strong>${escapeHtml(card.name)}</strong>
+      <small class="served-card-rule">${escapeHtml(cardDetail(card))}</small>
+      <span class="served-card-return" aria-hidden="true">Return ↩</span>
+    </button>
+  `;
+}
+
 function mealDish(dish, index) {
   const selected = ui.selectedDish === index;
   const difficulty = dish.ingredients.length === 0 ? "Easy" : dish.ingredients.length === 1 ? "Normal" : "Hard";
+  const recipeAbilityContext = cardAbilityContext(dish.recipe);
+  const additions = [...dish.ingredients, ...(dish.flavor ? [dish.flavor] : [])];
   return `
-    <article class="meal-dish ${selected ? "is-selected" : ""}" data-action="select-dish" data-dish-index="${index}">
+    <article
+      class="meal-dish ${selected ? "is-selected" : ""}"
+      data-action="select-dish"
+      data-dish-index="${index}"
+      aria-label="Dish ${index + 1}: ${escapeHtml(dish.recipe.name)}${selected ? ", selected as the target for added cards" : ""}"
+    >
       <div class="dish-number">Dish ${index + 1} ${selected ? `<b>Selected target</b>` : ""}</div>
-      <button class="remove-card" data-action="remove-meal-card" data-card-id="${dish.recipe.id}" aria-label="Return ${escapeHtml(dish.recipe.name)} to hand">×</button>
-      <div class="dish-recipe">
-        <span>♨</span>
+      <div class="served-card served-recipe-card card-recipe ${recipeAbilityContext ? "has-ability-marker" : ""}">
+        ${abilityMarker(recipeAbilityContext)}
+        <button class="remove-card" data-action="remove-meal-card" data-card-id="${dish.recipe.id}" aria-label="Return ${escapeHtml(dish.recipe.name)} to hand">×</button>
+        <span class="served-card-corner"><b>♨</b><small>+1</small></span>
+        <span class="served-card-art" aria-hidden="true">♨</span>
+        <span class="served-card-type">Recipe Card</span>
         <strong>${escapeHtml(dish.recipe.name)}</strong>
-        <small>${difficulty} dish · Recipe +1</small>
+        <small class="served-card-rule">${difficulty} dish · ${escapeHtml(cardDetail(dish.recipe))}</small>
+        <div class="dish-capacity">${ingredientSlots(dish)}</div>
+        <button class="dish-target" data-action="select-dish" data-dish-index="${index}" aria-pressed="${selected}">${selected ? "Adding cards here" : "Target this dish"}</button>
       </div>
-      <div class="dish-capacity">${ingredientSlots(dish)}<button class="dish-target" data-action="select-dish" data-dish-index="${index}" aria-pressed="${selected}">${selected ? "Adding cards here" : "Target this dish"}</button></div>
-      <div class="dish-additions">
-        ${dish.ingredients.map((card) => `
-          <button class="addition ingredient" data-action="remove-meal-card" data-card-id="${card.id}">
-            ◇ ${escapeHtml(card.name)} <b>+1</b>
-          </button>`).join("")}
-        ${dish.flavor ? `
-          <button class="addition flavor" data-action="remove-meal-card" data-card-id="${dish.flavor.id}">
-            ✦ ${escapeHtml(dish.flavor.name)} <b>+2</b>
-          </button>` : ""}
-        ${dish.ingredients.length === 0 && !dish.flavor ? `<span class="empty-addition">Ingredient and Flavor Cards will appear here</span>` : ""}
+      <div class="served-attachments" aria-label="Cards added to ${escapeHtml(dish.recipe.name)}">
+        ${additions.length
+          ? additions.map((card, cardIndex) => servedAttachmentCard(card, cardIndex, additions.length)).join("")
+          : `<span class="empty-addition-card"><b>＋</b><small>Add Ingredient<br>or Flavor</small></span>`}
       </div>
     </article>
+  `;
+}
+
+function servedDrinkCard(meal, validDrink) {
+  if (!meal.drink) {
+    return `
+      <div class="drink-card-wrap">
+        <div class="dish-number">Optional</div>
+        <div class="served-card empty-drink-card card-drink" aria-label="Empty Drink Card slot">
+          <span class="served-card-corner"><b>◒</b><small>+3</small></span>
+          <span class="served-card-art" aria-hidden="true">＋</span>
+          <span class="served-card-type">Drink Card</span>
+          <strong>Add one drink</strong>
+          <small class="served-card-rule">Its printed condition must be met to score.</small>
+        </div>
+      </div>
+    `;
+  }
+  const abilityContext = cardAbilityContext(meal.drink);
+  return `
+    <div class="drink-card-wrap ${validDrink ? "is-valid" : "is-invalid"}">
+      <div class="dish-number">Drink ${validDrink ? `<b>Condition met</b>` : `<b>Not scoring</b>`}</div>
+      <button
+        class="served-card served-drink-card card-drink ${abilityContext ? "has-ability-marker" : ""}"
+        data-action="remove-meal-card"
+        data-card-id="${meal.drink.id}"
+        aria-label="${escapeHtml(meal.drink.name)}. ${validDrink ? "Condition met, worth 3 Serve Value." : "Condition not met, worth 0 Serve Value."} Return this card to your hand."
+      >
+        ${abilityMarker(abilityContext)}
+        <span class="served-card-corner"><b>◒</b><small>${validDrink ? "+3" : "+0"}</small></span>
+        <span class="drink-status" aria-hidden="true">${validDrink ? "✓" : "!"}</span>
+        <span class="served-card-art" aria-hidden="true">◒</span>
+        <span class="served-card-type">Drink Card</span>
+        <strong>${escapeHtml(meal.drink.name)}</strong>
+        <small class="served-card-rule">${escapeHtml(meal.drink.condition)}</small>
+        <span class="served-card-return" aria-hidden="true">Return ↩</span>
+      </button>
+    </div>
   `;
 }
 
@@ -732,6 +1163,9 @@ function mealBuilder() {
           <span class="eyebrow">Your serving board</span>
           <h2>${meal.dishes.length ? "Tonight's meal" : "Build a meal"}</h2>
         </div>
+        <div class="ability-chip" style="--cuisine:${cuisine.accent}">
+          <span>↯</span><div><small>${escapeHtml(cuisine.ability)}</small>${escapeHtml(cuisine.abilityText)}</div>
+        </div>
         <div class="serve-preview" aria-live="polite" aria-label="Current Serve Value ${preview.total}">
           <small>Live Serve Value</small>
           <strong>${preview.total}</strong>
@@ -746,27 +1180,48 @@ function mealBuilder() {
         ${meal.dishes.map(mealDish).join("")}
         ${meal.dishes.length < maxRecipes ? `
           <div class="empty-dish-slot">
-            <span>＋</span>
+            <span class="served-card-corner"><b>♨</b><small>+1</small></span>
+            <span class="empty-slot-art">＋</span>
+            <span class="served-card-type">Recipe Card</span>
             <strong>${meal.dishes.length ? "Add another recipe" : "Choose a recipe from your hand"}</strong>
             <small>Up to ${maxRecipes} dish${maxRecipes === 1 ? "" : "es"} for this customer</small>
           </div>` : ""}
-      </div>
-      <div class="meal-footer">
-        <div class="ability-chip" style="--cuisine:${cuisine.accent}">
-          <span>✦</span><div><small>${escapeHtml(cuisine.ability)}</small>${escapeHtml(cuisine.abilityText)}</div>
-        </div>
-        <div class="drink-slot ${meal.drink ? "has-drink" : ""} ${meal.drink ? (preview.validDrink ? "is-valid" : "is-invalid") : ""}">
-          ${meal.drink ? `
-            <button data-action="remove-meal-card" data-card-id="${meal.drink.id}">
-              <span>◒</span><div><small>${preview.validDrink ? "Requirement met · +3" : "Requirement not met · +0"}</small><strong>${escapeHtml(meal.drink.name)}</strong><em>${escapeHtml(meal.drink.condition)}</em></div><b>${preview.validDrink ? "✓" : "!"}</b>
-            </button>` : `<span>◒</span><div><small>Optional · one per meal</small><strong>Drink slot</strong></div>`}
-        </div>
+        ${servedDrinkCard(meal, preview.validDrink)}
       </div>
     </section>
   `;
 }
 
+function disconnectRecoveryControls() {
+  if (!isOnlineGame() || !game.multiplayer.isHost) return "";
+  const disconnectedPlayers = online.room.players.filter((player) =>
+    game.multiplayer.disconnectedPlayerIds.includes(player.id)
+      && !game.multiplayer.readyPlayerIds.includes(player.id));
+  if (!disconnectedPlayers.length) return "";
+  return `
+    <div class="disconnect-recovery">
+      <small>Disconnected player</small>
+      ${disconnectedPlayers.map((player) => `
+        <button class="secondary-button" data-action="replace-disconnected" data-player-id="${player.id}">
+          Let AI finish for ${escapeHtml(player.name)}
+        </button>
+      `).join("")}
+    </div>
+  `;
+}
+
 function phaseAction() {
+  if (onlineActionLocked()) {
+    const waitingFor = game.multiplayer.waitingFor;
+    return `
+      <aside class="phase-action waiting-action">
+        <div><span class="phase-step">✓</span><div><small>Your choice is locked in</small><strong>${game.phase === "refresh" ? "Hand refreshed" : "Meal served face down"}</strong></div></div>
+        <p>${waitingFor.length ? `Waiting for ${escapeHtml(waitingFor.join(", "))}.` : "Resolving the table…"}</p>
+        <div class="waiting-pulse"><i></i><i></i><i></i><span>Live table sync</span></div>
+        ${disconnectRecoveryControls()}
+      </aside>
+    `;
+  }
   if (game.phase === "refresh") {
     const limit = handLimit(game.activeCustomer);
     const french = game.activeCustomer.nationality === "france";
@@ -803,6 +1258,7 @@ function phaseAction() {
 }
 
 function mobileActionBar() {
+  if (onlineActionLocked()) return "";
   if (game.phase === "refresh") {
     const french = game.activeCustomer.nationality === "france";
     return `
@@ -838,7 +1294,7 @@ function handSection() {
       ? "Choose a gold Recipe Card to create your first dish."
       : `Targeting Dish ${ui.selectedDish + 1}: ${selectedDish?.recipe.name}. Ingredients and Flavors go here.`;
   return `
-    <section class="hand-section ${refresh ? "refresh-mode" : ""}">
+    <section class="hand-section ${refresh ? "refresh-mode" : ""} ${onlineActionLocked() ? "is-readonly" : ""}">
       <div class="hand-toolbar">
         <div><span class="eyebrow">Your hand</span><strong>${game.player.hand.length} cards</strong></div>
         <div class="hand-legend">
@@ -848,10 +1304,10 @@ function handSection() {
         ${refresh ? `<span class="discard-counter">${ui.discardIds.size}/1 selected to discard</span>` : ""}
       </div>
       <div class="hand-coach ${refresh ? "" : "serve-coach"}"><span>${refresh ? "↻" : "◎"}</span>${escapeHtml(coach)}</div>
-      <div class="hand-cards" role="list" aria-label="Your hand of cards">
+      <div class="hand-cards hand-count-${game.player.hand.length}" role="list" aria-label="Your hand of cards">
         ${game.player.hand.length ? game.player.hand.map((card) => cardMarkup(card, {
           selected: ui.discardIds.has(card.id),
-          action: refresh ? "toggle-discard" : "play-card",
+          action: onlineActionLocked() ? "noop" : refresh ? "toggle-discard" : "play-card",
           playability: refresh ? null : cardPlayability(card, game.player.meal, game.player.cuisineId, game.activeCustomer.order, ui.selectedDish),
         })).join("") : `<div class="empty-hand">Your hand is empty. Your discard pile will be reshuffled when needed.</div>`}
       </div>
@@ -1004,9 +1460,9 @@ function revealOverlay() {
         </div>
         ${resolutionTrail(classified)}
         <div class="result-comparison result-count-${game.opponents.length + 1}">
-          ${resultPanel("player", game.player, game.player.meal, pending.playerResult, "Your meal", statusFor(game.player.id))}
+          ${resultPanel("player", game.player, game.player.meal, pending.playerResult, `${game.player.name || "Your restaurant"} · your meal`, statusFor(game.player.id))}
           ${pending.opponentResults.map(({ player, result }, index) =>
-            resultPanel("opponent", player, player.meal, result, `Rival ${index + 1}`, statusFor(player.id))).join("")}
+            resultPanel("opponent", player, player.meal, result, player.name || `Rival ${index + 1}`, statusFor(player.id))).join("")}
         </div>
         ${isPlayerWinner && pending.tipCandidates.length ? `
           <div class="tip-choice">
@@ -1022,9 +1478,12 @@ function revealOverlay() {
               ? `Tracking this card moves you to <b>${game.player.tips.length + 1}/4 Tips</b>. Attracted customers with Tips Value ${game.player.tips.length + 1} or less now score their bonus.${game.player.tips.length + 1 === 4 ? " This ends the game." : ""}`
               : `Skipping leaves you at <b>${game.player.tips.length}/4 Tips</b>. The eligible card returns to your discard cycle.`}</p>
           </div>` : ""}
-        <button class="primary-button continue-button" data-action="continue-round">
-          ${game.customerDeck.length === 0 ? "See final scores" : "Continue to next customer"} <span>→</span>
+        <button class="primary-button continue-button" data-action="continue-round" ${onlineActionLocked() ? "disabled" : ""}>
+          ${onlineActionLocked()
+            ? `Ready · waiting for ${escapeHtml(game.multiplayer.waitingFor.join(", ") || "the table")}`
+            : game.customerDeck.length === 0 ? "See final scores" : "Continue to next customer"} <span>→</span>
         </button>
+        ${onlineActionLocked() ? disconnectRecoveryControls() : ""}
       </div>
     </div>
   `;
@@ -1048,7 +1507,7 @@ function gameOverOverlay() {
         <div class="final-score final-count-${standings.length}">
           ${standings.map(({ player, index, score }) => `
             <div class="${score === topScore ? "winner" : ""}">
-              <small>${player.id === game.player.id ? "You" : `Rival ${index}`}</small>
+              <small>${player.id === game.player.id ? "You" : player.isAi ? `AI rival ${index}` : escapeHtml(player.name || `Rival ${index}`)}</small>
               <button
                 type="button"
                 class="final-score-vp"
@@ -1062,8 +1521,10 @@ function gameOverOverlay() {
           `).join("")}
         </div>
         <div class="end-actions">
-          <button class="secondary-button" data-action="back-to-lobby">Choose restaurant</button>
-          <button class="primary-button" data-action="rematch" data-dialog-primary>Play again <span>↻</span></button>
+          <button class="secondary-button" data-action="${isOnlineGame() ? "leave-room" : "back-to-lobby"}">${isOnlineGame() ? "Leave table" : "Choose restaurant"}</button>
+          ${isOnlineGame() && !game.multiplayer.isHost
+            ? `<button class="primary-button" disabled data-dialog-primary>Waiting for host…</button>`
+            : `<button class="primary-button" data-action="rematch" data-dialog-primary>Play again <span>↻</span></button>`}
         </div>
       </div>
     </div>
@@ -1156,20 +1617,23 @@ function tutorialModal() {
 function renderGame() {
   const phaseLabel = game.phase === "refresh" ? "Refresh" : game.phase === "serve" ? "Serve" : "Reveal";
   return `
-    <main class="game-shell cuisine-theme-${game.player.cuisineId}">
+    <main class="game-shell ${isOnlineGame() ? "is-online" : ""} phase-${game.phase} cuisine-theme-${game.player.cuisineId}">
       <header class="game-header">
-        <button class="wordmark" data-action="back-to-lobby" aria-label="Return to restaurant selection"><span>Food</span> Court</button>
-        <div class="round-marker"><small>Round ${game.round}</small><strong>${phaseLabel}</strong>${phaseTrail()}</div>
-        <div class="scoreboard player-count-${game.opponents.length + 1}">
-          ${scorePill(game.player, "player")}
-          ${game.opponents.map((opponent, index) => `
-            <span class="score-divider">vs</span>
-            ${scorePill(opponent, "opponent", index)}
-          `).join("")}
-        </div>
-        <div class="header-tools">
-          <button class="icon-button dark" data-action="open-rules" aria-label="Open complete game rules" title="Complete rules">≡</button>
-          <button class="icon-button dark tutorial-button" data-action="open-tutorial" aria-label="Open guided tour" title="Guided tour">?</button>
+        <div class="game-header-inner">
+          <button class="wordmark" data-action="${isOnlineGame() ? "leave-room" : "back-to-lobby"}" aria-label="${isOnlineGame() ? "Leave online table" : "Return to restaurant selection"}"><span>Food</span> Court</button>
+          <div class="round-marker"><small>Round ${game.round}</small><strong>${phaseLabel}</strong>${phaseTrail()}</div>
+          <div class="scoreboard player-count-${game.opponents.length + 1}">
+            ${scorePill(game.player, "player")}
+            ${game.opponents.map((opponent, index) => `
+              <span class="score-divider">vs</span>
+              ${scorePill(opponent, "opponent", index)}
+            `).join("")}
+          </div>
+          <div class="header-tools">
+            ${isOnlineGame() ? `<button class="room-header-link" data-action="copy-invite" title="Copy invite link"><span>${online.roomId}</span>${roomConnectionBadge()}</button>` : ""}
+            <button class="icon-button dark" data-action="open-rules" aria-label="Open complete game rules" title="Complete rules">≡</button>
+            <button class="icon-button dark tutorial-button" data-action="open-tutorial" aria-label="Open How to Play guided tour" title="How to play">?</button>
+          </div>
         </div>
       </header>
       ${mobileCustomerSummary(game.activeCustomer)}
@@ -1183,14 +1647,7 @@ function renderGame() {
           ${customerCard(game.activeCustomer)}
           ${phaseAction()}
         </section>
-        ${game.phase === "serve" || game.phase === "reveal" ? mealBuilder() : `
-          <section class="refresh-board" aria-label="Refresh phase guidance">
-            <div class="refresh-emblem">↻</div>
-            <div class="refresh-copy"><span class="eyebrow">Before service</span>
-            <h2>Tune your hand</h2>
-            <p>Keep what works, discard one weak card, and draw toward a meal that fits this customer.</p></div>
-            <div class="refresh-hint"><span>✦</span><div><strong>${escapeHtml(CUISINES[game.player.cuisineId].ability)}</strong><small>${escapeHtml(CUISINES[game.player.cuisineId].abilityText)}</small></div></div>
-          </section>`}
+        ${game.phase === "serve" || game.phase === "reveal" ? mealBuilder() : ""}
         ${handSection()}
       </div>
       ${mobileActionBar()}
@@ -1322,6 +1779,18 @@ function prepareOpponentMeals() {
 }
 
 function finishRefresh(mulligan = false) {
+  if (isOnlineGame()) {
+    if (onlineActionLocked()) return;
+    online.pendingAction = "refresh";
+    sendRoomAction({
+      type: "refresh",
+      discardIds: [...ui.discardIds],
+      mulligan,
+    });
+    clearUndo();
+    render();
+    return;
+  }
   refreshPlayer(game.player, game.activeCustomer, [...ui.discardIds], mulligan);
   refreshOpponents();
   prepareOpponentMeals();
@@ -1333,7 +1802,7 @@ function finishRefresh(mulligan = false) {
 }
 
 function playCard(cardId) {
-  if (game.phase !== "serve") return;
+  if (game.phase !== "serve" || onlineActionLocked()) return;
   const cardIndex = game.player.hand.findIndex((card) => card.id === cardId);
   if (cardIndex < 0) return;
   const card = game.player.hand[cardIndex];
@@ -1402,6 +1871,7 @@ function playCard(cardId) {
 }
 
 function removeMealCard(cardId) {
+  if (onlineActionLocked()) return;
   const meal = game.player.meal;
   if (meal.drink?.id === cardId) {
     pushUndo(`removing ${meal.drink.name}`);
@@ -1439,6 +1909,15 @@ function removeMealCard(cardId) {
 
 function resolveRound(pass = false) {
   if (game.phase !== "serve") return;
+  if (isOnlineGame()) {
+    if (onlineActionLocked()) return;
+    const meal = pass ? emptyMeal() : game.player.meal;
+    online.pendingAction = "serve";
+    sendRoomAction({ type: "serve", meal: serializeMeal(meal) });
+    clearUndo();
+    render();
+    return;
+  }
   if (pass) {
     flattenMeal(game.player.meal).forEach((card) => game.player.hand.push(card));
     game.player.meal = emptyMeal();
@@ -1497,6 +1976,16 @@ function resolveRound(pass = false) {
 }
 
 function continueRound() {
+  if (isOnlineGame()) {
+    if (onlineActionLocked()) return;
+    online.pendingAction = "reveal";
+    sendRoomAction({
+      type: "reveal_ack",
+      tipCardId: ui.pending?.selectedTipId || null,
+    });
+    render();
+    return;
+  }
   const playerTip = ui.pending.tipCandidates.find((card) => card.id === ui.pending.selectedTipId) || null;
   cleanupMeal(game.player, game.player.meal, playerTip);
   game.opponents.forEach((opponent, index) =>
@@ -1535,9 +2024,22 @@ app.addEventListener("click", (event) => {
   if (!target) return;
   const action = target.dataset.action;
 
-  if (action === "select-cuisine") {
+  if (action === "set-play-mode") {
+    playMode = target.dataset.mode;
+    online.error = "";
+    if (playMode === "solo" && !online.token) {
+      online.roomId = null;
+      online.room = null;
+      setRoomUrl();
+    }
+    render();
+  } else if (action === "select-cuisine") {
     selectedCuisineId = target.dataset.cuisine;
-    reconcileOpponentDecks();
+    if (playMode === "online" && online.room?.you) {
+      sendRoomAction({ type: "set_cuisine", cuisineId: selectedCuisineId });
+    } else {
+      reconcileOpponentDecks();
+    }
     render();
   } else if (action === "set-opponent-count") {
     opponentCount = Number(target.dataset.count);
@@ -1545,6 +2047,24 @@ app.addEventListener("click", (event) => {
     render();
   } else if (action === "start-game") {
     startGame();
+  } else if (action === "create-room") {
+    void createOnlineRoom();
+  } else if (action === "join-room") {
+    void joinOnlineRoom();
+  } else if (action === "copy-invite") {
+    void copyInviteLink();
+  } else if (action === "leave-room") {
+    void leaveOnlineTable();
+  } else if (action === "add-ai") {
+    const available = CUISINE_LIST.find((cuisine) =>
+      !online.room.players.some((player) => player.cuisineId === cuisine.id));
+    if (available) sendRoomAction({ type: "add_ai", cuisineId: available.id });
+  } else if (action === "remove-ai") {
+    sendRoomAction({ type: "remove_ai", playerId: target.dataset.playerId });
+  } else if (action === "start-online-game") {
+    sendRoomAction({ type: "start" });
+  } else if (action === "replace-disconnected") {
+    sendRoomAction({ type: "replace_disconnected", playerId: target.dataset.playerId });
   } else if (action === "open-rules") {
     focusReturnAction = "open-rules";
     ui.rulesOpen = true;
@@ -1595,7 +2115,8 @@ app.addEventListener("click", (event) => {
     render();
     window.queueMicrotask(() => window.scrollTo({ top: 0, left: 0 }));
   } else if (action === "rematch") {
-    startGame();
+    if (isOnlineGame()) sendRoomAction({ type: "rematch" });
+    else startGame();
   } else if (action === "toggle-discard") {
     const cardId = target.dataset.cardId;
     const card = game.player.hand.find((item) => item.id === cardId);
@@ -1634,6 +2155,15 @@ app.addEventListener("click", (event) => {
 });
 
 app.addEventListener("change", (event) => {
+  const aiSelect = event.target.closest("select[data-ai-player-id]");
+  if (aiSelect) {
+    sendRoomAction({
+      type: "set_ai_cuisine",
+      playerId: aiSelect.dataset.aiPlayerId,
+      cuisineId: aiSelect.value,
+    });
+    return;
+  }
   const select = event.target.closest("select[data-opponent-index]");
   if (!select) return;
   selectedOpponentCuisineIds[Number(select.dataset.opponentIndex)] = select.value;
@@ -1641,10 +2171,21 @@ app.addEventListener("change", (event) => {
   render();
 });
 
+app.addEventListener("input", (event) => {
+  const input = event.target.closest("input[data-player-name]");
+  if (!input) return;
+  playerName = input.value.slice(0, 24);
+});
+
 document.addEventListener("keydown", (event) => {
   const dialogs = [...document.querySelectorAll('[role="dialog"]')];
   const activeDialog = dialogs.at(-1);
-  if (event.key === "Tab" && activeDialog) {
+  if (event.key === "Enter" && event.target.matches("input[data-player-name]")) {
+    event.preventDefault();
+    if (online.busy || (online.roomId && online.room && !online.room.joinable)) return;
+    if (online.roomId) void joinOnlineRoom();
+    else void createOnlineRoom();
+  } else if (event.key === "Tab" && activeDialog) {
     const focusable = [...activeDialog.querySelectorAll('button:not([disabled]), select:not([disabled]), [href], [tabindex]:not([tabindex="-1"])')];
     if (focusable.length) {
       const first = focusable[0];
@@ -1680,4 +2221,6 @@ window.addEventListener("resize", () => {
   responsiveLayoutTimer = window.setTimeout(setupMobileCustomerSummary, 120);
 });
 
+restorePlayerName();
 render();
+void initializeOnlineRoom();
