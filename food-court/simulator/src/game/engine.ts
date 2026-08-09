@@ -91,7 +91,7 @@ export interface GameState {
 
 const HAND_LIMIT = 6;
 const REFRESH_DRAW_LIMIT = 3;
-const REFRESH_DISCARD_LIMIT = 1;
+const REFRESH_DISCARD_LIMIT = 2;
 const MAX_TIPS = 4;
 
 const RECIPE_VALUES: Record<RecipeDifficulty, number> = {
@@ -110,7 +110,7 @@ const handLimitFor = (state: GameState) => (state.activeCustomer?.deckId === 'it
 
 export const RULE_NOTES = [
   'One active customer is contested by all players each round.',
-  'Refresh allows discarding up to 1 card, then drawing up to 3 cards without exceeding hand limit 6.',
+  'Refresh first draws up to 3 cards without exceeding hand limit 6, then replaces up to 2 cards.',
   'All recipes have base serve value 1; difficulty controls normal ingredient slots.',
   'Recipes are served from hand up to the active customer Order Value.',
   'Ingredient Cards fill ingredient slots for +1 each.',
@@ -352,7 +352,7 @@ export const refreshHand = (state: GameState, playerId: string) => {
 export const discardHandForRefresh = (state: GameState, playerId: string) => {
   const player = findPlayer(state, playerId);
   if (!player || state.phase !== 'serve' || state.activeCustomer?.deckId !== 'france') return;
-  if (player.refreshDiscards > 0 || player.refreshDraws > 0) {
+  if (player.refreshDiscards > 0) {
     state.log.unshift(`${player.name} has already refreshed this round.`);
     return;
   }
@@ -361,7 +361,6 @@ export const discardHandForRefresh = (state: GameState, playerId: string) => {
   const playerIndex = state.players.findIndex((item) => item.id === player.id);
   const drawn = draw(player, handLimitFor(state), state.log, state.seed + state.round * 1231 + playerIndex * 917);
   player.refreshDiscards = REFRESH_DISCARD_LIMIT;
-  player.refreshDraws = REFRESH_DRAW_LIMIT;
   state.log.unshift(`${player.name} discarded their hand and drew ${drawn} card${drawn === 1 ? '' : 's'}.`);
   if (discarded === 0) state.log.unshift(`${player.name} had no cards to discard for the French customer refresh.`);
 };
@@ -370,18 +369,23 @@ export const discardFromHand = (state: GameState, playerId: string, cardIdToDisc
   const player = findPlayer(state, playerId);
   if (!player || state.phase !== 'serve') return;
   if (player.refreshDiscards >= REFRESH_DISCARD_LIMIT) {
-    state.log.unshift(`${player.name} has already discarded ${REFRESH_DISCARD_LIMIT} card this round.`);
-    return;
-  }
-  if (player.refreshDraws > 0) {
-    state.log.unshift(`${player.name} cannot discard during refresh after drawing.`);
+    state.log.unshift(`${player.name} has already replaced ${REFRESH_DISCARD_LIMIT} cards this round.`);
     return;
   }
   const card = moveCard(player.hand, cardIdToDiscard);
   if (!card) return;
   player.discard.push(card);
+  const playerIndex = state.players.findIndex((item) => item.id === player.id);
+  const drawn = draw(
+    player,
+    1,
+    state.log,
+    state.seed + state.round * 1423 + playerIndex * 917 + player.refreshDiscards * 101,
+  );
   player.refreshDiscards += 1;
-  state.log.unshift(`${player.name} discarded ${cardSummary(card)} during refresh.`);
+  state.log.unshift(
+    `${player.name} replaced ${cardSummary(card)} and drew ${drawn} new card${drawn === 1 ? '' : 's'}.`,
+  );
 };
 
 export const serveRecipe = (state: GameState, playerId: string, cardIdToServe: string) => {

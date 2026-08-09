@@ -82,7 +82,7 @@ is met.
 
 ## 🇫🇷 Le Petit Paris
 
-- **Customer Effect** - Players can discard their hand and draw new one when refreshing.
+- **Customer Effect** - After the initial Refresh draw, players may replace their whole hand.
 - **Special Ability** - Each adjacent course pair served in the same meal gains +1 serve value,
   to a maximum of +2 per meal: entrée + appetizer, appetizer + main, or main + dessert.
 - **Tips Tracking** - Attract a customer using dish in order: entrée, appetizer, main & dessert and

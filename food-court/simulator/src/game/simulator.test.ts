@@ -6,7 +6,9 @@ import { assignBotPolicies, BOT_POLICIES, playBotPlayers, refreshForBot } from '
 import {
   addIngredient,
   createGame,
+  discardFromHand,
   eligibleTipCard,
+  refreshHand,
   serveRecipe,
   valueBreakdown,
   type CardInstance,
@@ -356,6 +358,33 @@ test('Tips policy uses the French full-hand redraw when the hand has no Tips pat
   refreshForBot(state, player.id, 'tips');
   assert.equal(player.hand.length, 6);
   assert.ok(player.discard.some((card) => originalIds.has(card.id)));
+});
+
+test('refresh draws first and then replaces up to two cards', () => {
+  const state = createGame(DECKS, ['china'], 111);
+  const player = state.players[0];
+  state.activeCustomer!.deckId = 'china';
+  const initialHand = allPlayerCards(player).slice(0, 4);
+  setHand(player, initialHand);
+  player.refreshDiscards = 0;
+  player.refreshDraws = 0;
+
+  refreshHand(state, player.id);
+  assert.equal(player.hand.length, 6);
+  const newlyDrawn = player.hand.find((card) =>
+    !initialHand.some((initial) => initial.id === card.id));
+  assert.ok(newlyDrawn);
+
+  discardFromHand(state, player.id, newlyDrawn.id);
+  discardFromHand(state, player.id, initialHand[0].id);
+  assert.equal(player.hand.length, 6);
+  assert.equal(player.refreshDiscards, 2);
+  assert.ok(player.discard.some((card) => card.id === newlyDrawn.id));
+  assert.ok(player.discard.some((card) => card.id === initialHand[0].id));
+
+  const handAfterTwoReplacements = player.hand.map((card) => card.id);
+  discardFromHand(state, player.id, player.hand[0].id);
+  assert.deepEqual(player.hand.map((card) => card.id), handAfterTwoReplacements);
 });
 
 test('mixed games rotate all policies and never play unsuccessful Drinks', () => {

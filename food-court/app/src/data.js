@@ -71,7 +71,7 @@ export const CUISINES = {
     ability: "Perfect Progression",
     abilityText: "Adjacent course pairs gain +1 each, to a maximum of +2.",
     tipsText: "Win with a new course; track that recipe. Courses must be different.",
-    customerEffect: "You may replace your whole hand while refreshing.",
+    customerEffect: "After the initial Refresh draw, you may replace your whole hand.",
     recipes: [
       recipe("Soupe à l'Oignon", 0, "entree"),
       recipe("Bouillabaisse", 0, "entree"),

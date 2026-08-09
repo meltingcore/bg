@@ -66,7 +66,8 @@ meal that gains more from the active customer effect and conserves more cards.
 - Easy recipes have 0 normal ingredient slots.
 - Normal recipes have 1 normal ingredient slot.
 - Hard recipes have 2 normal ingredient slots.
-- Refresh allows discarding up to 1 card, then drawing up to 3 cards without exceeding hand limit 6.
+- Refresh first draws up to 3 cards without exceeding hand limit 6, then optionally replaces up to
+  2 cards.
 - Each recipe may also take 1 Flavor Card.
 - Drink Cards are played face down with a served meal and add +3 serve value if their requirement
   is met.

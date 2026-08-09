@@ -5,11 +5,12 @@ import {
   canAttachIngredient,
   chooseAiMeal,
   cleanupMeal,
+  drawForRefresh,
   emptyMeal,
   flattenMeal,
   makePlayer,
   moveMealFromHand,
-  refreshPlayer,
+  replaceForRefresh,
   scorePlayer,
   tipCandidates,
 } from "../src/game.js";
@@ -167,7 +168,7 @@ function makeTableGame(room, random) {
     return player;
   });
   const customerDeck = buildCustomerDeck(players.map((player) => player.cuisineId), random);
-  return {
+  const game = {
     round: 1,
     phase: "refresh",
     players,
@@ -177,6 +178,8 @@ function makeTableGame(room, random) {
     ready: { refresh: [], serve: [], reveal: [] },
     pending: null,
   };
+  game.players.forEach((player) => drawForRefresh(player, game.activeCustomer, random));
+  return game;
 }
 
 function gamePlayer(room, playerId) {
@@ -216,10 +219,13 @@ function refreshAiPlayers(room, random) {
   game.players.filter((player) => player.isAi).forEach((player) => {
     if (game.ready.refresh.includes(player.id)) return;
     const recipes = player.hand.filter((card) => card.type === "recipe");
-    const expendable = recipes.length === 0
-      ? player.hand.find((card) => card.type === "drink") || player.hand[0]
-      : null;
-    refreshPlayer(player, game.activeCustomer, expendable ? [expendable.id] : [], false, random);
+    const discardIds = recipes.length === 0
+      ? [...player.hand]
+        .sort((left, right) => Number(right.type === "drink") - Number(left.type === "drink"))
+        .slice(0, 2)
+        .map((card) => card.id)
+      : [];
+    replaceForRefresh(player, game.activeCustomer, discardIds, false, random);
     markReady(game, "refresh", player.id);
   });
 }
@@ -407,6 +413,7 @@ function completeRound(room, random) {
   game.activeCustomer = game.customerDeck.pop();
   game.phase = "refresh";
   game.ready = { refresh: [], serve: [], reveal: [] };
+  game.players.forEach((player) => drawForRefresh(player, game.activeCustomer, random));
   refreshAiPlayers(room, random);
   advanceFromRefresh(room);
 }
@@ -475,7 +482,7 @@ function applyGameAction(room, playerId, action, random) {
   if (action.type === "refresh") {
     if (game.phase !== "refresh") throw new RoomError("Refresh is already complete.", 409, "WRONG_PHASE");
     if (game.ready.refresh.includes(playerId)) return;
-    refreshPlayer(
+    replaceForRefresh(
       player,
       game.activeCustomer,
       Array.isArray(action.discardIds) ? action.discardIds : [],
