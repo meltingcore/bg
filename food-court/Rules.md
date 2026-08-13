@@ -56,10 +56,11 @@ Tips Cards can increase customer scoring and can end the game early.
 
 Each round is a simultaneous contest for the active customer.
 
-1. **Refresh Hands** - Each player may discard up to 1 card, then draw up to 3 cards if below their
-   hand limit and without exceeding it. The default hand limit is 6 unless a card effect changes it. 
-   If the draw pile is empty, the player reshuffles their discard pile as a new draw pile and 
-   continues drawing.
+1. **Refresh Hands** - Each player may first draw up to 3 cards without exceeding their hand limit.
+   Then, they may replace up to 2 cards from their hand by discarding those cards and drawing the
+   same number of new cards. The default hand limit is 6 unless a card effect changes it. If the
+   draw pile is empty, the player reshuffles their discard pile as a new draw pile and continues
+   drawing.
 2. **Serve Dishes** - Each player may secretly serve a meal of a number of Recipe Cards from their 
    hand as cooked dishes up to the active customer's Order Value.
 3. **Add Cards** - Players may add extra ingredients and flavor to recipes for bonus points.
@@ -192,7 +193,7 @@ served to the active customer.
 Customer effects are printed on customer cards and apply to all players.
 
 - **Italian Customer** - Players hand limit is increased to 8 when refreshing.
-- **French Customer** - Players can discard their hand and draw new one when refreshing.
+- **French Customer** - After the initial Refresh draw, players may replace their whole hand.
 - **Chinese Customer** - Easy dishes gain +1 serve value.
 - **Indian Customer** - A pair of added ingredients add +1 serve value.
 - **American Customer** - Gain +1 serve value for each pair of cards in hand.

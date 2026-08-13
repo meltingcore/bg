@@ -24,7 +24,7 @@ Score the most victory points (VP) from attracted customers.
 
 ## Round Flow
 
-1. Each player may discard up to 1 card, then draw up to 3 cards, up to hand limit 6 if possible.
+1. Each player may first draw up to 3 cards, up to hand limit 6, then replace up to 2 cards.
 2. Each player may serve 0 or more recipes face down, up to the active customer's Order Value.
 3. Players may add extra Ingredient Cards and Flavor Cards to recipes. A player who served a
    recipe may also add up to 1 Drink Card to their meal.
@@ -69,7 +69,7 @@ Then apply customer effects and deck abilities.
 ## Customer Effects
 
 - Italian: Players hand limit is increased to 8 when refreshing.
-- French: Players can discard their hand and draw new one when refreshing.
+- French: After the initial Refresh draw, players may replace their whole hand.
 - Chinese: Easy dishes gain +1.
 - Indian: A pair of added ingredients add +1.
 - American: Gain +1 for each pair of cards in hand.

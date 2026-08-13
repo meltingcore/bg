@@ -14,7 +14,9 @@ import {
   createGame,
   determineUniqueWinner,
   drawCards,
+  drawForRefresh,
   makePlayer,
+  replaceForRefresh,
   scoreCustomer,
   scorePlayer,
   shuffle,
@@ -210,6 +212,27 @@ test("recycled discard piles receive the same fresh shuffle and cut", () => {
     );
     assert.equal(player.discard.length, 0);
   }
+});
+
+test("refresh draws first, then replaces up to two cards including newly drawn cards", () => {
+  const cards = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    .map((cardId) => ({ id: cardId, type: "ingredient", name: cardId }));
+  const player = {
+    hand: cards.slice(0, 4),
+    deck: cards.slice(4),
+    discard: [],
+    refreshDrawn: 0,
+  };
+
+  assert.equal(drawForRefresh(player, { nationality: "china" }, stableRandom), 2);
+  assert.deepEqual(player.hand.map((card) => card.id), ["a", "b", "c", "d", "h", "g"]);
+
+  assert.equal(
+    replaceForRefresh(player, { nationality: "china" }, ["h", "a", "b"], false, stableRandom),
+    2,
+  );
+  assert.deepEqual(player.hand.map((card) => card.id), ["b", "c", "d", "g", "f", "e"]);
+  assert.deepEqual(player.discard.map((card) => card.id), ["a", "h"]);
 });
 
 test("the customer deck contains only cuisines selected for the match", () => {

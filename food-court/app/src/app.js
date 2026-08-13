@@ -9,11 +9,12 @@ import {
   cleanupMeal,
   createGame,
   determineUniqueWinner,
+  drawForRefresh,
   emptyMeal,
   flattenMeal,
   handLimit,
   moveMealFromHand,
-  refreshPlayer,
+  replaceForRefresh,
   scoreCustomer,
   scorePlayer,
   tipCandidates,
@@ -100,7 +101,7 @@ const TUTORIAL_STEPS = [
     title: "Prepare your hand for this customer",
     symbol: "↻",
     visual: "refresh",
-    body: "You may discard up to one card, then draw up to three cards without passing your hand limit. You may also keep every card and simply draw into any open space in your hand.",
+    body: "First, draw up to three cards without passing your hand limit. Then you may replace up to two cards from your hand by discarding them and drawing the same number of new cards.",
     note: "The normal hand limit is 6. Some customers change Refresh: an Italian customer raises the limit to 8, while a French customer lets you replace your whole hand.",
   },
   {
@@ -1225,17 +1226,17 @@ function phaseAction() {
   if (game.phase === "refresh") {
     const limit = handLimit(game.activeCustomer);
     const french = game.activeCustomer.nationality === "france";
-    const drawCount = Math.min(3, Math.max(0, limit - game.player.hand.length + ui.discardIds.size));
+    const drawn = game.player.refreshDrawn || 0;
     return `
       <aside class="phase-action refresh-action">
-        <div><span class="phase-step">1</span><div><small>Now · Refresh</small><strong>${ui.discardIds.size ? "Replace the marked card" : "Keep or mark one card"}</strong></div></div>
-        <p>Select up to one card to discard. You will draw ${drawCount || "no"} card${drawCount === 1 ? "" : "s"} when you continue.</p>
-        <div class="phase-metrics"><span>Hand <b>${game.player.hand.length}/${limit}</b></span><span>Marked <b>${ui.discardIds.size}/1</b></span><span>Draw <b>${drawCount}</b></span></div>
+        <div><span class="phase-step">1</span><div><small>Now · Refresh</small><strong>${ui.discardIds.size ? "Replace the marked cards" : "Keep your hand or choose replacements"}</strong></div></div>
+        <p>You drew ${drawn || "no"} card${drawn === 1 ? "" : "s"} first. Now select up to two cards to replace.</p>
+        <div class="phase-metrics"><span>Hand <b>${game.player.hand.length}/${limit}</b></span><span>First draw <b>${drawn}/3</b></span><span>Replace <b>${ui.discardIds.size}/2</b></span></div>
         <div class="action-buttons">
           ${undoButton()}
-          ${french ? `<button class="secondary-button" data-action="mulligan">Replace hand</button>` : ""}
+          ${french ? `<button class="secondary-button" data-action="mulligan">Replace whole hand</button>` : ""}
           <button class="primary-button" data-action="finish-refresh">
-            ${ui.discardIds.size ? "Discard & draw" : "Keep hand & draw"} <span>→</span>
+            ${ui.discardIds.size ? `Replace ${ui.discardIds.size}` : "Keep hand"} <span>→</span>
           </button>
         </div>
       </aside>
@@ -1265,7 +1266,7 @@ function mobileActionBar() {
       <nav class="mobile-action-bar" aria-label="Refresh actions">
         ${undoButton()}
         ${french ? `<button class="secondary-button" data-action="mulligan">New hand</button>` : ""}
-        <button class="primary-button" data-action="finish-refresh">${ui.discardIds.size ? "Discard & draw" : "Keep & draw"} <span>→</span></button>
+        <button class="primary-button" data-action="finish-refresh">${ui.discardIds.size ? `Replace ${ui.discardIds.size}` : "Keep hand"} <span>→</span></button>
       </nav>
     `;
   }
@@ -1289,7 +1290,7 @@ function handSection() {
   ]));
   const selectedDish = game.player.meal.dishes[ui.selectedDish];
   const coach = refresh
-    ? (ui.discardIds.size ? "Marked cards return to normal when you click them again." : "Optional: mark one card you do not need this round.")
+    ? (ui.discardIds.size ? "Marked cards return to normal when you click them again." : "Your first draw is complete. Optionally mark up to two cards to replace.")
     : !game.player.meal.dishes.length
       ? "Choose a gold Recipe Card to create your first dish."
       : `Targeting Dish ${ui.selectedDish + 1}: ${selectedDish?.recipe.name}. Ingredients and Flavors go here.`;
@@ -1301,7 +1302,7 @@ function handSection() {
           ${Object.entries(TYPE_META).map(([type, meta]) => `<span class="legend-${type}">${meta.symbol} ${counts[type]}</span>`).join("")}
           <span class="legend-ability" title="Cards marked with ↯ can participate in your restaurant's special ability">↯ ability</span>
         </div>
-        ${refresh ? `<span class="discard-counter">${ui.discardIds.size}/1 selected to discard</span>` : ""}
+        ${refresh ? `<span class="discard-counter">${ui.discardIds.size}/2 selected to replace</span>` : ""}
       </div>
       <div class="hand-coach ${refresh ? "" : "serve-coach"}"><span>${refresh ? "↻" : "◎"}</span>${escapeHtml(coach)}</div>
       <div class="hand-cards hand-count-${game.player.hand.length}" role="list" aria-label="Your hand of cards">
@@ -1540,7 +1541,7 @@ function rulesModal() {
         <h2 id="rules-title">Attract customers</h2>
         <p class="rules-lead">Every round, all restaurants secretly build a meal for the same customer.</p>
         <ol class="rules-flow">
-          <li><span>1</span><div><strong>Refresh</strong><p>Discard up to one card, then draw up to three without passing your hand limit.</p></div></li>
+          <li><span>1</span><div><strong>Refresh</strong><p>Draw up to three without passing your hand limit, then replace up to two cards.</p></div></li>
           <li><span>2</span><div><strong>Build</strong><p>Serve recipes up to the customer's Order Value. Add ingredients, one flavor per recipe, and one drink per meal.</p></div></li>
           <li><span>3</span><div><strong>Reveal</strong><p>Recipes and ingredients add +1, flavors +2, and a valid drink +3. Then abilities and the customer effect apply.</p></div></li>
           <li><span>4</span><div><strong>Attract</strong><p>The highest unique serve value wins. Tied values are ignored until a unique value is found.</p></div></li>
@@ -1566,7 +1567,7 @@ function tutorialVisual(visual) {
     return `<div class="tutorial-values"><span><b>2</b><small>Order<br>max recipes + base VP</small></span><span><b>+2</b><small>Tips<br>conditional bonus VP</small></span></div>`;
   }
   if (visual === "refresh") {
-    return `<div class="tutorial-cards"><i>Keep</i><i class="is-marked">Discard</i><span>→ draw up to 3</span></div>`;
+    return `<div class="tutorial-cards"><i>Draw ≤ 3</i><i class="is-marked">Replace ≤ 2</i><span>in that order</span></div>`;
   }
   if (visual === "formula") {
     return `<div class="tutorial-formula"><span class="recipe">♨ <b>+1</b></span><i>+</i><span class="ingredient">◇ <b>+1</b></span><i>+</i><span class="flavor">✦ <b>+2</b></span><i>+</i><span class="drink">◒ <b>+3</b></span></div>`;
@@ -1738,6 +1739,8 @@ function closeTutorial() {
 function startGame() {
   reconcileOpponentDecks();
   game = createGame(selectedCuisineId, selectedOpponentCuisineIds);
+  [game.player, ...game.opponents].forEach((player) =>
+    drawForRefresh(player, game.activeCustomer));
   screen = "game";
   ui.discardIds.clear();
   ui.selectedDish = 0;
@@ -1763,10 +1766,12 @@ function refreshOpponents() {
     const recipes = opponent.hand.filter((card) => card.type === "recipe");
     let discardIds = [];
     if (recipes.length === 0) {
-      const expendable = opponent.hand.find((card) => card.type === "drink") || opponent.hand[0];
-      if (expendable) discardIds = [expendable.id];
+      discardIds = [...opponent.hand]
+        .sort((left, right) => Number(right.type === "drink") - Number(left.type === "drink"))
+        .slice(0, 2)
+        .map((card) => card.id);
     }
-    refreshPlayer(opponent, game.activeCustomer, discardIds);
+    replaceForRefresh(opponent, game.activeCustomer, discardIds);
   });
 }
 
@@ -1791,7 +1796,7 @@ function finishRefresh(mulligan = false) {
     render();
     return;
   }
-  refreshPlayer(game.player, game.activeCustomer, [...ui.discardIds], mulligan);
+  replaceForRefresh(game.player, game.activeCustomer, [...ui.discardIds], mulligan);
   refreshOpponents();
   prepareOpponentMeals();
   ui.discardIds.clear();
@@ -2011,6 +2016,8 @@ function continueRound() {
     game.round += 1;
     game.activeCustomer = game.customerDeck.pop();
     game.phase = "refresh";
+    [game.player, ...game.opponents].forEach((player) =>
+      drawForRefresh(player, game.activeCustomer));
     ui.discardIds.clear();
     ui.selectedDish = 0;
     announce(`Round ${game.round}. A new customer is ordering.`);
@@ -2120,12 +2127,14 @@ app.addEventListener("click", (event) => {
   } else if (action === "toggle-discard") {
     const cardId = target.dataset.cardId;
     const card = game.player.hand.find((item) => item.id === cardId);
-    pushUndo(`${ui.discardIds.has(cardId) ? "keeping" : "marking"} ${card?.name || "a card"}`);
-    if (ui.discardIds.has(cardId)) ui.discardIds.delete(cardId);
-    else {
-      ui.discardIds.clear();
-      ui.discardIds.add(cardId);
+    if (!card) return;
+    if (!ui.discardIds.has(cardId) && ui.discardIds.size >= 2) {
+      showToast("You can replace up to two cards during Refresh.");
+      return;
     }
+    pushUndo(`${ui.discardIds.has(cardId) ? "keeping" : "marking"} ${card.name}`);
+    if (ui.discardIds.has(cardId)) ui.discardIds.delete(cardId);
+    else ui.discardIds.add(cardId);
     render();
   } else if (action === "finish-refresh") {
     finishRefresh(false);

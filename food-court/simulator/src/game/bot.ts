@@ -452,23 +452,22 @@ const shouldRedrawFrenchHand = (
   return (recipes < Math.min(2, order) && !support) || averageKeep < 3;
 };
 
-const chooseRefreshDiscard = (
+const chooseRefreshDiscards = (
   state: GameState,
   player: PlayerState,
   policy: BotPolicy,
 ) => {
-  if (player.refreshDiscards > 0 || player.refreshDraws > 0 || player.hand.length <= 3) return null;
+  if (player.refreshDiscards > 0 || player.hand.length === 0) return [];
 
   const ranked = [...player.hand]
     .map((card) => ({ card, keep: cardKeepValue(state, player, card, policy) }))
     .sort((a, b) => a.keep - b.keep || a.card.name.localeCompare(b.card.name));
-  const weakest = ranked[0];
-  if (!weakest) return null;
-
   const handLimit = currentHandLimit(state);
   const threshold = policy === 'tips' ? 5 : policy === 'adaptive' ? 3.25 : 2.5;
-  if (player.hand.length < handLimit && weakest.keep >= threshold) return null;
-  return weakest.card;
+  return ranked
+    .filter(({ keep }) => player.hand.length >= handLimit || keep < threshold)
+    .slice(0, 2)
+    .map(({ card }) => card);
 };
 
 export const assignBotPolicies = (
@@ -503,14 +502,15 @@ export const refreshForBot = (
   const player = findPlayer(state, playerId);
   if (!player || state.phase !== 'serve') return false;
 
+  refreshHand(state, playerId);
+
   if (shouldRedrawFrenchHand(state, player, policy)) {
     discardHandForRefresh(state, playerId);
     return true;
   }
 
-  const discard = chooseRefreshDiscard(state, player, policy);
-  if (discard) discardFromHand(state, playerId, discard.id);
-  refreshHand(state, playerId);
+  const discards = chooseRefreshDiscards(state, player, policy);
+  discards.forEach((card) => discardFromHand(state, playerId, card.id));
   return false;
 };
 

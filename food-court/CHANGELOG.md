@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.1]
+
+FIXES:
+
+* Refresh now lets each player first draw up to 3 cards without exceeding their hand limit, then
+  optionally replace up to 2 cards.
+
 ## [0.14.0]
 
 CHANGES:

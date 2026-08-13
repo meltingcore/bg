@@ -170,6 +170,7 @@ export function makePlayer(cuisineId, name, random = gameRandom) {
     meal: emptyMeal(),
     customers: [],
     tips: [],
+    refreshDrawn: 0,
   };
   drawCards(player, 6, random);
   return player;
@@ -195,23 +196,38 @@ export function handLimit(customer) {
   return customer?.nationality === "italy" ? 8 : 6;
 }
 
-export function refreshPlayer(player, customer, discardIds = [], mulligan = false, random = gameRandom) {
+export function drawForRefresh(player, customer, random = gameRandom) {
   const limit = handLimit(customer);
-  if (mulligan && customer.nationality === "france") {
+  const drawn = drawCards(player, Math.min(3, Math.max(0, limit - player.hand.length)), random);
+  player.refreshDrawn = drawn;
+  return drawn;
+}
+
+export function replaceForRefresh(
+  player,
+  customer,
+  discardIds = [],
+  mulligan = false,
+  random = gameRandom,
+) {
+  const limit = handLimit(customer);
+  if (mulligan && customer?.nationality === "france") {
     player.discard.push(...player.hand);
     player.hand = [];
     return drawCards(player, limit, random);
   }
 
-  const allowed = new Set(discardIds.slice(0, 1));
+  const allowed = new Set(discardIds.slice(0, 2));
+  let discarded = 0;
   player.hand = player.hand.filter((card) => {
     if (allowed.has(card.id)) {
       player.discard.push(card);
+      discarded += 1;
       return false;
     }
     return true;
   });
-  return drawCards(player, Math.min(3, Math.max(0, limit - player.hand.length)), random);
+  return drawCards(player, discarded, random);
 }
 
 function totalIngredients(meal) {
