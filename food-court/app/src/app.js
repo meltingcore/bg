@@ -268,6 +268,7 @@ function connectOnlineSession(session) {
   online.connection?.close();
   online.roomId = session.roomId;
   online.token = session.token;
+  online.room = session.room || online.room;
   online.busy = false;
   online.error = "";
   playMode = "online";
@@ -660,6 +661,9 @@ function onlineEntrySetup() {
     return `<div class="online-entry-state"><span class="loading-spinner"></span><strong>Opening the private table…</strong></div>`;
   }
   if (online.room?.you) return joinedRoomSetup();
+  if (online.token) {
+    return `<div class="online-entry-state"><span class="loading-spinner"></span><strong>Connecting to your private table…</strong><small>Your seat is saved on this device.</small></div>`;
+  }
 
   const joining = Boolean(online.roomId);
   const roomUnavailable = joining && online.room && !online.room.joinable;

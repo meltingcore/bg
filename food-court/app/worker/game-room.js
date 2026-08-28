@@ -100,7 +100,12 @@ export class GameRoom {
         const room = createRoomState(body);
         await this.save(room);
         const host = room.players[0];
-        return json({ roomId: room.id, playerId: host.id, token: host.token });
+        return json({
+          roomId: room.id,
+          playerId: host.id,
+          token: host.token,
+          room: roomSnapshot(room, host.id, this.connectedPlayerIds()),
+        });
       }
 
       const room = await this.room();
@@ -114,7 +119,11 @@ export class GameRoom {
         const session = joinRoomState(room, await requestBody(request));
         await this.save(room);
         this.broadcast(room);
-        return json({ roomId: room.id, ...session });
+        return json({
+          roomId: room.id,
+          ...session,
+          room: roomSnapshot(room, session.playerId, this.connectedPlayerIds()),
+        });
       }
 
       if (route === "leave" && request.method === "POST") {

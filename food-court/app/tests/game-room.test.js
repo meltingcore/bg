@@ -98,3 +98,30 @@ test("an abnormal WebSocket close does not echo a reserved close code", async ()
 
   await assert.doesNotReject(() => durableRoom.webSocketClose(socket, 1005, "", false));
 });
+
+test("creating a room returns the authenticated host snapshot immediately", async () => {
+  const mock = roomContext(undefined);
+  const durableRoom = new GameRoom(mock.ctx, {});
+  const response = await durableRoom.fetch(new Request("https://room.internal/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      roomId: "ABCDEFGH",
+      name: "Host chef",
+      cuisineId: "italy",
+      maxPlayers: 3,
+      aiCuisineIds: ["france"],
+    }),
+  }));
+  const session = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(session.roomId, "ABCDEFGH");
+  assert.equal(session.room.you, session.playerId);
+  assert.equal(session.room.isHost, true);
+  assert.equal(session.room.maxPlayers, 3);
+  assert.deepEqual(
+    session.room.players.map((player) => player.cuisineId),
+    ["italy", "france"],
+  );
+});
