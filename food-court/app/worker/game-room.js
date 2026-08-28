@@ -192,8 +192,9 @@ export class GameRoom {
     }
   }
 
-  async webSocketClose(socket, code, reason) {
-    socket.close(code, reason);
+  async webSocketClose() {
+    // The current compatibility date enables Cloudflare's automatic close reply.
+    // Calling close() here can throw for reserved event codes such as 1005/1006.
     const room = await this.room();
     if (room) this.broadcast(room);
   }

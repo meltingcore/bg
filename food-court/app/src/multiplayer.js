@@ -93,10 +93,10 @@ export function forgetRoomToken(roomId) {
   }
 }
 
-export function createRoom({ name, cuisineId }) {
+export function createRoom({ name, cuisineId, maxPlayers, aiCuisineIds }) {
   return requestJson("/api/rooms", {
     method: "POST",
-    body: JSON.stringify({ name, cuisineId }),
+    body: JSON.stringify({ name, cuisineId, maxPlayers, aiCuisineIds }),
   });
 }
 

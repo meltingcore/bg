@@ -64,6 +64,71 @@ test("a room enforces unique restaurants and a four-seat human limit", () => {
   );
 });
 
+test("a room can be created with configured human and AI seats", () => {
+  const room = createRoomState({
+    roomId: "SETUP123",
+    name: "Host chef",
+    cuisineId: "italy",
+    maxPlayers: 4,
+    aiCuisineIds: ["france", "china"],
+    playerId: "host",
+    token: "host-token",
+  });
+
+  assert.equal(room.maxPlayers, 4);
+  assert.equal(room.players.length, 3);
+  assert.deepEqual(
+    room.players.filter((player) => player.isAi).map((player) => player.cuisineId),
+    ["france", "china"],
+  );
+  assert.equal(roomSnapshot(room, "host").maxPlayers, 4);
+});
+
+test("a configured room size limits the number of human seats", () => {
+  const room = createRoomState({
+    roomId: "SMALL123",
+    name: "Host chef",
+    cuisineId: "italy",
+    maxPlayers: 2,
+    playerId: "host",
+    token: "host-token",
+  });
+  joinRoomState(room, {
+    name: "Guest",
+    cuisineId: "france",
+    playerId: "guest",
+    playerToken: "guest-token",
+  });
+
+  assert.throws(
+    () => joinRoomState(room, { name: "Third", cuisineId: "china" }),
+    (error) => error instanceof RoomError && error.code === "ROOM_FULL",
+  );
+});
+
+test("a configured room waits for every selected seat before starting", () => {
+  const room = createRoomState({
+    roomId: "WAIT1234",
+    name: "Host chef",
+    cuisineId: "italy",
+    maxPlayers: 3,
+    playerId: "host",
+    token: "host-token",
+  });
+  joinRoomState(room, {
+    name: "Guest",
+    cuisineId: "france",
+    playerId: "guest",
+    playerToken: "guest-token",
+  });
+
+  assert.equal(roomSnapshot(room, "host").startable, false);
+  assert.throws(
+    () => applyRoomAction(room, "host", { type: "start" }, stableRandom),
+    (error) => error instanceof RoomError && error.code === "OPEN_SEATS",
+  );
+});
+
 test("server snapshots keep rival hands and future customers private", () => {
   const room = roomWithHost();
   applyRoomAction(room, "host", { type: "add_ai", cuisineId: "france" }, stableRandom);

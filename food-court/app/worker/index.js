@@ -61,9 +61,17 @@ async function createRoom(request, env) {
     const response = await stub.fetch("https://room.internal/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ roomId, name: body.name, cuisineId: body.cuisineId }),
+      body: JSON.stringify({
+        roomId,
+        name: body.name,
+        cuisineId: body.cuisineId,
+        maxPlayers: body.maxPlayers,
+        aiCuisineIds: body.aiCuisineIds,
+      }),
     });
     if (response.status !== 409) return response;
+    const payload = await response.clone().json().catch(() => ({}));
+    if (payload.code !== "ROOM_EXISTS") return response;
   }
   return apiError("A room code could not be allocated. Try again.", 503, "ROOM_CODE_UNAVAILABLE");
 }

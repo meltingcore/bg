@@ -4513,7 +4513,9 @@ button:focus-visible {
   }
 
   .selected-brief p {
-    display: none;
+    margin-top: 2px;
+    font-size: 0.72rem;
+    line-height: 1.25;
   }
 
   .match-setup {
@@ -5585,6 +5587,11 @@ button:focus-visible {
 
 .online-entry-button { width: 100%; margin-top: 12px; }
 .online-entry-panel > .setup-note { margin: 9px 2px 0; }
+.online-table-setup { margin: 12px 0 0; }
+.online-table-setup .opponent-count-row + .opponent-count-row {
+  padding-top: 10px;
+  border-top: 1px solid rgba(79, 68, 50, 0.12);
+}
 
 .online-error {
   margin: 10px 0 0;
