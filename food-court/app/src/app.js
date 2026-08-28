@@ -26,6 +26,7 @@ import {
   joinRoom,
   leaveRoom,
   loadRoom,
+  normalizeRoomId,
   roomIdFromUrl,
   serializeMeal,
   shareableRoomUrl,
@@ -35,24 +36,27 @@ import {
 
 const app = document.querySelector("#app");
 const announcer = document.querySelector("#announcer");
+const initialRoomId = roomIdFromUrl();
 
 let screen = "lobby";
 let selectedCuisineId = "italy";
 let opponentCount = 1;
 let selectedOpponentCuisineIds = ["france"];
 let game = null;
-let playMode = roomIdFromUrl() ? "online" : "solo";
+let playMode = initialRoomId ? "online" : "solo";
 let playerName = "Guest chef";
 let onlineHumanCount = 2;
 let onlineAiCount = 0;
 let selectedOnlineAiCuisineIds = [];
+let onlineEntryMode = initialRoomId ? "join" : "create";
+let roomCodeInput = initialRoomId || "";
 let toastTimer = null;
 let dialogFocusPending = false;
 let focusReturnAction = null;
 let customerCardObserver = null;
 let responsiveLayoutTimer = null;
 const online = {
-  roomId: roomIdFromUrl(),
+  roomId: initialRoomId,
   token: null,
   room: null,
   connection: null,
@@ -326,6 +330,56 @@ async function joinOnlineRoom() {
   }
 }
 
+async function findOnlineRoom() {
+  const roomId = normalizeRoomId(roomCodeInput);
+  if (!roomId) {
+    online.error = "Enter the eight-character room code from the host.";
+    render();
+    return;
+  }
+
+  online.busy = true;
+  online.error = "";
+  online.room = null;
+  render();
+
+  const token = storedRoomToken(roomId);
+  if (token) {
+    try {
+      connectOnlineSession(await joinRoom(roomId, { token }));
+      return;
+    } catch (error) {
+      if (error.code === "INVALID_SESSION") forgetRoomToken(roomId);
+      else online.error = error.message;
+    }
+  }
+
+  try {
+    const { room } = await loadRoom(roomId);
+    online.roomId = roomId;
+    online.room = room;
+    online.error = "";
+    roomCodeInput = roomId;
+    setRoomUrl(roomId);
+
+    const selectedCuisineTaken = room.players.some((player) =>
+      player.cuisineId === selectedCuisineId);
+    if (selectedCuisineTaken) {
+      const availableCuisine = CUISINE_LIST.find((cuisine) =>
+        !room.players.some((player) => player.cuisineId === cuisine.id));
+      if (availableCuisine) selectedCuisineId = availableCuisine.id;
+    }
+  } catch (error) {
+    online.roomId = null;
+    online.room = null;
+    online.error = error.message;
+    setRoomUrl();
+  } finally {
+    online.busy = false;
+    render();
+  }
+}
+
 async function initializeOnlineRoom() {
   if (!online.roomId) return;
   online.busy = true;
@@ -379,6 +433,8 @@ async function leaveOnlineTable() {
   online.busy = false;
   online.connectionStatus = "disconnected";
   online.pendingAction = null;
+  onlineEntryMode = "create";
+  roomCodeInput = "";
   game = null;
   screen = "lobby";
   playMode = "solo";
@@ -674,23 +730,42 @@ function joinedRoomSetup() {
 
 function onlineEntrySetup() {
   if (online.busy && !online.room) {
-    return `<div class="online-entry-state"><span class="loading-spinner"></span><strong>Opening the private table…</strong></div>`;
+    const busyLabel = onlineEntryMode === "join" ? "Looking up the private table…" : "Opening the private table…";
+    return `<div class="online-entry-state"><span class="loading-spinner"></span><strong>${busyLabel}</strong></div>`;
   }
   if (online.room?.you) return joinedRoomSetup();
   if (online.token) {
     return `<div class="online-entry-state"><span class="loading-spinner"></span><strong>Connecting to your private table…</strong><small>Your seat is saved on this device.</small></div>`;
   }
 
-  const joining = Boolean(online.roomId);
-  const roomUnavailable = joining && online.room && !online.room.joinable;
+  const joining = onlineEntryMode === "join";
+  const roomFound = joining && Boolean(online.roomId && online.room);
+  const roomUnavailable = roomFound && !online.room.joinable;
   return `
     <section class="online-entry-panel">
+      <div class="online-entry-switcher" aria-label="Private table action">
+        <button data-action="set-online-entry-mode" data-entry-mode="create" class="${joining ? "" : "is-selected"}" aria-pressed="${!joining}">
+          <span>Create a table</span><small>Choose people and AI seats</small>
+        </button>
+        <button data-action="set-online-entry-mode" data-entry-mode="join" class="${joining ? "is-selected" : ""}" aria-pressed="${joining}">
+          <span>Join with a code</span><small>Enter the host’s room code</small>
+        </button>
+      </div>
+      ${joining ? `
+        <div class="room-code-row">
+          <label class="room-code-field">
+            <span>Room code</span>
+            <input data-room-code maxlength="8" value="${escapeHtml(roomCodeInput)}" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCDEFGH" ${roomFound ? "readonly" : ""} />
+          </label>
+          ${roomFound ? `<button class="secondary-button" data-action="change-room-code">Different code</button>` : ""}
+        </div>
+      ` : ""}
       <label class="player-name-field">
         <span>Your display name</span>
         <input data-player-name maxlength="24" value="${escapeHtml(playerName)}" autocomplete="nickname" placeholder="Guest chef" />
       </label>
       ${joining ? "" : onlineTableSetup()}
-      ${joining && online.room ? `
+      ${roomFound ? `
         <div class="room-preview">
           <span>Room ${online.room.id}</span>
           <strong>${online.room.players.length} seated player${online.room.players.length === 1 ? "" : "s"}</strong>
@@ -700,10 +775,10 @@ function onlineEntrySetup() {
       ${roomUnavailable ? `
         <div class="online-entry-state is-error"><strong>${online.room.status === "playing" ? "This game is already in progress." : "This table is full."}</strong><small>Ask the host to open a seat, or create a new table.</small></div>
       ` : `
-        <button class="primary-button online-entry-button" data-action="${joining ? "join-room" : "create-room"}" ${online.busy ? "disabled" : ""}>
-          ${online.busy ? "Connecting…" : joining ? "Join private table" : "Create private table"} <span>→</span>
+        <button class="primary-button online-entry-button" data-action="${joining ? roomFound ? "join-room" : "find-room" : "create-room"}" ${online.busy || (joining && !roomFound && !normalizeRoomId(roomCodeInput)) ? "disabled" : ""}>
+          ${online.busy ? "Connecting…" : joining ? roomFound ? "Join private table" : "Find private table" : "Create private table"} <span>→</span>
         </button>
-        <p class="setup-note">No account needed. Your session stays on this device so you can reconnect after a refresh.</p>
+        <p class="setup-note">${joining && !roomFound ? "Enter the code shown on the host’s private-table panel." : "No account needed. Your session stays on this device so you can reconnect after a refresh."}</p>
       `}
     </section>
   `;
@@ -2130,6 +2205,22 @@ app.addEventListener("click", (event) => {
       setRoomUrl();
     }
     render();
+  } else if (action === "set-online-entry-mode") {
+    onlineEntryMode = target.dataset.entryMode;
+    online.roomId = null;
+    online.room = null;
+    online.error = "";
+    roomCodeInput = "";
+    setRoomUrl();
+    render();
+  } else if (action === "change-room-code") {
+    online.roomId = null;
+    online.room = null;
+    online.error = "";
+    roomCodeInput = "";
+    setRoomUrl();
+    render();
+    window.queueMicrotask(() => document.querySelector("input[data-room-code]")?.focus());
   } else if (action === "select-cuisine") {
     selectedCuisineId = target.dataset.cuisine;
     if (playMode === "online" && online.room?.you) {
@@ -2159,6 +2250,8 @@ app.addEventListener("click", (event) => {
     void createOnlineRoom();
   } else if (action === "join-room") {
     void joinOnlineRoom();
+  } else if (action === "find-room") {
+    void findOnlineRoom();
   } else if (action === "copy-invite") {
     void copyInviteLink();
   } else if (action === "leave-room") {
@@ -2289,6 +2382,18 @@ app.addEventListener("change", (event) => {
 });
 
 app.addEventListener("input", (event) => {
+  const roomCode = event.target.closest("input[data-room-code]");
+  if (roomCode) {
+    roomCodeInput = roomCode.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
+    roomCode.value = roomCodeInput;
+    online.error = "";
+    document.querySelector(".online-error")?.remove();
+    document.querySelector('[data-action="find-room"]')?.toggleAttribute(
+      "disabled",
+      !normalizeRoomId(roomCodeInput),
+    );
+    return;
+  }
   const input = event.target.closest("input[data-player-name]");
   if (!input) return;
   playerName = input.value.slice(0, 24);
@@ -2297,11 +2402,16 @@ app.addEventListener("input", (event) => {
 document.addEventListener("keydown", (event) => {
   const dialogs = [...document.querySelectorAll('[role="dialog"]')];
   const activeDialog = dialogs.at(-1);
-  if (event.key === "Enter" && event.target.matches("input[data-player-name]")) {
+  if (event.key === "Enter" && event.target.matches("input[data-room-code]")) {
+    event.preventDefault();
+    if (!online.busy && normalizeRoomId(roomCodeInput)) void findOnlineRoom();
+  } else if (event.key === "Enter" && event.target.matches("input[data-player-name]")) {
     event.preventDefault();
     if (online.busy || (online.roomId && online.room && !online.room.joinable)) return;
-    if (online.roomId) void joinOnlineRoom();
-    else void createOnlineRoom();
+    if (onlineEntryMode === "join") {
+      if (online.roomId && online.room) void joinOnlineRoom();
+      else if (normalizeRoomId(roomCodeInput)) void findOnlineRoom();
+    } else void createOnlineRoom();
   } else if (event.key === "Tab" && activeDialog) {
     const focusable = [...activeDialog.querySelectorAll('button:not([disabled]), select:not([disabled]), [href], [tabindex]:not([tabindex="-1"])')];
     if (focusable.length) {

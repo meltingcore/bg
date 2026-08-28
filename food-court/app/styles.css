@@ -5485,7 +5485,8 @@ button:focus-visible {
 }
 
 /* Private online tables */
-.play-mode-switcher {
+.play-mode-switcher,
+.online-entry-switcher {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
@@ -5496,7 +5497,8 @@ button:focus-visible {
   background: rgb(255 251 234 / 36%);
 }
 
-.play-mode-switcher button {
+.play-mode-switcher button,
+.online-entry-switcher button {
   display: grid;
   gap: 2px;
   min-height: 54px;
@@ -5511,13 +5513,17 @@ button:focus-visible {
   transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
 }
 
-.play-mode-switcher button span { font-weight: 800; }
-.play-mode-switcher button small { color: rgba(44, 38, 31, 0.64); }
-.play-mode-switcher button:hover {
+.play-mode-switcher button span,
+.online-entry-switcher button span { font-weight: 800; }
+.play-mode-switcher button small,
+.online-entry-switcher button small { color: rgba(44, 38, 31, 0.64); }
+.play-mode-switcher button:hover,
+.online-entry-switcher button:hover {
   border-color: var(--theme-accent);
   transform: translateY(-1px);
 }
-.play-mode-switcher button.is-selected {
+.play-mode-switcher button.is-selected,
+.online-entry-switcher button.is-selected {
   color: #fffaf0;
   border-color: color-mix(in srgb, var(--theme-accent), black 12%);
   background: linear-gradient(
@@ -5528,7 +5534,8 @@ button:focus-visible {
   box-shadow: 0 5px 14px color-mix(in srgb, var(--theme-accent), transparent 68%);
 }
 
-.play-mode-switcher button.is-selected small {
+.play-mode-switcher button.is-selected small,
+.online-entry-switcher button.is-selected small {
   color: rgb(255 250 240 / 78%);
 }
 
@@ -5554,7 +5561,22 @@ button:focus-visible {
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.72);
 }
 
-.player-name-field {
+.online-entry-switcher {
+  margin: 0 0 12px;
+}
+
+.room-code-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+  margin-bottom: 11px;
+}
+
+.room-code-row .secondary-button { min-height: 46px; padding-inline: 12px; }
+
+.player-name-field,
+.room-code-field {
   display: grid;
   gap: 6px;
   color: rgba(44, 38, 31, 0.72);
@@ -5564,7 +5586,8 @@ button:focus-visible {
   text-transform: uppercase;
 }
 
-.player-name-field input {
+.player-name-field input,
+.room-code-field input {
   width: 100%;
   min-height: 46px;
   padding: 0 13px;
@@ -5580,10 +5603,20 @@ button:focus-visible {
   text-transform: none;
 }
 
-.player-name-field input:focus {
+.player-name-field input:focus,
+.room-code-field input:focus {
   border-color: var(--cuisine, #b46b32);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--cuisine, #b46b32) 18%, transparent);
 }
+
+.room-code-field input {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.room-code-field input[readonly] { color: rgba(40, 33, 25, 0.64); }
 
 .online-entry-button { width: 100%; margin-top: 12px; }
 .online-entry-panel > .setup-note { margin: 9px 2px 0; }
@@ -5802,8 +5835,12 @@ button:focus-visible {
 }
 
 @media (max-width: 560px) {
-  .play-mode-switcher { grid-template-columns: 1fr; }
-  .play-mode-switcher button { min-height: 46px; }
+  .play-mode-switcher,
+  .online-entry-switcher { grid-template-columns: 1fr; }
+  .play-mode-switcher button,
+  .online-entry-switcher button { min-height: 46px; }
+  .room-code-row { grid-template-columns: 1fr; }
+  .room-code-row .secondary-button { width: 100%; }
   .room-seats { grid-template-columns: 1fr; }
   .room-invite-row { align-items: stretch; flex-direction: column; }
   .room-invite-row .secondary-button { width: 100%; }
