@@ -2,6 +2,9 @@
 
 A standalone player-facing browser game for Food Court.
 
+> **Rules compatibility:** The app currently implements the v0.14.1 Tips rules. It has not yet been
+> updated for the v0.15.0 Promotion Cards, open bidding, or Order-only customer scoring rules.
+
 ## Run Locally
 
 ```sh

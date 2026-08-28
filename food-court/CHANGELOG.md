@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.15.0]
+
+CHANGES:
+
+* Replaced Tips Cards and Tips Value with Promotion Cards and refactor the logic behind them to
+  allow for catch up opportunities and tie resolution.
+* Customer bonuses nerfed to prevent snowballing.
+
+FIXES:
+
+* Multiplayer fixes in the webapp
+
 ## [0.14.1]
 
 FIXES:

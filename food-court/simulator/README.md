@@ -1,6 +1,9 @@
 # Food Court Simulator
 
-Local-only, headless balance-analysis tooling for the current Food Court rules.
+Local-only, headless balance-analysis tooling for Food Court.
+
+> **Rules compatibility:** The simulator currently models the v0.14.1 Tips rules. It has not yet
+> been updated for the v0.15.0 Promotion Cards, open bidding, or Order-only customer scoring rules.
 
 ## Automated Playtests
 
