@@ -7,6 +7,8 @@ export class MultiplayerError extends Error {
   }
 }
 
+export const ROOM_HEARTBEAT_INTERVAL_MS = 5000;
+
 async function requestJson(path, options = {}) {
   let response;
   try {
@@ -150,7 +152,7 @@ export function connectToRoom(roomId, token, handlers = {}) {
       window.clearInterval(heartbeatTimer);
       heartbeatTimer = window.setInterval(() => {
         if (socket?.readyState === WebSocket.OPEN) socket.send("ping");
-      }, 25000);
+      }, ROOM_HEARTBEAT_INTERVAL_MS);
     });
     socket.addEventListener("message", (event) => {
       if (event.data === "pong") return;

@@ -283,7 +283,7 @@ function connectOnlineSession(session) {
     },
     onStatus: (status) => {
       online.connectionStatus = status;
-      render();
+      updateRoomConnectionUi();
     },
   });
   render();
@@ -584,15 +584,31 @@ function modeSwitcher() {
   `;
 }
 
+const ROOM_CONNECTION_LABELS = {
+  connected: "Live",
+  connecting: "Connecting",
+  reconnecting: "Reconnecting",
+  failed: "Connection lost",
+  disconnected: "Offline",
+};
+
 function roomConnectionBadge() {
-  const labels = {
-    connected: "Live",
-    connecting: "Connecting",
-    reconnecting: "Reconnecting",
-    failed: "Connection lost",
-    disconnected: "Offline",
-  };
-  return `<span class="room-connection is-${online.connectionStatus}"><i></i>${labels[online.connectionStatus] || "Connecting"}</span>`;
+  return `<span class="room-connection is-${online.connectionStatus}"><i></i>${ROOM_CONNECTION_LABELS[online.connectionStatus] || "Connecting"}</span>`;
+}
+
+function updateRoomConnectionUi() {
+  document.querySelectorAll(".room-connection").forEach((badge) => {
+    badge.className = `room-connection is-${online.connectionStatus}`;
+    badge.replaceChildren(document.createElement("i"), document.createTextNode(
+      ROOM_CONNECTION_LABELS[online.connectionStatus] || "Connecting",
+    ));
+  });
+
+  const startButton = document.querySelector('[data-action="start-online-game"]');
+  if (startButton) {
+    const enoughPlayers = online.room?.startable ?? online.room?.players.length >= 2;
+    startButton.disabled = !(enoughPlayers && online.connectionStatus === "connected");
+  }
 }
 
 function roomPlayerCard(player, index) {
