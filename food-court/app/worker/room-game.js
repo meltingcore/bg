@@ -64,6 +64,31 @@ function assertCuisineAvailable(room, cuisineId, ignoredPlayerId = null) {
   }
 }
 
+function configuredPlayerLimit(value) {
+  const limit = Number(value);
+  if (!Number.isInteger(limit) || limit < MIN_PLAYERS || limit > MAX_PLAYERS) {
+    throw new RoomError(
+      "Choose a table size between two and four players.",
+      400,
+      "INVALID_PLAYER_COUNT",
+    );
+  }
+  return limit;
+}
+
+function roomPlayerLimit(room) {
+  try {
+    return configuredPlayerLimit(room.maxPlayers);
+  } catch {
+    // Rooms created before configurable tables were introduced support four players.
+    return MAX_PLAYERS;
+  }
+}
+
+function roomRequiredPlayerCount(room) {
+  return room.maxPlayers === undefined ? MIN_PLAYERS : roomPlayerLimit(room);
+}
+
 function playerSession(player) {
   return { playerId: player.id, token: player.token };
 }
@@ -72,11 +97,21 @@ export function createRoomState({
   roomId,
   name,
   cuisineId,
+  maxPlayers,
+  aiCuisineIds = [],
   playerId = randomId("human"),
   token = randomToken(),
   now = Date.now(),
 }) {
   assertCuisine(cuisineId);
+  const playerLimit = maxPlayers === undefined ? MAX_PLAYERS : configuredPlayerLimit(maxPlayers);
+  if (!Array.isArray(aiCuisineIds) || aiCuisineIds.length > playerLimit - 1) {
+    throw new RoomError(
+      "The selected AI rivals do not fit at this table.",
+      400,
+      "INVALID_AI_COUNT",
+    );
+  }
   const host = {
     id: playerId,
     token,
@@ -84,15 +119,27 @@ export function createRoomState({
     cuisineId,
     isAi: false,
   };
-  return {
+  const room = {
     id: roomId,
     status: "lobby",
     hostPlayerId: host.id,
     players: [host],
+    ...(maxPlayers === undefined ? {} : { maxPlayers: playerLimit }),
     game: null,
     createdAt: now,
     updatedAt: now,
   };
+  aiCuisineIds.forEach((aiCuisineId, index) => {
+    assertCuisineAvailable(room, aiCuisineId);
+    room.players.push({
+      id: randomId("ai"),
+      token: null,
+      name: `AI rival ${index + 1}`,
+      cuisineId: aiCuisineId,
+      isAi: true,
+    });
+  });
+  return room;
 }
 
 export function findPlayerByToken(room, token) {
@@ -115,10 +162,10 @@ export function joinRoomState(room, {
   }
 
   assertCuisineAvailable(room, cuisineId);
-  if (room.players.length >= MAX_PLAYERS) {
+  if (room.players.length >= roomPlayerLimit(room)) {
     const replaceableAi = [...room.players].reverse().find((player) => player.isAi);
     if (!replaceableAi) {
-      throw new RoomError("This table already has four human players.", 409, "ROOM_FULL");
+      throw new RoomError("This table already has all its human players.", 409, "ROOM_FULL");
     }
     room.players = room.players.filter((player) => player.id !== replaceableAi.id);
   }
@@ -148,14 +195,16 @@ function publicPlayers(room, connectedPlayerIds = []) {
 }
 
 export function roomPreview(room, connectedPlayerIds = []) {
+  const maxPlayers = roomPlayerLimit(room);
   return {
     id: room.id,
     status: room.status,
     hostPlayerId: room.hostPlayerId,
     players: publicPlayers(room, connectedPlayerIds),
-    maxPlayers: MAX_PLAYERS,
+    maxPlayers,
+    startable: room.players.length >= roomRequiredPlayerCount(room),
     joinable: room.status === "lobby" && (
-      room.players.length < MAX_PLAYERS || room.players.some((player) => player.isAi)
+      room.players.length < maxPlayers || room.players.some((player) => player.isAi)
     ),
   };
 }
@@ -422,8 +471,15 @@ function startGame(room, random) {
   if (room.players.length < MIN_PLAYERS) {
     throw new RoomError("Add at least one rival before starting.", 409, "NOT_ENOUGH_PLAYERS");
   }
-  if (room.players.length > MAX_PLAYERS) {
-    throw new RoomError("A table can have at most four players.", 409, "ROOM_FULL");
+  if (room.players.length < roomRequiredPlayerCount(room)) {
+    throw new RoomError(
+      "Wait for every configured person or fill the open seats with AI rivals.",
+      409,
+      "OPEN_SEATS",
+    );
+  }
+  if (room.players.length > roomPlayerLimit(room)) {
+    throw new RoomError("This table has too many players.", 409, "ROOM_FULL");
   }
   if (unique(room.players.map((player) => player.cuisineId)).length !== room.players.length) {
     throw new RoomError("Every restaurant deck at the table must be unique.", 409, "DUPLICATE_CUISINE");
@@ -443,8 +499,8 @@ function applyLobbyAction(room, playerId, action, random) {
     player.name = normalizePlayerName(action.name);
   } else if (action.type === "add_ai") {
     assertHost(room, playerId);
-    if (room.players.length >= MAX_PLAYERS) {
-      throw new RoomError("This table already has four players.", 409, "ROOM_FULL");
+    if (room.players.length >= roomPlayerLimit(room)) {
+      throw new RoomError("This table is already full.", 409, "ROOM_FULL");
     }
     assertCuisineAvailable(room, action.cuisineId);
     room.players.push({

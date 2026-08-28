@@ -43,6 +43,9 @@ let selectedOpponentCuisineIds = ["france"];
 let game = null;
 let playMode = roomIdFromUrl() ? "online" : "solo";
 let playerName = "Guest chef";
+let onlineHumanCount = 2;
+let onlineAiCount = 0;
+let selectedOnlineAiCuisineIds = [];
 let toastTimer = null;
 let dialogFocusPending = false;
 let focusReturnAction = null;
@@ -291,7 +294,12 @@ async function createOnlineRoom() {
   rememberPlayerName();
   render();
   try {
-    connectOnlineSession(await createRoom({ name: playerName, cuisineId: selectedCuisineId }));
+    connectOnlineSession(await createRoom({
+      name: playerName,
+      cuisineId: selectedCuisineId,
+      maxPlayers: onlineHumanCount + onlineAiCount,
+      aiCuisineIds: selectedOnlineAiCuisineIds,
+    }));
   } catch (error) {
     online.busy = false;
     online.error = error.message;
@@ -471,6 +479,20 @@ function reconcileOpponentDecks() {
   selectedOpponentCuisineIds = next;
 }
 
+function reconcileOnlineAiDecks() {
+  const available = CUISINE_LIST.map((cuisine) => cuisine.id)
+    .filter((id) => id !== selectedCuisineId);
+  const next = [];
+  for (let index = 0; index < onlineAiCount; index += 1) {
+    const preferred = selectedOnlineAiCuisineIds[index];
+    const selection = available.includes(preferred) && !next.includes(preferred)
+      ? preferred
+      : available.find((id) => !next.includes(id));
+    next.push(selection);
+  }
+  selectedOnlineAiCuisineIds = next;
+}
+
 function opponentSetup() {
   return `
     <div class="match-setup">
@@ -500,6 +522,53 @@ function opponentSetup() {
   `;
 }
 
+function onlineTableSetup() {
+  const minimumAiCount = onlineHumanCount === 1 ? 1 : 0;
+  const maximumAiCount = 4 - onlineHumanCount;
+  const aiCounts = Array.from(
+    { length: maximumAiCount - minimumAiCount + 1 },
+    (_, index) => minimumAiCount + index,
+  );
+  return `
+    <div class="match-setup online-table-setup">
+      <div class="opponent-count-row">
+        <div><span class="step-label"><b>2</b> Set the table</span><strong>People, including you</strong></div>
+        <div class="count-toggle" aria-label="Number of human players">
+          ${[1, 2, 3, 4].map((count) => `
+            <button data-action="set-online-human-count" data-count="${count}" class="${onlineHumanCount === count ? "is-selected" : ""}" aria-pressed="${onlineHumanCount === count}">${count}</button>
+          `).join("")}
+        </div>
+      </div>
+      <div class="opponent-count-row">
+        <div><span class="eyebrow">Fill open seats</span><strong>AI rivals</strong></div>
+        <div class="count-toggle" aria-label="Number of AI rivals">
+          ${aiCounts.map((count) => `
+            <button data-action="set-online-ai-count" data-count="${count}" class="${onlineAiCount === count ? "is-selected" : ""}" aria-pressed="${onlineAiCount === count}">${count}</button>
+          `).join("")}
+        </div>
+      </div>
+      ${selectedOnlineAiCuisineIds.length ? `
+        <div class="opponent-selects">
+          ${selectedOnlineAiCuisineIds.map((selectedId, index) => `
+            <label>
+              <span>AI rival ${index + 1}</span>
+              <select data-online-ai-index="${index}" aria-label="Restaurant deck for AI rival ${index + 1}">
+                ${CUISINE_LIST.filter((cuisine) => cuisine.id !== selectedCuisineId).map((cuisine) => {
+                  const chosenElsewhere = selectedOnlineAiCuisineIds.some(
+                    (id, rivalIndex) => rivalIndex !== index && id === cuisine.id,
+                  );
+                  return `<option value="${cuisine.id}" ${cuisine.id === selectedId ? "selected" : ""} ${chosenElsewhere ? "disabled" : ""}>${cuisine.flag} ${escapeHtml(cuisine.name)}</option>`;
+                }).join("")}
+              </select>
+            </label>
+          `).join("")}
+        </div>
+      ` : ""}
+      <p class="setup-note">${onlineHumanCount} human seat${onlineHumanCount === 1 ? "" : "s"} and ${onlineAiCount} AI rival${onlineAiCount === 1 ? "" : "s"}. Share the invite link for the other people.</p>
+    </div>
+  `;
+}
+
 function modeSwitcher() {
   if (online.room?.you) return "";
   return `
@@ -508,7 +577,7 @@ function modeSwitcher() {
         <span>Single player</span><small>Play with AI bots</small>
       </button>
       <button data-action="set-play-mode" data-mode="online" class="${playMode === "online" ? "is-selected" : ""}" aria-pressed="${playMode === "online"}">
-        <span>Multi player</span><small>Play with up to 3 people</small>
+        <span>Multiplayer table</span><small>Choose people and AI rivals</small>
       </button>
     </div>
   `;
@@ -555,7 +624,7 @@ function joinedRoomSetup() {
   const isHost = room.isHost;
   const availableCuisine = CUISINE_LIST.find((cuisine) =>
     !room.players.some((player) => player.cuisineId === cuisine.id));
-  const enoughPlayers = room.players.length >= 2;
+  const enoughPlayers = room.startable ?? room.players.length >= 2;
   return `
     <section class="online-room-panel" aria-label="Private online table">
       <header class="online-room-heading">
@@ -600,6 +669,7 @@ function onlineEntrySetup() {
         <span>Your display name</span>
         <input data-player-name maxlength="24" value="${escapeHtml(playerName)}" autocomplete="nickname" placeholder="Guest chef" />
       </label>
+      ${joining ? "" : onlineTableSetup()}
       ${joining && online.room ? `
         <div class="room-preview">
           <span>Room ${online.room.id}</span>
@@ -2046,7 +2116,18 @@ app.addEventListener("click", (event) => {
       sendRoomAction({ type: "set_cuisine", cuisineId: selectedCuisineId });
     } else {
       reconcileOpponentDecks();
+      reconcileOnlineAiDecks();
     }
+    render();
+  } else if (action === "set-online-human-count") {
+    onlineHumanCount = Number(target.dataset.count);
+    const minimumAiCount = onlineHumanCount === 1 ? 1 : 0;
+    onlineAiCount = Math.max(minimumAiCount, Math.min(onlineAiCount, 4 - onlineHumanCount));
+    reconcileOnlineAiDecks();
+    render();
+  } else if (action === "set-online-ai-count") {
+    onlineAiCount = Number(target.dataset.count);
+    reconcileOnlineAiDecks();
     render();
   } else if (action === "set-opponent-count") {
     opponentCount = Number(target.dataset.count);
@@ -2164,6 +2245,13 @@ app.addEventListener("click", (event) => {
 });
 
 app.addEventListener("change", (event) => {
+  const onlineAiSelect = event.target.closest("select[data-online-ai-index]");
+  if (onlineAiSelect) {
+    selectedOnlineAiCuisineIds[Number(onlineAiSelect.dataset.onlineAiIndex)] = onlineAiSelect.value;
+    reconcileOnlineAiDecks();
+    render();
+    return;
+  }
   const aiSelect = event.target.closest("select[data-ai-player-id]");
   if (aiSelect) {
     sendRoomAction({

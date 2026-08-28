@@ -85,3 +85,16 @@ test("an alarm retains a room while a player remains connected", async () => {
   assert.equal(mock.values().deleted, false);
   assert.ok(mock.values().alarmAt >= before + ROOM_IDLE_TTL_MS);
 });
+
+test("an abnormal WebSocket close does not echo a reserved close code", async () => {
+  const room = roomState();
+  const mock = roomContext(room);
+  const durableRoom = new GameRoom(mock.ctx, {});
+  const socket = {
+    close() {
+      throw new Error("The runtime must handle the close handshake.");
+    },
+  };
+
+  await assert.doesNotReject(() => durableRoom.webSocketClose(socket, 1005, "", false));
+});
