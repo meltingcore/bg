@@ -8,12 +8,12 @@ const ingredient = (name, count = 1, tag = "", subtype = "") => ({
 const drink = (name, condition, rule) => ({ name, condition, rule });
 
 export const CUSTOMER_VALUES = [
-  [1, 2],
-  [1, 3],
-  [2, 2],
-  [2, 2],
-  [3, 1],
-  [3, 2],
+  1,
+  1,
+  2,
+  2,
+  3,
+  3,
 ];
 
 export const CUISINES = {
@@ -26,7 +26,7 @@ export const CUISINES = {
     accent: "#3f7a4d",
     ability: "Perfect Pairing",
     abilityText: "Dishes with their exact pasta ingredient gain +1 serve value.",
-    tipsText: "Win with an exact pasta pairing; track that pasta ingredient.",
+    promotionText: "Lose the customer with an exact pasta pairing; track that pasta ingredient.",
     customerEffect: "Hand limit becomes 8 while refreshing.",
     recipes: [
       recipe("Farfalle al Salmone", 0),
@@ -70,7 +70,7 @@ export const CUISINES = {
     accent: "#3f55a5",
     ability: "Perfect Progression",
     abilityText: "Adjacent course pairs gain +1 each, to a maximum of +2.",
-    tipsText: "Win with a new course; track that recipe. Courses must be different.",
+    promotionText: "Lose the customer with a course not already promoted; track that recipe.",
     customerEffect: "After the initial Refresh draw, you may replace your whole hand.",
     recipes: [
       recipe("Soupe à l'Oignon", 0, "entree"),
@@ -113,7 +113,7 @@ export const CUISINES = {
     accent: "#c12f32",
     ability: "Double Service",
     abilityText: "Each pair of recipes served grants +1 serve value.",
-    tipsText: "Win with a pair of dishes of the same type; track one recipe.",
+    promotionText: "Lose the customer with a same-type dish pair; track one recipe.",
     customerEffect: "Easy dishes gain +1 serve value.",
     recipes: [
       recipe("Mapo Tofu", 0),
@@ -156,7 +156,7 @@ export const CUISINES = {
     accent: "#d8781d",
     ability: "Spice Harmony",
     abilityText: "Each distinct pair of different spices gains +1 serve value.",
-    tipsText: "Win with a new spice ingredient; track that spice.",
+    promotionText: "Lose the customer with a new spice ingredient; track that spice.",
     customerEffect: "Each pair of added ingredients gains +1 serve value.",
     recipes: [
       recipe("Jeera Rice", 0),
@@ -199,7 +199,7 @@ export const CUISINES = {
     accent: "#257b98",
     ability: "Load It Up",
     abilityText: "Add up to 2 ingredients above printed slots across your meal.",
-    tipsText: "Win with a burger or steak; track that recipe.",
+    promotionText: "Lose the customer with a burger or steak; track that recipe.",
     customerEffect: "Gain +1 for each pair of cards left in hand.",
     recipes: [
       recipe("Lobster Roll", 0),
@@ -246,8 +246,8 @@ export const CUISINES = {
     accent: "#704a91",
     ability: "Mixed Grill",
     abilityText: "Kebabs gain +1 for each non-kebab dish served with them.",
-    tipsText: "Win with a kebab dish; track that recipe.",
-    customerEffect: "Gain +1 if you trail an opponent in tracked Tips Cards.",
+    promotionText: "Lose the customer with a kebab dish; track that recipe.",
+    customerEffect: "Gain +1 if you trail an opponent in tracked Promotion Cards.",
     recipes: [
       recipe("Shish Kebab", 0, "kebab"),
       recipe("Adana Kebab", 0, "kebab"),
@@ -289,7 +289,7 @@ export const CUISINES = {
     accent: "#9f4e62",
     ability: "Measured Seasoning",
     abilityText: "Use exactly 1 seasoning ingredient in a meal to gain +1.",
-    tipsText: "Win with a new seasoning ingredient; track that seasoning.",
+    promotionText: "Lose the customer with a new seasoning ingredient; track that seasoning.",
     customerEffect: "Hard dishes gain +1 serve value.",
     recipes: [
       recipe("Shoyu Ramen", 0),
@@ -330,7 +330,7 @@ export const CUISINES = {
     accent: "#7b4b2a",
     ability: "Turn Up the Heat",
     abilityText: "Hot ingredients may fill zero-slot recipes; use at most 2 hot ingredients.",
-    tipsText: "Win with a hot ingredient; track that ingredient.",
+    promotionText: "Lose the customer with a hot ingredient; track that ingredient.",
     customerEffect: "Normal dishes gain +1 serve value.",
     recipes: [
       recipe("Quesadilla", 0),

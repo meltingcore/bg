@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 
 import { CUISINES, CUISINE_LIST } from "../src/data.js";
 import {
+  applyPromotionBid,
   buildCustomerDeck,
   buildRestaurantDeck,
   cardParticipatesInAbility,
@@ -11,16 +12,18 @@ import {
   chooseAiMeal,
   classifyContest,
   cleanupMeal,
+  createPromotionContest,
   createGame,
   determineUniqueWinner,
   drawCards,
   drawForRefresh,
+  GAME_ROUND_LIMIT,
   makePlayer,
   replaceForRefresh,
   scoreCustomer,
   scorePlayer,
   shuffle,
-  tipCandidates,
+  promotionCandidates,
 } from "../src/game.js";
 
 const stableRandom = () => 0.42;
@@ -243,9 +246,16 @@ test("the customer deck contains only cuisines selected for the match", () => {
   cuisineIds.forEach((cuisineId) => {
     assert.equal(customers.filter((customer) => customer.cuisineId === cuisineId).length, 6);
   });
+  assert.deepEqual(
+    customers.filter((customer) => customer.cuisineId === "italy").map((customer) => customer.order).sort(),
+    [1, 1, 2, 2, 3, 3],
+  );
+  assert.equal(customers.some((customer) => Object.hasOwn(customer, "promotions")), false);
 
   const game = createGame("italy", ["china", "mexico"], stableRandom);
   const gameCustomers = [game.activeCustomer, ...game.customerDeck];
+  assert.equal(GAME_ROUND_LIMIT, 10);
+  assert.equal(gameCustomers.length, cuisineIds.length * 6);
   assert.deepEqual(
     [...new Set(gameCustomers.map((customer) => customer.cuisineId))].sort(),
     cuisineIds.sort(),
@@ -266,7 +276,7 @@ test("Italian exact pasta pairing applies ability and validates Cappuccino", () 
   assert.equal(result.breakdown.Ability, 1);
   assert.equal(result.breakdown.Drink, 3);
   assert.equal(result.validDrink, true);
-  assert.deepEqual(tipCandidates(meal, "italy", []).map((card) => card.name), ["Spaghetti"]);
+  assert.deepEqual(promotionCandidates(meal, "italy", []).map((card) => card.name), ["Spaghetti"]);
 });
 
 test("customer difficulty bonuses use ingredients actually added", () => {
@@ -344,39 +354,78 @@ test("a multiplayer table falls through tied leaders to the next unique meal", (
   ]), "three");
 });
 
-test("customer score adds Tips Value only after its threshold", () => {
-  const customer = { order: 2, tips: 2 };
+test("customer score uses Order Value as the threshold for a single bonus point", () => {
+  const customer = { order: 2 };
   assert.deepEqual(scoreCustomer(customer, 1), {
     orderVp: 2,
-    tipsVp: 0,
-    tipsUnlocked: false,
+    promotionVp: 0,
+    promotionUnlocked: false,
     total: 2,
   });
   assert.deepEqual(scoreCustomer(customer, 2), {
     orderVp: 2,
-    tipsVp: 2,
-    tipsUnlocked: true,
-    total: 4,
+    promotionVp: 1,
+    promotionUnlocked: true,
+    total: 3,
   });
 
-  const player = { customers: [{ order: 2, tips: 2 }, { order: 3, tips: 1 }], tips: [] };
+  const player = { customers: [{ order: 2 }, { order: 3 }], promotions: [] };
   assert.equal(scorePlayer(player), 5);
-  player.tips.push({ id: "t1" });
+  player.promotions.push({ id: "t1" });
+  assert.equal(scorePlayer(player), 5);
+  player.promotions.push({ id: "t2" });
   assert.equal(scorePlayer(player), 6);
-  player.tips.push({ id: "t2" });
-  assert.equal(scorePlayer(player), 8);
+  player.promotions.push({ id: "t3" });
+  assert.equal(scorePlayer(player), 7);
 });
 
-test("tracked Tips Cards remain set aside from the discard and draw cycle", () => {
+test("open Promotion bidding raises, matches, withdraws, and discards committed cards", () => {
+  const players = ["one", "two", "three"].map((id) => ({
+    id,
+    promotions: [
+      { id: `${id}-p1`, type: "ingredient", name: "Promotion 1" },
+      { id: `${id}-p2`, type: "ingredient", name: "Promotion 2" },
+    ],
+    discard: [],
+  }));
+  const entries = players.map((player) => ({ id: player.id, value: 5, competing: true }));
+  let contest = createPromotionContest(entries, players);
+  contest = applyPromotionBid(contest, { type: "raise", playerId: "one" }, players, entries);
+  contest = applyPromotionBid(contest, { type: "match", playerId: "two" }, players, entries);
+  contest = applyPromotionBid(contest, { type: "withdraw", playerId: "three" }, players, entries);
+  contest = applyPromotionBid(contest, { type: "raise", playerId: "two" }, players, entries);
+  contest = applyPromotionBid(contest, { type: "withdraw", playerId: "one" }, players, entries);
+
+  assert.equal(contest.resolved, true);
+  assert.equal(contest.winnerId, "two");
+  assert.deepEqual(contest.spent, { one: 1, two: 2 });
+  assert.equal(players[0].discard.length, 1);
+  assert.equal(players[1].discard.length, 2);
+});
+
+test("a persisted Promotion tie cancels and falls through to the next unique value", () => {
+  const players = ["one", "two", "three"].map((id) => ({ id, promotions: [], discard: [] }));
+  const entries = [
+    { id: "one", value: 7, competing: true },
+    { id: "two", value: 7, competing: true },
+    { id: "three", value: 5, competing: true },
+  ];
+  const contest = createPromotionContest(entries, players);
+  assert.equal(contest.resolved, true);
+  assert.equal(contest.winnerId, "three");
+  assert.deepEqual(contest.canceledValues, [7]);
+});
+
+test("tracked Promotion Cards remain set aside from the discard and draw cycle", () => {
   const trackedCard = { id: "tracked", type: "ingredient", name: "Spaghetti" };
   const recipe = { id: "recipe", type: "recipe", name: "Carbonara", slots: 1 };
-  const player = { tips: [], discard: [], meal: null };
+  const player = { promotions: [], discard: [], meal: null };
   const meal = {
     dishes: [{ recipe, ingredients: [trackedCard], flavor: null }],
     drink: null,
   };
   cleanupMeal(player, meal, trackedCard);
-  assert.deepEqual(player.tips, [trackedCard]);
+  assert.deepEqual(player.promotions, [trackedCard]);
   assert.deepEqual(player.discard, [recipe]);
   assert.equal(player.discard.includes(trackedCard), false);
 });
@@ -404,7 +453,7 @@ test("Turkish customer catch-up checks every rival at the table", () => {
   const player = makePlayer("italy", "Player", stableRandom);
   const levelRival = makePlayer("france", "Rival 1", stableRandom);
   const leadingRival = makePlayer("china", "Rival 2", stableRandom);
-  leadingRival.tips.push({ id: "tip" });
+  leadingRival.promotions.push({ id: "promotion" });
   const meal = {
     dishes: [{ recipe: { id: "r", type: "recipe", name: "Dish", slots: 0 }, ingredients: [], flavor: null }],
     drink: null,

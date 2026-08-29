@@ -25,11 +25,11 @@ export interface PlayerResult {
   policy: BotPolicy;
   score: number;
   customers: number;
-  tips: number;
-  tipsCompleted: boolean;
+  promotions: number;
+  promotionsCompleted: boolean;
   drinkAttempts: number;
   drinkSuccesses: number;
-  tipEligibleMeals: number;
+  promotionEligibleMeals: number;
   averageTieRisk: number;
   averageServeValue: number;
   winShare: number;
@@ -50,7 +50,7 @@ export interface RoundResult {
   customerDeckId: CuisineId;
   customerDeckName: string;
   customerOrder: number;
-  customerTips: number;
+  customerPromotionThreshold: number;
   players: BotTurnSummary[];
   winnerDeckId: CuisineId | null;
   winnerDeckName: string | null;
@@ -81,15 +81,15 @@ export interface DeckAggregate {
   topFinishes: number;
   totalScore: number;
   totalCustomers: number;
-  totalTips: number;
+  totalPromotions: number;
   totalServeValue: number;
   serveValueSamples: number;
   drinkAttempts: number;
   drinkSuccesses: number;
-  tipEligibleMeals: number;
+  promotionEligibleMeals: number;
   totalTieRisk: number;
   tieRiskSamples: number;
-  tipsCompletions: number;
+  promotionsCompletions: number;
   totalScoreSquared: number;
 }
 
@@ -143,12 +143,12 @@ export interface DrinkDiagnostic {
   successes: number;
 }
 
-export interface TipsCompletionDiagnostic {
+export interface PromotionsCompletionDiagnostic {
   deckId: CuisineId;
   deckName: string;
   games: number;
   completions: number;
-  averageTips: number;
+  averagePromotions: number;
 }
 
 export interface StrategyDiagnostic {
@@ -158,9 +158,9 @@ export interface StrategyDiagnostic {
   topFinishes: number;
   averageScore: number;
   averageCustomers: number;
-  averageTips: number;
-  tipsCompletionRate: number;
-  tipEligibleMealsPerGame: number;
+  averagePromotions: number;
+  promotionsCompletionRate: number;
+  promotionEligibleMealsPerGame: number;
   averageTieRisk: number;
 }
 
@@ -170,7 +170,7 @@ export interface BalanceDiagnostics {
   seatBias: SeatBias[];
   customerImpact: CustomerImpact[];
   drinkSuccess: DrinkDiagnostic[];
-  tipsCompletion: TipsCompletionDiagnostic[];
+  promotionsCompletion: PromotionsCompletionDiagnostic[];
   strategyImpact: StrategyDiagnostic[];
 }
 
@@ -236,11 +236,11 @@ const playerResult = (
     policy: playerTurns[0]?.policy ?? 'adaptive',
     score: scoreFor(player),
     customers: player.scoring.length,
-    tips: player.tips.length,
-    tipsCompleted: player.tips.length >= 4,
+    promotions: player.promotions.length,
+    promotionsCompleted: player.promotions.length >= 3,
     drinkAttempts: playerTurns.filter((summary) => summary.playedDrink).length,
     drinkSuccesses: playerTurns.filter((summary) => summary.drinkSuccessful).length,
-    tipEligibleMeals: playerTurns.filter((summary) => summary.tipEligible).length,
+    promotionEligibleMeals: playerTurns.filter((summary) => summary.promotionEligible).length,
     averageTieRisk: avg(
       playerTurns.reduce((sum, summary) => sum + summary.estimatedTieRisk, 0),
       playerTurns.length,
@@ -291,7 +291,7 @@ export const runGame = (options: SimulationOptions, seed: number): GameResult =>
         customerDeckId: customer.deckId,
         customerDeckName: customer.deckName,
         customerOrder: customer.order ?? 0,
-        customerTips: customer.tips ?? 0,
+        customerPromotionThreshold: customer.order ?? 0,
         players: summaries,
         winnerDeckId: winnerSummary?.deckId ?? null,
         winnerDeckName: winnerSummary?.deckName ?? null,
@@ -340,15 +340,15 @@ export const aggregateByDeck = (games: GameResult[]) => {
         topFinishes: 0,
         totalScore: 0,
         totalCustomers: 0,
-        totalTips: 0,
+        totalPromotions: 0,
         totalServeValue: 0,
         serveValueSamples: 0,
         drinkAttempts: 0,
         drinkSuccesses: 0,
-        tipEligibleMeals: 0,
+        promotionEligibleMeals: 0,
         totalTieRisk: 0,
         tieRiskSamples: 0,
-        tipsCompletions: 0,
+        promotionsCompletions: 0,
         totalScoreSquared: 0,
       };
 
@@ -357,15 +357,15 @@ export const aggregateByDeck = (games: GameResult[]) => {
       aggregate.topFinishes += player.topFinish ? 1 : 0;
       aggregate.totalScore += player.score;
       aggregate.totalCustomers += player.customers;
-      aggregate.totalTips += player.tips;
+      aggregate.totalPromotions += player.promotions;
       aggregate.totalServeValue += player.averageServeValue;
       aggregate.serveValueSamples += 1;
       aggregate.drinkAttempts += player.drinkAttempts;
       aggregate.drinkSuccesses += player.drinkSuccesses;
-      aggregate.tipEligibleMeals += player.tipEligibleMeals;
+      aggregate.promotionEligibleMeals += player.promotionEligibleMeals;
       aggregate.totalTieRisk += player.averageTieRisk;
       aggregate.tieRiskSamples += 1;
-      aggregate.tipsCompletions += player.tipsCompleted ? 1 : 0;
+      aggregate.promotionsCompletions += player.promotionsCompleted ? 1 : 0;
       aggregate.totalScoreSquared += player.score * player.score;
 
       aggregates.set(player.deckId, aggregate);
@@ -553,9 +553,9 @@ const buildStrategyImpact = (games: GameResult[]): StrategyDiagnostic[] => {
       topFinishes: number;
       totalScore: number;
       totalCustomers: number;
-      totalTips: number;
-      tipsCompletions: number;
-      tipEligibleMeals: number;
+      totalPromotions: number;
+      promotionsCompletions: number;
+      promotionEligibleMeals: number;
       totalTieRisk: number;
     }
   >();
@@ -568,9 +568,9 @@ const buildStrategyImpact = (games: GameResult[]): StrategyDiagnostic[] => {
         topFinishes: 0,
         totalScore: 0,
         totalCustomers: 0,
-        totalTips: 0,
-        tipsCompletions: 0,
-        tipEligibleMeals: 0,
+        totalPromotions: 0,
+        promotionsCompletions: 0,
+        promotionEligibleMeals: 0,
         totalTieRisk: 0,
       };
       strategy.games += 1;
@@ -578,9 +578,9 @@ const buildStrategyImpact = (games: GameResult[]): StrategyDiagnostic[] => {
       strategy.topFinishes += player.topFinish ? 1 : 0;
       strategy.totalScore += player.score;
       strategy.totalCustomers += player.customers;
-      strategy.totalTips += player.tips;
-      strategy.tipsCompletions += player.tipsCompleted ? 1 : 0;
-      strategy.tipEligibleMeals += player.tipEligibleMeals;
+      strategy.totalPromotions += player.promotions;
+      strategy.promotionsCompletions += player.promotionsCompleted ? 1 : 0;
+      strategy.promotionEligibleMeals += player.promotionEligibleMeals;
       strategy.totalTieRisk += player.averageTieRisk;
       strategies.set(player.policy, strategy);
     }
@@ -597,9 +597,9 @@ const buildStrategyImpact = (games: GameResult[]): StrategyDiagnostic[] => {
         topFinishes: strategy.topFinishes,
         averageScore: avg(strategy.totalScore, strategy.games),
         averageCustomers: avg(strategy.totalCustomers, strategy.games),
-        averageTips: avg(strategy.totalTips, strategy.games),
-        tipsCompletionRate: avg(strategy.tipsCompletions, strategy.games),
-        tipEligibleMealsPerGame: avg(strategy.tipEligibleMeals, strategy.games),
+        averagePromotions: avg(strategy.totalPromotions, strategy.games),
+        promotionsCompletionRate: avg(strategy.promotionsCompletions, strategy.games),
+        promotionEligibleMealsPerGame: avg(strategy.promotionEligibleMeals, strategy.games),
         averageTieRisk: avg(strategy.totalTieRisk, strategy.games),
       };
     });
@@ -622,13 +622,13 @@ export const buildDiagnostics = (
       successes: deck.drinkSuccesses,
     }))
     .sort((a, b) => avg(b.successes, b.attempts) - avg(a.successes, a.attempts)),
-  tipsCompletion: aggregates
+  promotionsCompletion: aggregates
     .map((deck) => ({
       deckId: deck.deckId,
       deckName: deck.deckName,
       games: deck.games,
-      completions: deck.tipsCompletions,
-      averageTips: avg(deck.totalTips, deck.games),
+      completions: deck.promotionsCompletions,
+      averagePromotions: avg(deck.totalPromotions, deck.games),
     }))
     .sort((a, b) => avg(b.completions, b.games) - avg(a.completions, a.games)),
   strategyImpact: buildStrategyImpact(games),
@@ -661,8 +661,8 @@ export const simulationInsights = (
     if (winRate <= expected - 0.15) {
       lines.push(`${deck.deckName} is under expected win share by ${pct(expected - winRate)}.`);
     }
-    if (avg(deck.totalTips, deck.games) < 1.25) {
-      lines.push(`${deck.deckName} rarely reaches Tips tracking under this bot policy.`);
+    if (avg(deck.totalPromotions, deck.games) < 1.25) {
+      lines.push(`${deck.deckName} rarely reaches Promotions tracking under this bot policy.`);
     }
   }
 
@@ -687,30 +687,30 @@ export const balanceRecommendations = (
 
   for (const deck of aggregates) {
     const winRate = avg(deck.winShare, deck.games);
-    const tipsCompletion = avg(deck.tipsCompletions, deck.games);
-    const tipEligibleMeals = avg(deck.tipEligibleMeals, deck.games);
+    const promotionsCompletion = avg(deck.promotionsCompletions, deck.games);
+    const promotionEligibleMeals = avg(deck.promotionEligibleMeals, deck.games);
 
     if (winRate >= expected + 0.12) {
       lines.push(
-        `Pressure-test ${deck.deckName}: its win share is ${pct(winRate)}, above the ${pct(expected)} table baseline. Try a small serve-value or Tips-tracking nerf first.`,
+        `Pressure-test ${deck.deckName}: its win share is ${pct(winRate)}, above the ${pct(expected)} table baseline. Try a small serve-value or Promotion-tracking nerf first.`,
       );
     } else if (winRate <= expected - 0.12) {
       lines.push(
-        `Support ${deck.deckName}: its win share is ${pct(winRate)}, below the ${pct(expected)} table baseline. Start by making its Tips tracking or signature ingredients easier to assemble.`,
+        `Support ${deck.deckName}: its win share is ${pct(winRate)}, below the ${pct(expected)} table baseline. Start by making its Promotion tracking or signature ingredients easier to assemble.`,
       );
     }
 
     if (avg(deck.drinkAttempts, deck.games) > 3.5) {
       lines.push(`${deck.deckName} plays more than 3.5 Drinks per game; its Drink requirements may be too easy to repeat after reshuffling.`);
     }
-    if (tipEligibleMeals < 1) {
-      lines.push(`${deck.deckName} creates fewer than 1 Tips-eligible meal per game even when strategies can pursue Tips.`);
+    if (promotionEligibleMeals < 1) {
+      lines.push(`${deck.deckName} creates fewer than 1 Promotion-eligible meal per game even when strategies can pursue Promotions.`);
     }
-    if (tipsCompletion < 0.12) {
-      lines.push(`${deck.deckName} almost never completes Tips tracking (${pct(tipsCompletion)}); check whether its tracking card type appears too late or too rarely.`);
+    if (promotionsCompletion < 0.12) {
+      lines.push(`${deck.deckName} almost never fills its Promotion track (${pct(promotionsCompletion)}); check whether its tracking card type appears too late or too rarely.`);
     }
-    if (tipsCompletion > 0.65) {
-      lines.push(`${deck.deckName} completes Tips tracking very often (${pct(tipsCompletion)}); verify that its end condition is not ending games too early.`);
+    if (promotionsCompletion > 0.65) {
+      lines.push(`${deck.deckName} fills all 3 Promotion slots very often (${pct(promotionsCompletion)}); verify that its bonus scoring and bidding choices stay healthy.`);
     }
   }
 
@@ -784,19 +784,19 @@ const pad = (value: string, width: number) => value.padEnd(width, ' ');
 
 export const deckTable = (aggregates: DeckAggregate[]) => {
   const rows = [
-    ['Deck', 'Win', 'Top', 'Avg VP', 'Cust', 'Tips', 'Avg SV', 'Drink/G', 'Tip Meal/G', 'Tie Risk', 'Tips %'],
+    ['Deck', 'Win', 'Top', 'Avg VP', 'Cust', 'Promotions', 'Avg SV', 'Drink/G', 'Promotion Meal/G', 'Tie Risk', 'Full Track %'],
     ...aggregates.map((deck) => [
       deck.deckName,
       pct(deck.winShare / deck.games),
       String(deck.topFinishes),
       fixed(avg(deck.totalScore, deck.games)),
       fixed(avg(deck.totalCustomers, deck.games)),
-      fixed(avg(deck.totalTips, deck.games)),
+      fixed(avg(deck.totalPromotions, deck.games)),
       fixed(avg(deck.totalServeValue, deck.serveValueSamples)),
       fixed(avg(deck.drinkAttempts, deck.games)),
-      fixed(avg(deck.tipEligibleMeals, deck.games)),
+      fixed(avg(deck.promotionEligibleMeals, deck.games)),
       pct(avg(deck.totalTieRisk, deck.tieRiskSamples)),
-      pct(avg(deck.tipsCompletions, deck.games)),
+      pct(avg(deck.promotionsCompletions, deck.games)),
     ]),
   ];
 
@@ -872,29 +872,29 @@ const drinkTable = (diagnostics: BalanceDiagnostics) =>
     ]),
   ]);
 
-const tipsTable = (diagnostics: BalanceDiagnostics) =>
+const promotionsTable = (diagnostics: BalanceDiagnostics) =>
   tableFromRows([
-    ['Deck', 'Complete', 'Avg Tips'],
-    ...diagnostics.tipsCompletion.map((tips) => [
-      tips.deckName,
-      pct(avg(tips.completions, tips.games)),
-      fixed(tips.averageTips),
+    ['Deck', 'Full', 'Avg Promotions'],
+    ...diagnostics.promotionsCompletion.map((promotions) => [
+      promotions.deckName,
+      pct(avg(promotions.completions, promotions.games)),
+      fixed(promotions.averagePromotions),
     ]),
   ]);
 
 const strategyTable = (diagnostics: BalanceDiagnostics) =>
   tableFromRows([
-    ['Policy', 'Games', 'Win', 'Avg VP', 'Cust', 'Tips', 'Tip Meal/G', 'Tie Risk', 'Tips %'],
+    ['Policy', 'Games', 'Win', 'Avg VP', 'Cust', 'Promotions', 'Promotion Meal/G', 'Tie Risk', 'Full Track %'],
     ...diagnostics.strategyImpact.map((strategy) => [
       strategy.policy,
       String(strategy.games),
       pct(avg(strategy.winShare, strategy.games)),
       fixed(strategy.averageScore),
       fixed(strategy.averageCustomers),
-      fixed(strategy.averageTips),
-      fixed(strategy.tipEligibleMealsPerGame),
+      fixed(strategy.averagePromotions),
+      fixed(strategy.promotionEligibleMealsPerGame),
       pct(strategy.averageTieRisk),
-      pct(strategy.tipsCompletionRate),
+      pct(strategy.promotionsCompletionRate),
     ]),
   ]);
 
@@ -929,8 +929,8 @@ export const formatSimulationReport = (result: SimulationResult) => [
   'Drink Success:',
   drinkTable(result.diagnostics),
   '',
-  'Tips Completion:',
-  tipsTable(result.diagnostics),
+  'Full Promotion Tracks:',
+  promotionsTable(result.diagnostics),
   '',
   'Strategy Impact:',
   strategyTable(result.diagnostics),

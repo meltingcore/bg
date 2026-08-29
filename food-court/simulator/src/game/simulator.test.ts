@@ -7,8 +7,12 @@ import {
   addIngredient,
   createGame,
   discardFromHand,
-  eligibleTipCard,
+  drinkRequirementMet,
+  eligiblePromotionCard,
+  GAME_ROUND_LIMIT,
   refreshHand,
+  resolveRound,
+  scoreFor,
   serveRecipe,
   valueBreakdown,
   type CardInstance,
@@ -45,6 +49,7 @@ test('deck data matches the revised card distributions', () => {
   }
 
   const china = DECKS.find((deck) => deck.id === 'china')!;
+  assert.equal(china.ingredients.reduce((sum, card) => sum + card.count, 0), 15);
   assert.equal(china.recipes.filter((card) => card.tags?.includes('rice')).length, 6);
   assert.equal(china.recipes.filter((card) => card.tags?.includes('noodles')).length, 6);
   assert.deepEqual(china.recipes.find((card) => card.name === 'Lo Mein')?.tags, ['noodles']);
@@ -78,6 +83,115 @@ test('deck data matches the revised card distributions', () => {
   assert.equal(mexico.ingredients.find((card) => card.name === 'Corn')?.count, 3);
 });
 
+test('customers use one Order Value for dish count, base VP, and the +1 Promotion threshold', () => {
+  for (const deck of DECKS) {
+    assert.deepEqual(deck.customers.map((customer) => customer.order), [1, 1, 2, 2, 3, 3]);
+    assert.equal(deck.customers.some((customer) => 'promotions' in customer), false);
+  }
+
+  const state = createGame(DECKS, ['italy'], 99);
+  const player = state.players[0];
+  player.scoring = [
+    { kind: 'customer', order: 2 },
+    { kind: 'customer', order: 3 },
+  ] as CardInstance[];
+  assert.equal(scoreFor(player), 5);
+  player.promotions = [{ id: 'p1' }, { id: 'p2' }] as CardInstance[];
+  assert.equal(scoreFor(player), 6);
+  player.promotions.push({ id: 'p3' } as CardInstance);
+  assert.equal(scoreFor(player), 7);
+});
+
+test('the full shared customer deck is shuffled but only 10 customers are resolved', () => {
+  const state = createGame(DECKS, ['italy', 'france'], 98);
+  assert.equal(state.customerDeck.length + Number(Boolean(state.activeCustomer)), 12);
+
+  const unrestrictedShuffleObserved = Array.from({ length: 32 }, (_, seed) =>
+    createGame(DECKS, ['italy', 'france'], seed + 1))
+    .some((game) => {
+      const customers = [game.activeCustomer, ...game.customerDeck].filter(Boolean);
+      return customers.some((customer, index) =>
+        index > 0 && customer.deckId === customers[index - 1].deckId);
+    });
+  assert.equal(unrestrictedShuffleObserved, true);
+
+  for (let round = 0; round < GAME_ROUND_LIMIT; round += 1) {
+    assert.notEqual(state.phase, 'game-over');
+    resolveRound(state, () => false);
+  }
+
+  assert.equal(state.phase, 'game-over');
+  assert.equal(state.round, GAME_ROUND_LIMIT);
+  assert.equal(state.customerDeck.length, 2);
+  assert.equal(state.customerDiscard.length, GAME_ROUND_LIMIT);
+});
+
+test('open bids spend the selected promotion and only chosen non-winners track', () => {
+  const state = createGame(DECKS, ['italy', 'france', 'china'], 100);
+  const [italy, france, china] = state.players;
+  state.activeCustomer!.deckId = 'italy';
+  state.activeCustomer!.order = 1;
+  italy.meal = [{ id: 'i', recipe: cardNamed(italy, 'Farfalle al Salmone'), ingredients: [] }];
+  france.meal = [{ id: 'f', recipe: cardNamed(france, 'Ratatouille'), ingredients: [] }];
+  china.meal = [{ id: 'c', recipe: cardNamed(china, 'Mapo Tofu'), ingredients: [] }];
+  const keptPromotion = { id: 'italy-keep', name: 'Kept promotion' } as CardInstance;
+  const spentPromotion = { id: 'italy-spend', name: 'Spent promotion' } as CardInstance;
+  italy.promotions = [keptPromotion, spentPromotion];
+  france.promotions = [{ id: 'france-promo', name: 'Old promotion', tags: ['entree'] } as CardInstance];
+
+  const resolution = resolveRound(state, ({ player, role }) =>
+    player.id === italy.id && role === 'raise' ? spentPromotion : null,
+  ({ player, eligibleCards }) => player.id === france.id ? eligibleCards[0] : null);
+
+  assert.equal(resolution?.winnerId, italy.id);
+  assert.deepEqual(resolution?.promotionBids, { [italy.id]: 1 });
+  assert.equal(italy.scoring.length, 1);
+  assert.deepEqual(italy.promotions.map((card) => card.id), ['italy-keep']);
+  assert.equal(italy.discard.some((card) => card.id === 'italy-spend'), true);
+  assert.equal(france.promotions.length, 2);
+  assert.equal(france.promotions.some((card) => card.name === 'Ratatouille'), true);
+  assert.equal(china.promotions.length, 0);
+});
+
+test('Promotion tracking may be declined', () => {
+  const state = createGame(DECKS, ['italy', 'france'], 1010);
+  const [italy, france] = state.players;
+  state.activeCustomer!.deckId = 'italy';
+  state.activeCustomer!.order = 1;
+  italy.meal = [{
+    id: 'winner',
+    recipe: cardNamed(italy, 'Spaghetti Carbonara'),
+    ingredients: [cardNamed(italy, 'Spaghetti')],
+  }];
+  france.meal = [{ id: 'loser', recipe: cardNamed(france, 'Ratatouille'), ingredients: [] }];
+
+  const resolution = resolveRound(state, () => null, () => null);
+
+  assert.equal(resolution?.winnerId, italy.id);
+  assert.equal(france.promotions.length, 0);
+  assert.equal(france.discard.some((card) => card.name === 'Ratatouille'), true);
+});
+
+test('seeded bid initiative rotates between seats', () => {
+  const winners = new Set<string>();
+  for (let seed = 1; seed <= 32; seed += 1) {
+    const state = createGame(DECKS, ['italy', 'france'], seed);
+    const [italy, france] = state.players;
+    state.activeCustomer!.deckId = 'italy';
+    state.activeCustomer!.order = 1;
+    italy.meal = [{ id: 'i', recipe: cardNamed(italy, 'Farfalle al Salmone'), ingredients: [] }];
+    france.meal = [{ id: 'f', recipe: cardNamed(france, 'Tourin'), ingredients: [] }];
+    italy.promotions = [{ id: `i-${seed}`, name: 'Italy promotion' } as CardInstance];
+    france.promotions = [{ id: `f-${seed}`, name: 'France promotion' } as CardInstance];
+
+    const resolution = resolveRound(state, ({ player, role }) =>
+      role === 'raise' ? player.promotions[0] : null);
+    if (resolution?.winnerId) winners.add(resolution.winnerId);
+  }
+
+  assert.deepEqual(winners, new Set(['p1', 'p2']));
+});
+
 test('Drink Card requirements use explicit card types and quantities', () => {
   const vagueTerms = /overstuffed|exact pasta pairing|same type|hard dish|normal dish|with flavor/i;
   const drinks = DECKS.flatMap((deck) => deck.drinks);
@@ -96,6 +210,24 @@ test('Drink Card requirements use explicit card types and quantities', () => {
       `${drinkCard.name}: ${drinkCard.requirement}`,
     );
   }
+});
+
+test('Limoncello checks pasta Ingredient Cards actually added to the meal', () => {
+  const state = createGame(DECKS, ['italy'], 1001);
+  const italy = state.players[0];
+  const limoncello = cardNamed(italy, 'Limoncello');
+  const carbonara = cardNamed(italy, 'Spaghetti Carbonara');
+  const alfredo = cardNamed(italy, 'Fettuccine Alfredo');
+  const spaghetti = cardNamed(italy, 'Spaghetti');
+  const fettuccine = cardNamed(italy, 'Fettuccine');
+  italy.meal = [
+    { id: 'i1', recipe: carbonara, ingredients: [] },
+    { id: 'i2', recipe: alfredo, ingredients: [] },
+  ];
+  assert.equal(drinkRequirementMet(italy, limoncello), false);
+  italy.meal[0].ingredients.push(spaghetti);
+  italy.meal[1].ingredients.push(fettuccine);
+  assert.equal(drinkRequirementMet(italy, limoncello), true);
 });
 
 test('Italy, China, India, and Japan abilities use the latest scoring rules', () => {
@@ -219,7 +351,7 @@ test('USA can use two extra Ingredients and Mexico caps hot Ingredients at two p
   assert.equal(mexico.meal[0].ingredients.length, 1);
 });
 
-test('China, USA, Japan, and Mexico Tips eligibility follows the revised requirements', () => {
+test('China, USA, Japan, and Mexico Promotions eligibility follows the revised requirements', () => {
   const chinaState = createGame(DECKS, ['china'], 107);
   const china = chinaState.players[0];
   const rice1 = cardNamed(china, 'Sticky Rice with Mango');
@@ -230,19 +362,19 @@ test('China, USA, Japan, and Mexico Tips eligibility follows the revised require
     { id: 'c1', recipe: rice1, ingredients: [] },
     { id: 'c2', recipe: noodles, ingredients: [] },
   ];
-  assert.equal(eligibleTipCard(china), null);
+  assert.equal(eligiblePromotionCard(china), null);
   china.meal[1] = { id: 'c2', recipe: rice2, ingredients: [] };
-  assert.equal(eligibleTipCard(china)?.name, 'Sticky Rice with Mango');
+  assert.equal(eligiblePromotionCard(china)?.name, 'Sticky Rice with Mango');
   china.meal[1] = { id: 'c2', recipe: untyped, ingredients: [] };
-  assert.equal(eligibleTipCard(china), null);
+  assert.equal(eligiblePromotionCard(china), null);
 
   const usaState = createGame(DECKS, ['usa'], 108);
   const usa = usaState.players[0];
   const burger = cardNamed(usa, 'Juicy Lucy');
   const steak = cardNamed(usa, 'T-bone Steak');
-  usa.tips = [burger];
+  usa.promotions = [burger];
   usa.meal = [{ id: 'u1', recipe: steak, ingredients: [] }];
-  assert.equal(eligibleTipCard(usa)?.name, 'T-bone Steak');
+  assert.equal(eligiblePromotionCard(usa)?.name, 'T-bone Steak');
 
   const japanState = createGame(DECKS, ['japan'], 109);
   const japan = japanState.players[0];
@@ -250,11 +382,11 @@ test('China, USA, Japan, and Mexico Tips eligibility follows the revised require
   const wasabi1 = cardNamed(japan, 'Wasabi', 0);
   const wasabi2 = cardNamed(japan, 'Wasabi', 1);
   const ginger = cardNamed(japan, 'Ginger');
-  japan.tips = [wasabi1];
+  japan.promotions = [wasabi1];
   japan.meal = [{ id: 'j1', recipe: japanRecipe, ingredients: [wasabi2] }];
-  assert.equal(eligibleTipCard(japan), undefined);
+  assert.equal(eligiblePromotionCard(japan), null);
   japan.meal = [{ id: 'j1', recipe: japanRecipe, ingredients: [ginger] }];
-  assert.equal(eligibleTipCard(japan)?.name, 'Ginger');
+  assert.equal(eligiblePromotionCard(japan)?.name, 'Ginger');
 
   const mexicoState = createGame(DECKS, ['mexico'], 109);
   const mexico = mexicoState.players[0];
@@ -262,9 +394,27 @@ test('China, USA, Japan, and Mexico Tips eligibility follows the revised require
   const corn = cardNamed(mexico, 'Corn');
   const hot = cardNamed(mexico, 'Poblano');
   mexico.meal = [{ id: 'm1', recipe, ingredients: [corn] }];
-  assert.equal(eligibleTipCard(mexico), undefined);
+  assert.equal(eligiblePromotionCard(mexico), null);
   mexico.meal = [{ id: 'm1', recipe, ingredients: [hot] }];
-  assert.equal(eligibleTipCard(mexico)?.name, 'Poblano');
+  assert.equal(eligiblePromotionCard(mexico)?.name, 'Poblano');
+  mexico.promotions = [hot, corn, recipe];
+  assert.equal(eligiblePromotionCard(mexico), null);
+});
+
+test('Italy Promotion eligibility requires the exact Ingredient on its matching dish', () => {
+  const state = createGame(DECKS, ['italy'], 1002);
+  const italy = state.players[0];
+  const carbonara = cardNamed(italy, 'Spaghetti Carbonara');
+  const alfredo = cardNamed(italy, 'Fettuccine Alfredo');
+  const spaghetti = cardNamed(italy, 'Spaghetti');
+  const fettuccine = cardNamed(italy, 'Fettuccine');
+  italy.meal = [
+    { id: 'i1', recipe: carbonara, ingredients: [fettuccine] },
+    { id: 'i2', recipe: alfredo, ingredients: [spaghetti] },
+  ];
+  assert.equal(eligiblePromotionCard(italy), null);
+  italy.meal[0].ingredients = [spaghetti];
+  assert.equal(eligiblePromotionCard(italy)?.id, spaghetti.id);
 });
 
 test('mixed policy assignment rotates every strategy across four seats', () => {
@@ -275,7 +425,7 @@ test('mixed policy assignment rotates every strategy across four seats', () => {
   assert.notEqual(first.get('p1'), second.get('p1'));
 });
 
-test('Tips policy selects a hot Mexican Ingredient when serve values are equal', () => {
+test('Promotions policy selects a hot Mexican Ingredient when serve values are equal', () => {
   const state = createGame(DECKS, ['mexico'], 107);
   const player = state.players[0];
   const recipe = cardNamed(player, 'Mole Poblano with Rice');
@@ -284,7 +434,7 @@ test('Tips policy selects a hot Mexican Ingredient when serve values are equal',
   setHand(player, [recipe, hot, corn]);
   player.drawPile = [];
   state.activeCustomer!.order = 1;
-  playBotPlayers(state, [player.id], 'tips');
+  playBotPlayers(state, [player.id], 'promotions');
   assert.equal(state.players[0].meal[0]?.ingredients[0]?.name, 'Cayenne Pepper');
 });
 
@@ -340,7 +490,7 @@ test('bots exploit customer effects and conserve cards when serve value is equal
   assert.equal(usaSummary.customerEffectValue, 1);
 });
 
-test('Tips policy uses the French full-hand redraw when the hand has no Tips path', () => {
+test('Promotions policy uses the French full-hand redraw when the hand has no Promotions path', () => {
   const state = createGame(DECKS, ['china'], 109);
   const player = state.players[0];
   state.activeCustomer!.deckId = 'france';
@@ -355,7 +505,7 @@ test('Tips policy uses the French full-hand redraw when the hand has no Tips pat
   ];
   setHand(player, hand);
   const originalIds = new Set(hand.map((card) => card.id));
-  refreshForBot(state, player.id, 'tips');
+  refreshForBot(state, player.id, 'promotions');
   assert.equal(player.hand.length, 6);
   assert.ok(player.discard.some((card) => originalIds.has(card.id)));
 });
@@ -397,6 +547,7 @@ test('mixed games rotate all policies and never play unsuccessful Drinks', () =>
   }, 110);
   assert.deepEqual(new Set(game.players.map((player) => player.policy)), new Set(BOT_POLICIES));
   assert.equal(game.drinkAttempts, game.drinkSuccesses);
+  assert.equal(game.rounds, GAME_ROUND_LIMIT);
   assert.equal(game.roundResults.length, game.contestedRounds);
   assert.ok(game.roundResults.every((round) => round.players.length === 4));
   assert.ok(game.roundResults.every((round) =>

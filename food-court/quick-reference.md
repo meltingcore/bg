@@ -37,7 +37,7 @@ Score the most victory points (VP) from attracted customers.
 9. If no player served any recipes, discard the customer.
 10. The winner attracts the customer and others may put one Promotion card in tracking.
 11. Discard served recipes, added cards, and played drinks.
-12. Reveal the next customer.
+12. Reveal the next customer unless 10 customers have been resolved.
 
 ## Serve Value
 
@@ -93,8 +93,9 @@ Then apply customer effects and deck abilities.
 
 ## Winning the Game
 
-The game ends after resolving the final customer in the customer deck. Players score the total VP
-from attracted customers. Each attracted customer scores its Order Value plus 1 VP if the player
-has at least as many Promotion Cards in tracking as that Order Value.
+The game ends after resolving the 10th customer. Customer Cards still in the shared deck are left
+unused. Players score the total VP from attracted customers. Each attracted customer scores its
+Order Value plus 1 VP if the player has at least as many Promotion Cards in tracking as that Order
+Value.
 
 Tiebreaker: the player who most recently cooked a real-life meal wins.

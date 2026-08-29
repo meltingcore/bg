@@ -176,10 +176,89 @@ test("server validates submitted cards and resolves synchronized phases", () => 
 
   applyRoomAction(room, "host", {
     type: "reveal_ack",
-    tipCardId: reveal.game.pending.selectedTipId,
+    promotionCardId: reveal.game.pending.selectedPromotionId,
   }, stableRandom);
   assert.ok(["refresh", "ended"].includes(room.game.phase));
   assert.equal(room.game.history.length, 1);
+});
+
+test("multiplayer resolves open Promotion bidding and rewards only the non-winner", () => {
+  const room = roomWithHost();
+  joinRoomState(room, {
+    name: "Guest chef",
+    cuisineId: "france",
+    playerId: "guest",
+    playerToken: "guest-token",
+  });
+  applyRoomAction(room, "host", { type: "start" }, stableRandom);
+  applyRoomAction(room, "host", { type: "refresh", discardIds: [] }, stableRandom);
+  applyRoomAction(room, "guest", { type: "refresh", discardIds: [] }, stableRandom);
+
+  const host = room.game.players.find((player) => player.id === "host");
+  const guest = room.game.players.find((player) => player.id === "guest");
+  const hostRecipe = { id: "host-recipe", type: "recipe", name: "Pasta", slots: 0 };
+  const guestRecipe = { id: "guest-recipe", type: "recipe", name: "Ratatouille", slots: 0, tag: "main" };
+  host.hand = [hostRecipe];
+  guest.hand = [guestRecipe];
+  host.promotions = [{ id: "host-promo", type: "ingredient", name: "Old promotion" }];
+  guest.promotions = [{ id: "guest-promo", type: "recipe", name: "Old promotion", promotionKey: "entree" }];
+  room.game.activeCustomer.order = 1;
+  room.game.activeCustomer.nationality = "italy";
+
+  applyRoomAction(room, "host", {
+    type: "serve",
+    meal: { dishes: [{ recipeId: hostRecipe.id, ingredientIds: [] }], drinkId: null },
+  }, stableRandom);
+  applyRoomAction(room, "guest", {
+    type: "serve",
+    meal: { dishes: [{ recipeId: guestRecipe.id, ingredientIds: [] }], drinkId: null },
+  }, stableRandom);
+  assert.equal(room.game.pending.contest.resolved, false);
+
+  applyRoomAction(room, "host", { type: "promotion_bid", bid: "raise" }, stableRandom);
+  applyRoomAction(room, "guest", { type: "promotion_bid", bid: "withdraw" }, stableRandom);
+  assert.equal(room.game.pending.winnerId, "host");
+  assert.equal(host.promotions.length, 0);
+  assert.equal(host.discard.some((card) => card.id === "host-promo"), true);
+
+  const guestView = roomSnapshot(room, "guest", ["host", "guest"]);
+  assert.equal(guestView.game.pending.promotionCandidates[0].id, guestRecipe.id);
+  applyRoomAction(room, "host", { type: "reveal_ack" }, stableRandom);
+  applyRoomAction(room, "guest", {
+    type: "reveal_ack",
+    promotionCardId: guestView.game.pending.selectedPromotionId,
+  }, stableRandom);
+
+  assert.equal(host.customers.length, 1);
+  assert.equal(host.promotions.length, 0);
+  assert.equal(guest.promotions.length, 2);
+  assert.notEqual(room.game.phase, "ended");
+});
+
+test("multiplayer resolves 10 customers and leaves the rest of the shared deck unused", () => {
+  const room = roomWithHost();
+  applyRoomAction(room, "host", { type: "add_ai", cuisineId: "france" }, stableRandom);
+  applyRoomAction(room, "host", { type: "start" }, stableRandom);
+
+  let actions = 0;
+  while (room.game.phase !== "ended" && actions < 40) {
+    actions += 1;
+    if (room.game.phase === "refresh") {
+      applyRoomAction(room, "host", { type: "refresh", discardIds: [] }, stableRandom);
+    } else if (room.game.phase === "serve") {
+      applyRoomAction(room, "host", {
+        type: "serve",
+        meal: { dishes: [], drinkId: null },
+      }, stableRandom);
+    } else if (room.game.phase === "reveal") {
+      applyRoomAction(room, "host", { type: "reveal_ack" }, stableRandom);
+    }
+  }
+
+  assert.equal(room.game.phase, "ended");
+  assert.equal(room.game.round, 10);
+  assert.equal(room.game.history.length, 10);
+  assert.equal(room.game.customerDeck.length, 2);
 });
 
 test("only the host can start or manage AI seats", () => {

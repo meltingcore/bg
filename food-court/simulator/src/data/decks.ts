@@ -35,7 +35,6 @@ export interface DrinkDefinition {
 
 export interface CustomerDefinition {
   order: number;
-  tips: number;
 }
 
 export interface DeckDefinition {
@@ -54,12 +53,12 @@ export interface DeckDefinition {
 }
 
 const customerPattern: CustomerDefinition[] = [
-  { order: 1, tips: 2 },
-  { order: 1, tips: 3 },
-  { order: 2, tips: 2 },
-  { order: 2, tips: 2 },
-  { order: 3, tips: 1 },
-  { order: 3, tips: 2 },
+  { order: 1 },
+  { order: 1 },
+  { order: 2 },
+  { order: 2 },
+  { order: 3 },
+  { order: 3 },
 ];
 
 const repeat = (
@@ -98,7 +97,7 @@ export const DECKS: DeckDefinition[] = [
     flag: '🍝',
     color: '#1f7a4d',
     ability: 'Dishes served with their exact pasta Ingredient Card gain +1 serve value.',
-    endCondition: 'Get 4 Tips Cards in tracking.',
+    endCondition: 'Resolve 10 Customer Cards.',
     tracking: 'Exact pasta Ingredient Cards.',
     ingredients: [
       { name: 'Spaghetti', count: 2, type: 'ingredient', emoji: '🍝', tags: ['pasta', 'exact'] },
@@ -143,8 +142,8 @@ export const DECKS: DeckDefinition[] = [
     flag: '🥖',
     color: '#3567b7',
     ability: 'Each adjacent course pair grants +1 serve value, to a maximum of +2 per meal.',
-    endCondition: 'Get 4 Tips Cards in tracking.',
-    tracking: 'Recipe cards.',
+    endCondition: 'Resolve 10 Customer Cards.',
+    tracking: 'Recipe Cards from a course not already promoted.',
     ingredients: [
       ...repeat([], 12, 'ingredient', '🥖'),
       { name: 'Herbs de Provence', count: 1, type: 'flavor', emoji: '🌿' },
@@ -182,7 +181,7 @@ export const DECKS: DeckDefinition[] = [
     flag: '🍜',
     color: '#c03a2b',
     ability: 'Each pair of served recipes grants +1 serve value.',
-    endCondition: 'Get 4 Tips Cards in tracking.',
+    endCondition: 'Resolve 10 Customer Cards.',
     tracking: 'A Recipe Card from a same-type rice or noodles pair.',
     ingredients: [
       ...repeat([], 12, 'ingredient', '🍚'),
@@ -221,7 +220,7 @@ export const DECKS: DeckDefinition[] = [
     flag: '🍛',
     color: '#d77825',
     ability: 'Each distinct pair of different Ingredient Cards gains +1 serve value.',
-    endCondition: 'Get 4 Tips Cards in tracking.',
+    endCondition: 'Resolve 10 Customer Cards.',
     tracking: 'Spice Ingredient Cards.',
     ingredients: [
       { name: 'Cumin', count: 2, type: 'ingredient', emoji: '🌰', tags: ['spice'] },
@@ -265,7 +264,7 @@ export const DECKS: DeckDefinition[] = [
     flag: '🍔',
     color: '#274b8f',
     ability: 'Up to 2 Ingredient Cards can be added across a meal above printed ingredient limits.',
-    endCondition: 'Get 4 Tips Cards in tracking.',
+    endCondition: 'Resolve 10 Customer Cards.',
     tracking: 'Burger or steak Recipe Cards.',
     ingredients: [
       ...repeat([], 12, 'ingredient', '🍔'),
@@ -308,7 +307,7 @@ export const DECKS: DeckDefinition[] = [
     flag: '🥙',
     color: '#9f2530',
     ability: 'Kebab dishes gain +1 serve value for each non-kebab dish also served with them.',
-    endCondition: 'Get 4 Tips Cards in tracking.',
+    endCondition: 'Resolve 10 Customer Cards.',
     tracking: 'Kebab recipe cards.',
     ingredients: [
       ...repeat([], 12, 'ingredient', '🥙'),
@@ -347,8 +346,8 @@ export const DECKS: DeckDefinition[] = [
     flag: '🍣',
     color: '#cc5f7a',
     ability: 'Gain +1 serve value if exactly 1 seasoning Ingredient Card is used in the meal.',
-    endCondition: 'Get 4 Tips Cards in tracking.',
-    tracking: 'Four different seasoning Ingredient Cards.',
+    endCondition: 'Resolve 10 Customer Cards.',
+    tracking: 'Seasoning Ingredient Cards not already promoted.',
     ingredients: [
       ...repeat([], 5, 'ingredient', '🍣'),
       { name: 'Umami', count: 2, type: 'ingredient', emoji: '🍄', tags: ['seasoning'] },
@@ -389,7 +388,7 @@ export const DECKS: DeckDefinition[] = [
     flag: '🌮',
     color: '#157f7a',
     ability: 'Up to 2 hot Ingredients per meal; hot Ingredients on zero-slot recipes gain +1.',
-    endCondition: 'Get 4 Tips Cards in tracking.',
+    endCondition: 'Resolve 10 Customer Cards.',
     tracking: 'Hot Ingredient Cards.',
     ingredients: [
       { name: 'Cayenne Pepper', count: 1, type: 'ingredient', emoji: '🌶️', tags: ['hot'] },

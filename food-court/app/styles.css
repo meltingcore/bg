@@ -859,6 +859,16 @@ button:focus-visible {
   display: none;
 }
 
+.score-promotions span {
+  font-size: 0;
+}
+
+.score-promotions span::after {
+  font-size: 0.55rem;
+  line-height: 1;
+  content: "◆";
+}
+
 .scoreboard.player-count-3 .score-pill {
   width: 210px;
 }
@@ -938,13 +948,13 @@ button:focus-visible {
 }
 
 .score-value small,
-.score-tips {
+.score-promotions {
   font-size: 0.55rem;
   font-weight: 800;
   text-transform: uppercase;
 }
 
-.score-tips {
+.score-promotions {
   display: grid;
   padding-left: 9px;
   color: #a9c0b6;
@@ -952,12 +962,12 @@ button:focus-visible {
   text-align: center;
 }
 
-.score-tips b {
+.score-promotions b {
   color: #f7e3a8;
   font-size: 0.7rem;
 }
 
-.score-tips-button {
+.score-promotions-button {
   padding: 3px 6px 3px 9px;
   border: 1px solid rgb(255 244 173 / 30%);
   border-radius: 8px;
@@ -965,7 +975,7 @@ button:focus-visible {
   cursor: pointer;
 }
 
-.score-tips-button:hover {
+.score-promotions-button:hover {
   color: #fff4ad;
   border-color: rgb(255 244 173 / 70%);
   background: rgb(255 255 255 / 13%);
@@ -1382,7 +1392,7 @@ button:focus-visible {
 .customer-values div {
   display: grid;
   place-items: center;
-  width: 62px;
+  width: 48px;
   min-height: 48px;
   color: #584315;
   border: 1px solid #c7ad69;
@@ -1393,24 +1403,6 @@ button:focus-visible {
 .customer-values strong {
   font-family: var(--display);
   font-size: 1rem;
-}
-
-.customer-values span {
-  margin-top: -4px;
-  font-size: 0.42rem;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.customer-values i {
-  display: block;
-  margin-top: 2px;
-  color: #735f35;
-  font-size: 0.4rem;
-  font-style: normal;
-  font-weight: 650;
-  letter-spacing: 0;
-  text-transform: none;
 }
 
 .customer-effect {
@@ -2455,7 +2447,7 @@ button:focus-visible {
 .reveal-panel,
 .end-panel,
 .tutorial-panel,
-.tips-panel,
+.promotions-panel,
 .customers-panel {
   width: min(900px, 100%);
   max-height: calc(100vh - 56px);
@@ -2546,7 +2538,7 @@ button:focus-visible {
 .tutorial-goal,
 .tutorial-build,
 .tutorial-counts,
-.tutorial-tips {
+.tutorial-promotions {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -2562,7 +2554,7 @@ button:focus-visible {
 .tutorial-goal span,
 .tutorial-build span,
 .tutorial-counts span,
-.tutorial-tips span {
+.tutorial-promotions span {
   display: grid;
   gap: 5px;
   place-items: center;
@@ -2580,7 +2572,7 @@ button:focus-visible {
 .tutorial-goal span small,
 .tutorial-build span small,
 .tutorial-counts span small,
-.tutorial-tips span small {
+.tutorial-promotions span small {
   font-family: var(--sans);
   font-size: 0.52rem;
   font-weight: 850;
@@ -2592,7 +2584,7 @@ button:focus-visible {
 .tutorial-goal i,
 .tutorial-build i,
 .tutorial-counts i,
-.tutorial-tips i {
+.tutorial-promotions i {
   color: #806d43;
   font-family: var(--display);
   font-size: 0.62rem;
@@ -2610,7 +2602,7 @@ button:focus-visible {
 }
 
 .tutorial-counts span b,
-.tutorial-tips span b {
+.tutorial-promotions span b {
   font-size: 1.25rem;
 }
 
@@ -2621,7 +2613,7 @@ button:focus-visible {
   box-shadow: 0 0 0 4px rgb(196 157 60 / 14%);
 }
 
-.tutorial-tips .tips-end {
+.tutorial-promotions .promotions-end {
   color: #fff7dd;
   border-color: #d4b65f;
   background: var(--forest-700);
@@ -2774,10 +2766,15 @@ button:focus-visible {
   padding: clamp(26px, 4vw, 42px);
 }
 
-.tips-panel {
+.promotions-panel {
   position: relative;
   width: min(760px, 100%);
   padding: clamp(26px, 4vw, 42px);
+}
+
+.promotions-panel > h2 {
+  padding-right: 50px;
+  overflow-wrap: anywhere;
 }
 
 .customers-panel {
@@ -3086,29 +3083,29 @@ button:focus-visible {
   line-height: 1.45;
 }
 
-.tips-panel > .eyebrow {
+.promotions-panel > .eyebrow {
   color: #936b2f;
 }
 
-.tips-panel h2 {
+.promotions-panel h2 {
   margin: 5px 0 3px;
   font-family: var(--display);
   font-size: 2.25rem;
 }
 
-.tips-lead {
+.promotions-lead {
   margin: 0 0 18px;
   color: #647069;
   font-size: 0.76rem;
 }
 
-.tips-lead strong {
+.promotions-lead strong {
   color: #3d5148;
   font-family: var(--display);
   font-size: 0.92rem;
 }
 
-.tips-ability {
+.promotions-ability {
   display: flex;
   gap: 11px;
   align-items: center;
@@ -3118,17 +3115,17 @@ button:focus-visible {
   background: rgb(255 255 255 / 34%);
 }
 
-.tips-ability > span {
+.promotions-ability > span {
   color: var(--cuisine);
   font-size: 1.4rem;
 }
 
-.tips-ability div {
+.promotions-ability div {
   display: grid;
   gap: 2px;
 }
 
-.tips-ability small {
+.promotions-ability small {
   color: #69736d;
   font-size: 0.58rem;
   font-weight: 800;
@@ -3136,18 +3133,18 @@ button:focus-visible {
   text-transform: uppercase;
 }
 
-.tips-ability strong {
+.promotions-ability strong {
   color: #3f4b45;
   font-size: 0.75rem;
 }
 
-.tracked-tips-grid {
+.tracked-promotions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
   gap: 12px;
 }
 
-.tracked-tip-card {
+.tracked-promotion-card {
   position: relative;
   display: grid;
   align-content: start;
@@ -3163,11 +3160,11 @@ button:focus-visible {
   text-align: center;
 }
 
-.tracked-tip-card.has-ability-marker .tracked-tip-number {
+.tracked-promotion-card.has-ability-marker .tracked-promotion-number {
   padding-inline: 18px;
 }
 
-.tracked-tip-number {
+.tracked-promotion-number {
   color: #77684a;
   font-size: 0.52rem;
   font-weight: 900;
@@ -3175,14 +3172,14 @@ button:focus-visible {
   text-transform: uppercase;
 }
 
-.tracked-tip-symbol {
+.tracked-promotion-symbol {
   margin: 13px 0 5px;
   color: var(--card-ink);
   font-family: var(--display);
   font-size: 2rem;
 }
 
-.tracked-tip-card > strong {
+.tracked-promotion-card > strong {
   margin: 4px 0;
   color: #303832;
   font-family: var(--display);
@@ -3190,14 +3187,14 @@ button:focus-visible {
   line-height: 1.1;
 }
 
-.tracked-tip-card p {
+.tracked-promotion-card p {
   margin: 2px 0 10px;
   color: #5f6862;
   font-size: 0.62rem;
   line-height: 1.35;
 }
 
-.tracked-tip-card small {
+.tracked-promotion-card small {
   align-self: end;
   margin-top: auto;
   color: #6d6046;
@@ -3205,7 +3202,7 @@ button:focus-visible {
   font-weight: 800;
 }
 
-.tips-empty {
+.promotions-empty {
   display: grid;
   place-items: center;
   min-height: 180px;
@@ -3216,17 +3213,17 @@ button:focus-visible {
   text-align: center;
 }
 
-.tips-empty > span {
+.promotions-empty > span {
   color: #aa7c2e;
   font-size: 2rem;
 }
 
-.tips-empty strong {
+.promotions-empty strong {
   font-family: var(--display);
   font-size: 1rem;
 }
 
-.tips-empty p {
+.promotions-empty p {
   max-width: 420px;
   margin: 5px 0 0;
   color: #68726c;
@@ -3234,7 +3231,7 @@ button:focus-visible {
   line-height: 1.45;
 }
 
-.tips-score-impact {
+.promotions-score-impact {
   margin: 18px 0 0;
   padding: 11px 13px;
   color: #5e665f;
@@ -3244,8 +3241,8 @@ button:focus-visible {
   line-height: 1.45;
 }
 
-.tips-score-impact strong,
-.tips-score-impact b {
+.promotions-score-impact strong,
+.promotions-score-impact b {
   color: #3c5147;
 }
 
@@ -3873,7 +3870,7 @@ button:focus-visible {
   font-style: italic;
 }
 
-.tip-choice {
+.promotion-choice {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 16px;
@@ -3884,7 +3881,97 @@ button:focus-visible {
   background: #f4e5b8;
 }
 
-.tip-impact {
+.promotion-bid {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 2px solid #a98233;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fff4cf, #ead8aa);
+  box-shadow: 0 8px 22px rgb(87 61 21 / 12%);
+}
+
+.promotion-bid-heading {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.promotion-bid-heading > span {
+  color: #a36d1f;
+  font-size: 1.7rem;
+}
+
+.promotion-bid-heading div {
+  display: grid;
+  gap: 3px;
+}
+
+.promotion-bid-heading small {
+  color: #8a6932;
+  font-size: 0.52rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.promotion-bid-heading strong {
+  color: #514733;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.promotion-bid-players {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.promotion-bid-players > span {
+  display: grid;
+  gap: 2px;
+  padding: 9px;
+  border: 1px solid #bca267;
+  border-radius: 8px;
+  background: rgb(255 250 230 / 70%);
+}
+
+.promotion-bid-players > span.is-withdrawn {
+  opacity: 0.55;
+}
+
+.promotion-bid-players b {
+  font-size: 0.62rem;
+}
+
+.promotion-bid-players small {
+  color: #74654a;
+  font-size: 0.52rem;
+}
+
+.promotion-bid-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.result-side.status-bidding {
+  border: 2px solid #b4882f;
+  background: #fff5d3;
+}
+
+.status-bidding > .result-status,
+.resolution-value.status-bidding {
+  color: #fff8df;
+  border-color: #a47927;
+  background: #8b651f;
+}
+
+.result-side.status-outbid {
+  opacity: 0.68;
+}
+
+.promotion-impact {
   grid-column: 1 / -1;
   margin: -4px 0 0;
   padding: 8px 10px;
@@ -3894,38 +3981,38 @@ button:focus-visible {
   line-height: 1.4;
 }
 
-.tip-choice > div:first-child {
+.promotion-choice > div:first-child {
   display: flex;
   gap: 9px;
   align-items: center;
 }
 
-.tip-choice > div:first-child > span {
+.promotion-choice > div:first-child > span {
   color: #a36d1f;
   font-size: 1.4rem;
 }
 
-.tip-choice > div:first-child div {
+.promotion-choice > div:first-child div {
   display: grid;
 }
 
-.tip-choice strong {
+.promotion-choice strong {
   font-family: var(--display);
 }
 
-.tip-choice small {
+.promotion-choice small {
   color: #716750;
   font-size: 0.57rem;
 }
 
-.tip-options {
+.promotion-options {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   justify-content: flex-end;
 }
 
-.tip-option {
+.promotion-option {
   padding: 7px 9px;
   color: #544c38;
   border: 1px solid #baa36b;
@@ -3936,7 +4023,7 @@ button:focus-visible {
   cursor: pointer;
 }
 
-.tip-option.is-selected {
+.promotion-option.is-selected {
   color: white;
   border-color: var(--forest-800);
   background: var(--forest-700);
@@ -4326,16 +4413,15 @@ button:focus-visible {
   }
   .score-value strong { font-size: 0.92rem; }
   .score-value small { font-size: 0.42rem; }
-  .score-tips {
+  .score-promotions {
     grid-column: 2;
     min-width: 0;
     padding: 0 2px;
     border: 0;
     line-height: 1;
   }
-  .score-tips b { font-size: 0.55rem; }
-  .score-tips span { font-size: 0.38rem; }
-  .score-tips-button { width: 100%; }
+  .score-promotions b { font-size: 0.55rem; }
+  .score-promotions-button { width: 100%; }
   .header-tools { grid-column: 3; grid-row: 1; }
   .header-tools .icon-button { width: 36px; height: 36px; }
   .game-shell { scroll-padding-bottom: calc(148px + env(safe-area-inset-bottom)); }
@@ -4353,7 +4439,7 @@ button:focus-visible {
     top: calc(var(--mobile-customer-top, 112px) + 7px);
     left: 50%;
     display: grid;
-    grid-template-columns: 36px minmax(0, 1fr) 45px 45px;
+    grid-template-columns: 36px minmax(0, 1fr) 45px;
     gap: 7px;
     align-items: center;
     width: min(calc(100% - 20px), 430px);
@@ -4419,14 +4505,6 @@ button:focus-visible {
     font-family: var(--display);
     font-size: 0.86rem;
   }
-  .mobile-customer-value small {
-    margin-top: -2px;
-    color: #b7c9c1;
-    font-size: 0.42rem;
-    font-weight: 850;
-    text-transform: uppercase;
-  }
-  .mobile-customer-value.is-tips b { color: var(--theme-highlight); }
   .opponent-zone { display: flex; gap: 0; overflow-x: auto; padding: 5px; scrollbar-width: none; scroll-snap-type: x proximity; }
   .opponent-zone::-webkit-scrollbar { display: none; }
   .opponent-seat { flex: 0 0 210px; border-right: 1px solid rgb(255 255 255 / 8%); border-bottom: 0; scroll-snap-align: start; }
@@ -4450,8 +4528,8 @@ button:focus-visible {
   .result-comparison { grid-template-columns: 1fr; }
   .result-comparison.result-count-3 { grid-template-columns: 1fr; }
   .versus-mark { height: 24px; }
-  .tip-choice { grid-template-columns: 1fr; }
-  .tip-options { justify-content: flex-start; }
+  .promotion-choice { grid-template-columns: 1fr; }
+  .promotion-options { justify-content: flex-start; }
   .mobile-action-bar {
     position: fixed;
     z-index: 90;
@@ -5393,6 +5471,13 @@ button:focus-visible {
   .cuisine-copy small { font-size: 0.58rem; }
   .cuisine-copy strong { line-height: 1.05; white-space: normal; }
   .opponent-selects { grid-template-columns: 1fr; }
+  .online-table-setup .opponent-count-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .online-table-setup .count-toggle { width: 100%; }
+  .online-table-setup .count-toggle button { flex: 1 1 0; }
   .restaurant-picker { padding: 20px 16px; }
   .cuisine-option { min-height: 67px; }
   .lobby-start { align-items: flex-start; flex-direction: column; justify-content: center; }
@@ -5402,7 +5487,7 @@ button:focus-visible {
   .round-marker { padding-left: 9px; }
   .phase-trail li { gap: 0; font-size: 0; }
   .phase-trail li + li::before { margin-inline: 2px; }
-  .score-tips { display: grid; }
+  .score-promotions { display: grid; }
   .score-pill { min-width: 0; }
   .table-surface { padding: 12px 10px calc(148px + env(safe-area-inset-bottom)); }
   .opponent-zone { padding: 10px; min-height: 70px; }
@@ -5429,17 +5514,37 @@ button:focus-visible {
   .rules-flow { grid-template-columns: 1fr; }
   .rules-panel,
   .reveal-panel,
-  .tips-panel,
+  .promotions-panel,
   .customers-panel { max-height: calc(100vh - 24px); padding: 23px 17px; }
-  .tips-panel h2 { font-size: 1.7rem; }
+  .promotions-panel h2 { font-size: 1.7rem; }
   .customers-score-summary { grid-template-columns: 1fr; }
-  .customers-score-summary > div { justify-content: center; }
+  .customers-score-summary > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 4px;
+    width: 100%;
+    min-width: 0;
+  }
+  .customers-score-summary > div span {
+    min-width: 0;
+    padding-inline: 3px;
+    text-align: center;
+  }
+  .customers-score-summary > div small { font-size: 0.4rem; }
   .attracted-customers-grid { grid-template-columns: 1fr; gap: 9px; }
   .attracted-customer-card { min-height: 230px; }
-  .tracked-tips-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .tracked-tip-card { min-height: 170px; padding-inline: 9px; }
+  .tracked-promotions-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .tracked-promotion-card { min-height: 170px; padding-inline: 9px; }
   .result-side { padding: 14px; }
   .result-side ul { grid-template-columns: 1fr; }
+  .resolution-trail {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    overflow: visible;
+  }
+  .resolution-trail > i { transform: rotate(90deg); }
+  .resolution-value { width: 100%; }
   .continue-button { width: 100%; min-width: 0; }
   .final-score { gap: 8px; }
   .final-score > div { padding: 10px; }
@@ -5448,8 +5553,7 @@ button:focus-visible {
   .end-actions { flex-direction: column-reverse; }
   .picker-heading { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: flex-start; }
   .game-facts { justify-content: center; }
-  .customer-values div { width: 56px; }
-  .customer-values i { font-size: 0.36rem; }
+  .customer-values div { width: 44px; }
   .phase-metrics { margin-bottom: 0; }
   .mobile-action-bar { gap: 6px; }
   .mobile-action-bar .primary-button,
@@ -5466,18 +5570,18 @@ button:focus-visible {
   .tutorial-goal,
   .tutorial-build,
   .tutorial-counts,
-  .tutorial-tips { gap: 6px; min-height: 82px; margin: 12px 0; padding: 10px 7px; }
+  .tutorial-promotions { gap: 6px; min-height: 82px; margin: 12px 0; padding: 10px 7px; }
   .tutorial-values > span { width: 50%; padding: 8px; }
   .tutorial-formula span { width: 58px; min-height: 58px; }
   .tutorial-contest span { width: 58px; height: 58px; }
   .tutorial-goal span,
   .tutorial-build span,
   .tutorial-counts span,
-  .tutorial-tips span { min-width: 0; min-height: 58px; padding: 7px 5px; font-size: 1rem; }
+  .tutorial-promotions span { min-width: 0; min-height: 58px; padding: 7px 5px; font-size: 1rem; }
   .tutorial-goal i,
   .tutorial-build i,
   .tutorial-counts i,
-  .tutorial-tips i { font-size: 0.5rem; }
+  .tutorial-promotions i { font-size: 0.5rem; }
   .tutorial-panel footer { margin-top: 15px; }
   .tutorial-panel footer .tutorial-skip { padding-inline: 2px; }
   .tutorial-panel footer .primary-button,
@@ -5792,7 +5896,7 @@ button:focus-visible {
     min-width: 0;
     padding-right: 7px;
   }
-  .game-shell.is-online .score-tips { padding-left: 5px; }
+  .game-shell.is-online .score-promotions { padding-left: 5px; }
 }
 
 .score-name em {

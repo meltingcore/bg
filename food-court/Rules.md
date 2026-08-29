@@ -77,7 +77,8 @@ Each round is a simultaneous contest for the active customer.
    tracks a Promotion Card.
 8. **Cleanup** - Served dishes, added cards, and played drinks are discarded. Cards moved into
    Promotion tracking are not discarded.
-9. **Reveal Next Customer** - Reveal the next customer from the customer deck, if possible.
+9. **Reveal Next Customer** - If fewer than 10 customers have been resolved, reveal the next
+   customer from the customer deck.
 
 ## Serve Value
 
@@ -218,7 +219,8 @@ Customer effects are printed on customer cards and apply to all players.
 
 ## Winning the Game
 
-The game ends after resolving the final customer in the customer deck.
+The game ends after resolving the 10th customer. Any Customer Cards still in the shared customer
+deck are left unused and do not score.
 
 After the game ends, each player sums VP from attracted customers. Each attracted customer scores
 its Order Value plus 1 VP if the player has Promotion Cards in tracking equal to or greater than
