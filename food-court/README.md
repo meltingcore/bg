@@ -16,10 +16,10 @@ In this competitive cooking card game, each player chooses a restaurant deck rep
 cuisine and races to attract customers while using that deck's unique ability and strategy. Each deck
 features Ingredient Cards, Flavor Cards, recipes that can take different numbers of extra
 Ingredient Cards, Drink Cards, Customer Cards, and an Ability Card.
-Each round, one customer appears in the middle and all players may serve a meal of cooked dishes at
-the same time. Players reveal together, compare serve values, and the highest unique value attracts 
-the customer. A player wins by having the most Victory Points (VP) from attracted customers at the 
-end of the game.
+Over 10 rounds, one customer at a time appears in the middle and all players may serve a meal of
+cooked dishes at the same time. Players reveal together, compare serve values, and the highest
+unique value attracts the customer. A player wins by having the most Victory Points (VP) from
+attracted customers at the end of the game.
 
 For more details, check:
 

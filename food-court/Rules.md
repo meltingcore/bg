@@ -9,6 +9,7 @@
   * [Serve Value](#serve-value)
   * [Drink Cards](#drink-cards)
   * [Ties](#ties)
+  * [Promotion Cards](#promotion-cards)
   * [Card Types](#card-types)
     * [Recipe Cards](#recipe-cards)
     * [Ingredient Cards](#ingredient-cards)
@@ -36,7 +37,7 @@ highest unique serve value attracts the customer.
 
 The player with the highest score at the end of the game wins.
 All scoring comes from attracted customers.
-Tips Cards can increase customer scoring and can end the game early.
+Promotion Cards can increase customer scoring or be spent to resolve tied contests.
 
 ## Setup
 
@@ -49,8 +50,8 @@ Tips Cards can increase customer scoring and can end the game early.
 3. Player Station:
    - Each player places their Ability Card in front of them for reference.
    - Each player places their remaining deck face down as a draw pile and draws 6 cards.
-   - Each player reserves space for a discard pile, Tips Cards in tracking, and a scoring pile for
-     attracted customers.
+   - Each player reserves space for a discard pile, up to 3 Promotion Cards in tracking, and a
+     scoring pile for attracted customers.
 
 ## Round Structure
 
@@ -68,12 +69,16 @@ Each round is a simultaneous contest for the active customer.
    least 1 Recipe Card may also add up to 1 Drink Card face down with their meal.
 4. **Reveal** - All players reveal their served cards at the same time.
 5. **Calculate Serve Value** - Each player totals the serve value of their revealed meal.
-6. **Determine Winner** - The highest unique serve value attracts the customer. See also
-   [Ties](#ties).
-7. **Cleanup** - Served dishes, added cards, and played drinks are discarded. The winner
-   moves the attracted customer to their scoring pile and may move 1 eligible Tips Card used in
-   that contest into tracking.
-8. **Reveal Next Customer** - Reveal the next customer from the customer deck, if possible.
+6. **Resolve Ties** - Players tied at a serve value may openly bid Promotion Cards. After bidding,
+   the highest unique serve value attracts the customer. See [Ties](#ties).
+7. **Award Customer And Promotions** - The winner moves the attracted customer to their scoring
+   pile. Each non-winning player may then move up to 1 eligible card used in their meal into
+   Promotion tracking, to a maximum of 3 Promotion Cards. If no customer was attracted, nobody
+   tracks a Promotion Card.
+8. **Cleanup** - Served dishes, added cards, and played drinks are discarded. Cards moved into
+   Promotion tracking are not discarded.
+9. **Reveal Next Customer** - If fewer than 10 customers have been resolved, reveal the next
+   customer from the customer deck.
 
 ## Serve Value
 
@@ -115,25 +120,36 @@ during cleanup.
 
 ## Ties
 
-After serve values are calculated, determine the winner:
+After serve values are calculated, check values from highest to lowest.
 
-- The highest unique serve value attracts the customer.
-- If the highest serve value is tied, all players tied at that value are ignored.
-- Continue checking the next highest serve value until a unique value is found.
+- A unique serve value attracts the customer.
+- If a serve value is tied, any player in that tie may raise by spending 1 Promotion Card from
+  tracking, adding +1 to that player's serve value for the contest. Each other player still in the
+  tie must either spend 1 Promotion Card to match or withdraw from that tie.
+- If every remaining player matches, any remaining player may raise again. Bidding continues until
+  only 1 player remains or no player raises while the bids are equal.
+- If only 1 player remains, that player attracts the customer.
+- If nobody raises or the remaining bids stay equal, the tie persists. Ignore all players still in
+  that tie and continue checking the next highest serve value.
+- All Promotion Cards bid are spent and moved to their owners' discard piles, including cards bid
+  by players who withdraw or remain tied.
 - If every competing serve value is tied, the customer is discarded.
 - If no player served any recipes, the customer is discarded.
 
-Example:
+## Promotion Cards
 
-```text
-Italy: 7
-France: 7
-China: 5
-Mexico: 4
-```
+Promotion Cards represent eligible items from unchosen meals that losing restaurants promote to
+attract future customers. The winning restaurant serves its meal to the attracted customer instead.
 
-Italy and France cancel each other out because they are tied at the highest value. 
-China wins with 5.
+After a customer is attracted, each non-winning player may track 1 eligible Recipe Card or
+Ingredient Card used in their meal as a Promotion Card. Each restaurant deck defines which cards
+are eligible. A player who did not serve an eligible card cannot track a Promotion Card that round.
+The winner cannot track a Promotion Card, and nobody tracks one if the customer was discarded.
+
+A player may have at most 3 Promotion Cards in tracking. Tracking is optional. A tracked card is
+removed from the meal before cleanup and kept face up in the player's Promotion area. When a
+Promotion Card is spent during bidding, it moves to its owner's discard pile and no longer counts
+for customer scoring. It may be drawn and tracked again after the discard pile is reshuffled.
 
 ## Card Types
 
@@ -144,17 +160,17 @@ whether it can take 0, 1, or 2 extra Ingredient Cards. All recipes have the same
 of 1. A served dish's difficulty is determined by how many Ingredient Cards were added to it:
 0 for easy, 1 for normal, or 2 for hard.
 
-Some recipes also have deck-specific symbols, such as pasta type, meal course, food type (rice, 
-noodles, kebab, etc.). These tags are used by deck abilities or for Tips tracking.
+Some recipes also have deck-specific symbols, such as pasta type, meal course, food type (rice,
+noodles, kebab, etc.). These tags are used by deck abilities or Promotion eligibility.
 
 ### Ingredient Cards
 
 Ingredient Cards are extra additions to recipes. Each Ingredient Card added to a recipe gives that
 dish +1 serve value and increases its difficulty.
 
-Some Ingredient Cards have deck-specific tags used by abilities or Tips tracking. For example, the
-Italian deck cares about exact pasta Ingredient Cards, the Indian deck cares about spice Ingredient
-Cards, and the Mexican deck cares about hot Ingredient Cards.
+Some Ingredient Cards have deck-specific tags used by abilities or Promotion eligibility. For
+example, the Italian deck cares about exact pasta Ingredient Cards, the Indian deck cares about
+spice Ingredient Cards, and the Mexican deck cares about hot Ingredient Cards.
 
 ### Flavor Cards
 
@@ -172,9 +188,8 @@ contest if its requirement is met.
 Customer Cards represent people choosing among the food court's restaurants. Each customer has:
 
 - **Order Value** - The maximum number of recipes each player may serve to that customer. It is
-  also the customer's base VP at end game.
-- **Tips Value** - Extra VP gained at end game only if the player has at least that many Tips Cards 
-  in tracking.
+  also the customer's base VP and the number of Promotion Cards needed for its +1 VP bonus at end
+  game.
 - **Nationality** - Determines the customer's printed effect.
 - **Effect** - A deck-agnostic bonus that applies to every player competing for that customer.
 
@@ -183,7 +198,7 @@ Customer Cards represent people choosing among the food court's restaurants. Eac
 Each deck includes an Ability Card that outlines:
 
 - The deck's unique special ability.
-- How to track Tips Cards.
+- Which cards are eligible for Promotion tracking.
 
 Special abilities are evaluated only from the Recipe Cards, Ingredient Cards, and Flavor Cards
 served to the active customer.
@@ -197,19 +212,19 @@ Customer effects are printed on customer cards and apply to all players.
 - **Chinese Customer** - Easy dishes gain +1 serve value.
 - **Indian Customer** - A pair of added ingredients add +1 serve value.
 - **American Customer** - Gain +1 serve value for each pair of cards in hand.
-- **Turkish Customer** - Gain +1 serve value if you have fewer Tips Cards in tracking than at
+- **Turkish Customer** - Gain +1 serve value if you have fewer Promotion Cards in tracking than at
   least one opponent.
 - **Japanese Customer** - Hard dishes gain +1 serve value.
 - **Mexican Customer** - Normal dishes gain +1 serve value.
 
 ## Winning the Game
 
-The game ends after resolving a round in which either a player gets 4 Tips Cards in tracking or the
-customer deck is emptied.
+The game ends after resolving the 10th customer. Any Customer Cards still in the shared customer
+deck are left unused and do not score.
 
 After the game ends, each player sums VP from attracted customers. Each attracted customer scores
-its Order Value. It also scores its full Tips Value if the player has Tips Cards in tracking equal
-to or greater than that Tips Value.
+its Order Value plus 1 VP if the player has Promotion Cards in tracking equal to or greater than
+that Order Value.
 
 The player with the highest total VP wins.
 
@@ -219,13 +234,14 @@ Tiebreaker: the player who most recently cooked a real-life dish wins.
 
 - **Active Customer** - The face-up customer all players may compete for this round.
 - **Attracted Customer** - A customer a player has won and moved to their scoring pile.
-- **Order Value** - The number on a customer showing both the recipe limit for that contest and
-  the customer's base VP.
+- **Order Value** - The number on a customer showing the recipe limit for that contest, the
+  customer's base VP, and the Promotion Cards required for its +1 VP bonus.
 - **Dish** - A served Recipe Card, with any Ingredient Cards or Flavor Card added to it.
 - **Dish Difficulty** - Whether a served dish is easy, normal, or hard, based on whether it has 0,
   1, or 2 Ingredient Cards added to it.
 - **Meal** - All dishes a player serves to the active customer in one contest.
 - **Serve Value** - The total value of a player's revealed meal after recipe, ingredient, flavor,
   customer effect, deck ability, and drink values are counted.
-- **Tips Cards** - Restaurant-specific cards moved into tracking after attracting a customer. Tips
-  Cards can increase customer scoring and end the game.
+- **Promotion Card** - An eligible card from a non-winning meal moved into tracking after another
+  player attracts the customer. A player may track at most 3 Promotion Cards. They may be spent to
+  bid during tied contests or kept to increase customer scoring.

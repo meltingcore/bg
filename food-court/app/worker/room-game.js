@@ -1,18 +1,22 @@
 import { CUISINES } from "../src/data.js";
 import {
+  applyPromotionBid,
   buildCustomerDeck,
   calculateMeal,
   canAttachIngredient,
   chooseAiMeal,
   cleanupMeal,
+  createPromotionContest,
   drawForRefresh,
   emptyMeal,
   flattenMeal,
+  GAME_ROUND_LIMIT,
   makePlayer,
   moveMealFromHand,
   replaceForRefresh,
   scorePlayer,
-  tipCandidates,
+  shouldAiSpendPromotion,
+  promotionCandidates,
 } from "../src/game.js";
 
 export const MAX_PLAYERS = 4;
@@ -314,9 +318,13 @@ function replacePlayerWithAi(room, hostPlayerId, targetPlayerId, random) {
     prepareAiMeals(room);
     if (allReady(game, "serve")) resolveContest(room);
   } else if (game.phase === "reveal" && !game.ready.reveal.includes(player.id)) {
-    const candidates = game.pending.tipCandidates[player.id] || [];
-    if (game.pending.winnerId === player.id && candidates[0]) {
-      game.pending.selectedTips[player.id] = candidates[0].id;
+    if (!game.pending.contest.resolved) {
+      advanceAiBidding(room);
+      if (!game.pending.contest.resolved) return;
+    }
+    const candidates = game.pending.promotionCandidates[player.id] || [];
+    if (game.pending.winnerId !== player.id && candidates[0]) {
+      game.pending.selectedPromotions[player.id] = candidates[0].id;
     }
     markReady(game, "reveal", player.id);
     if (allReady(game, "reveal")) completeRound(room, random);
@@ -381,6 +389,79 @@ export function buildSubmittedMeal(player, selection, orderValue) {
   return meal;
 }
 
+function contestEntries(game) {
+  return game.players.map((player) => ({
+    id: player.id,
+    value: game.pending.results[player.id].total,
+    competing: player.meal.dishes.length > 0,
+  }));
+}
+
+function finalizeContest(room) {
+  const { game } = room;
+  const winner = game.players.find((player) => player.id === game.pending.contest.winnerId) || null;
+  game.pending.winnerId = winner?.id || null;
+  if (winner) winner.customers.push(game.activeCustomer);
+  game.pending.promotionCandidates = winner
+    ? Object.fromEntries(game.players
+      .filter((player) => player.id !== winner.id)
+      .map((player) => [
+        player.id,
+        promotionCandidates(player.meal, player.cuisineId, player.promotions),
+      ]))
+    : {};
+  game.pending.selectedPromotions = {};
+  game.players.filter((player) => player.isAi).forEach((player) => {
+    const first = game.pending.promotionCandidates[player.id]?.[0];
+    if (first) game.pending.selectedPromotions[player.id] = first.id;
+  });
+  game.ready.reveal = game.players.filter((player) => player.isAi).map((player) => player.id);
+}
+
+function advanceAiBidding(room) {
+  const { game } = room;
+  let safety = 0;
+  while (!game.pending.contest.resolved && safety < 40) {
+    safety += 1;
+    const contest = game.pending.contest;
+    if (contest.stage === "raise") {
+      const actionableHuman = game.players.some((player) =>
+        !player.isAi
+        && contest.activeIds.includes(player.id)
+        && !contest.passedIds.includes(player.id));
+      if (actionableHuman) return;
+      const ai = game.players.find((player) =>
+        player.isAi
+        && contest.activeIds.includes(player.id)
+        && !contest.passedIds.includes(player.id));
+      if (!ai) return;
+      const nextLevel = (contest.spent[ai.id] || 0) + 1;
+      const bid = shouldAiSpendPromotion(ai, game.activeCustomer, nextLevel) ? "raise" : "pass";
+      game.pending.contest = applyPromotionBid(
+        contest,
+        { type: bid, playerId: ai.id },
+        game.players,
+        contestEntries(game),
+      );
+    } else if (contest.stage === "match") {
+      const actionableHuman = game.players.some((player) =>
+        !player.isAi && contest.waitingIds.includes(player.id));
+      if (actionableHuman) return;
+      const ai = game.players.find((player) => player.isAi && contest.waitingIds.includes(player.id));
+      if (!ai) return;
+      const nextLevel = (contest.spent[ai.id] || 0) + 1;
+      const bid = shouldAiSpendPromotion(ai, game.activeCustomer, nextLevel) ? "match" : "withdraw";
+      game.pending.contest = applyPromotionBid(
+        contest,
+        { type: bid, playerId: ai.id },
+        game.players,
+        contestEntries(game),
+      );
+    }
+  }
+  if (game.pending.contest.resolved && game.pending.winnerId === undefined) finalizeContest(room);
+}
+
 function resolveContest(room) {
   const { game } = room;
   const results = Object.fromEntries(game.players.map((player) => {
@@ -393,35 +474,20 @@ function resolveContest(room) {
       opponents,
     )];
   }));
-  const competing = game.players.filter((player) => player.meal.dishes.length > 0);
-  const valueCounts = new Map();
-  competing.forEach((player) => {
-    const value = results[player.id].total;
-    valueCounts.set(value, (valueCounts.get(value) || 0) + 1);
-  });
-  const highestUnique = [...valueCounts.entries()]
-    .filter(([, count]) => count === 1)
-    .map(([value]) => value)
-    .sort((left, right) => right - left)[0];
-  const winner = highestUnique === undefined
-    ? null
-    : competing.find((player) => results[player.id].total === highestUnique) || null;
-
-  if (winner) winner.customers.push(game.activeCustomer);
-  const candidates = winner
-    ? tipCandidates(winner.meal, winner.cuisineId, winner.tips)
-    : [];
-  const selectedTips = {};
-  if (winner?.isAi && candidates[0]) selectedTips[winner.id] = candidates[0].id;
-
   game.pending = {
-    winnerId: winner?.id || null,
     results,
-    tipCandidates: winner ? { [winner.id]: candidates } : {},
-    selectedTips,
+    contest: createPromotionContest(
+      game.players.map((player) => ({
+        id: player.id,
+        value: results[player.id].total,
+        competing: player.meal.dishes.length > 0,
+      })),
+      game.players,
+    ),
   };
-  game.ready.reveal = game.players.filter((player) => player.isAi).map((player) => player.id);
   game.phase = "reveal";
+  if (game.pending.contest.resolved) finalizeContest(room);
+  else advanceAiBidding(room);
 }
 
 function advanceFromRefresh(room) {
@@ -436,8 +502,8 @@ function completeRound(room, random) {
   const { game } = room;
   const pending = game.pending;
   game.players.forEach((player) => {
-    const selectedId = pending.selectedTips[player.id] || null;
-    const selectedCard = (pending.tipCandidates[player.id] || [])
+    const selectedId = pending.selectedPromotions[player.id] || null;
+    const selectedCard = (pending.promotionCandidates[player.id] || [])
       .find((card) => card.id === selectedId) || null;
     cleanupMeal(player, player.meal, selectedCard);
   });
@@ -450,8 +516,7 @@ function completeRound(room, random) {
     ),
   });
 
-  const ended = game.players.some((player) => player.tips.length >= 4)
-    || game.customerDeck.length === 0;
+  const ended = game.round >= GAME_ROUND_LIMIT || game.customerDeck.length === 0;
   game.pending = null;
   if (ended) {
     game.phase = "ended";
@@ -554,16 +619,35 @@ function applyGameAction(room, playerId, action, random) {
     moveMealFromHand(player, player.meal);
     markReady(game, "serve", playerId);
     if (allReady(game, "serve")) resolveContest(room);
+  } else if (action.type === "promotion_bid") {
+    if (game.phase !== "reveal" || !game.pending || game.pending.contest.resolved) {
+      throw new RoomError("There is no Promotion bid to make.", 409, "WRONG_PHASE");
+    }
+    try {
+      game.pending.contest = applyPromotionBid(
+        game.pending.contest,
+        { type: action.bid, playerId },
+        game.players,
+        contestEntries(game),
+      );
+    } catch (error) {
+      throw new RoomError(error.message, 400, "INVALID_PROMOTION_BID");
+    }
+    advanceAiBidding(room);
+    if (game.pending.contest.resolved && game.pending.winnerId === undefined) finalizeContest(room);
   } else if (action.type === "reveal_ack") {
     if (game.phase !== "reveal") throw new RoomError("There is no reveal to confirm.", 409, "WRONG_PHASE");
+    if (!game.pending.contest.resolved) {
+      throw new RoomError("Resolve Promotion bidding before confirming the reveal.", 409, "BID_IN_PROGRESS");
+    }
     if (game.ready.reveal.includes(playerId)) return;
-    if (game.pending.winnerId === playerId) {
-      const candidates = game.pending.tipCandidates[playerId] || [];
-      const selectedTipId = action.tipCardId || null;
-      if (selectedTipId && !candidates.some((card) => card.id === selectedTipId)) {
-        throw new RoomError("That Tips Card is not eligible.", 400, "INVALID_TIP");
+    if (game.pending.winnerId && game.pending.winnerId !== playerId) {
+      const candidates = game.pending.promotionCandidates[playerId] || [];
+      const selectedPromotionId = action.promotionCardId || null;
+      if (selectedPromotionId && !candidates.some((card) => card.id === selectedPromotionId)) {
+        throw new RoomError("That Promotion Card is not eligible.", 400, "INVALID_PROMOTION");
       }
-      game.pending.selectedTips[playerId] = selectedTipId;
+      game.pending.selectedPromotions[playerId] = selectedPromotionId;
     }
     markReady(game, "reveal", playerId);
     if (allReady(game, "reveal")) completeRound(room, random);
@@ -606,7 +690,7 @@ function publicGamePlayer(player, revealMeals, playedCount, connected) {
     meal: revealMeals ? player.meal : emptyMeal(),
     playedCount,
     customers: player.customers,
-    tips: player.tips,
+    promotions: player.promotions,
   };
 }
 
@@ -624,9 +708,19 @@ function gameSnapshot(room, viewerId, connectedPlayerIds = []) {
       game.ready.serve.includes(player.id) ? flattenMeal(player.meal).length : 0,
       connected.has(player.id),
     ));
-  const readyIds = game.ready[game.phase] || [];
+  const bidInProgress = game.phase === "reveal" && game.pending && !game.pending.contest.resolved;
+  const actionableBidIds = bidInProgress
+    ? game.pending.contest.stage === "match"
+      ? game.pending.contest.waitingIds
+      : game.pending.contest.activeIds.filter((id) => !game.pending.contest.passedIds.includes(id))
+    : [];
+  const readyIds = bidInProgress
+    ? game.players.map((player) => player.id).filter((id) => !actionableBidIds.includes(id))
+    : game.ready[game.phase] || [];
   const waitingFor = game.players
-    .filter((player) => !player.isAi && !readyIds.includes(player.id))
+    .filter((player) => !player.isAi && (bidInProgress
+      ? actionableBidIds.includes(player.id)
+      : !readyIds.includes(player.id)))
     .map((player) => player.name);
   const playerView = structuredClone(viewer);
   playerView.connected = connected.has(viewer.id);
@@ -640,15 +734,16 @@ function gameSnapshot(room, viewerId, connectedPlayerIds = []) {
   if (game.pending) {
     pending = {
       winnerId: game.pending.winnerId,
+      contest: structuredClone(game.pending.contest),
       playerResult: game.pending.results[viewerId],
       opponentResults: opponents.map((player) => ({
         player,
         result: game.pending.results[player.id],
       })),
-      tipCandidates: game.pending.tipCandidates[viewerId] || [],
-      selectedTipId: Object.hasOwn(game.pending.selectedTips, viewerId)
-        ? game.pending.selectedTips[viewerId]
-        : game.pending.tipCandidates[viewerId]?.[0]?.id || null,
+      promotionCandidates: game.pending.promotionCandidates?.[viewerId] || [],
+      selectedPromotionId: Object.hasOwn(game.pending.selectedPromotions || {}, viewerId)
+        ? game.pending.selectedPromotions[viewerId]
+        : game.pending.promotionCandidates?.[viewerId]?.[0]?.id || null,
     };
   }
   return {

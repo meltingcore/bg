@@ -24,7 +24,6 @@ export interface CardInstance {
   exactIngredient?: string;
   requirement?: string;
   order?: number;
-  tips?: number;
 }
 
 export interface Dish {
@@ -48,7 +47,7 @@ export interface PlayerState {
   meal: Dish[];
   drinkPlayed: CardInstance | null;
   scoring: CardInstance[];
-  tips: CardInstance[];
+  promotions: CardInstance[];
   refreshDiscards: number;
   refreshDraws: number;
   reshuffles: number;
@@ -89,10 +88,37 @@ export interface GameState {
   log: string[];
 }
 
+export interface PromotionBidContext {
+  player: PlayerState;
+  customer: CardInstance;
+  bidLevel: number;
+  role: 'raise' | 'match';
+  contenders: number;
+}
+
+export interface PromotionTrackingContext {
+  player: PlayerState;
+  customer: CardInstance;
+  winnerId: string;
+  eligibleCards: CardInstance[];
+}
+
+export interface RoundResolution {
+  winnerId: string | null;
+  promotionBids: Record<string, number>;
+  trackedPromotions: Record<string, string>;
+  canceledValues: number[];
+}
+
+export type PromotionCardDecision = CardInstance | string | boolean | null | undefined;
+export type PromotionBidPolicy = (context: PromotionBidContext) => PromotionCardDecision;
+export type PromotionTrackingPolicy = (context: PromotionTrackingContext) => PromotionCardDecision;
+
 const HAND_LIMIT = 6;
 const REFRESH_DRAW_LIMIT = 3;
 const REFRESH_DISCARD_LIMIT = 2;
-const MAX_TIPS = 4;
+export const MAX_PROMOTIONS = 3;
+export const GAME_ROUND_LIMIT = 10;
 
 const RECIPE_VALUES: Record<RecipeDifficulty, number> = {
   easy: 1,
@@ -116,6 +142,10 @@ export const RULE_NOTES = [
   'Ingredient Cards fill ingredient slots for +1 each.',
   'Flavor Cards use the flavor slot for +2.',
   'One Drink Card may be served face down with a meal and adds +3 if its requirement is met.',
+  'Each non-winner may track at most 1 eligible Promotion Card after a customer is attracted.',
+  'At tied values, tied players may openly raise, match, or withdraw with tracked Promotion Cards.',
+  'Customers score Order Value plus 1 VP when remaining promotions meet that same threshold.',
+  'The game ends after resolving 10 Customer Cards; unused customers remain in the shared deck.',
 ];
 
 const makeRng = (seed: number) => {
@@ -136,42 +166,6 @@ const shuffle = <T>(items: T[], seed: number): T[] => {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
-};
-
-const shuffleCustomers = (customers: CardInstance[], seed: number): CardInstance[] => {
-  const rng = makeRng(seed);
-  const grouped = customers.reduce<Record<string, CardInstance[]>>((acc, customer) => {
-    acc[customer.deckId] = acc[customer.deckId] ?? [];
-    acc[customer.deckId].push(customer);
-    return acc;
-  }, {});
-
-  for (const [deckId, group] of Object.entries(grouped)) {
-    grouped[deckId] = shuffle(group, seed + deckId.length);
-  }
-
-  const result: CardInstance[] = [];
-  let previousDeckId: string | null = null;
-
-  while (Object.values(grouped).some((group) => group.length > 0)) {
-    const candidates = Object.entries(grouped)
-      .filter(([, group]) => group.length > 0)
-      .filter(([deckId]) => deckId !== previousDeckId);
-    const available = candidates.length > 0 ? candidates : Object.entries(grouped).filter(([, group]) => group.length > 0);
-    const totalRemaining = available.reduce((sum, [, group]) => sum + group.length, 0);
-    let pick = Math.floor(rng() * totalRemaining);
-    const [chosenDeckId, chosenGroup] =
-      available.find(([, group]) => {
-        pick -= group.length;
-        return pick < 0;
-      }) ?? available[0];
-    const customer = chosenGroup.shift();
-    if (!customer) continue;
-    result.push(customer);
-    previousDeckId = chosenDeckId;
-  }
-
-  return result;
 };
 
 let nextRuntimeId = 1;
@@ -237,7 +231,6 @@ const buildCustomers = (deck: DeckDefinition) =>
     emoji: deck.flag,
     tags: [],
     order: customer.order,
-    tips: customer.tips,
   }));
 
 const draw = (player: PlayerState, count: number, log: string[], reshuffleSeed: number) => {
@@ -288,7 +281,7 @@ export const createGame = (decks: DeckDefinition[], selectedDeckIds: CuisineId[]
       meal: [],
       drinkPlayed: null,
       scoring: [],
-      tips: [],
+      promotions: [],
       refreshDiscards: 0,
       refreshDraws: 0,
       reshuffles: 0,
@@ -303,7 +296,7 @@ export const createGame = (decks: DeckDefinition[], selectedDeckIds: CuisineId[]
     phase: 'serve',
     players,
     activeCustomer: null,
-    customerDeck: shuffleCustomers(selectedDecks.flatMap(buildCustomers), seed + 101),
+    customerDeck: shuffle(selectedDecks.flatMap(buildCustomers), seed + 101),
     customerDiscard: [],
     serveHistory: [],
     log,
@@ -318,7 +311,7 @@ export const cardSummary = (card: CardInstance) => {
   if (card.kind === 'ingredient') return `${card.emoji} ${card.name} (${card.ingredientType})`;
   if (card.kind === 'recipe') return `${card.emoji} ${card.name} (${card.difficulty})`;
   if (card.kind === 'drink') return `${card.emoji} ${card.name}`;
-  return `${card.emoji} ${card.order}/${card.tips} ${card.deckName}`;
+  return `${card.emoji} Order ${card.order} ${card.deckName}`;
 };
 
 const findPlayer = (state: GameState, playerId: string) => state.players.find((player) => player.id === playerId);
@@ -329,12 +322,13 @@ const moveCard = (from: CardInstance[], cardIdToMove: string) => {
   return from.splice(index, 1)[0];
 };
 
-export const scoreFor = (player: PlayerState) =>
+export const scoreForPromotionCount = (player: PlayerState, promotionCount: number) =>
   player.scoring.reduce((total, customer) => {
     const order = customer.order ?? 0;
-    const tips = customer.tips ?? 0;
-    return total + order + (player.tips.length >= tips ? tips : 0);
+    return total + order + Number(promotionCount >= order);
   }, 0);
+
+export const scoreFor = (player: PlayerState) => scoreForPromotionCount(player, player.promotions.length);
 
 export const currentHandLimit = (state: GameState) => handLimitFor(state);
 
@@ -540,7 +534,7 @@ const recipeBaseBreakdown = (players: PlayerState[], player: PlayerState, custom
     customerBonus += Math.floor(ingredientCount / 2);
   }
 
-  if (customer.deckId === 'turkiye' && hasFewerTips(players, player)) {
+  if (customer.deckId === 'turkiye' && hasFewerPromotions(players, player)) {
     customerBonus += 1;
     notes.push('Turkish customer +1');
   }
@@ -548,8 +542,8 @@ const recipeBaseBreakdown = (players: PlayerState[], player: PlayerState, custom
   return { recipe, hand, ingredients, customer: customerBonus, notes };
 };
 
-const hasFewerTips = (players: PlayerState[], player: PlayerState) =>
-  players.some((opponent) => opponent.id !== player.id && player.tips.length < opponent.tips.length);
+const hasFewerPromotions = (players: PlayerState[], player: PlayerState) =>
+  players.some((opponent) => opponent.id !== player.id && player.promotions.length < opponent.promotions.length);
 
 const abilityBonus = (player: PlayerState) => {
   if (player.deckId === 'italy') {
@@ -656,7 +650,7 @@ export const drinkRequirementMet = (player: PlayerState, drink: CardInstance) =>
     case 'italy:Aperol Spritz':
       return normalDishes >= 2;
     case 'italy:Limoncello':
-      return new Set(player.meal.map((dish) => dish.recipe.exactIngredient).filter(Boolean)).size >= 2;
+      return differentTaggedIngredientNames(player, 'pasta') >= 2;
     case 'france:Champagne':
       return hasAdjacentCoursePair(player);
     case 'france:Cognac':
@@ -764,78 +758,68 @@ export const revealMeals = (state: GameState) => {
   state.log.unshift('Meals revealed. Resolve by highest unique serve value.');
 };
 
-const winningBreakdown = (state: GameState) => {
-  const breakdowns = roundBreakdowns(state)
-    .filter((breakdown) => breakdown.competing)
-    .sort((a, b) => b.total - a.total);
-  for (const breakdown of breakdowns) {
-    if (breakdowns.filter((item) => item.total === breakdown.total).length === 1) return breakdown;
-  }
-  return null;
-};
-
-const courseOrder = ['entree', 'appetizer', 'main', 'dessert'];
-
-export const eligibleTipCard = (player: PlayerState) => {
-  if (player.tips.length >= MAX_TIPS) return null;
+export const eligiblePromotionCards = (player: PlayerState): CardInstance[] => {
+  if (player.promotions.length >= MAX_PROMOTIONS) return [];
 
   if (player.deckId === 'italy') {
     return player.meal
-      .flatMap((dish) => dish.ingredients)
-      .find((card) => player.meal.some((dish) => dish.recipe.exactIngredient === card.name));
+      .flatMap((dish) => dish.ingredients.filter((card) => dish.recipe.exactIngredient === card.name));
   }
 
   if (player.deckId === 'france') {
-    const nextCourse = courseOrder[player.tips.length];
-    return player.meal.map((dish) => dish.recipe).find((card) => card.tags.includes(nextCourse));
+    const promotedCourses = new Set(player.promotions.flatMap((card) => card.tags));
+    return player.meal
+      .map((dish) => dish.recipe)
+      .filter((card) => card.tags.some((tag) =>
+        ['entree', 'appetizer', 'main', 'dessert'].includes(tag) && !promotedCourses.has(tag)));
   }
 
   if (player.deckId === 'china') {
     const recipes = player.meal.map((dish) => dish.recipe);
-    const qualifyingType = ['rice', 'noodles'].find(
+    const qualifyingTypes = ['rice', 'noodles'].filter(
       (tag) => recipes.filter((card) => card.tags.includes(tag)).length >= 2,
     );
-    return qualifyingType
-      ? recipes.find((card) => card.tags.includes(qualifyingType)) ?? null
-      : null;
+    return recipes.filter((card) => qualifyingTypes.some((tag) => card.tags.includes(tag)));
   }
 
   if (player.deckId === 'india') {
-    const tracked = new Set(player.tips.map((card) => card.name));
+    const tracked = new Set(player.promotions.map((card) => card.name));
     return player.meal
       .flatMap((dish) => dish.ingredients)
-      .find((card) => card.tags.includes('spice') && !tracked.has(card.name));
+      .filter((card) => card.tags.includes('spice') && !tracked.has(card.name));
   }
 
   if (player.deckId === 'usa') {
     return player.meal
       .map((dish) => dish.recipe)
-      .find((card) => card.tags.includes('burger') || card.tags.includes('steak'));
+      .filter((card) => card.tags.includes('burger') || card.tags.includes('steak'));
   }
 
   if (player.deckId === 'turkiye') {
-    return player.meal.map((dish) => dish.recipe).find((card) => card.tags.includes('kebab'));
+    return player.meal.map((dish) => dish.recipe).filter((card) => card.tags.includes('kebab'));
   }
 
   if (player.deckId === 'japan') {
-    const tracked = new Set(player.tips.map((card) => card.name));
+    const tracked = new Set(player.promotions.map((card) => card.name));
     return player.meal
       .flatMap((dish) => dish.ingredients)
-      .find((card) => card.tags.includes('seasoning') && !tracked.has(card.name));
+      .filter((card) => card.tags.includes('seasoning') && !tracked.has(card.name));
   }
 
   if (player.deckId === 'mexico') {
     return player.meal
       .flatMap((dish) => dish.ingredients)
-      .find((card) => card.ingredientType === 'ingredient' && card.tags.includes('hot'));
+      .filter((card) => card.ingredientType === 'ingredient' && card.tags.includes('hot'));
   }
 
-  return null;
+  return [];
 };
 
-const removeTrackedTipFromMeal = (player: PlayerState, tip: CardInstance) => {
+export const eligiblePromotionCard = (player: PlayerState) => eligiblePromotionCards(player)[0] ?? null;
+
+const removeTrackedPromotionFromMeal = (player: PlayerState, promotion: CardInstance) => {
   for (const dish of player.meal) {
-    const index = dish.ingredients.findIndex((card) => card.id === tip.id);
+    const index = dish.ingredients.findIndex((card) => card.id === promotion.id);
     if (index >= 0) {
       dish.ingredients.splice(index, 1);
       return;
@@ -845,7 +829,7 @@ const removeTrackedTipFromMeal = (player: PlayerState, tip: CardInstance) => {
 
 const cleanupRound = (state: GameState) => {
   for (const player of state.players) {
-    const trackedIds = new Set(player.tips.map((card) => card.id));
+    const trackedIds = new Set(player.promotions.map((card) => card.id));
     for (const dish of player.meal) {
       player.discard.push(...[dish.recipe, ...dish.ingredients].filter((card) => !trackedIds.has(card.id)));
     }
@@ -857,13 +841,121 @@ const cleanupRound = (state: GameState) => {
   }
 };
 
-export const resolveRound = (state: GameState) => {
+const promotionFromDecision = (
+  cards: CardInstance[],
+  decision: PromotionCardDecision,
+) => {
+  if (!decision) return null;
+  if (decision === true) return cards[0] ?? null;
+  const id = typeof decision === 'string' ? decision : decision.id;
+  return cards.find((card) => card.id === id) ?? null;
+};
+
+const spendPromotion = (player: PlayerState, decision: PromotionCardDecision) => {
+  const selected = promotionFromDecision(player.promotions, decision);
+  if (!selected) return false;
+  const index = player.promotions.findIndex((card) => card.id === selected.id);
+  const [promotion] = player.promotions.splice(index, 1);
+  if (!promotion) return false;
+  player.discard.push(promotion);
+  return true;
+};
+
+const defaultPromotionBidPolicy: PromotionBidPolicy = ({ player, customer, bidLevel }) => {
+  if (!player.promotions.length) return false;
+  const remaining = player.promotions.length - 1;
+  const opportunityCost = scoreFor(player) - scoreForPromotionCount(player, remaining);
+  const prize = (customer.order ?? 0) + Number(remaining >= (customer.order ?? 0));
+  return prize > opportunityCost + Math.max(0, bidLevel - 1)
+    ? player.promotions[0]
+    : null;
+};
+
+const defaultPromotionTrackingPolicy: PromotionTrackingPolicy = () => null;
+
+const resolvePromotionBids = (
+  state: GameState,
+  breakdowns: PlayerBreakdown[],
+  policy: PromotionBidPolicy,
+): RoundResolution => {
+  const promotionBids: Record<string, number> = {};
+  const trackedPromotions: Record<string, string> = {};
+  const canceledValues: number[] = [];
+  const groups = [...new Set(breakdowns
+    .filter((breakdown) => breakdown.competing)
+    .map((breakdown) => breakdown.total))]
+    .sort((a, b) => b - a);
+
+  for (const value of groups) {
+    const group = breakdowns.filter((breakdown) => breakdown.competing && breakdown.total === value);
+    if (group.length === 1) {
+      return { winnerId: group[0].playerId, promotionBids, trackedPromotions, canceledValues };
+    }
+
+    let active = group
+      .map((breakdown) => findPlayer(state, breakdown.playerId))
+      .filter((player): player is PlayerState => Boolean(player));
+    let auctionStep = 0;
+    while (active.length > 1) {
+      auctionStep += 1;
+      const bidderOrder = shuffle(
+        active,
+        state.seed + state.round * 1009 + value * 9173 + auctionStep * 7919,
+      );
+      const raise = bidderOrder
+        .map((player) => ({
+          player,
+          decision: policy({
+            player,
+            customer: state.activeCustomer!,
+            bidLevel: (promotionBids[player.id] ?? 0) + 1,
+            role: 'raise',
+            contenders: active.length,
+          }),
+        }))
+        .find(({ player, decision }) => promotionFromDecision(player.promotions, decision));
+      if (!raise || !spendPromotion(raise.player, raise.decision)) break;
+      const raiser = raise.player;
+      promotionBids[raiser.id] = (promotionBids[raiser.id] ?? 0) + 1;
+
+      const matched = [raiser];
+      for (const player of active) {
+        if (player.id === raiser.id) continue;
+        const decision = policy({
+          player,
+          customer: state.activeCustomer!,
+          bidLevel: (promotionBids[player.id] ?? 0) + 1,
+          role: 'match',
+          contenders: active.length,
+        });
+        if (spendPromotion(player, decision)) {
+          promotionBids[player.id] = (promotionBids[player.id] ?? 0) + 1;
+          matched.push(player);
+        }
+      }
+      active = matched;
+    }
+
+    if (active.length === 1) {
+      return { winnerId: active[0].id, promotionBids, trackedPromotions, canceledValues };
+    }
+    canceledValues.push(value);
+  }
+
+  return { winnerId: null, promotionBids, trackedPromotions, canceledValues };
+};
+
+export const resolveRound = (
+  state: GameState,
+  promotionBidPolicy: PromotionBidPolicy = defaultPromotionBidPolicy,
+  promotionTrackingPolicy: PromotionTrackingPolicy = defaultPromotionTrackingPolicy,
+) => {
   if (state.phase === 'serve') revealMeals(state);
-  if (state.phase !== 'reveal' || !state.activeCustomer) return;
+  if (state.phase !== 'reveal' || !state.activeCustomer) return null;
 
   const customer = state.activeCustomer;
-  const winnerBreakdown = winningBreakdown(state);
   const breakdowns = roundBreakdowns(state);
+  const resolution = resolvePromotionBids(state, breakdowns, promotionBidPolicy);
   for (const breakdown of breakdowns.filter((item) => item.competing)) {
     const player = findPlayer(state, breakdown.playerId);
     if (!player) continue;
@@ -877,34 +969,47 @@ export const resolveRound = (state: GameState) => {
     });
   }
 
-  if (!winnerBreakdown) {
+  if (!resolution.winnerId) {
     state.customerDiscard.push(customer);
     state.log.unshift(`${cardSummary(customer)} was discarded; no unique serve value won.`);
   } else {
-    const winner = findPlayer(state, winnerBreakdown.playerId);
+    const winner = findPlayer(state, resolution.winnerId);
     if (winner) {
       winner.scoring.push(customer);
-      const tip = eligibleTipCard(winner);
-      if (tip) {
-        winner.tips.push(tip);
-        removeTrackedTipFromMeal(winner, tip);
-        state.log.unshift(`${winner.name} tracked ${cardSummary(tip)} as a Tips Card.`);
-      }
-      state.log.unshift(`${winner.name} attracted ${cardSummary(customer)} with ${winnerBreakdown.total}.`);
+      const winningValue = breakdowns.find((breakdown) => breakdown.playerId === winner.id)?.total ?? 0;
+      state.log.unshift(`${winner.name} attracted ${cardSummary(customer)} with ${winningValue}.`);
+    }
+    for (const player of state.players) {
+      if (player.id === resolution.winnerId) continue;
+      const eligibleCards = eligiblePromotionCards(player);
+      const promotion = promotionFromDecision(
+        eligibleCards,
+        promotionTrackingPolicy({
+          player,
+          customer,
+          winnerId: resolution.winnerId,
+          eligibleCards,
+        }),
+      );
+      if (!promotion) continue;
+      player.promotions.push(promotion);
+      removeTrackedPromotionFromMeal(player, promotion);
+      resolution.trackedPromotions[player.id] = promotion.id;
+      state.log.unshift(`${player.name} tracked ${cardSummary(promotion)} as a Promotion Card.`);
     }
   }
 
   cleanupRound(state);
-  const triggeredByTips = state.players.some((player) => player.tips.length >= MAX_TIPS);
-  const noMoreCustomers = state.customerDeck.length === 0;
-  if (triggeredByTips || noMoreCustomers) {
+  const gameEnded = state.round >= GAME_ROUND_LIMIT || state.customerDeck.length === 0;
+  if (gameEnded) {
     state.activeCustomer = null;
     state.phase = 'game-over';
     state.log.unshift(`Game ended after round ${state.round}.`);
-    return;
+    return resolution;
   }
 
   state.round += 1;
   state.phase = 'serve';
   revealNextCustomer(state);
+  return resolution;
 };

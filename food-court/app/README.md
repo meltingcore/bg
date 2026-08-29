@@ -2,6 +2,8 @@
 
 A standalone player-facing browser game for Food Court.
 
+> **Rules compatibility:** Solo and multiplayer games implement the v0.15.0 Promotion Card rules.
+
 ## Run Locally
 
 ```sh

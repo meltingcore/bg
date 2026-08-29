@@ -3,8 +3,15 @@ import test from "node:test";
 
 import {
   connectToRoom,
+  normalizeRoomId,
   ROOM_HEARTBEAT_INTERVAL_MS,
 } from "../src/multiplayer.js";
+
+test("room codes normalize pasted lowercase values and reject malformed codes", () => {
+  assert.equal(normalizeRoomId(" abcd2345 "), "ABCD2345");
+  assert.equal(normalizeRoomId("ABC12345"), null);
+  assert.equal(normalizeRoomId("TOO-SHORT"), null);
+});
 
 test("room connections send a heartbeat before short corporate idle timeouts", (t) => {
   const originalWindow = globalThis.window;

@@ -2,6 +2,9 @@ import { CUISINES, CUISINE_LIST, CUSTOMER_VALUES } from "./data.js";
 
 let nextId = 1;
 
+export const MAX_PROMOTIONS = 3;
+export const GAME_ROUND_LIMIT = 10;
+
 const id = (prefix) => `${prefix}-${nextId++}`;
 
 export function gameRandom() {
@@ -128,7 +131,7 @@ export function buildCustomerDeck(cuisineIds = CUISINE_LIST.map((cuisine) => cui
   }
   const includedCuisines = new Set(cuisineIds);
   const customers = CUISINE_LIST.filter((cuisine) => includedCuisines.has(cuisine.id)).flatMap((cuisine) =>
-    CUSTOMER_VALUES.map(([order, tips]) => ({
+    CUSTOMER_VALUES.map((order) => ({
       id: id("customer"),
       type: "customer",
       cuisineId: cuisine.id,
@@ -136,7 +139,6 @@ export function buildCustomerDeck(cuisineIds = CUISINE_LIST.map((cuisine) => cui
       flag: cuisine.flag,
       name: `${cuisine.region.replace(" restaurant", "")} customer`,
       order,
-      tips,
       effect: cuisine.customerEffect,
       accent: cuisine.accent,
     })),
@@ -169,7 +171,7 @@ export function makePlayer(cuisineId, name, random = gameRandom) {
     discard: [],
     meal: emptyMeal(),
     customers: [],
-    tips: [],
+    promotions: [],
     refreshDrawn: 0,
   };
   drawCards(player, 6, random);
@@ -385,7 +387,8 @@ function customerValue(meal, customer, player, opponents, handCount) {
     case "china": return easy;
     case "india": return Math.floor(ingredients / 2);
     case "usa": return Math.floor(handCount / 2);
-    case "turkey": return rivals.some((opponent) => player.tips.length < opponent.tips.length) ? 1 : 0;
+    case "turkey": return rivals.some((opponent) =>
+      player.promotions.length < opponent.promotions.length) ? 1 : 0;
     case "japan": return hard;
     case "mexico": return normal;
     default: return 0;
@@ -426,7 +429,26 @@ export function determineUniqueWinner(entries) {
   return competitors.find((entry) => entry.value === uniqueValues[0])?.id ?? null;
 }
 
-export function classifyContest(entries) {
+export function classifyContest(entries, contest = null) {
+  if (contest) {
+    const canceledValues = new Set(contest.canceledValues || []);
+    return entries.map((entry) => ({
+      ...entry,
+      status: !entry.competing
+        ? "passed"
+        : entry.id === contest.winnerId
+          ? "winner"
+          : canceledValues.has(entry.value)
+            ? "cancelled"
+            : !contest.resolved && contest.activeIds?.includes(entry.id)
+              ? "bidding"
+              : !contest.resolved && contest.participantIds?.includes(entry.id)
+                ? "outbid"
+                : contest.resolved && contest.participantIds?.includes(entry.id)
+                  ? "outbid"
+                  : "outscored",
+    }));
+  }
   const winnerId = determineUniqueWinner(entries);
   const counts = new Map();
   entries.filter((entry) => entry.competing).forEach((entry) =>
@@ -443,9 +465,145 @@ export function classifyContest(entries) {
   }));
 }
 
-export function tipCandidates(meal, cuisineId, existingTips = []) {
+function nextContestGroup(entries, canceledValues) {
+  const canceled = new Set(canceledValues);
+  const grouped = new Map();
+  entries.filter((entry) => entry.competing && !canceled.has(entry.value)).forEach((entry) => {
+    grouped.set(entry.value, [...(grouped.get(entry.value) || []), entry]);
+  });
+  const value = [...grouped.keys()].sort((a, b) => b - a)[0];
+  return value === undefined ? null : { value, entries: grouped.get(value) };
+}
+
+export function createPromotionContest(
+  entries,
+  players,
+  canceledValues = [],
+  spent = {},
+  revision = 0,
+) {
+  const group = nextContestGroup(entries, canceledValues);
+  if (!group) {
+    return { resolved: true, winnerId: null, canceledValues, spent, revision };
+  }
+  if (group.entries.length === 1) {
+    return {
+      resolved: true,
+      winnerId: group.entries[0].id,
+      canceledValues,
+      spent,
+      revision,
+    };
+  }
+
+  const participantIds = group.entries.map((entry) => entry.id);
+  const canRaise = players.some((player) =>
+    participantIds.includes(player.id) && player.promotions.length > 0);
+  if (!canRaise) {
+    return createPromotionContest(
+      entries,
+      players,
+      [...canceledValues, group.value],
+      spent,
+      revision + 1,
+    );
+  }
+
+  return {
+    resolved: false,
+    winnerId: null,
+    canceledValues,
+    spent,
+    revision,
+    baseValue: group.value,
+    participantIds,
+    activeIds: [...participantIds],
+    stage: "raise",
+    passedIds: [],
+    waitingIds: [],
+    raiserId: null,
+  };
+}
+
+function spendPromotion(players, playerId) {
+  const player = players.find((candidate) => candidate.id === playerId);
+  const card = player?.promotions.pop();
+  if (!player || !card) throw new Error("No Promotion Card is available to spend.");
+  player.discard.push(card);
+  return card;
+}
+
+export function applyPromotionBid(contest, action, players, entries) {
+  if (!contest || contest.resolved) throw new Error("Promotion bidding is already complete.");
+  const { playerId, type } = action;
+  if (!contest.activeIds.includes(playerId)) throw new Error("This restaurant is no longer in the tie.");
+
+  const finishMatchStep = () => {
+    if (contest.activeIds.length === 1) {
+      contest.resolved = true;
+      contest.winnerId = contest.activeIds[0];
+      contest.stage = "resolved";
+      contest.waitingIds = [];
+      return;
+    }
+    if (contest.waitingIds.length === 0) {
+      contest.stage = "raise";
+      contest.raiserId = null;
+      contest.passedIds = [];
+    }
+  };
+
+  if (type === "raise") {
+    if (contest.stage !== "raise" || contest.passedIds.includes(playerId)) {
+      throw new Error("This restaurant cannot raise now.");
+    }
+    spendPromotion(players, playerId);
+    contest.spent[playerId] = (contest.spent[playerId] || 0) + 1;
+    contest.raiserId = playerId;
+    contest.stage = "match";
+    contest.passedIds = [];
+    contest.waitingIds = contest.activeIds.filter((id) => id !== playerId);
+  } else if (type === "pass") {
+    if (contest.stage !== "raise" || contest.passedIds.includes(playerId)) {
+      throw new Error("This restaurant cannot pass now.");
+    }
+    contest.passedIds.push(playerId);
+    if (contest.passedIds.length === contest.activeIds.length) {
+      return createPromotionContest(
+        entries,
+        players,
+        [...contest.canceledValues, contest.baseValue],
+        contest.spent,
+        contest.revision + 1,
+      );
+    }
+  } else if (type === "match") {
+    if (contest.stage !== "match" || !contest.waitingIds.includes(playerId)) {
+      throw new Error("This restaurant does not need to match now.");
+    }
+    spendPromotion(players, playerId);
+    contest.spent[playerId] = (contest.spent[playerId] || 0) + 1;
+    contest.waitingIds = contest.waitingIds.filter((id) => id !== playerId);
+    finishMatchStep();
+  } else if (type === "withdraw") {
+    if (contest.stage !== "match" || !contest.waitingIds.includes(playerId)) {
+      throw new Error("This restaurant cannot withdraw now.");
+    }
+    contest.waitingIds = contest.waitingIds.filter((id) => id !== playerId);
+    contest.activeIds = contest.activeIds.filter((id) => id !== playerId);
+    finishMatchStep();
+  } else {
+    throw new Error("Choose a valid Promotion bid action.");
+  }
+
+  contest.revision += 1;
+  return contest;
+}
+
+export function promotionCandidates(meal, cuisineId, existingPromotions = []) {
+  if (existingPromotions.length >= MAX_PROMOTIONS) return [];
   const ingredients = allIngredients(meal);
-  const existingKeys = new Set(existingTips.map((tip) => tip.tipKey));
+  const existingKeys = new Set(existingPromotions.map((promotion) => promotion.promotionKey));
   let candidates = [];
 
   switch (cuisineId) {
@@ -454,8 +612,9 @@ export function tipCandidates(meal, cuisineId, existingTips = []) {
         dish.ingredients.filter((card) => card.subtype === dish.recipe.match));
       break;
     case "france": {
-      const nextCourse = ["entree", "appetizer", "main", "dessert"][existingTips.length];
-      candidates = meal.dishes.map((dish) => dish.recipe).filter((card) => card.tag === nextCourse);
+      candidates = meal.dishes
+        .map((dish) => dish.recipe)
+        .filter((card) => card.tag && !existingKeys.has(card.tag));
       break;
     }
     case "china": {
@@ -484,7 +643,7 @@ export function tipCandidates(meal, cuisineId, existingTips = []) {
 
   return candidates.map((card) => ({
     ...card,
-    tipKey: card.subtype || card.tag || card.name,
+    promotionKey: card.subtype || card.tag || card.name,
   }));
 }
 
@@ -568,30 +727,43 @@ export function moveMealFromHand(player, meal) {
   player.hand = player.hand.filter((card) => !ids.has(card.id));
 }
 
-export function cleanupMeal(player, meal, tipCard = null) {
-  const tipId = tipCard?.id;
+export function cleanupMeal(player, meal, promotionCard = null) {
+  const promotionId = promotionCard?.id;
   flattenMeal(meal).forEach((card) => {
-    if (card.id !== tipId) player.discard.push(card);
+    if (card.id !== promotionId) player.discard.push(card);
   });
-  if (tipCard) player.tips.push(tipCard);
+  if (promotionCard) player.promotions.push(promotionCard);
   player.meal = emptyMeal();
 }
 
-export function scoreCustomer(customer, trackedTips) {
+export function scoreCustomer(customer, trackedPromotions) {
   const orderVp = customer.order;
-  const tipsUnlocked = trackedTips >= customer.tips;
-  const tipsVp = tipsUnlocked ? customer.tips : 0;
+  const promotionUnlocked = trackedPromotions >= customer.order;
+  const promotionVp = promotionUnlocked ? 1 : 0;
   return {
     orderVp,
-    tipsVp,
-    tipsUnlocked,
-    total: orderVp + tipsVp,
+    promotionVp,
+    promotionUnlocked,
+    total: orderVp + promotionVp,
   };
 }
 
 export function scorePlayer(player) {
   return player.customers.reduce(
-    (score, customer) => score + scoreCustomer(customer, player.tips.length).total,
+    (score, customer) => score + scoreCustomer(customer, player.promotions.length).total,
     0,
   );
+}
+
+export function shouldAiSpendPromotion(player, customer, nextBidLevel = 1) {
+  if (!player.promotions.length) return false;
+  const currentScore = scorePlayer(player);
+  const remaining = player.promotions.length - 1;
+  const scoreAfterSpend = player.customers.reduce(
+    (score, attracted) => score + scoreCustomer(attracted, remaining).total,
+    0,
+  );
+  const opportunityCost = currentScore - scoreAfterSpend;
+  const customerValue = customer.order + Number(remaining >= customer.order);
+  return customerValue > opportunityCost + Math.max(0, nextBidLevel - 1);
 }

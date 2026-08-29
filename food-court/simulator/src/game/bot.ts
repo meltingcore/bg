@@ -6,19 +6,24 @@ import {
   discardFromHand,
   discardHandForRefresh,
   drinkRequirementMet,
-  eligibleTipCard,
+  eligiblePromotionCard,
+  GAME_ROUND_LIMIT,
   playDrink,
   refreshHand,
   resolveRound,
+  scoreFor,
+  scoreForPromotionCount,
   serveRecipe,
   valueBreakdown,
   type CardInstance,
   type Dish,
   type GameState,
   type PlayerState,
+  type PromotionBidContext,
+  type PromotionTrackingContext,
 } from './engine.ts';
 
-export const BOT_POLICIES = ['greedy', 'tips', 'cautious', 'adaptive'] as const;
+export const BOT_POLICIES = ['greedy', 'promotions', 'cautious', 'adaptive'] as const;
 export type BotPolicy = (typeof BOT_POLICIES)[number];
 export type SimulationPolicy = BotPolicy | 'mixed';
 export const SIMULATION_POLICIES: readonly SimulationPolicy[] = [...BOT_POLICIES, 'mixed'];
@@ -36,12 +41,14 @@ export interface BotTurnSummary {
   addedIngredients: number;
   playedDrink: boolean;
   drinkSuccessful: boolean;
-  tipEligible: boolean;
+  promotionEligible: boolean;
   estimatedTieRisk: number;
   customerEffectValue: number;
   usedFrenchRedraw: boolean;
   usedItalianHandLimit: boolean;
   serveValue: number;
+  promotionsBid: number;
+  promotionTracked: boolean;
   wonCustomer: boolean;
   customerDiscarded: boolean;
 }
@@ -55,9 +62,9 @@ interface CandidateMetrics {
   cardsSpent: number;
   handSize: number;
   playedDrink: boolean;
-  tipEligible: boolean;
-  tipScoreSwing: number;
-  completesTips: boolean;
+  promotionEligible: boolean;
+  promotionScoreSwing: number;
+  completesPromotions: boolean;
   tieRisk: number;
   customerEffectValue: number;
   abilityValue: number;
@@ -95,15 +102,11 @@ const candidateRecipes = (player: PlayerState, order: number) => {
   return result;
 };
 
-const scoreAtTips = (player: PlayerState, tipCount: number) =>
-  player.scoring.reduce((total, customer) => {
-    const order = customer.order ?? 0;
-    const tips = customer.tips ?? 0;
-    return total + order + (tipCount >= tips ? tips : 0);
-  }, 0);
+const scoreAtPromotions = (player: PlayerState, promotionCount: number) =>
+  scoreForPromotionCount(player, promotionCount);
 
-const tipScoreSwing = (player: PlayerState) =>
-  scoreAtTips(player, player.tips.length + 1) - scoreAtTips(player, player.tips.length);
+const promotionScoreSwing = (player: PlayerState) =>
+  scoreAtPromotions(player, player.promotions.length + 1) - scoreAtPromotions(player, player.promotions.length);
 
 const hashText = (value: string) => {
   let hash = 2166136261;
@@ -150,8 +153,8 @@ const candidateUtility = (
   player: PlayerState,
   metrics: Omit<CandidateMetrics, 'state' | 'utility'>,
 ) => {
-  const tipBonus = metrics.tipEligible
-    ? 7 + metrics.tipScoreSwing * 2 + (metrics.completesTips ? 16 : 0)
+  const promotionBonus = metrics.promotionEligible
+    ? 7 + metrics.promotionScoreSwing * 2 + (metrics.completesPromotions ? 16 : 0)
     : 0;
   const jitter = policy === 'greedy'
     ? 0
@@ -165,9 +168,9 @@ const candidateUtility = (
       metrics.cardsSpent * 0.001;
   }
 
-  if (policy === 'tips') {
+  if (policy === 'promotions') {
     return metrics.value * 10 +
-      tipBonus * 1.5 -
+      promotionBonus * 1.5 -
       metrics.tieRisk * 4 -
       metrics.cardsSpent * 0.08 +
       metrics.customerEffectValue * 0.04 +
@@ -176,7 +179,7 @@ const candidateUtility = (
 
   if (policy === 'cautious') {
     return metrics.value * 10 +
-      tipBonus * 0.35 -
+      promotionBonus * 0.35 -
       metrics.tieRisk * 18 -
       metrics.cardsSpent * 0.2 +
       metrics.handSize * 0.05 +
@@ -185,7 +188,7 @@ const candidateUtility = (
   }
 
   return metrics.value * 10 +
-    tipBonus -
+    promotionBonus -
     metrics.tieRisk * 10 -
     metrics.cardsSpent * 0.12 +
     metrics.handSize * 0.08 +
@@ -203,7 +206,7 @@ const metricsFor = (
 
   const breakdown = valueBreakdown(state, player);
   const value = breakdown.total;
-  const tipEligible = Boolean(eligibleTipCard(player));
+  const promotionEligible = Boolean(eligiblePromotionCard(player));
   const recipes = player.meal.length;
   const ingredients = player.meal.reduce((sum, dish) => sum + dish.ingredients.length, 0);
   const playedDrink = Boolean(player.drinkPlayed);
@@ -215,9 +218,9 @@ const metricsFor = (
     cardsSpent,
     handSize: player.hand.length,
     playedDrink,
-    tipEligible,
-    tipScoreSwing: tipEligible ? tipScoreSwing(player) : 0,
-    completesTips: tipEligible && player.tips.length === 3,
+    promotionEligible,
+    promotionScoreSwing: promotionEligible ? promotionScoreSwing(player) : 0,
+    completesPromotions: promotionEligible && player.promotions.length === 2,
     tieRisk: tieRiskFor(state, player, value),
     customerEffectValue: breakdown.customer + breakdown.hand,
     abilityValue: breakdown.ability,
@@ -263,7 +266,7 @@ const rankCandidates = (candidates: CandidateMetrics[]) =>
     (a, b) =>
       b.utility - a.utility ||
       b.value - a.value ||
-      Number(b.tipEligible) - Number(a.tipEligible) ||
+      Number(b.promotionEligible) - Number(a.promotionEligible) ||
       a.tieRisk - b.tieRisk ||
       a.cardsSpent - b.cardsSpent,
   );
@@ -343,33 +346,32 @@ const chooseMeal = (
     .map((recipes) => buildMealCandidate(state, playerId, recipes, policy))
     .filter((candidate): candidate is CandidateMetrics => Boolean(candidate));
   let competitiveCandidates = candidates;
-  if (policy === 'tips' && candidates.length > 0) {
+  if (policy === 'promotions' && candidates.length > 0) {
     const bestValue = Math.max(...candidates.map((candidate) => candidate.value));
-    const tipCandidates = candidates.filter(
-      (candidate) => candidate.tipEligible && candidate.value >= bestValue - 1,
+    const promotionCandidates = candidates.filter(
+      (candidate) => candidate.promotionEligible && candidate.value >= bestValue - 1,
     );
-    if (tipCandidates.length > 0) competitiveCandidates = tipCandidates;
+    if (promotionCandidates.length > 0) competitiveCandidates = promotionCandidates;
   }
 
   const best = rankCandidates(competitiveCandidates)[0] ?? fallback;
   return { state: best.state, metrics: best };
 };
 
-const nextFrenchCourse = (player: PlayerState) =>
-  ['entree', 'appetizer', 'main', 'dessert'][player.tips.length];
-
-const supportsTips = (player: PlayerState, card: CardInstance) => {
+const supportsPromotions = (player: PlayerState, card: CardInstance) => {
   if (player.deckId === 'italy') {
     return card.kind === 'ingredient' && card.tags.includes('exact');
   }
   if (player.deckId === 'france') {
-    return card.kind === 'recipe' && card.tags.includes(nextFrenchCourse(player));
+    const promotedCourses = new Set(player.promotions.flatMap((promotion) => promotion.tags));
+    return card.kind === 'recipe' && card.tags.some((tag) =>
+      ['entree', 'appetizer', 'main', 'dessert'].includes(tag) && !promotedCourses.has(tag));
   }
   if (player.deckId === 'china') {
     return card.kind === 'recipe' && (card.tags.includes('rice') || card.tags.includes('noodles'));
   }
   if (player.deckId === 'india') {
-    const tracked = new Set(player.tips.map((tip) => tip.name));
+    const tracked = new Set(player.promotions.map((promotion) => promotion.name));
     return card.kind === 'ingredient' && card.tags.includes('spice') && !tracked.has(card.name);
   }
   if (player.deckId === 'usa') {
@@ -380,7 +382,7 @@ const supportsTips = (player: PlayerState, card: CardInstance) => {
     return card.kind === 'recipe' && card.tags.includes('kebab');
   }
   if (player.deckId === 'japan') {
-    const tracked = new Set(player.tips.map((tip) => tip.name));
+    const tracked = new Set(player.promotions.map((promotion) => promotion.name));
     return card.kind === 'ingredient' &&
       card.tags.includes('seasoning') &&
       !tracked.has(card.name);
@@ -406,15 +408,15 @@ const cardKeepValue = (
           ? 2
           : 0;
 
-  if (supportsTips(player, card)) {
-    value += policy === 'tips' ? 8 : policy === 'adaptive' ? 3.5 : policy === 'cautious' ? 1.5 : 0.5;
+  if (supportsPromotions(player, card)) {
+    value += policy === 'promotions' ? 8 : policy === 'adaptive' ? 3.5 : policy === 'cautious' ? 1.5 : 0.5;
   }
   if (card.kind === 'recipe' && (state.activeCustomer?.order ?? 0) >= 2) value += 0.5;
   if (card.kind === 'drink' && player.hand.filter((item) => item.kind === 'drink').length > 1) value -= 1;
   return value;
 };
 
-const hasImmediateTipPotential = (player: PlayerState) => {
+const hasImmediatePromotionPotential = (player: PlayerState) => {
   if (player.deckId === 'italy') {
     const recipes = player.hand.filter((card) => card.kind === 'recipe');
     const ingredients = new Set(player.hand.filter((card) => card.kind === 'ingredient').map((card) => card.name));
@@ -426,7 +428,7 @@ const hasImmediateTipPotential = (player: PlayerState) => {
       (tag) => recipes.filter((card) => card.tags.includes(tag)).length >= 2,
     );
   }
-  return player.hand.some((card) => supportsTips(player, card));
+  return player.hand.some((card) => supportsPromotions(player, card));
 };
 
 const shouldRedrawFrenchHand = (
@@ -441,13 +443,13 @@ const shouldRedrawFrenchHand = (
   if (policy === 'greedy') return false;
 
   const order = state.activeCustomer.order ?? 1;
-  const support = hasImmediateTipPotential(player);
+  const support = hasImmediatePromotionPotential(player);
   const averageKeep = player.hand.reduce(
     (sum, card) => sum + cardKeepValue(state, player, card, policy),
     0,
   ) / player.hand.length;
 
-  if (policy === 'tips') return !support && player.tips.length < 4;
+  if (policy === 'promotions') return !support && player.promotions.length < 3;
   if (policy === 'cautious') return recipes < Math.min(2, order) && averageKeep < 3.5;
   return (recipes < Math.min(2, order) && !support) || averageKeep < 3;
 };
@@ -463,7 +465,7 @@ const chooseRefreshDiscards = (
     .map((card) => ({ card, keep: cardKeepValue(state, player, card, policy) }))
     .sort((a, b) => a.keep - b.keep || a.card.name.localeCompare(b.card.name));
   const handLimit = currentHandLimit(state);
-  const threshold = policy === 'tips' ? 5 : policy === 'adaptive' ? 3.25 : 2.5;
+  const threshold = policy === 'promotions' ? 5 : policy === 'adaptive' ? 3.25 : 2.5;
   return ranked
     .filter(({ keep }) => player.hand.length >= handLimit || keep < threshold)
     .slice(0, 2)
@@ -514,21 +516,6 @@ export const refreshForBot = (
   return false;
 };
 
-const uniqueWinningPlayerId = (state: GameState) => {
-  const breakdowns = state.players
-    .map((player) => valueBreakdown(state, player))
-    .filter((breakdown) => breakdown.competing)
-    .sort((a, b) => b.total - a.total);
-
-  for (const breakdown of breakdowns) {
-    if (breakdowns.filter((item) => item.total === breakdown.total).length === 1) {
-      return breakdown.playerId;
-    }
-  }
-
-  return null;
-};
-
 export const playBotPlayers = (
   state: GameState,
   playerIds: string[],
@@ -564,8 +551,6 @@ export const playBotPlayers = (
 
   Object.assign(state, current);
 
-  const winningPlayerId = uniqueWinningPlayerId(state);
-  const customerDiscarded = !winningPlayerId;
   const activeCustomerDeckId = state.activeCustomer?.deckId ?? null;
   const activeCustomerDeckName = state.activeCustomer?.deckName ?? null;
 
@@ -594,16 +579,109 @@ export const playBotPlayers = (
         currentPlayer.drinkPlayed &&
         drinkRequirementMet(currentPlayer, currentPlayer.drinkPlayed),
       ),
-      tipEligible: Boolean(eligibleTipCard(currentPlayer)),
+      promotionEligible: Boolean(eligiblePromotionCard(currentPlayer)),
       estimatedTieRisk: metrics?.tieRisk ?? 0,
       customerEffectValue: metrics?.customerEffectValue ?? 0,
       usedFrenchRedraw: frenchRedraws.get(player.id) ?? false,
       usedItalianHandLimit: italianHandLimitUses.get(player.id) ?? false,
       serveValue: valueBreakdown(state, currentPlayer).total,
-      wonCustomer: winningPlayerId === currentPlayer.id,
-      customerDiscarded,
+      promotionsBid: 0,
+      promotionTracked: false,
+      wonCustomer: false,
+      customerDiscarded: false,
     };
   });
+};
+
+const promotionRecoveryPotential = (player: PlayerState, promotion: CardInstance) => {
+  const available = [
+    ...player.hand,
+    ...player.drawPile,
+    ...player.discard,
+    ...player.meal.flatMap((dish) => [dish.recipe, ...dish.ingredients]),
+  ].filter((card) => card.id !== promotion.id);
+
+  if (player.deckId === 'italy') {
+    return available.filter((card) =>
+      card.name === promotion.name || card.exactIngredient === promotion.name).length;
+  }
+  if (player.deckId === 'france') {
+    const courses = promotion.tags.filter((tag) =>
+      ['entree', 'appetizer', 'main', 'dessert'].includes(tag));
+    return available.filter((card) =>
+      card.kind === 'recipe' && courses.some((course) => card.tags.includes(course))).length;
+  }
+  if (player.deckId === 'china') {
+    const types = promotion.tags.filter((tag) => ['rice', 'noodles'].includes(tag));
+    return available.filter((card) =>
+      card.kind === 'recipe' && types.some((type) => card.tags.includes(type))).length;
+  }
+  if (player.deckId === 'india' || player.deckId === 'japan') {
+    return available.filter((card) => card.kind === 'ingredient' && card.name === promotion.name).length;
+  }
+  if (player.deckId === 'usa') {
+    return available.filter((card) =>
+      card.kind === 'recipe' && (card.tags.includes('burger') || card.tags.includes('steak'))).length;
+  }
+  if (player.deckId === 'turkiye') {
+    return available.filter((card) => card.kind === 'recipe' && card.tags.includes('kebab')).length;
+  }
+  return available.filter((card) =>
+    card.kind === 'ingredient' && card.tags.includes('hot')).length;
+};
+
+const choosePromotionCard = (
+  state: GameState,
+  player: PlayerState,
+  cards: CardInstance[],
+  preferEasyRecovery: boolean,
+) => [...cards].sort((a, b) => {
+  const recoveryDelta = promotionRecoveryPotential(player, b) - promotionRecoveryPotential(player, a);
+  if (recoveryDelta !== 0) return preferEasyRecovery ? recoveryDelta : -recoveryDelta;
+  return hashText(`${state.seed}:${state.round}:${player.id}:${a.id}`) -
+    hashText(`${state.seed}:${state.round}:${player.id}:${b.id}`);
+})[0] ?? null;
+
+const choosePromotionToSpend = (
+  policy: BotPolicy,
+  state: GameState,
+  context: PromotionBidContext,
+) => {
+  const { player, customer, bidLevel, role } = context;
+  if (!player.promotions.length) return null;
+  const remaining = player.promotions.length - 1;
+  const opportunityCost = scoreFor(player) - scoreForPromotionCount(player, remaining);
+  const prize = (customer.order ?? 0) + Number(remaining >= (customer.order ?? 0));
+  const pressure = bidLevel - 1;
+  const policyThreshold = {
+    greedy: 0.15,
+    promotions: 1.35,
+    cautious: 1.05,
+    adaptive: 0.65,
+  }[policy];
+  const jitter = (hashText(`${state.seed}:${state.round}:${player.id}:${bidLevel}:${role}`) % 100) / 200;
+  return prize - opportunityCost - pressure + jitter > policyThreshold
+    ? choosePromotionCard(state, player, player.promotions, true)
+    : null;
+};
+
+const choosePromotionToTrack = (
+  policy: BotPolicy,
+  state: GameState,
+  context: PromotionTrackingContext,
+) => {
+  const { player, eligibleCards } = context;
+  if (eligibleCards.length === 0) return null;
+  const scoreGain = scoreForPromotionCount(player, player.promotions.length + 1) - scoreFor(player);
+  const roundsRemaining = GAME_ROUND_LIMIT - state.round;
+  const shouldTrack = policy === 'promotions' ||
+    scoreGain > 0 ||
+    (policy === 'adaptive' && roundsRemaining > 0) ||
+    (policy === 'greedy' && roundsRemaining >= 2) ||
+    (policy === 'cautious' && roundsRemaining >= 2 && player.promotions.length < 2);
+  return shouldTrack
+    ? choosePromotionCard(state, player, eligibleCards, false)
+    : null;
 };
 
 export const playBotRound = (
@@ -615,7 +693,29 @@ export const playBotRound = (
     state.players.map((player) => player.id),
     assignment,
   );
-
-  resolveRound(state);
+  const policies = resolveAssignments(
+    assignment,
+    state.players.map((player) => player.id),
+    state.seed,
+  );
+  const resolution = resolveRound(
+    state,
+    (context) => choosePromotionToSpend(
+      policies.get(context.player.id) ?? 'adaptive',
+      state,
+      context,
+    ),
+    (context) => choosePromotionToTrack(
+      policies.get(context.player.id) ?? 'adaptive',
+      state,
+      context,
+    ),
+  );
+  summaries.forEach((summary) => {
+    summary.promotionsBid = resolution?.promotionBids[summary.playerId] ?? 0;
+    summary.promotionTracked = Boolean(resolution?.trackedPromotions[summary.playerId]);
+    summary.wonCustomer = resolution?.winnerId === summary.playerId;
+    summary.customerDiscarded = !resolution?.winnerId;
+  });
   return summaries;
 };

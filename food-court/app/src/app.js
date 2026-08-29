@@ -1,5 +1,6 @@
 import { CUISINES, CUISINE_LIST, TYPE_META } from "./data.js";
 import {
+  applyPromotionBid,
   cardParticipatesInAbility,
   cardPlayability,
   calculateMeal,
@@ -7,17 +8,19 @@ import {
   chooseAiMeal,
   classifyContest,
   cleanupMeal,
+  createPromotionContest,
   createGame,
-  determineUniqueWinner,
   drawForRefresh,
   emptyMeal,
   flattenMeal,
   handLimit,
+  GAME_ROUND_LIMIT,
   moveMealFromHand,
   replaceForRefresh,
   scoreCustomer,
   scorePlayer,
-  tipCandidates,
+  shouldAiSpendPromotion,
+  promotionCandidates,
 } from "./game.js";
 import {
   connectToRoom,
@@ -26,6 +29,7 @@ import {
   joinRoom,
   leaveRoom,
   loadRoom,
+  normalizeRoomId,
   roomIdFromUrl,
   serializeMeal,
   shareableRoomUrl,
@@ -35,24 +39,27 @@ import {
 
 const app = document.querySelector("#app");
 const announcer = document.querySelector("#announcer");
+const initialRoomId = roomIdFromUrl();
 
 let screen = "lobby";
 let selectedCuisineId = "italy";
 let opponentCount = 1;
 let selectedOpponentCuisineIds = ["france"];
 let game = null;
-let playMode = roomIdFromUrl() ? "online" : "solo";
+let playMode = initialRoomId ? "online" : "solo";
 let playerName = "Guest chef";
 let onlineHumanCount = 2;
 let onlineAiCount = 0;
 let selectedOnlineAiCuisineIds = [];
+let onlineEntryMode = initialRoomId ? "join" : "create";
+let roomCodeInput = initialRoomId || "";
 let toastTimer = null;
 let dialogFocusPending = false;
 let focusReturnAction = null;
 let customerCardObserver = null;
 let responsiveLayoutTimer = null;
 const online = {
-  roomId: roomIdFromUrl(),
+  roomId: initialRoomId,
   token: null,
   room: null,
   connection: null,
@@ -65,7 +72,7 @@ const ui = {
   discardIds: new Set(),
   selectedDish: 0,
   rulesOpen: false,
-  tipsOpen: false,
+  promotionsOpen: false,
   customersPlayerId: null,
   tutorialOpen: false,
   tutorialStep: 0,
@@ -81,15 +88,15 @@ const TUTORIAL_STEPS = [
     symbol: "★",
     visual: "goal",
     body: "You run one of several restaurants in a busy mall food court. Customers wander between the available options, wondering what to eat. Each round, every restaurant secretly prepares an offer for the same customer.",
-    note: "The game ends when any restaurant tracks 4 Tips Cards or the customer deck runs out. Then the restaurant with the most VP wins.",
+    note: "The game ends after the 10th Customer Card is resolved. Then the restaurant with the most VP wins.",
   },
   {
     kicker: "First · A customer considers the court",
     title: "Read what could attract this customer",
     symbol: "◎",
     visual: "customer",
-    body: "The active Customer Card represents a customer comparing the food court's restaurants. Order Value limits how many Recipe Cards you may serve and becomes base VP if they choose you. Tips Value is possible bonus VP, and the printed effect applies to every restaurant.",
-    note: "Example: Order 2 means you may serve at most 2 recipes and the customer is worth 2 base VP. Tips +2 is gained only when you have at least 2 tracked Tips Cards.",
+    body: "The active Customer Card represents a customer comparing the food court's restaurants. Its Order Value limits how many Recipe Cards you may serve, becomes base VP if they choose you, and sets its Promotion bonus threshold. The printed effect applies to every restaurant.",
+    note: "Example: Order 2 means at most 2 recipes and 2 base VP. At game end, that customer adds exactly +1 VP if you still have at least 2 tracked Promotion Cards.",
   },
   {
     kicker: "Know your cards",
@@ -125,19 +132,19 @@ const TUTORIAL_STEPS = [
   },
   {
     kicker: "Phase 3 · Reveal",
-    title: "Total the meals, then find the highest unique value",
+    title: "Total the meals, then resolve tied values",
     symbol: "✦",
     visual: "contest",
-    body: "Every restaurant reveals its offer. Add card values, then the customer effect and each restaurant's ability. A Drink that misses its requirement adds +0. The highest unique Serve Value attracts the browsing customer.",
-    note: "Matching values cancel. If two restaurants score 7 and another scores 5, both 7s are ignored and the unique 5 attracts the customer.",
+    body: "Every restaurant reveals its offer. Add card values, then the customer effect and each restaurant's ability. At a tied value, tied restaurants may openly spend Promotion Cards to raise, match, or withdraw.",
+    note: "If nobody raises and the tie remains, that value cancels and the next lower unique value can win. Every Promotion Card committed to a bid is discarded.",
   },
   {
     kicker: "After the winner is found",
-    title: "Attract customers, track Tips, and score at the end",
+    title: "Losing restaurants promote their next service",
     symbol: "◆",
-    visual: "tips",
-    body: "The customer chooses the winning restaurant. If that meal meets the restaurant deck's tracking condition, its owner may set aside one eligible card as a Tips Card. Tracked cards leave the draw cycle.",
-    note: "At game end, each customer scores its Order Value plus its full Tips Value when your tracked Tips count meets that customer's threshold. Tracking 4 Tips Cards ends the game after that round.",
+    visual: "promotions",
+    body: "After a customer is attracted, each non-winning restaurant whose meal meets its tracking condition may set aside one eligible card as a Promotion Card. The winner cannot promote after that contest.",
+    note: "Keep at most 3 Promotion Cards. Spend them in future tied contests or retain them so each attracted customer whose Order Value you meet scores +1 VP at game end.",
   },
 ];
 
@@ -246,9 +253,7 @@ function applyOnlineRoomState(roomState) {
       nextGame.player.meal = previousGame.player.meal;
     }
     game = nextGame;
-    if (game.multiplayer.submitted || previousPhase !== game.phase || previousRound !== game.round) {
-      online.pendingAction = null;
-    }
+    online.pendingAction = null;
     ui.pending = nextGame.pending;
     screen = "game";
     if (previousPhase !== game.phase || previousRound !== game.round) {
@@ -326,6 +331,56 @@ async function joinOnlineRoom() {
   }
 }
 
+async function findOnlineRoom() {
+  const roomId = normalizeRoomId(roomCodeInput);
+  if (!roomId) {
+    online.error = "Enter the eight-character room code from the host.";
+    render();
+    return;
+  }
+
+  online.busy = true;
+  online.error = "";
+  online.room = null;
+  render();
+
+  const token = storedRoomToken(roomId);
+  if (token) {
+    try {
+      connectOnlineSession(await joinRoom(roomId, { token }));
+      return;
+    } catch (error) {
+      if (error.code === "INVALID_SESSION") forgetRoomToken(roomId);
+      else online.error = error.message;
+    }
+  }
+
+  try {
+    const { room } = await loadRoom(roomId);
+    online.roomId = roomId;
+    online.room = room;
+    online.error = "";
+    roomCodeInput = roomId;
+    setRoomUrl(roomId);
+
+    const selectedCuisineTaken = room.players.some((player) =>
+      player.cuisineId === selectedCuisineId);
+    if (selectedCuisineTaken) {
+      const availableCuisine = CUISINE_LIST.find((cuisine) =>
+        !room.players.some((player) => player.cuisineId === cuisine.id));
+      if (availableCuisine) selectedCuisineId = availableCuisine.id;
+    }
+  } catch (error) {
+    online.roomId = null;
+    online.room = null;
+    online.error = error.message;
+    setRoomUrl();
+  } finally {
+    online.busy = false;
+    render();
+  }
+}
+
 async function initializeOnlineRoom() {
   if (!online.roomId) return;
   online.busy = true;
@@ -379,6 +434,8 @@ async function leaveOnlineTable() {
   online.busy = false;
   online.connectionStatus = "disconnected";
   online.pendingAction = null;
+  onlineEntryMode = "create";
+  roomCodeInput = "";
   game = null;
   screen = "lobby";
   playMode = "solo";
@@ -674,23 +731,42 @@ function joinedRoomSetup() {
 
 function onlineEntrySetup() {
   if (online.busy && !online.room) {
-    return `<div class="online-entry-state"><span class="loading-spinner"></span><strong>Opening the private table…</strong></div>`;
+    const busyLabel = onlineEntryMode === "join" ? "Looking up the private table…" : "Opening the private table…";
+    return `<div class="online-entry-state"><span class="loading-spinner"></span><strong>${busyLabel}</strong></div>`;
   }
   if (online.room?.you) return joinedRoomSetup();
   if (online.token) {
     return `<div class="online-entry-state"><span class="loading-spinner"></span><strong>Connecting to your private table…</strong><small>Your seat is saved on this device.</small></div>`;
   }
 
-  const joining = Boolean(online.roomId);
-  const roomUnavailable = joining && online.room && !online.room.joinable;
+  const joining = onlineEntryMode === "join";
+  const roomFound = joining && Boolean(online.roomId && online.room);
+  const roomUnavailable = roomFound && !online.room.joinable;
   return `
     <section class="online-entry-panel">
+      <div class="online-entry-switcher" aria-label="Private table action">
+        <button data-action="set-online-entry-mode" data-entry-mode="create" class="${joining ? "" : "is-selected"}" aria-pressed="${!joining}">
+          <span>Create a table</span><small>Choose people and AI seats</small>
+        </button>
+        <button data-action="set-online-entry-mode" data-entry-mode="join" class="${joining ? "is-selected" : ""}" aria-pressed="${joining}">
+          <span>Join with a code</span><small>Enter the host’s room code</small>
+        </button>
+      </div>
+      ${joining ? `
+        <div class="room-code-row">
+          <label class="room-code-field">
+            <span>Room code</span>
+            <input data-room-code maxlength="8" value="${escapeHtml(roomCodeInput)}" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCDEFGH" ${roomFound ? "readonly" : ""} />
+          </label>
+          ${roomFound ? `<button class="secondary-button" data-action="change-room-code">Different code</button>` : ""}
+        </div>
+      ` : ""}
       <label class="player-name-field">
         <span>Your display name</span>
         <input data-player-name maxlength="24" value="${escapeHtml(playerName)}" autocomplete="nickname" placeholder="Guest chef" />
       </label>
       ${joining ? "" : onlineTableSetup()}
-      ${joining && online.room ? `
+      ${roomFound ? `
         <div class="room-preview">
           <span>Room ${online.room.id}</span>
           <strong>${online.room.players.length} seated player${online.room.players.length === 1 ? "" : "s"}</strong>
@@ -700,10 +776,10 @@ function onlineEntrySetup() {
       ${roomUnavailable ? `
         <div class="online-entry-state is-error"><strong>${online.room.status === "playing" ? "This game is already in progress." : "This table is full."}</strong><small>Ask the host to open a seat, or create a new table.</small></div>
       ` : `
-        <button class="primary-button online-entry-button" data-action="${joining ? "join-room" : "create-room"}" ${online.busy ? "disabled" : ""}>
-          ${online.busy ? "Connecting…" : joining ? "Join private table" : "Create private table"} <span>→</span>
+        <button class="primary-button online-entry-button" data-action="${joining ? roomFound ? "join-room" : "find-room" : "create-room"}" ${online.busy || (joining && !roomFound && !normalizeRoomId(roomCodeInput)) ? "disabled" : ""}>
+          ${online.busy ? "Connecting…" : joining ? roomFound ? "Join private table" : "Find private table" : "Create private table"} <span>→</span>
         </button>
-        <p class="setup-note">No account needed. Your session stays on this device so you can reconnect after a refresh.</p>
+        <p class="setup-note">${joining && !roomFound ? "Enter the code shown on the host’s private-table panel." : "No account needed. Your session stays on this device so you can reconnect after a refresh."}</p>
       `}
     </section>
   `;
@@ -837,8 +913,7 @@ function customerCard(customer) {
         <h2>${escapeHtml(customer.name)}</h2>
       </div>
       <div class="customer-values">
-        <div aria-label="Order Value ${customer.order}: serve at most ${customer.order} recipe${customer.order === 1 ? "" : "s"}; worth ${customer.order} base victory point${customer.order === 1 ? "" : "s"}"><strong>${customer.order}</strong><span>Order <i>max dishes</i></span></div>
-        <div aria-label="Tips Value ${customer.tips}: gain ${customer.tips} bonus victory points when you have at least ${customer.tips} tracked Tips Cards"><strong>+${customer.tips}</strong><span>Tips <i>bonus VP</i></span></div>
+        <div aria-label="Order Value ${customer.order}"><strong>${customer.order}</strong></div>
       </div>
       <p class="customer-effect"><span>✦</span>${escapeHtml(customer.effect)}</p>
     </article>
@@ -849,14 +924,13 @@ function mobileCustomerSummary(customer) {
   return `
     <aside
       class="mobile-customer-summary"
-      aria-label="Current customer: ${escapeHtml(customer.name)}. Order Value ${customer.order}. Tips Value ${customer.tips}."
+      aria-label="Current customer: ${escapeHtml(customer.name)}. Order Value ${customer.order}."
       aria-hidden="true"
       style="--customer:${customer.accent}"
     >
       <span class="mobile-customer-flag restaurant-flag" aria-hidden="true"><span class="flag-glyph">${customer.flag}</span></span>
       <span class="mobile-customer-name"><small>Current customer</small><strong>${escapeHtml(customer.name)}</strong></span>
-      <span class="mobile-customer-value"><b>${customer.order}</b><small>Order</small></span>
-      <span class="mobile-customer-value is-tips"><b>+${customer.tips}</b><small>Tips</small></span>
+      <span class="mobile-customer-value"><b>${customer.order}</b></span>
     </aside>
   `;
 }
@@ -864,14 +938,14 @@ function mobileCustomerSummary(customer) {
 function scorePill(player, side, index = 0) {
   const cuisine = CUISINES[player.cuisineId];
   const restaurantLabel = side === "player" ? "your restaurant" : `Rival ${index + 1}`;
-  const tipsCounter = side === "player"
+  const promotionsCounter = side === "player"
     ? `<button
-        class="score-tips score-tips-button"
-        data-action="open-tips"
+        class="score-promotions score-promotions-button"
+        data-action="open-promotions"
         aria-haspopup="dialog"
-        aria-label="View your ${player.tips.length} tracked Tips Cards"
-      ><b>${player.tips.length}/4</b><span>tips</span></button>`
-    : `<span class="score-tips"><b>${player.tips.length}/4</b><span>tips</span></span>`;
+        aria-label="View your ${player.promotions.length} tracked Promotion Cards"
+      ><b>${player.promotions.length}/3</b><span>promotions</span></button>`
+    : `<span class="score-promotions"><b>${player.promotions.length}/3</b><span>promotions</span></span>`;
   return `
     <div class="score-pill ${side}">
       <span class="score-avatar restaurant-flag" style="--cuisine: ${cuisine.accent}" aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></span>
@@ -884,22 +958,22 @@ function scorePill(player, side, index = 0) {
         aria-haspopup="dialog"
         aria-label="View ${restaurantLabel}'s ${player.customers.length} attracted customer${player.customers.length === 1 ? "" : "s"} contributing ${scorePlayer(player)} victory points"
       ><strong>${scorePlayer(player)}</strong><small>VP</small></button>
-      ${tipsCounter}
+      ${promotionsCounter}
     </div>
   `;
 }
 
-function trackedTipCard(card, index) {
+function trackedPromotionCard(card, index) {
   const meta = TYPE_META[card.type];
   const abilityContext = cardAbilityContext(card);
   return `
     <article
-      class="tracked-tip-card card-${card.type} ${abilityContext ? "has-ability-marker" : ""}"
-      aria-label="Tracked Tips Card ${index + 1}: ${escapeHtml(card.name)}${abilityContext ? `. ${escapeHtml(abilityContext.label)}` : ""}"
+      class="tracked-promotion-card card-${card.type} ${abilityContext ? "has-ability-marker" : ""}"
+      aria-label="Tracked Promotion Card ${index + 1}: ${escapeHtml(card.name)}${abilityContext ? `. ${escapeHtml(abilityContext.label)}` : ""}"
     >
       ${abilityMarker(abilityContext)}
-      <span class="tracked-tip-number">Tips Card ${index + 1}</span>
-      <span class="tracked-tip-symbol" aria-hidden="true">${meta.symbol}</span>
+      <span class="tracked-promotion-number">Promotion Card ${index + 1}</span>
+      <span class="tracked-promotion-symbol" aria-hidden="true">${meta.symbol}</span>
       <span class="card-type">${meta.label}</span>
       <strong>${escapeHtml(card.name)}</strong>
       <p>${escapeHtml(cardDetail(card))}</p>
@@ -908,53 +982,53 @@ function trackedTipCard(card, index) {
   `;
 }
 
-function tipsModal() {
+function promotionsModal() {
   const cuisine = CUISINES[game.player.cuisineId];
-  const trackedCount = game.player.tips.length;
-  const bonusCustomers = game.player.customers.filter((customer) => trackedCount >= customer.tips);
-  const bonusVp = bonusCustomers.reduce((total, customer) => total + customer.tips, 0);
+  const trackedCount = game.player.promotions.length;
+  const bonusCustomers = game.player.customers.filter((customer) => trackedCount >= customer.order);
+  const bonusVp = bonusCustomers.length;
   return `
     <div
-      class="overlay tips-overlay"
+      class="overlay promotions-overlay"
       role="dialog"
       aria-modal="true"
-      aria-labelledby="tips-title"
-      aria-describedby="tips-summary"
+      aria-labelledby="promotions-title"
+      aria-describedby="promotions-summary"
     >
-      <section class="tips-panel panel-parchment">
+      <section class="promotions-panel panel-parchment">
         <button
           class="close-button"
-          data-action="close-tips"
+          data-action="close-promotions"
           data-dialog-primary
-          aria-label="Close Tips Cards"
+          aria-label="Close Promotion Cards"
         >×</button>
         <span class="eyebrow">Your set-aside cards</span>
-        <h2 id="tips-title">Tips Cards</h2>
-        <p id="tips-summary" class="tips-lead">
-          <strong>${trackedCount}/4 tracked</strong> · Tracking four ends the game.
+        <h2 id="promotions-title">Promotion Cards</h2>
+        <p id="promotions-summary" class="promotions-lead">
+          <strong>${trackedCount}/3 tracked</strong> · Spend them in tied contests or retain them for bonuses.
         </p>
-        <div class="tips-ability" style="--cuisine:${cuisine.accent}">
+        <div class="promotions-ability" style="--cuisine:${cuisine.accent}">
           <span>✦</span>
           <div>
             <small>${escapeHtml(cuisine.name)} tracking condition</small>
-            <strong>${escapeHtml(cuisine.tipsText)}</strong>
+            <strong>${escapeHtml(cuisine.promotionText)}</strong>
           </div>
         </div>
         ${trackedCount ? `
-          <div class="tracked-tips-grid" aria-label="Your tracked Tips Cards">
-            ${game.player.tips.map(trackedTipCard).join("")}
+          <div class="tracked-promotions-grid" aria-label="Your tracked Promotion Cards">
+            ${game.player.promotions.map(trackedPromotionCard).join("")}
           </div>` : `
-          <div class="tips-empty">
+          <div class="promotions-empty">
             <span aria-hidden="true">✦</span>
-            <strong>No Tips Cards tracked yet</strong>
+            <strong>No Promotion Cards tracked yet</strong>
             <p>
-              Attract a customer with your restaurant's tracking combination, then choose an eligible
-              card during the reveal.
+              Lose a resolved customer contest with your restaurant's tracking combination, then choose
+              one eligible card during the reveal.
             </p>
           </div>`}
-        <p class="tips-score-impact">
+        <p class="promotions-score-impact">
           <strong>Current scoring:</strong> ${bonusCustomers.length} of ${game.player.customers.length}
-          attracted customers receive their Tips Value, adding <b>+${bonusVp} VP</b>.
+          attracted customers meet their Order threshold, adding <b>+${bonusVp} VP</b>.
         </p>
       </section>
     </div>
@@ -970,12 +1044,12 @@ function restaurantLabel(player) {
   return `Rival ${game.opponents.findIndex((opponent) => opponent.id === player.id) + 1}`;
 }
 
-function attractedCustomerCard(customer, trackedTips, index) {
+function attractedCustomerCard(customer, trackedPromotions, index) {
   const cuisine = CUISINES[customer.cuisineId];
-  const scoring = scoreCustomer(customer, trackedTips);
+  const scoring = scoreCustomer(customer, trackedPromotions);
   return `
     <article
-      class="attracted-customer-card ${scoring.tipsUnlocked ? "has-tips" : "needs-tips"}"
+      class="attracted-customer-card ${scoring.promotionUnlocked ? "has-promotions" : "needs-promotions"}"
       style="--customer:${customer.accent}"
       aria-label="Attracted Customer ${index + 1}: ${escapeHtml(customer.name)}. Scores ${scoring.total} victory points."
     >
@@ -991,14 +1065,14 @@ function attractedCustomerCard(customer, trackedTips, index) {
       </header>
       <div class="attracted-customer-values">
         <span><b>${customer.order}</b><small>Order VP</small></span>
-        <span class="${scoring.tipsUnlocked ? "is-unlocked" : ""}"><b>+${customer.tips}</b><small>Tips Value</small></span>
+        <span class="${scoring.promotionUnlocked ? "is-unlocked" : ""}"><b>+1</b><small>Promotion bonus</small></span>
       </div>
       <p><span aria-hidden="true">✦</span>${escapeHtml(customer.effect)}</p>
-      <footer class="${scoring.tipsUnlocked ? "is-unlocked" : ""}">
-        <span>${scoring.tipsUnlocked
-          ? `Tips unlocked with ${trackedTips} tracked`
-          : `Needs ${customer.tips} tracked Tips · currently ${trackedTips}`}</span>
-        <strong>${scoring.orderVp} + ${scoring.tipsVp} = ${scoring.total} VP</strong>
+      <footer class="${scoring.promotionUnlocked ? "is-unlocked" : ""}">
+        <span>${scoring.promotionUnlocked
+          ? `Bonus unlocked: ${trackedPromotions} tracked meets Order ${customer.order}`
+          : `Needs ${customer.order} tracked promotions · currently ${trackedPromotions}`}</span>
+        <strong>${scoring.orderVp} + ${scoring.promotionVp} = ${scoring.total} VP</strong>
       </footer>
     </article>
   `;
@@ -1010,11 +1084,11 @@ function customersModal() {
 
   const cuisine = CUISINES[player.cuisineId];
   const baseVp = player.customers.reduce(
-    (total, customer) => total + scoreCustomer(customer, player.tips.length).orderVp,
+    (total, customer) => total + scoreCustomer(customer, player.promotions.length).orderVp,
     0,
   );
-  const tipsVp = player.customers.reduce(
-    (total, customer) => total + scoreCustomer(customer, player.tips.length).tipsVp,
+  const promotionVp = player.customers.reduce(
+    (total, customer) => total + scoreCustomer(customer, player.promotions.length).promotionVp,
     0,
   );
   const label = restaurantLabel(player);
@@ -1047,19 +1121,19 @@ function customersModal() {
             <strong>${scorePlayer(player)} VP</strong>
             from ${player.customers.length} attracted customer${player.customers.length === 1 ? "" : "s"}
           </p>
-          <div aria-label="${baseVp} Order Value points plus ${tipsVp} Tips Value points">
+          <div aria-label="${baseVp} Order Value points plus ${promotionVp} Promotion bonus points">
             <span><b>${baseVp}</b><small>Order VP</small></span>
             <i aria-hidden="true">+</i>
-            <span><b>${tipsVp}</b><small>Tips VP</small></span>
+            <span><b>${promotionVp}</b><small>Promotion VP</small></span>
             <i aria-hidden="true">=</i>
             <span class="is-total"><b>${scorePlayer(player)}</b><small>Total VP</small></span>
           </div>
-          <small>${player.tips.length}/4 Tips Cards tracked</small>
+          <small>${player.promotions.length}/3 Promotion Cards tracked</small>
         </div>
         ${player.customers.length ? `
           <div class="attracted-customers-grid" aria-label="${label}'s attracted Customer Cards">
             ${player.customers.map((customer, index) =>
-              attractedCustomerCard(customer, player.tips.length, index)).join("")}
+              attractedCustomerCard(customer, player.promotions.length, index)).join("")}
           </div>` : `
           <div class="customers-empty">
             <span aria-hidden="true">◎</span>
@@ -1487,14 +1561,16 @@ function revealedMealDetails(player, meal, result) {
 function resultPanel(side, player, meal, result, label, status) {
   const cuisine = CUISINES[player.cuisineId];
   const statusText = {
-    winner: "Highest unique · wins",
+    winner: "Attracts the customer",
     cancelled: "Tied value · canceled",
+    bidding: "Tied value · bidding",
+    outbid: "Withdrew from the tie",
     outscored: "Unique, but lower",
     passed: "Passed this customer",
   }[status];
   return `
     <article class="result-side ${side} status-${status}">
-      <span class="result-status">${status === "winner" ? "✦" : status === "cancelled" ? "×" : "·"} ${statusText}</span>
+      <span class="result-status">${status === "winner" ? "✦" : status === "cancelled" ? "×" : status === "bidding" ? "◆" : "·"} ${statusText}</span>
       <div class="result-restaurant">
         <span class="mini-seal restaurant-flag" style="--cuisine:${cuisine.accent}" aria-hidden="true"><span class="flag-glyph">${cuisine.flag}</span></span>
         <div><small>${escapeHtml(label)}</small><strong>${escapeHtml(cuisine.name)}</strong></div>
@@ -1511,34 +1587,86 @@ function resultPanel(side, player, meal, result, label, status) {
   `;
 }
 
-function resolutionTrail(classified) {
+function resolutionTrail(classified, contest = null) {
   const groups = [...new Set(classified.filter((entry) => entry.competing).map((entry) => entry.value))]
     .sort((a, b) => b - a)
     .map((value) => {
       const entries = classified.filter((entry) => entry.competing && entry.value === value);
-      const status = entries[0]?.status;
-      return `<span class="resolution-value status-${status}"><b>${value}</b><small>${entries.length > 1 ? `${entries.length}-way tie · canceled` : status === "winner" ? "highest unique · wins" : "unique but lower"}</small></span>`;
+      const status = entries.some((entry) => entry.status === "winner")
+        ? "winner"
+        : entries.some((entry) => entry.status === "bidding")
+          ? "bidding"
+          : entries[0]?.status;
+      const tieLabel = contest?.baseValue === value
+        ? contest.resolved && contest.winnerId
+          ? `${entries.length}-way tie · resolved by promotion`
+          : !contest.resolved
+            ? `${entries.length}-way tie · bidding`
+            : `${entries.length}-way tie · canceled`
+        : `${entries.length}-way tie · canceled`;
+      return `<span class="resolution-value status-${status}"><b>${value}</b><small>${entries.length > 1 ? tieLabel : status === "winner" ? "highest unique · wins" : "unique but lower"}</small></span>`;
     });
   if (!groups.length) return `<div class="resolution-trail"><span class="resolution-value status-passed"><b>—</b><small>Everyone passed</small></span></div>`;
   return `<div class="resolution-trail" aria-label="Contest resolution">${groups.join('<i aria-hidden="true">→</i>')}</div>`;
 }
 
+function promotionBidPanel(pending) {
+  const contest = pending.contest;
+  if (!contest || contest.resolved) return "";
+  const players = [game.player, ...game.opponents];
+  const playerActive = contest.activeIds.includes(game.player.id);
+  const canRaise = contest.stage === "raise"
+    && playerActive
+    && !contest.passedIds.includes(game.player.id);
+  const mustMatch = contest.stage === "match" && contest.waitingIds.includes(game.player.id);
+  const instructions = canRaise
+    ? "Raise by one Promotion Card or pass for now. If every tied restaurant passes, this value cancels."
+    : mustMatch
+      ? "Another restaurant raised. Match with one Promotion Card or withdraw from this tied value."
+      : "Waiting for the other tied restaurants to decide openly.";
+  return `
+    <section class="promotion-bid" aria-label="Open Promotion Card bidding">
+      <div class="promotion-bid-heading">
+        <span>◆</span>
+        <div><small>Open tie bidding · Serve Value ${contest.baseValue}</small><strong>${escapeHtml(instructions)}</strong></div>
+      </div>
+      <div class="promotion-bid-players">
+        ${contest.participantIds.map((playerId) => {
+          const player = players.find((candidate) => candidate.id === playerId);
+          const active = contest.activeIds.includes(playerId);
+          return `<span class="${active ? "is-active" : "is-withdrawn"}"><b>${escapeHtml(player?.name || CUISINES[player?.cuisineId]?.name || "Restaurant")}</b><small>${contest.spent[playerId] || 0} bid · ${player?.promotions.length || 0} left${active ? "" : " · withdrew"}</small></span>`;
+        }).join("")}
+      </div>
+      ${(canRaise || mustMatch) && !onlineActionLocked() ? `
+        <div class="promotion-bid-actions">
+          <button class="secondary-button" data-action="promotion-bid" data-bid="${mustMatch ? "withdraw" : "pass"}">${mustMatch ? "Withdraw" : "Pass"}</button>
+          <button class="primary-button" data-action="promotion-bid" data-bid="${mustMatch ? "match" : "raise"}" ${game.player.promotions.length ? "" : "disabled"}>${mustMatch ? "Match +1" : "Raise +1"} <span>◆</span></button>
+        </div>` : `<div class="waiting-pulse"><i></i><i></i><i></i><span>${isOnlineGame() ? "Live table sync" : "Rivals are deciding"}</span></div>`}
+    </section>
+  `;
+}
+
 function revealOverlay() {
   const pending = ui.pending;
+  const bidding = Boolean(pending.contest && !pending.contest.resolved);
   const isPlayerWinner = pending.winnerId === game.player.id;
   const winner = [game.player, ...game.opponents].find((player) => player.id === pending.winnerId);
   const contestEntries = [
     { id: game.player.id, value: pending.playerResult.total, competing: game.player.meal.dishes.length > 0 },
     ...pending.opponentResults.map(({ player, result }) => ({ id: player.id, value: result.total, competing: player.meal.dishes.length > 0 })),
   ];
-  const classified = classifyContest(contestEntries);
+  const classified = classifyContest(contestEntries, pending.contest);
   const statusFor = (playerId) => classified.find((entry) => entry.id === playerId)?.status || "passed";
-  const heading = isPlayerWinner
+  const heading = bidding
+    ? "A tied value is open for promotions"
+    : isPlayerWinner
     ? "Your table wins!"
     : winner
       ? `${CUISINES[winner.cuisineId].name} attracts the customer`
       : "The customer walks away";
-  const subheading = winner
+  const subheading = bidding
+    ? "Tied restaurants may raise openly. Every committed Promotion Card is discarded."
+    : winner
     ? `${isPlayerWinner ? "Your meal" : "Their meal"} had the highest unique serve value.`
     : "Tied values canceled out, leaving no unique winner.";
   return `
@@ -1549,31 +1677,32 @@ function revealOverlay() {
           <h2 id="reveal-title">${heading}</h2>
           <p>${subheading}</p>
         </div>
-        ${resolutionTrail(classified)}
+        ${resolutionTrail(classified, pending.contest)}
         <div class="result-comparison result-count-${game.opponents.length + 1}">
           ${resultPanel("player", game.player, game.player.meal, pending.playerResult, `${game.player.name || "Your restaurant"} · your meal`, statusFor(game.player.id))}
           ${pending.opponentResults.map(({ player, result }, index) =>
             resultPanel("opponent", player, player.meal, result, player.name || `Rival ${index + 1}`, statusFor(player.id))).join("")}
         </div>
-        ${isPlayerWinner && pending.tipCandidates.length ? `
-          <div class="tip-choice">
-            <div><span>✦</span><div><strong>Track a Tips Card?</strong><small>Choose one eligible card, or keep it in your discard cycle.</small></div></div>
-            <div class="tip-options">
-              ${pending.tipCandidates.map((card) => `
-                <button class="tip-option ${pending.selectedTipId === card.id ? "is-selected" : ""}" data-action="select-tip" data-card-id="${card.id}">
-                  ${escapeHtml(card.name)} ${pending.selectedTipId === card.id ? "✓" : ""}
+        ${promotionBidPanel(pending)}
+        ${!bidding && pending.winnerId && !isPlayerWinner && pending.promotionCandidates.length ? `
+          <div class="promotion-choice">
+            <div><span>✦</span><div><strong>Track a Promotion Card?</strong><small>You did not win this customer. Choose one eligible card, or keep it in your discard cycle.</small></div></div>
+            <div class="promotion-options">
+              ${pending.promotionCandidates.map((card) => `
+                <button class="promotion-option ${pending.selectedPromotionId === card.id ? "is-selected" : ""}" data-action="select-promotion" data-card-id="${card.id}">
+                  ${escapeHtml(card.name)} ${pending.selectedPromotionId === card.id ? "✓" : ""}
                 </button>`).join("")}
-              <button class="tip-option ${pending.selectedTipId === null ? "is-selected" : ""}" data-action="skip-tip">Skip</button>
+              <button class="promotion-option ${pending.selectedPromotionId === null ? "is-selected" : ""}" data-action="skip-promotion">Skip</button>
             </div>
-            <p class="tip-impact">${pending.selectedTipId
-              ? `Tracking this card moves you to <b>${game.player.tips.length + 1}/4 Tips</b>. Attracted customers with Tips Value ${game.player.tips.length + 1} or less now score their bonus.${game.player.tips.length + 1 === 4 ? " This ends the game." : ""}`
-              : `Skipping leaves you at <b>${game.player.tips.length}/4 Tips</b>. The eligible card returns to your discard cycle.`}</p>
+            <p class="promotion-impact">${pending.selectedPromotionId
+              ? `Tracking this card moves you to <b>${game.player.promotions.length + 1}/3 promotions</b>. Each attracted customer with Order Value ${game.player.promotions.length + 1} or less now has its +1 bonus unlocked.`
+              : `Skipping leaves you at <b>${game.player.promotions.length}/3 promotions</b>. The eligible card returns to your discard cycle.`}</p>
           </div>` : ""}
-        <button class="primary-button continue-button" data-action="continue-round" ${onlineActionLocked() ? "disabled" : ""}>
+        ${bidding ? "" : `<button class="primary-button continue-button" data-action="continue-round" ${onlineActionLocked() ? "disabled" : ""}>
           ${onlineActionLocked()
             ? `Ready · waiting for ${escapeHtml(game.multiplayer.waitingFor.join(", ") || "the table")}`
-            : game.customerDeck.length === 0 ? "See final scores" : "Continue to next customer"} <span>→</span>
-        </button>
+            : game.round >= GAME_ROUND_LIMIT || game.customerDeck.length === 0 ? "See final scores" : "Continue to next customer"} <span>→</span>
+        </button>`}
         ${onlineActionLocked() ? disconnectRecoveryControls() : ""}
       </div>
     </div>
@@ -1607,7 +1736,7 @@ function gameOverOverlay() {
                 aria-haspopup="dialog"
                 aria-label="View ${player.id === game.player.id ? "your restaurant" : `Rival ${index}`}'s ${player.customers.length} attracted customer${player.customers.length === 1 ? "" : "s"} contributing ${score} victory points"
               >${score}<span>VP</span></button>
-              <span>${escapeHtml(CUISINES[player.cuisineId].name)} · ${player.customers.length} customers · ${player.tips.length} tips</span>
+              <span>${escapeHtml(CUISINES[player.cuisineId].name)} · ${player.customers.length} customers · ${player.promotions.length}/3 promotions</span>
             </div>
           `).join("")}
         </div>
@@ -1634,7 +1763,7 @@ function rulesModal() {
           <li><span>1</span><div><strong>Refresh</strong><p>Draw up to three without passing your hand limit, then replace up to two cards.</p></div></li>
           <li><span>2</span><div><strong>Build</strong><p>Serve recipes up to the customer's Order Value. Add ingredients, one flavor per recipe, and one drink per meal.</p></div></li>
           <li><span>3</span><div><strong>Reveal</strong><p>Recipes and ingredients add +1, flavors +2, and a valid drink +3. Then abilities and the customer effect apply.</p></div></li>
-          <li><span>4</span><div><strong>Attract</strong><p>The highest unique serve value wins. Tied values are ignored until a unique value is found.</p></div></li>
+          <li><span>4</span><div><strong>Attract</strong><p>At a tied value, tied restaurants openly raise with Promotion Cards, match, or withdraw. An unchanged tie cancels.</p></div></li>
         </ol>
         <div class="rules-values">
           <span class="recipe">♨ Recipe <b>+1</b></span>
@@ -1642,7 +1771,7 @@ function rulesModal() {
           <span class="flavor">✦ Flavor <b>+2</b></span>
           <span class="drink">◒ Drink <b>+3</b></span>
         </div>
-        <div class="rules-finish"><strong>End Condition</strong><p>Play ends when a restaurant tracks 4 Tips Cards or the customer deck empties. Score each customer's Order Value, plus their Tips Value when you have enough tracked Tips Cards.</p></div>
+        <div class="rules-finish"><strong>Promotions & End Condition</strong><p>After a customer is attracted, each eligible non-winner may track one Promotion Card, to a maximum of 3. The game ends after resolving 10 customers; unused cards remain in the shared Customer deck. Each customer scores its Order Value plus +1 if your remaining promotions meet that Order Value.</p></div>
         <button class="primary-button" data-action="close-rules" data-dialog-primary>Back to the table</button>
       </div>
     </div>
@@ -1654,7 +1783,7 @@ function tutorialVisual(visual) {
     return `<div class="tutorial-goal"><span>♨<small>Your restaurant</small></span><i>competes for</i><span>◎<small>The customer</small></span><i>earns</i><span>★<small>Victory points</small></span></div>`;
   }
   if (visual === "customer") {
-    return `<div class="tutorial-values"><span><b>2</b><small>Order<br>max recipes + base VP</small></span><span><b>+2</b><small>Tips<br>conditional bonus VP</small></span></div>`;
+    return `<div class="tutorial-values"><span><b>2</b><small>Order<br>max recipes + base VP</small></span><span><b>+1</b><small>bonus<br>with 2+ promotions</small></span></div>`;
   }
   if (visual === "refresh") {
     return `<div class="tutorial-cards"><i>Draw ≤ 3</i><i class="is-marked">Replace ≤ 2</i><span>in that order</span></div>`;
@@ -1668,10 +1797,10 @@ function tutorialVisual(visual) {
   if (visual === "counts") {
     return `<div class="tutorial-counts"><span class="played-count"><b>4</b><small>cards played</small></span><i>face down</i><span><b>2</b><small>cards in hand</small></span></div>`;
   }
-  if (visual === "tips") {
-    return `<div class="tutorial-tips"><span><b>◎ 2 VP</b><small>Order Value</small></span><i>+</i><span><b>◆ +2 VP</b><small>with 2+ tracked Tips</small></span><i>→</i><span class="tips-end"><b>4 ◆</b><small>ends the game</small></span></div>`;
+  if (visual === "promotions") {
+    return `<div class="tutorial-promotions"><span><b>◎ 2 VP</b><small>Order Value</small></span><i>+</i><span><b>◆ +1 VP</b><small>with 2+ promotions</small></span><i>·</i><span class="promotions-end"><b>3 ◆ max</b><small>or spend in a tie</small></span></div>`;
   }
-  return `<div class="tutorial-contest"><span class="is-tied">7 <small>tied</small></span><b>=</b><span class="is-tied">7 <small>tied</small></span><i>cancel</i><span class="is-winner">5 <small>wins</small></span></div>`;
+  return `<div class="tutorial-contest"><span class="is-tied">7 + ◆ <small>raise</small></span><b>↔</b><span class="is-tied">7 + ◆ <small>match</small></span><i>or cancel</i><span class="is-winner">5 <small>next unique</small></span></div>`;
 }
 
 function tutorialModal() {
@@ -1706,13 +1835,13 @@ function tutorialModal() {
 }
 
 function renderGame() {
-  const phaseLabel = game.phase === "refresh" ? "Refresh" : game.phase === "serve" ? "Serve" : "Reveal";
+  const phaseLabel = game.phase === "refresh" ? "Refresh" : game.phase === "serve" ? "Serve" : ui.pending?.contest && !ui.pending.contest.resolved ? "Promotion Bid" : "Reveal";
   return `
     <main class="game-shell ${isOnlineGame() ? "is-online" : ""} phase-${game.phase} cuisine-theme-${game.player.cuisineId}">
       <header class="game-header">
         <div class="game-header-inner">
           <button class="wordmark" data-action="${isOnlineGame() ? "leave-room" : "back-to-lobby"}" aria-label="${isOnlineGame() ? "Leave online table" : "Return to restaurant selection"}"><span>Food</span> Court</button>
-          <div class="round-marker"><small>Round ${game.round}</small><strong>${phaseLabel}</strong>${phaseTrail()}</div>
+          <div class="round-marker"><small>Round ${game.round} of ${GAME_ROUND_LIMIT}</small><strong>${phaseLabel}</strong>${phaseTrail()}</div>
           <div class="scoreboard player-count-${game.opponents.length + 1}">
             ${scorePill(game.player, "player")}
             ${game.opponents.map((opponent, index) => `
@@ -1731,9 +1860,9 @@ function renderGame() {
       <div class="table-surface">
         ${opponentZone()}
         <section class="center-table">
-          <div class="deck-stack" aria-label="${game.customerDeck.length} customers remain">
+          <div class="deck-stack" aria-label="${game.customerDeck.length} customers remain in the shared deck; the game ends after round ${GAME_ROUND_LIMIT}">
             <span class="stack-card back-3"></span><span class="stack-card back-2"></span><span class="stack-card back-1"></span>
-            <span class="stack-count">${game.customerDeck.length}<small>left</small></span>
+            <span class="stack-count">${game.customerDeck.length}<small>in deck</small></span>
           </div>
           ${customerCard(game.activeCustomer)}
           ${phaseAction()}
@@ -1746,7 +1875,7 @@ function renderGame() {
       ${game.phase === "reveal" ? revealOverlay() : ""}
       ${game.phase === "ended" && !ui.customersPlayerId ? gameOverOverlay() : ""}
       ${ui.rulesOpen ? rulesModal() : ""}
-      ${ui.tipsOpen ? tipsModal() : ""}
+      ${ui.promotionsOpen ? promotionsModal() : ""}
       ${ui.tutorialOpen ? tutorialModal() : ""}
       ${ui.customersPlayerId ? customersModal() : ""}
     </main>
@@ -1835,7 +1964,7 @@ function startGame() {
   ui.discardIds.clear();
   ui.selectedDish = 0;
   ui.pending = null;
-  ui.tipsOpen = false;
+  ui.promotionsOpen = false;
   ui.customersPlayerId = null;
   clearUndo();
   if (!tutorialWasSeen()) {
@@ -2002,6 +2131,106 @@ function removeMealCard(cardId) {
   }
 }
 
+function pendingContestEntries() {
+  return [
+    {
+      id: game.player.id,
+      value: ui.pending.playerResult.total,
+      competing: game.player.meal.dishes.length > 0,
+    },
+    ...ui.pending.opponentResults.map(({ player, result }) => ({
+      id: player.id,
+      value: result.total,
+      competing: player.meal.dishes.length > 0,
+    })),
+  ];
+}
+
+function finalizeLocalContest() {
+  const players = [game.player, ...game.opponents];
+  const winnerId = ui.pending.contest.winnerId;
+  const winner = players.find((player) => player.id === winnerId) || null;
+  ui.pending.winnerId = winnerId;
+  if (winner) winner.customers.push(game.activeCustomer);
+
+  ui.pending.promotionCandidates = winner && winnerId !== game.player.id
+    ? promotionCandidates(game.player.meal, game.player.cuisineId, game.player.promotions)
+    : [];
+  ui.pending.selectedPromotionId = ui.pending.promotionCandidates[0]?.id ?? null;
+  ui.pending.opponentPromotions = game.opponents.map((opponent) =>
+    winner && winnerId !== opponent.id
+      ? promotionCandidates(opponent.meal, opponent.cuisineId, opponent.promotions)[0] ?? null
+      : null);
+
+  announce(winnerId === game.player.id
+    ? "You attracted the customer."
+    : winner
+      ? `${CUISINES[winner.cuisineId].name} attracted the customer.`
+      : "Every tied value remained unresolved, so the customer walked away.");
+}
+
+function advanceLocalAiBidding() {
+  const players = [game.player, ...game.opponents];
+  const entries = pendingContestEntries();
+  let safety = 0;
+  while (!ui.pending.contest.resolved && safety < 40) {
+    safety += 1;
+    const contest = ui.pending.contest;
+    if (contest.stage === "raise") {
+      if (contest.activeIds.includes(game.player.id)
+        && !contest.passedIds.includes(game.player.id)) return;
+      const ai = game.opponents.find((opponent) =>
+        contest.activeIds.includes(opponent.id) && !contest.passedIds.includes(opponent.id));
+      if (!ai) return;
+      const nextLevel = (contest.spent[ai.id] || 0) + 1;
+      const bid = shouldAiSpendPromotion(ai, game.activeCustomer, nextLevel) ? "raise" : "pass";
+      ui.pending.contest = applyPromotionBid(
+        contest,
+        { type: bid, playerId: ai.id },
+        players,
+        entries,
+      );
+    } else if (contest.stage === "match") {
+      if (contest.waitingIds.includes(game.player.id)) return;
+      const ai = game.opponents.find((opponent) => contest.waitingIds.includes(opponent.id));
+      if (!ai) return;
+      const nextLevel = (contest.spent[ai.id] || 0) + 1;
+      const bid = shouldAiSpendPromotion(ai, game.activeCustomer, nextLevel) ? "match" : "withdraw";
+      ui.pending.contest = applyPromotionBid(
+        contest,
+        { type: bid, playerId: ai.id },
+        players,
+        entries,
+      );
+    }
+  }
+  if (ui.pending.contest.resolved) finalizeLocalContest();
+}
+
+function makePromotionBid(type) {
+  if (!ui.pending?.contest || ui.pending.contest.resolved || onlineActionLocked()) return;
+  if (isOnlineGame()) {
+    online.pendingAction = "reveal";
+    sendRoomAction({ type: "promotion_bid", bid: type });
+    render();
+    return;
+  }
+  try {
+    ui.pending.contest = applyPromotionBid(
+      ui.pending.contest,
+      { type, playerId: game.player.id },
+      [game.player, ...game.opponents],
+      pendingContestEntries(),
+    );
+    advanceLocalAiBidding();
+    if (ui.pending.contest.resolved && ui.pending.winnerId === undefined) finalizeLocalContest();
+  } catch (error) {
+    showToast(error.message);
+    return;
+  }
+  render();
+}
+
 function resolveRound(pass = false) {
   if (game.phase !== "serve") return;
   if (isOnlineGame()) {
@@ -2036,37 +2265,27 @@ function resolveRound(pass = false) {
       [game.player, ...game.opponents.filter((other) => other.id !== opponent.id)],
     ),
   }));
-  const winnerId = determineUniqueWinner([
+  const contestEntries = [
     { id: game.player.id, value: playerResult.total, competing: game.player.meal.dishes.length > 0 },
     ...opponentResults.map(({ player, result }, index) => ({
       id: player.id,
       value: result.total,
       competing: aiMeals[index].dishes.length > 0,
     })),
-  ]);
-
-  const winner = [game.player, ...game.opponents].find((player) => player.id === winnerId);
-  if (winner) winner.customers.push(game.activeCustomer);
-
-  const playerTips = winnerId === game.player.id
-    ? tipCandidates(game.player.meal, game.player.cuisineId, game.player.tips)
-    : [];
-  const opponentTips = game.opponents.map((opponent, index) =>
-    winnerId === opponent.id
-      ? tipCandidates(aiMeals[index], opponent.cuisineId, opponent.tips)[0] ?? null
-      : null);
+  ];
   ui.pending = {
-    winnerId,
     playerResult,
     opponentResults,
-    tipCandidates: playerTips,
-    selectedTipId: playerTips[0]?.id ?? null,
-    opponentTips,
+    contest: createPromotionContest(
+      contestEntries,
+      [game.player, ...game.opponents],
+    ),
   };
+  if (ui.pending.contest.resolved) finalizeLocalContest();
+  else advanceLocalAiBidding();
   clearUndo();
   game.phase = "reveal";
   dialogFocusPending = true;
-  announce(winnerId === game.player.id ? "You attracted the customer." : winner ? `${CUISINES[winner.cuisineId].name} attracted the customer.` : "Tied values canceled out.");
   render();
 }
 
@@ -2076,15 +2295,15 @@ function continueRound() {
     online.pendingAction = "reveal";
     sendRoomAction({
       type: "reveal_ack",
-      tipCardId: ui.pending?.selectedTipId || null,
+      promotionCardId: ui.pending?.selectedPromotionId || null,
     });
     render();
     return;
   }
-  const playerTip = ui.pending.tipCandidates.find((card) => card.id === ui.pending.selectedTipId) || null;
-  cleanupMeal(game.player, game.player.meal, playerTip);
+  const playerPromotion = ui.pending.promotionCandidates.find((card) => card.id === ui.pending.selectedPromotionId) || null;
+  cleanupMeal(game.player, game.player.meal, playerPromotion);
   game.opponents.forEach((opponent, index) =>
-    cleanupMeal(opponent, opponent.meal, ui.pending.opponentTips[index]));
+    cleanupMeal(opponent, opponent.meal, ui.pending.opponentPromotions[index]));
 
   game.history.push({
     round: game.round,
@@ -2094,8 +2313,7 @@ function continueRound() {
     opponentValues: ui.pending.opponentResults.map(({ result }) => result.total),
   });
 
-  const gameEnded = [game.player, ...game.opponents].some((player) => player.tips.length >= 4)
-    || game.customerDeck.length === 0;
+  const gameEnded = game.round >= GAME_ROUND_LIMIT || game.customerDeck.length === 0;
   ui.pending = null;
   clearUndo();
   if (gameEnded) {
@@ -2130,6 +2348,22 @@ app.addEventListener("click", (event) => {
       setRoomUrl();
     }
     render();
+  } else if (action === "set-online-entry-mode") {
+    onlineEntryMode = target.dataset.entryMode;
+    online.roomId = null;
+    online.room = null;
+    online.error = "";
+    roomCodeInput = "";
+    setRoomUrl();
+    render();
+  } else if (action === "change-room-code") {
+    online.roomId = null;
+    online.room = null;
+    online.error = "";
+    roomCodeInput = "";
+    setRoomUrl();
+    render();
+    window.queueMicrotask(() => document.querySelector("input[data-room-code]")?.focus());
   } else if (action === "select-cuisine") {
     selectedCuisineId = target.dataset.cuisine;
     if (playMode === "online" && online.room?.you) {
@@ -2159,6 +2393,8 @@ app.addEventListener("click", (event) => {
     void createOnlineRoom();
   } else if (action === "join-room") {
     void joinOnlineRoom();
+  } else if (action === "find-room") {
+    void findOnlineRoom();
   } else if (action === "copy-invite") {
     void copyInviteLink();
   } else if (action === "leave-room") {
@@ -2178,9 +2414,9 @@ app.addEventListener("click", (event) => {
     ui.rulesOpen = true;
     dialogFocusPending = true;
     render();
-  } else if (action === "open-tips") {
-    focusReturnAction = "open-tips";
-    ui.tipsOpen = true;
+  } else if (action === "open-promotions") {
+    focusReturnAction = "open-promotions";
+    ui.promotionsOpen = true;
     dialogFocusPending = true;
     render();
   } else if (action === "open-customers") {
@@ -2192,10 +2428,10 @@ app.addEventListener("click", (event) => {
     render();
   } else if (action === "close-customers") {
     closeCustomers();
-  } else if (action === "close-tips") {
-    ui.tipsOpen = false;
+  } else if (action === "close-promotions") {
+    ui.promotionsOpen = false;
     render();
-    window.queueMicrotask(() => document.querySelector('[data-action="open-tips"]')?.focus());
+    window.queueMicrotask(() => document.querySelector('[data-action="open-promotions"]')?.focus());
   } else if (action === "close-rules") {
     ui.rulesOpen = false;
     render();
@@ -2217,7 +2453,7 @@ app.addEventListener("click", (event) => {
     game = null;
     ui.pending = null;
     ui.rulesOpen = false;
-    ui.tipsOpen = false;
+    ui.promotionsOpen = false;
     ui.customersPlayerId = null;
     clearUndo();
     render();
@@ -2253,11 +2489,13 @@ app.addEventListener("click", (event) => {
     removeMealCard(target.dataset.cardId);
   } else if (action === "serve-meal") {
     resolveRound(target.dataset.pass === "true");
-  } else if (action === "select-tip") {
-    ui.pending.selectedTipId = target.dataset.cardId;
+  } else if (action === "promotion-bid") {
+    makePromotionBid(target.dataset.bid);
+  } else if (action === "select-promotion") {
+    ui.pending.selectedPromotionId = target.dataset.cardId;
     render();
-  } else if (action === "skip-tip") {
-    ui.pending.selectedTipId = null;
+  } else if (action === "skip-promotion") {
+    ui.pending.selectedPromotionId = null;
     render();
   } else if (action === "continue-round") {
     continueRound();
@@ -2289,6 +2527,18 @@ app.addEventListener("change", (event) => {
 });
 
 app.addEventListener("input", (event) => {
+  const roomCode = event.target.closest("input[data-room-code]");
+  if (roomCode) {
+    roomCodeInput = roomCode.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
+    roomCode.value = roomCodeInput;
+    online.error = "";
+    document.querySelector(".online-error")?.remove();
+    document.querySelector('[data-action="find-room"]')?.toggleAttribute(
+      "disabled",
+      !normalizeRoomId(roomCodeInput),
+    );
+    return;
+  }
   const input = event.target.closest("input[data-player-name]");
   if (!input) return;
   playerName = input.value.slice(0, 24);
@@ -2297,11 +2547,16 @@ app.addEventListener("input", (event) => {
 document.addEventListener("keydown", (event) => {
   const dialogs = [...document.querySelectorAll('[role="dialog"]')];
   const activeDialog = dialogs.at(-1);
-  if (event.key === "Enter" && event.target.matches("input[data-player-name]")) {
+  if (event.key === "Enter" && event.target.matches("input[data-room-code]")) {
+    event.preventDefault();
+    if (!online.busy && normalizeRoomId(roomCodeInput)) void findOnlineRoom();
+  } else if (event.key === "Enter" && event.target.matches("input[data-player-name]")) {
     event.preventDefault();
     if (online.busy || (online.roomId && online.room && !online.room.joinable)) return;
-    if (online.roomId) void joinOnlineRoom();
-    else void createOnlineRoom();
+    if (onlineEntryMode === "join") {
+      if (online.roomId && online.room) void joinOnlineRoom();
+      else if (normalizeRoomId(roomCodeInput)) void findOnlineRoom();
+    } else void createOnlineRoom();
   } else if (event.key === "Tab" && activeDialog) {
     const focusable = [...activeDialog.querySelectorAll('button:not([disabled]), select:not([disabled]), [href], [tabindex]:not([tabindex="-1"])')];
     if (focusable.length) {
@@ -2319,10 +2574,10 @@ document.addEventListener("keydown", (event) => {
     closeCustomers();
   } else if (event.key === "Escape" && ui.tutorialOpen) {
     closeTutorial();
-  } else if (event.key === "Escape" && ui.tipsOpen) {
-    ui.tipsOpen = false;
+  } else if (event.key === "Escape" && ui.promotionsOpen) {
+    ui.promotionsOpen = false;
     render();
-    window.queueMicrotask(() => document.querySelector('[data-action="open-tips"]')?.focus());
+    window.queueMicrotask(() => document.querySelector('[data-action="open-promotions"]')?.focus());
   } else if (event.key === "Escape" && ui.rulesOpen) {
     ui.rulesOpen = false;
     render();

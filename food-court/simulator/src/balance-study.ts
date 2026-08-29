@@ -17,7 +17,7 @@ declare const process: {
 };
 
 interface StudyTask {
-  kind: 'two-player' | 'four-player';
+  kind: 'two-player' | 'three-player' | 'four-player';
   tableKey: string;
   decks: CuisineId[];
   games: number;
@@ -49,9 +49,9 @@ interface RawStrategy {
   topFinishes: number;
   totalScore: number;
   totalCustomers: number;
-  totalTips: number;
-  tipsCompletions: number;
-  tipEligibleMeals: number;
+  totalPromotions: number;
+  promotionsCompletions: number;
+  promotionEligibleMeals: number;
   totalTieRisk: number;
 }
 
@@ -119,9 +119,9 @@ const rawStrategy = (strategy: StrategyDiagnostic): RawStrategy => ({
   topFinishes: strategy.topFinishes,
   totalScore: strategy.averageScore * strategy.games,
   totalCustomers: strategy.averageCustomers * strategy.games,
-  totalTips: strategy.averageTips * strategy.games,
-  tipsCompletions: strategy.tipsCompletionRate * strategy.games,
-  tipEligibleMeals: strategy.tipEligibleMealsPerGame * strategy.games,
+  totalPromotions: strategy.averagePromotions * strategy.games,
+  promotionsCompletions: strategy.promotionsCompletionRate * strategy.games,
+  promotionEligibleMeals: strategy.promotionEligibleMealsPerGame * strategy.games,
   totalTieRisk: strategy.averageTieRisk * strategy.games,
 });
 
@@ -168,15 +168,15 @@ const mergeDeckAggregates = (summaries: TaskSummary[]) => {
         topFinishes: 0,
         totalScore: 0,
         totalCustomers: 0,
-        totalTips: 0,
+        totalPromotions: 0,
         totalServeValue: 0,
         serveValueSamples: 0,
         drinkAttempts: 0,
         drinkSuccesses: 0,
-        tipEligibleMeals: 0,
+        promotionEligibleMeals: 0,
         totalTieRisk: 0,
         tieRiskSamples: 0,
-        tipsCompletions: 0,
+        promotionsCompletions: 0,
         totalScoreSquared: 0,
       };
       for (const key of [
@@ -185,15 +185,15 @@ const mergeDeckAggregates = (summaries: TaskSummary[]) => {
         'topFinishes',
         'totalScore',
         'totalCustomers',
-        'totalTips',
+        'totalPromotions',
         'totalServeValue',
         'serveValueSamples',
         'drinkAttempts',
         'drinkSuccesses',
-        'tipEligibleMeals',
+        'promotionEligibleMeals',
         'totalTieRisk',
         'tieRiskSamples',
-        'tipsCompletions',
+        'promotionsCompletions',
         'totalScoreSquared',
       ] as const) {
         entry[key] += deck[key];
@@ -280,9 +280,9 @@ const mergeStrategies = (summaries: TaskSummary[]) => {
       topFinishes: 0,
       totalScore: 0,
       totalCustomers: 0,
-      totalTips: 0,
-      tipsCompletions: 0,
-      tipEligibleMeals: 0,
+      totalPromotions: 0,
+      promotionsCompletions: 0,
+      promotionEligibleMeals: 0,
       totalTieRisk: 0,
     };
     for (const key of [
@@ -291,9 +291,9 @@ const mergeStrategies = (summaries: TaskSummary[]) => {
       'topFinishes',
       'totalScore',
       'totalCustomers',
-      'totalTips',
-      'tipsCompletions',
-      'tipEligibleMeals',
+      'totalPromotions',
+      'promotionsCompletions',
+      'promotionEligibleMeals',
       'totalTieRisk',
     ] as const) {
       entry[key] += strategy[key];
@@ -306,9 +306,9 @@ const mergeStrategies = (summaries: TaskSummary[]) => {
     winRate: avg(entry.winShare, entry.games),
     averageScore: avg(entry.totalScore, entry.games),
     averageCustomers: avg(entry.totalCustomers, entry.games),
-    averageTips: avg(entry.totalTips, entry.games),
-    tipsCompletionRate: avg(entry.tipsCompletions, entry.games),
-    tipEligibleMealsPerGame: avg(entry.tipEligibleMeals, entry.games),
+    averagePromotions: avg(entry.totalPromotions, entry.games),
+    promotionsCompletionRate: avg(entry.promotionsCompletions, entry.games),
+    promotionEligibleMealsPerGame: avg(entry.promotionEligibleMeals, entry.games),
     averageTieRisk: avg(entry.totalTieRisk, entry.games),
   }));
 };
@@ -342,11 +342,11 @@ const normalizedDeckStats = (aggregates: DeckAggregate[]) =>
       topFinishRate: avg(deck.topFinishes, deck.games),
       averageScore: avg(deck.totalScore, deck.games),
       averageCustomers: avg(deck.totalCustomers, deck.games),
-      averageTips: avg(deck.totalTips, deck.games),
+      averagePromotions: avg(deck.totalPromotions, deck.games),
       averageServeValue: avg(deck.totalServeValue, deck.serveValueSamples),
       drinksPerGame: avg(deck.drinkAttempts, deck.games),
-      tipEligibleMealsPerGame: avg(deck.tipEligibleMeals, deck.games),
-      tipsCompletionRate: avg(deck.tipsCompletions, deck.games),
+      promotionEligibleMealsPerGame: avg(deck.promotionEligibleMeals, deck.games),
+      promotionsCompletionRate: avg(deck.promotionsCompletions, deck.games),
     }))
     .sort((a, b) => b.winRate - a.winRate);
 
@@ -430,6 +430,7 @@ const splitGames = (games: number, parts: number) =>
 
 const main = async () => {
   const games2 = parsePositiveInteger('--games2', optionValue('--games2'), 300);
+  const games3 = parsePositiveInteger('--games3', optionValue('--games3'), 90);
   const games4 = parsePositiveInteger('--games4', optionValue('--games4'), 40);
   const workerCount = parsePositiveInteger('--workers', optionValue('--workers'), 4);
   const seed = parsePositiveInteger('--seed', optionValue('--seed'), 700_000);
@@ -444,6 +445,16 @@ const main = async () => {
       seed: seed + index * 1_000_000 + variant * 100_000,
     })).filter((task) => task.games > 0);
   });
+  const threePlayerTasks = combinations(ids, 3).flatMap((decks, index) => {
+    const tableKey = decks.join(',');
+    return splitGames(games3, 3).map((games, variant) => ({
+      kind: 'three-player' as const,
+      tableKey,
+      decks: [...decks.slice(variant), ...decks.slice(0, variant)],
+      games,
+      seed: seed + 50_000_000 + index * 1_000_000 + variant * 100_000,
+    })).filter((task) => task.games > 0);
+  });
   const fourPlayerTasks = combinations(ids, 4).flatMap((decks, index) => {
     const tableKey = decks.join(',');
     return splitGames(games4, 4).map((games, variant) => ({
@@ -454,7 +465,7 @@ const main = async () => {
       seed: seed + 100_000_000 + index * 1_000_000 + variant * 100_000,
     })).filter((task) => task.games > 0);
   });
-  const tasks: StudyTask[] = [...twoPlayerTasks, ...fourPlayerTasks];
+  const tasks: StudyTask[] = [...twoPlayerTasks, ...threePlayerTasks, ...fourPlayerTasks];
 
   const shards = Array.from({ length: Math.min(workerCount, tasks.length) }, () => [] as StudyTask[]);
   tasks.forEach((task, index) => shards[index % shards.length].push(task));
@@ -470,11 +481,13 @@ const main = async () => {
   )).flat();
 
   const twoPlayer = summaries.filter((summary) => summary.task.kind === 'two-player');
+  const threePlayer = summaries.filter((summary) => summary.task.kind === 'three-player');
   const fourPlayer = summaries.filter((summary) => summary.task.kind === 'four-player');
   process.stdout.write(`${JSON.stringify({
     generatedAt: new Date().toISOString(),
-    parameters: { games2, games4, workers: shards.length, seed },
+    parameters: { games2, games3, games4, workers: shards.length, seed },
     twoPlayer: normalizedGroup(twoPlayer),
+    threePlayer: normalizedGroup(threePlayer),
     fourPlayer: normalizedGroup(fourPlayer),
   }, null, 2)}\n`);
 };

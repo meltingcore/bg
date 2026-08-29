@@ -1,12 +1,13 @@
 # Restaurant Decks
 
-Customer Cards have the following `order value/tips value`:
-  - 1/2
-  - 1/3
-  - 2/2
-  - 2/2
-  - 3/1
-  - 3/2
+Each restaurant deck has 6 Customer Cards:
+
+- 2 customers with Order Value 1.
+- 2 customers with Order Value 2.
+- 2 customers with Order Value 3.
+
+Order Value is the recipe limit for the contest, the customer's base VP, and the Promotion Cards
+needed for its +1 VP end-game bonus.
 Nationality matches the deck section where the customer is listed.
 
 Each nationality has a customer effect that applies to all players competing for that customer.
@@ -34,8 +35,8 @@ is met.
 
 - **Customer Effect** - Players hand limit is increased to 8 when refreshing.
 - **Special Ability** - Dishes served with their exact pasta Ingredient Card gain +1 serve value.
-- **Tips Tracking** - Attract a customer using a dish with an exact pasta Ingredient Card added
-  and use the pasta Ingredient Card as a Tips Card.
+- **Promotion Eligibility** - An exact pasta Ingredient Card added to its matching Recipe Card is
+  eligible as a Promotion Card.
 
 <details>
   <summary>Deck Composition</summary>
@@ -83,10 +84,10 @@ is met.
 ## 🇫🇷 Le Petit Paris
 
 - **Customer Effect** - After the initial Refresh draw, players may replace their whole hand.
-- **Special Ability** - Each adjacent course pair served in the same meal gains +1 serve value,
-  to a maximum of +2 per meal: entrée + appetizer, appetizer + main, or main + dessert.
-- **Tips Tracking** - Attract a customer using dish in order: entrée, appetizer, main & dessert and
-  use the recipe card as a Tips Card. Tips cards must be different courses.
+- **Special Ability** - Each distinct adjacent course pair served in the same meal gains +1 serve 
+  value: entrée + appetizer, appetizer + main, or main + dessert.
+- **Promotion Eligibility** - A Recipe Card is eligible as a Promotion Card if its course is not
+  already represented among that player's tracked Promotion Cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -134,8 +135,8 @@ is met.
 
 - **Customer Effect** - Easy dishes gain +1 serve value.
 - **Special Ability** - Each pair of recipes served grants +1 serve value.
-- **Tips Tracking** - Attract a customer using a pair of dishes of the same type and use one of the
-  recipe cards as Tips Card. 
+- **Promotion Eligibility** - If a meal contains at least 2 rice Recipe Cards or at least 2 noodle
+  Recipe Cards, 1 Recipe Card from that pair is eligible as a Promotion Card.
 
 <details>
   <summary>Deck Composition</summary>
@@ -184,8 +185,8 @@ is met.
 - **Customer Effect** - A pair of added ingredients add +1 serve value.
 - **Special Ability** - Each distinct pair of different Ingredient Cards gains +1 serve
   value.
-- **Tips Tracking** - Attract a customer using a dish with a spice Ingredient Card added and use
-  the spice Ingredient Card as a Tips Card. Tips cards must be different spices.
+- **Promotion Eligibility** - A spice Ingredient Card is eligible as a Promotion Card if its spice
+  is not already represented among that player's tracked Promotion Cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -234,8 +235,7 @@ is met.
 - **Customer Effect** - Gain +1 serve value for each pair of cards in hand.
 - **Special Ability** - Up to 2 extra Ingredient Cards can be added to dishes in a meal above their
   printed number of extra Ingredient Cards.
-- **Tips Tracking** - Attract a customer using a burger or steak dish and use the recipe card as 
-  a Tips Card. 
+- **Promotion Eligibility** - A burger or steak Recipe Card is eligible as a Promotion Card.
 
 <details>
   <summary>Deck Composition</summary>
@@ -281,11 +281,11 @@ is met.
 
 ## 🇹🇷 Sultan Saray
 
-- **Customer Effect** - Gain +1 serve value if you have fewer Tips Cards in tracking than at least
-  one opponent.
+- **Customer Effect** - Gain +1 serve value if you have fewer Promotion Cards in tracking than at
+  least one opponent.
 - **Special Ability** - Kebab dishes gain +1 serve value for each non-kebab dish also served with
   them.
-- **Tips Tracking** - Attract a customer using a kebab dish and use the recipe card as a Tips Card.
+- **Promotion Eligibility** - A kebab Recipe Card is eligible as a Promotion Card.
 
 <details>
   <summary>Deck Composition</summary>
@@ -334,8 +334,8 @@ is met.
 - **Customer Effect** - Hard dishes gain +1 serve value.
 - **Special Ability** - If exactly 1 seasoning Ingredient Card is used in a meal, gain +1 serve
   value.
-- **Tips Tracking** - Attract a customer using a dish with a seasoning Ingredient Card added and
-  use the seasoning Ingredient Card as a Tips Card. Tips Cards must be different seasonings.
+- **Promotion Eligibility** - A seasoning Ingredient Card is eligible as a Promotion Card if its
+  seasoning is not already represented among that player's tracked Promotion Cards.
 
 <details>
   <summary>Deck Composition</summary>
@@ -383,8 +383,7 @@ is met.
 - **Customer Effect** - Normal dishes gain +1 serve value.
 - **Special Ability** - Hot Ingredient Cards can be added also to Recipe Cards without printed
   Ingredient slots to gain +1 serve value but a meal can have max 2 hot Ingredient Cards total.
-- **Tips Tracking** - Attract a customer using a dish with a hot Ingredient Card and use the hot
-  Ingredient Card as a Tips Card.
+- **Promotion Eligibility** - A hot Ingredient Card is eligible as a Promotion Card.
 
 <details>
   <summary>Deck Composition</summary>
